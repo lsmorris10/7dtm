@@ -85,8 +85,13 @@ public class StatsHudOverlay {
 
         // ── Panel background ────────────────────────────────────────────
         int panelWidth = LABEL_WIDTH + BAR_WIDTH + 60; // extra space for percentage text
-        int panelHeight = (BAR_HEIGHT + BAR_SPACING) * 3 + BAR_SPACING + 12 + 12; // 3 bars + temp line + debuff line
+        int panelHeight = (BAR_HEIGHT + BAR_SPACING) * 3 + BAR_SPACING + 12 + 12 + 14; // Day text + 3 bars + temp line + debuff line
         graphics.fill(x - 4, y - 4, x + panelWidth + 4, y + panelHeight + 4, BG_COLOR);
+
+        // ── Day Display ─────────────────────────────────────────────────
+        int currentDay = (int) (mc.level.getDayTime() / 24000L) + 1;
+        graphics.drawString(mc.font, "Day: " + currentDay, x, y, TEXT_COLOR, true);
+        y += 14;
 
         // ── Food Bar ────────────────────────────────────────────────────
         float foodPct = (stats.getMaxFood() > 0) ? stats.getFood() / stats.getMaxFood() : 0f;

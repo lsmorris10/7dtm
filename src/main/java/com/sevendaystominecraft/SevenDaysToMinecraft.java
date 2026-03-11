@@ -2,6 +2,7 @@ package com.sevendaystominecraft;
 
 import com.mojang.logging.LogUtils;
 import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.config.HordeConfig;
 import com.sevendaystominecraft.config.SurvivalConfig;
 
 import net.neoforged.bus.api.IEventBus;
@@ -38,6 +39,9 @@ public class SevenDaysToMinecraft {
 
         // ── Milestone #2: Register Server Config (survival.toml) ────────
         modContainer.registerConfig(ModConfig.Type.SERVER, SurvivalConfig.SPEC, "survival.toml");
+
+        // ── Milestone #3: Register Horde Config (horde.toml) ─────────
+        modContainer.registerConfig(ModConfig.Type.SERVER, HordeConfig.SPEC, "horde.toml");
 
         // Register mod lifecycle events
         modEventBus.addListener(this::onCommonSetup);

@@ -94,15 +94,6 @@ public class PlayerStatsHandler {
         // ── 2. Stamina Drain / Regen ────────────────────────────────────
         // Per-second values in config; convert to per-tick (÷ 20)
 
-        // Detect sprinting via BOTH the flag AND movement speed.
-        // The client can sprint visually while the server flag is false (desync).
-        // If the player is moving faster than normal walk speed, they're sprinting.
-        double horizontalSpeedSq = player.getDeltaMovement().horizontalDistanceSqr();
-        boolean serverThinksSprinting = player.isSprinting();
-        // Normal walk speed squared is ~0.0043; sprint is ~0.0075+
-        boolean movingAtSprintSpeed = horizontalSpeedSq > 0.006;
-        boolean effectivelySprinting = serverThinksSprinting || movingAtSprintSpeed;
-
         // Check exhaustion recovery: clear exhausted flag when stamina > 40%
         // (Higher threshold prevents rapid stutter cycling)
         float staminaPct = (stats.getMaxStamina() > 0)
@@ -116,19 +107,11 @@ public class PlayerStatsHandler {
         }
 
         // Force-cancel sprint while exhausted (every tick)
-        if (stats.isStaminaExhausted()) {
-            if (player.isSprinting()) {
-                player.setSprinting(false);
-            }
-            // Also slow down the player if they're somehow moving at sprint speed
-            // This catches client-side sprint that bypasses the server flag
-            if (movingAtSprintSpeed) {
-                var motion = player.getDeltaMovement();
-                player.setDeltaMovement(motion.x * 0.7, motion.y, motion.z * 0.7);
-            }
+        if (stats.isStaminaExhausted() && player.isSprinting()) {
+            player.setSprinting(false);
         }
 
-        if (effectivelySprinting && !stats.isStaminaExhausted()) {
+        if (player.isSprinting() && !stats.isStaminaExhausted()) {
             float drain = (float) (cfg.staminaDrainSprint.get() / 20.0);
             stats.setStamina(stats.getStamina() - drain);
 
@@ -141,10 +124,10 @@ public class PlayerStatsHandler {
                 SevenDaysToMinecraft.LOGGER.info("[7DTM] Sprint cancelled — stamina exhausted! Must recover to 40%");
             }
         } else if (!stats.isStaminaExhausted() && isPlayerMoving(player)) {
-            // Walking — regen at walking rate (only if NOT exhausted or not moving fast)
+            // Walking — regen at walking rate (only if NOT exhausted)
             float regenRate = (float) (cfg.staminaRegenWalking.get() / 20.0);
             applyStaminaRegen(stats, cfg, regenRate);
-        } else if (!effectivelySprinting) {
+        } else if (!player.isSprinting()) {
             // At rest — regen at rest rate
             float regenRate = (float) (cfg.staminaRegenRest.get() / 20.0);
             applyStaminaRegen(stats, cfg, regenRate);

@@ -3,6 +3,7 @@ package com.sevendaystominecraft.network;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
+import com.sevendaystominecraft.client.BloodMoonClientState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +48,25 @@ public class ModNetworking {
                 ModNetworking::handleStatsSync
         );
 
+        // Server → Client: blood moon state sync
+        registrar.playToClient(
+                BloodMoonSyncPayload.TYPE,
+                BloodMoonSyncPayload.STREAM_CODEC,
+                ModNetworking::handleBloodMoonSync
+        );
+
         SevenDaysToMinecraft.LOGGER.debug("7DTM: Registered network payloads");
+    }
+
+    private static void handleBloodMoonSync(BloodMoonSyncPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            BloodMoonClientState.update(
+                    payload.active(),
+                    payload.currentWave(),
+                    payload.totalWaves(),
+                    payload.dayNumber()
+            );
+        });
     }
 
     /**
@@ -71,6 +90,10 @@ public class ModNetworking {
             stats.setMaxStamina(payload.maxStamina());
             stats.setStaminaExhausted(payload.staminaExhausted());
             stats.setCoreTemperature(payload.coreTemp());
+            
+            if (payload.staminaExhausted() && player.isSprinting()) {
+                player.setSprinting(false);
+            }
 
             // Clear and repopulate debuffs
             for (String id : SevenDaysPlayerStats.KNOWN_DEBUFF_IDS) {

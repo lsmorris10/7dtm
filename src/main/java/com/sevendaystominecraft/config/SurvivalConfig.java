@@ -97,7 +97,7 @@ public class SurvivalConfig {
 
     // ── Temperature ─────────────────────────────────────────────────────
 
-    /** Rate of core temp adjustment toward ambient (°F/sec, spec §1.1: 2) */
+    /** Rate of core temp adjustment toward ambient (°F/sec, spec §1.1: 0.3) */
     public final ModConfigSpec.DoubleValue tempAdjustRate;
 
     // ── Sync ────────────────────────────────────────────────────────────
@@ -198,7 +198,7 @@ public class SurvivalConfig {
         builder.push("temperature");
         tempAdjustRate = builder
                 .comment("Core temp adjustment rate toward ambient (°F/sec)")
-                .defineInRange("tempAdjustRate", 2.0, 0.1, 10.0);
+                .defineInRange("tempAdjustRate", 0.3, 0.01, 10.0);
         builder.pop();
 
         // Sync
