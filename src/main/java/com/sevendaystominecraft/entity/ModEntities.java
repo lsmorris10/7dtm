@@ -47,12 +47,12 @@ public class ModEntities {
     public static final Supplier<EntityType<BloatedWalkerZombie>> BLOATED_WALKER =
             ENTITY_TYPES.register("bloated_walker", () ->
                     EntityType.Builder.<BloatedWalkerZombie>of(BloatedWalkerZombie::new, MobCategory.MONSTER)
-                            .sized(0.8f, 1.95f).clientTrackingRange(8).build(key("bloated_walker")));
+                            .sized(0.9f, 2.1f).clientTrackingRange(8).build(key("bloated_walker")));
 
     public static final Supplier<EntityType<SpiderZombie>> SPIDER_ZOMBIE =
             ENTITY_TYPES.register("spider_zombie", () ->
                     EntityType.Builder.<SpiderZombie>of(SpiderZombie::new, MobCategory.MONSTER)
-                            .sized(0.6f, 1.95f).clientTrackingRange(8).build(key("spider_zombie")));
+                            .sized(0.9f, 0.8f).clientTrackingRange(8).build(key("spider_zombie")));
 
     public static final Supplier<EntityType<FeralWightZombie>> FERAL_WIGHT =
             ENTITY_TYPES.register("feral_wight", () ->
@@ -77,12 +77,12 @@ public class ModEntities {
     public static final Supplier<EntityType<VultureEntity>> VULTURE =
             ENTITY_TYPES.register("vulture", () ->
                     EntityType.Builder.<VultureEntity>of(VultureEntity::new, MobCategory.MONSTER)
-                            .sized(0.8f, 0.6f).clientTrackingRange(10).build(key("vulture")));
+                            .sized(0.9f, 0.5f).clientTrackingRange(10).build(key("vulture")));
 
     public static final Supplier<EntityType<DemolisherZombie>> DEMOLISHER =
             ENTITY_TYPES.register("demolisher", () ->
                     EntityType.Builder.<DemolisherZombie>of(DemolisherZombie::new, MobCategory.MONSTER)
-                            .sized(0.8f, 2.2f).clientTrackingRange(8).build(key("demolisher")));
+                            .sized(0.9f, 2.4f).clientTrackingRange(8).build(key("demolisher")));
 
     public static final Supplier<EntityType<MutatedChuckZombie>> MUTATED_CHUCK =
             ENTITY_TYPES.register("mutated_chuck", () ->
@@ -117,7 +117,7 @@ public class ModEntities {
     public static final Supplier<EntityType<BehemothZombie>> BEHEMOTH =
             ENTITY_TYPES.register("behemoth", () ->
                     EntityType.Builder.<BehemothZombie>of(BehemothZombie::new, MobCategory.MONSTER)
-                            .sized(1.2f, 2.5f).clientTrackingRange(10).build(key("behemoth")));
+                            .sized(1.6f, 3.0f).clientTrackingRange(10).build(key("behemoth")));
 
     @EventBusSubscriber(modid = SevenDaysToMinecraft.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class AttributeRegistration {

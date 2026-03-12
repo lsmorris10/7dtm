@@ -60,6 +60,17 @@ Built the entire custom zombie entity system from scratch. Here's the breakdown:
   - ZombieBear: `ScaledZombieRenderer` at 1.5x (bear-sized)
 - **Note**: All entities extend `Zombie` via `BaseSevenDaysZombie`, so vanilla animal renderers (`WolfRenderer`, `PhantomRenderer`, `PolarBearRenderer`) cannot be used directly (type mismatch — those renderers expect their specific entity classes). Scaled zombie models with correct bounding boxes provide visually distinct sizes. Full custom models/textures are future work.
 
+### Name tags above zombies (Task #2 — merged from task agent)
+- **What**: Added floating name tags above all custom zombie entities so players can identify types before custom textures exist.
+- **How**: `BaseSevenDaysZombie.applyNameTag()` sets `setCustomName()` + `setCustomNameVisible(true)` using a formatted display name built from variant + modifier.
+- Converts enum names to Title Case (e.g. `FROZEN_LUMBERJACK` → "Frozen Lumberjack", `RADIATED` + `COP` → "Radiated Cop").
+- Called from `applyAllStats()`, `setModifier()`, and `readAdditionalSaveData()` so names stay correct through spawn, modifier changes, and save/load.
+- All animal-type zombies inherit this automatically — no subclass changes needed.
+
+### Post-merge setup
+- Created `scripts/post-merge.sh` — runs `./gradlew build --no-daemon -q` after task agent merges to verify compilation.
+- Configured in `.replit` with 180s timeout.
+
 ### Build status
 BUILD SUCCESSFUL — 0 errors, only deprecation warnings on `@EventBusSubscriber(bus = Bus.MOD)` (still functional in NeoForge 21.4.140).
 
@@ -93,6 +104,35 @@ BUILD SUCCESSFUL — 0 errors, only deprecation warnings on `@EventBusSubscriber
 5. **TODO — HUD polish**: Compass/minimap not yet started.
 
 6. **TODO — Heatmap**: Stub exists but needs actual chunk data for noise events.
+
+### HP Display and Zombie Size Fixes (Task #3)
+
+1. **HP display under name tags**
+   - `BaseSevenDaysZombie.applyNameTag()` now includes HP: displays "Zombie Name" on one line and "currentHP / maxHP" below it in red.
+   - Tick-based HP refresh every 5 ticks — only updates the custom name when HP actually changes (tracks `lastDisplayedHP`).
+   - `ScaledZombieRenderer` overrides `renderNameTag()` to split the `\n`-delimited custom name into two lines, rendering the name higher and the HP counter below.
+   - `ScaledZombieRenderer` overrides `extractRenderState()` to push `nameTagAttachment` up by 1.0 block, making both lines clearly float above the entity.
+
+2. **All zombie types now use ScaledZombieRenderer**
+   - Previously only Demolisher, Behemoth, ZombieDog, Vulture, and ZombieBear used `ScaledZombieRenderer`. Now all 18 types use it (standard zombies at scale 1.0) to get the raised name tag and two-line HP rendering.
+
+3. **Bounding box size corrections in ModEntities**
+   - Bloated Walker: 0.8×1.95 → 0.9×2.1 (wider, taller)
+   - Spider Zombie: 0.6×1.95 → 0.9×0.8 (low profile)
+   - Demolisher: 0.8×2.2 → 0.9×2.4 (bulkier)
+   - Behemoth: 1.2×2.5 → 1.6×3.0 (massive)
+   - Vulture: 0.8×0.6 → 0.9×0.5 (small flying)
+   - Zombie Bear: 1.4×1.4 (confirmed, no change)
+   - Zombie Dog: 0.6×0.85 (confirmed, no change)
+
+4. **Renderer scale factor updates in ModEntityRenderers**
+   - Bloated Walker: new, 1.1x (fatter visual)
+   - Spider Zombie: new, 0.5x (low profile visual)
+   - Demolisher: 1.2x → 1.3x
+   - Behemoth: 1.8x → 2.0x
+   - Zombie Bear, Zombie Dog, Vulture: unchanged
+
+5. **Zombie guide updated** — Added Size (W × H) row to every zombie's stat table in `docs/zombie_guide.md`.
 
 ## Next Up
 - Sprint bug fix (Mixin approach).

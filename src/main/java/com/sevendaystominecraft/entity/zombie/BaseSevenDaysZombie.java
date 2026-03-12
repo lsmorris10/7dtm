@@ -2,6 +2,7 @@ package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -20,6 +21,7 @@ public class BaseSevenDaysZombie extends Zombie {
     protected ZombieVariant modifier;
     protected boolean isHordeMob;
     private boolean statsApplied = false;
+    private float lastDisplayedHP = -1;
 
     public BaseSevenDaysZombie(EntityType<? extends Zombie> type, Level level, ZombieVariant variant) {
         super(type, level);
@@ -42,6 +44,7 @@ public class BaseSevenDaysZombie extends Zombie {
             if (statsApplied) {
                 applyModifierStats();
             }
+            applyNameTag();
         }
     }
 
@@ -82,6 +85,14 @@ public class BaseSevenDaysZombie extends Zombie {
         if (!level().isClientSide() && !isHordeMob) {
             applyNightSpeedBonus();
         }
+
+        if (!level().isClientSide() && statsApplied && tickCount % 5 == 0) {
+            float currentHP = getHealth();
+            if (currentHP != lastDisplayedHP) {
+                lastDisplayedHP = currentHP;
+                applyNameTag();
+            }
+        }
     }
 
     private void applyAllStats() {
@@ -89,6 +100,7 @@ public class BaseSevenDaysZombie extends Zombie {
         if (modifier != null) {
             applyModifierStats();
         }
+        applyNameTag();
         statsApplied = true;
     }
 
@@ -110,7 +122,36 @@ public class BaseSevenDaysZombie extends Zombie {
                 modifier = ZombieVariant.valueOf(tag.getString("7dtm_modifier"));
             } catch (IllegalArgumentException ignored) {}
         }
+        applyNameTag();
         statsApplied = false;
+    }
+
+    protected void applyNameTag() {
+        String displayName = buildDisplayName();
+        int currentHP = (int) getHealth();
+        int maxHP = (int) getMaxHealth();
+        String fullText = displayName + "\n" + currentHP + " / " + maxHP;
+        setCustomName(Component.literal(fullText));
+        setCustomNameVisible(true);
+    }
+
+    private String buildDisplayName() {
+        String name = formatEnumName(variant.name());
+        if (modifier != null) {
+            name = formatEnumName(modifier.name()) + " " + name;
+        }
+        return name;
+    }
+
+    private static String formatEnumName(String enumName) {
+        String[] words = enumName.toLowerCase().split("_");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) sb.append(' ');
+            sb.append(Character.toUpperCase(words[i].charAt(0)));
+            sb.append(words[i].substring(1));
+        }
+        return sb.toString();
     }
 
     protected void applyVariantStats() {

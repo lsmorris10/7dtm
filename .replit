@@ -28,3 +28,7 @@ args = "export JAVA_HOME=$(dirname $(dirname $(which java))) && ./gradlew build 
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 180000
