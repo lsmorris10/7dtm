@@ -2,27 +2,58 @@
 
 ---
 
-## Currently Running Tasks (March 12, 2026 — overnight)
+## Overnight Tasks — All Merged ✓
 
-Three task agents are running in parallel while you sleep:
+All three overnight task agents completed and merged successfully:
 
-1. **Task #5 — Heatmap Spawning System** (Spec §1.3): Adds per-chunk heat tracking driven by player activity (block breaking, torch placement, explosions, sprinting). Chunks that accumulate enough heat trigger scout Walkers, Screamer spawns, and mini-hordes. Includes `/7dtm heat` and `/7dtm heat_clear` debug commands.
-
-2. **Task #6 — Hide Vanilla Hunger Bar**: Removes the redundant vanilla drumstick hunger bar since the custom HUD already displays Food, Water, and Stamina bars.
-
-3. **Task #7 — HUD Health Bar Replacing Vanilla Hearts**: Adds an HP bar to the custom stats panel and hides the vanilla heart icons, consolidating all player vitals into the custom HUD.
+1. **Task #5 — Heatmap Spawning System** (Spec §1.3) — **MERGED** ✓
+2. **Task #6 — Hide Vanilla Hunger Bar** — **MERGED** ✓
+3. **Task #7 — HUD Health Bar Replacing Vanilla Hearts** — **MERGED** ✓
 
 ---
 
-## When You Wake Up — Checklist
+## Testing Today — March 12, 2026
 
-- [ ] Check if all three tasks (#5, #6, #7) completed and merged successfully
-- [ ] Run `./gradlew build` to verify everything compiles cleanly
-- [ ] Test in-game: spawn zombies near high-heat areas, verify heatmap spawning works (place lots of torches or break blocks to raise chunk heat, then check `/7dtm heat`)
-- [ ] Verify vanilla hunger bar (drumstick icons) is gone and the custom HUD shows Food/Water/Stamina bars
-- [ ] Verify vanilla hearts are gone and the custom HUD shows an HP bar
-- [ ] Check the sprint bug — still unresolved, needs client-side Mixin on `LocalPlayer.aiStep()`
-- [ ] Look at `docs/if-bored.md` for edge cases worth testing
+### Build Verification
+- [ ] Run `./gradlew build` — confirm it compiles cleanly with zero errors
+
+### Heatmap Spawning (Task #5)
+- [ ] Place a large cluster of torches in one chunk to raise heat (+2 per torch)
+- [ ] Break a bunch of blocks in one area to add heat (+0.5 per block)
+- [ ] Run `/7dtm heat` — verify it reports the correct heat value for your chunk
+- [ ] Get heat to 25+ and watch for 1-2 scout Walkers to spawn
+- [ ] Get heat to 50+ and confirm a Screamer spawns
+- [ ] Get heat to 75+ and confirm a mini-horde of 8-12 mixed zombies spawns
+- [ ] Run `/7dtm heat_clear` — verify all heat resets to 0 and spawning stops
+- [ ] Confirm heat decays over time when you stop doing noisy things
+
+### Vanilla Hunger Bar Hidden (Task #6)
+- [ ] Verify the vanilla drumstick hunger icons are completely gone
+- [ ] Confirm the custom HUD still shows Food, Water, and Stamina bars correctly
+
+### HUD Health Bar (Task #7)
+- [ ] Verify the vanilla heart icons are completely gone
+- [ ] Confirm the custom HUD shows an HP bar in the stats panel
+- [ ] Take damage and verify the HP bar updates in real-time
+
+### Temperature System
+- [ ] Check the 0.3°F/s adjustment rate — does it feel smooth and reasonable?
+- [ ] Move between biomes and verify temperature shifts
+
+### Debuffs
+- [ ] Get hit by zombies and check for Infection/Bleeding effects
+- [ ] Verify bleeding drains HP (-1 HP every 3 sec)
+- [ ] Verify infection progression (Stage 1 → Stage 2)
+
+### Horde Spawn Balance
+- [ ] Trigger a blood moon or use commands to spawn a horde wave
+- [ ] Verify spawn counts feel right for the current game day
+- [ ] Check that zombie composition matches the tier table (day thresholds)
+
+### Edge Cases (from `docs/if-bored.md`)
+- [ ] Spawn all zombie types one by one — no crashes
+- [ ] Test modifier variants (Radiated, Charged, Infernal) on eligible base types
+- [ ] Try cross-system interactions: heatmap during blood moon, stacking debuffs, etc.
 
 ---
 
@@ -116,22 +147,23 @@ BUILD SUCCESSFUL — 0 errors, only deprecation warnings on `@EventBusSubscriber
 
 ## Known Bugs / Polish To Address
 
-1. **SPRINT BUG** (unresolved since Milestone 2):
+1. **SPRINT BUG — FIX ANOTHER DAY** (unresolved since Milestone 2):
    - Sprint can get stuck — holding W alone gives infinite sprint. Stamina drains but sprint doesn't cancel. Needs a client-side Mixin on `LocalPlayer.aiStep()`.
+   - **Not on today's test list.** This is a known issue that requires a proper client-side fix.
 
-2. **TEST NEEDED — Temperature**: Adjustment rate at 0.3°F/s, needs gameplay verification.
+2. **TEST NEEDED — Temperature**: Adjustment rate at 0.3°F/s, needs gameplay verification. (On today's test list.)
 
-3. **TEST NEEDED — Debuffs**: Infection/bleeding effects unverified in gameplay.
+3. **TEST NEEDED — Debuffs**: Infection/bleeding effects unverified in gameplay. (On today's test list.)
 
-4. **TEST NEEDED — Horde spawn balance**: Verify spawn counts match intended difficulty.
+4. **TEST NEEDED — Horde spawn balance**: Verify spawn counts match intended difficulty. (On today's test list.)
 
 5. **TODO — HUD polish**: Compass/minimap not yet started.
 
-6. **DONE — Heatmap**: Core implementation complete in Milestone 5. Task #5 adds the spawning integration and is merging overnight.
+6. **DONE — Heatmap Spawning** (Task #5): Full heatmap system with per-chunk heat tracking, threshold-based spawning, and debug commands. Merged. ✓
 
-7. **IN PROGRESS — Hide Vanilla Hunger Bar** (Task #6): Removing vanilla drumstick icons; custom HUD already handles Food/Water/Stamina display.
+7. **DONE — Hide Vanilla Hunger Bar** (Task #6): Vanilla drumstick icons removed; custom HUD handles Food/Water/Stamina. Merged. ✓
 
-8. **IN PROGRESS — HUD Health Bar** (Task #7): Adding HP bar to the custom stats panel and hiding vanilla heart icons.
+8. **DONE — HUD Health Bar** (Task #7): HP bar added to custom stats panel, vanilla heart icons hidden. Merged. ✓
 
 ### HP Display and Zombie Size Fixes (Task #3)
 
