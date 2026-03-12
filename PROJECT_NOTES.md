@@ -2,6 +2,25 @@
 
 ---
 
+## Development Workflow (Permanent)
+
+**Primary coding environment:** Replit Agent
+**Testing environment:** Antigravity (local PC)
+
+| Environment | Role | Push Frequency |
+|-------------|------|---------------|
+| **Replit** | Main coding, building, pushing to GitHub | Most pushes |
+| **Antigravity** | Pull, test mod in-game on local PC, occasional code + push | Less frequent |
+
+**Sync Rules:**
+1. **Before coding in Antigravity:** Always `git pull` first to grab latest from Replit.
+2. **Before starting work in Replit after an Antigravity session:** Run `git fetch origin && git reset --hard origin/master` to pick up anything pushed from Antigravity.
+3. **Never squash or rebase from Replit** — Replit cannot force-push to GitHub. Do history cleanup from Antigravity only.
+4. **Replit auto-creates checkpoint commits** ("Transitioned from Plan to Build mode", task completion commits). This is normal. Squash from Antigravity if cleaner history is desired, then sync Replit with step 2.
+5. **Replit creates `subrepl-*` branches** for parallel task agents. These are temporary and can be deleted from Antigravity after tasks are merged.
+
+---
+
 ## Current Status & Next Up
 
 **Next Tasks:**
