@@ -25,31 +25,70 @@
 
 **Next Tasks:**
 - **Sprint bug fix** — Client-side Mixin on `LocalPlayer.aiStep()` to properly cancel sprint when stamina is depleted.
-- **HUD Polish** — Compass and Minimap.
-- **Loot & crafting system** (Spec §5-6) — Custom loot tables, crafting recipes, and item progression.
 - **Custom textures & models** — Replace scaled zombie renderers with proper custom models and textures for each variant.
 - **World generation** — Custom biomes, structures, and POI generation per the spec.
 
 ---
 
-## Pending Testing (March 12, 2026)
+## Pending Testing & Debugging (March 12, 2026)
 
 ### Build Verification
 - [ ] Run `./gradlew build` — confirm it compiles cleanly with zero errors
 
 ### Systems to Verify In-Game
-- **Temperature:** [ ] Check 0.3°F/s adjustment rate and biomes shifts.
-- **Debuffs:** [ ] Check Infection/Bleeding effects (Bleeding drains -1 HP/3s, Infection stages).
-- **Horde Spawn Balance:** [ ] Trigger blood moon/horde wave, verify counts and zombie composition.
-- **Heatmap Spawning:** 
-  - [ ] Break blocks (+0.5 heat) and place torches (+2 heat).
-  - [ ] Verify `/7dtm heat` reports correct values.
-  - [ ] Heat 25+ (scout Walkers), 50+ (Screamer), 75+ (Mini-horde).
-  - [ ] Verify `/7dtm heat_clear` resets heat and heat decays over time.
-- **HUD Changes:** 
-  - [ ] Verify vanilla hunger (drumsticks) and vanilla health (hearts) are hidden.
-  - [ ] Confirm custom HUD shows Food, Water, Stamina, and HP correctly.
-- **Edge Cases:** [ ] Spawn all zombie types (no crashes), test modifier variants, cross-system interactions (heatmap during blood moon).
+
+- **Compass & Minimap:**
+  - [ ] Verify HUD compass shows cardinal directions (N/S/E/W)
+  - [ ] Minimap renders nearby terrain correctly
+  - [ ] Player tracking dot works in multiplayer
+
+- **Zombie Name Tags:**
+  - [ ] Confirm name tags and HP bars are NOT visible through walls (occlusion fix)
+
+- **Sunlight Burning Disabled:**
+  - [ ] All 7DTM zombies should NOT burn in daylight
+
+- **Loot & Crafting System:**
+  - [ ] Open loot containers, verify loot tables populate correctly
+  - [ ] Test crafting recipes work end-to-end
+  - [ ] Check item progression tiers
+
+- **XP & Leveling System:**
+  - [ ] Kill zombies and verify XP gain
+  - [ ] Check level-up notifications display correctly
+  - [ ] Test perk unlocks and confirm their effects apply
+
+- **Debuffs System:**
+  - [ ] Trigger each debuff: Bleeding, Infection, Dysentery, Sprain, Fracture
+  - [ ] Verify effects apply correctly (damage over time, movement penalties, etc.)
+  - [ ] Test cures work for each debuff
+  - [ ] Confirm debuffs clear on death
+  - [ ] Test `/7dtm cleardebuffs` command
+
+- **Night Zombie Speed:**
+  - [ ] Verify zombies move at 2.25x speed at night
+
+- **Day Cycle:**
+  - [ ] Confirm day/night cycle is 48,000 ticks (double vanilla length)
+
+- **Player Health:**
+  - [ ] Confirm base health is 100 HP
+  - [ ] Zombies no longer one-shot the player
+
+- **HUD Layout:**
+  - [ ] Stats HUD doesn't overlap compass
+  - [ ] Background removed from stats HUD
+  - [ ] Everything readable and properly positioned
+
+- **Heatmap:**
+  - [ ] Re-verify heatmap still works properly alongside all the new systems
+  - [ ] `/7dtm heat` and `/7dtm heat_clear` commands still functional
+
+- **Previous Systems (Regression Check):**
+  - [ ] Temperature system (0.3°F/s adjustment, biome shifts)
+  - [ ] Horde spawn balance (blood moon triggers, zombie composition)
+  - [ ] Vanilla hunger/health bars still hidden, custom HUD still correct
+  - [ ] Spawn all zombie types (no crashes), test modifier variants
 
 ---
 
@@ -59,11 +98,26 @@
    - Sprint can get stuck — holding W alone gives infinite sprint. Stamina drains but sprint doesn't cancel. Needs a client-side Mixin on `LocalPlayer.aiStep()`.
    - **Not on today's test list.** This is a known issue that requires a proper client-side fix.
 
-2. **TODO — HUD polish**: Compass/minimap not yet started.
+2. **UNPUSHED COMMITS** — As of end of March 12 session, there are commits ahead of `origin/master`. Push to GitHub before pulling on Antigravity.
 
 ---
 
-## Recent Completed Work (Milestones 3, 4, 5)
+## Recent Completed Work
+
+**March 12 Late-Session Work [MERGED]**
+- Zombie name tag occlusion fix (name tags and HP bars not visible through walls)
+- HUD compass and minimap with player tracking
+- Sunlight burning disabled for all 7DTM zombies
+- Zombie behavior summary added to `docs/zombie_guide.md`
+- Loot and crafting system (Milestone 6) — loot tables, crafting recipes, item progression tiers
+- XP, leveling & perk system — kill XP, level-up notifications, perk unlocks
+- Debuffs system — Bleeding, Infection, Dysentery, Sprain, Fracture with triggers and cures
+- Stats HUD overlap fix (moved down below compass, removed background)
+- Night zombie speed increased to 2.25x
+- Day cycle doubled to 48,000 ticks
+- Debuffs persistence bug fixed (twice — `/7dtm cleardebuffs` command + `copyOnDeath` removal)
+- Debuffs guide created (`docs/debuffs_guide.md`)
+- Player base health set to 100 HP
 
 **Milestone 5 — Heatmap System (§1.3) [MERGED]**
 - Full per-chunk heatmap system with decay over time.
