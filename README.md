@@ -34,8 +34,8 @@ A total conversion mod for **Minecraft 1.21.4** (NeoForge) that brings **7 Days 
 - All debuffs clear on death
 
 ### Zombie System (18 Variants + 3 Modifiers)
-- **Base Variants**: Walker, Soldier, Frozen Lumberjack, Bloated Walker, Spider Zombie, Feral Wight, Screamer, Cop, Demolisher, Nurse, Mutated Chuck, Behemoth
-- **Animals**: Zombie Dog, Zombie Bear, Vulture
+- **Humanoid (15)**: Walker, Crawler, Soldier, Frozen Lumberjack, Bloated Walker, Spider Zombie, Feral Wight, Screamer, Cop, Demolisher, Nurse, Mutated Chuck, Behemoth, Charged, Infernal
+- **Animals (3)**: Zombie Dog, Zombie Bear, Vulture
 - **Special Mechanics**: Explosions, acid spit projectiles, chain lightning, fire trails, wall climbing, healing aura, screamer spawning, flying dive attacks, ground pound AoE
 - **Modifiers**: Radiated (HP regen), Charged (chain lightning), Infernal (fire trail + burn)
 - **Night Speed**: 2.25x movement speed at night (configurable)
