@@ -123,8 +123,8 @@ public class ZombieConfig {
                 .comment("Hard cap on max zombies per player")
                 .defineInRange("maxZombiesCap", 64, 16, 256);
         nightSpeedBonus = builder
-                .comment("Speed multiplier bonus for sprint-capable zombies at night (spec §3.2: 0.5 = +50%)")
-                .defineInRange("nightSpeedBonus", 0.5, 0.0, 2.0);
+                .comment("Speed multiplier bonus for sprint-capable zombies at night (spec §3.2: 1.25 = +125%, i.e. 2.25x base speed)")
+                .defineInRange("nightSpeedBonus", 1.25, 0.0, 3.0);
         replaceVanillaHostiles = builder
                 .comment("Replace all vanilla hostile mob spawns with 7DTM zombie variants")
                 .define("replaceVanillaHostiles", true);

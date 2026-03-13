@@ -9,7 +9,7 @@ A complete guide to every zombie type in the game, including their stats, abilit
 All 18 zombie types in 7 Days to Minecraft share these universal traits:
 
 **Day vs Night**
-- Zombies are slower and less aggressive during the day. At night (18:00-06:00), all zombies gain a **+50% movement speed bonus**, making nighttime significantly more dangerous.
+- Zombies are slower and less aggressive during the day. At night (18:00-06:00), all zombies gain a **+125% movement speed bonus (2.25x)**, making nighttime significantly more dangerous.
 - Zombie spawn rates are **3x higher at night** compared to daytime.
 - Zombies do **not** burn in sunlight. Unlike vanilla Minecraft, the undead roam freely during the day — they're just slower and easier to manage.
 
@@ -300,7 +300,7 @@ Infernal zombies leave a trail of fire wherever they walk and set players ablaze
 
 ## Night Behavior
 
-All zombies receive a +50% movement speed bonus during nighttime (configurable). This makes nighttime significantly more dangerous than daytime encounters, even outside of horde nights. Plan your activities accordingly — getting caught in the open after dark is far more punishing than during the day.
+All zombies receive a +125% movement speed bonus (2.25x) during nighttime (configurable). This creates the dramatic day-to-night threat escalation that defines the 7 Days to Die experience — zombies shift from slow shamblers to full sprinters after dark. Plan your activities accordingly — getting caught in the open after dark is far more punishing than during the day.
 
 ---
 
