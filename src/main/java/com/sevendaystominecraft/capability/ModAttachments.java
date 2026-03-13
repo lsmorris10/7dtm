@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
  * <h3>Key behaviors:</h3>
  * <ul>
  *   <li>Persisted to disk via {@link SevenDaysPlayerStats} (INBTSerializable)</li>
- *   <li>Copied on death via {@code copyOnDeath(true)} — stats survive respawn</li>
+ *   <li>Death handling is done manually in PlayerStatsHandler's Clone handler</li>
  *   <li>Synced to client manually via {@link com.sevendaystominecraft.network.SyncPlayerStatsPayload}</li>
  * </ul>
  *
@@ -53,14 +53,14 @@ public class ModAttachments {
      *
      * Registered with:
      * - serializable() → uses INBTSerializable for CompoundTag persistence
-     * - copyOnDeath(true) → stats persist through death/respawn
      *
+     * Death/respawn copying is handled manually in PlayerStatsHandler's Clone
+     * handler via copyFrom(), which allows debuffs to be cleared on respawn.
      * Client sync is handled manually via SyncPlayerStatsPayload.
      */
     public static final Supplier<AttachmentType<SevenDaysPlayerStats>> PLAYER_STATS =
             ATTACHMENT_TYPES.register("player_stats",
                     () -> AttachmentType.serializable(SevenDaysPlayerStats::new)
-                            .copyOnDeath()
                             .build()
             );
 }
