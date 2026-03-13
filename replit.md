@@ -38,11 +38,31 @@ src/main/java/com/sevendaystominecraft/
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
 │   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types
 │   └── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
+├── block/
+│   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations + loot containers)
+│   ├── ModBlockEntities.java       — Block entity type registration
+│   ├── workstation/
+│   │   ├── WorkstationType.java    — Enum: Campfire, Grill, Workbench, Forge, Cement Mixer, Chemistry Station, Advanced Workbench
+│   │   ├── WorkstationBlock.java   — BaseEntityBlock for all workstation types
+│   │   ├── WorkstationBlockEntity.java — Block entity with fuel, crafting progress, input/output slots
+│   │   ├── WorkstationMenu.java    — Container menu for workstation GUI
+│   │   └── WorkstationScreen.java  — Client-side GUI screen for workstations
+│   └── loot/
+│       ├── LootContainerType.java  — Enum: Trash Pile, Cardboard Box, Gun Safe, Munitions Box, etc.
+│       ├── LootContainerBlock.java — BaseEntityBlock for loot containers
+│       ├── LootContainerBlockEntity.java — Block entity with loot generation, respawn tracking
+│       ├── LootContainerMenu.java  — Container menu for loot containers
+│       └── LootContainerScreen.java — Client-side GUI for loot containers
+├── command/
+│   └── LootStageCommand.java       — /7dtm loot_stage debug command
 ├── config/
 │   ├── SurvivalConfig.java         — Server-side survival config (survival.toml)
 │   ├── HordeConfig.java            — Server-side horde/blood moon config (horde.toml)
 │   ├── ZombieConfig.java           — Zombie variant stats/modifiers config (zombies.toml)
-│   └── HeatmapConfig.java          — Heatmap config (heatmap.toml): enabled, decay/spawn multipliers
+│   ├── HeatmapConfig.java          — Heatmap config (heatmap.toml): enabled, decay/spawn multipliers
+│   └── LootConfig.java             — Loot config (loot.toml): respawnDays, abundanceMultiplier, qualityScaling
+├── crafting/
+│   └── ScrappingSystem.java        — Item scrapping into component materials (workbench vs inventory yield)
 ├── entity/
 │   ├── ModEntities.java            — DeferredRegister for all custom entity types + attribute events
 │   └── zombie/
@@ -64,6 +84,15 @@ src/main/java/com/sevendaystominecraft/
 │       ├── VultureEntity.java       — Flying dive attacks (Phantom base)
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
+├── item/
+│   ├── ModItems.java               — DeferredRegister for all custom items (17 core materials + Dukes Casino Token)
+│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Loot Containers
+│   └── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
+├── loot/
+│   ├── LootStageCalculator.java    — Loot stage formula: floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)
+│   └── LootStageHandler.java       — Periodic loot stage sync to client
+├── menu/
+│   └── ModMenuTypes.java           — Menu type registration for workstations and loot containers
 ├── heatmap/
 │   ├── HeatSource.java             — Individual heat source with amount, decay rate, radius
 │   ├── HeatmapData.java            — SavedData storing per-chunk heat sources, persisted via NBT
@@ -195,4 +224,16 @@ src/main/java/com/sevendaystominecraft/
 
 ## Spec / Roadmap
 The full implementation is tracked in `docs/7dtm_final_spec.md` with 19 phases.
-Milestones 1-5 complete. Milestone 3 debuffs complete (all 12 debuff types). Milestone 6 (HUD polish) in progress: compass + minimap + player tracking added. Next priorities: sprint bug fix, loot/crafting system (§5-6).
+Milestones 1-6 complete. Milestone 6 (HUD polish) includes compass + minimap + player tracking. Next priorities: sprint bug fix, skills/perks system (§5), trader NPCs (§9).
+
+## Milestone #6: Loot & Crafting System
+- **Items**: 17 core materials + Dukes Casino Token registered via ModItems with creative tabs
+- **Quality Tiers**: T1 (Poor, ×0.7) → T6 (Legendary, ×1.5) with color codes and mod slot scaling
+- **Workstations**: 7 workstation blocks (Campfire, Grill, Workbench, Forge, Cement Mixer, Chemistry Station, Advanced Workbench) with block entities, container menus, and GUI screens; fuel-based workstations tick to process items
+- **Loot Containers**: 8 loot container blocks (Trash Pile, Cardboard Box, Gun Safe, Munitions Box, Supply Crate, Kitchen Cabinet, Medicine Cabinet, Bookshelf) with loot generation scaled by player loot stage and configurable respawn timers
+- **Loot Stage**: Calculated per player: `floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)`, synced to client every 10 seconds
+- **Scrapping**: Tools/weapons/armor/electronics/food can be scrapped into materials, with workbench giving full yield and inventory giving 50%
+- **Config**: `loot.toml` with respawnDays, abundanceMultiplier, qualityScaling options
+- **Command**: `/7dtm loot_stage` shows player's current loot stage with breakdown
+- **4×4 Crafting Grid**: Deferred — Mixin complexity on NeoForge 1.21.4's CraftingMenu/InventoryMenu is too high; workstation-based crafting is implemented first as the task spec allows
+- `BlockEntityType` in NeoForge 1.21.4: No `Builder` class — use constructor directly: `new BlockEntityType<>(Supplier, Block...)`

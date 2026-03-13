@@ -71,6 +71,13 @@ public class ModNetworking {
                 ModNetworking::handleChunkHeatSync
         );
 
+        // Server → Client: loot stage sync
+        registrar.playToClient(
+                SyncLootStagePayload.TYPE,
+                SyncLootStagePayload.STREAM_CODEC,
+                ModNetworking::handleLootStageSync
+        );
+
         SevenDaysToMinecraft.LOGGER.debug("7DTM: Registered network payloads");
     }
 
@@ -94,6 +101,12 @@ public class ModNetworking {
     private static void handleChunkHeatSync(SyncChunkHeatPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             ChunkHeatClientState.update(payload.chunkHeat());
+        });
+    }
+
+    private static void handleLootStageSync(SyncLootStagePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            SevenDaysToMinecraft.LOGGER.debug("7DTM: Received loot stage sync: {}", payload.lootStage());
         });
     }
 

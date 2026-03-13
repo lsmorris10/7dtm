@@ -1,12 +1,19 @@
 package com.sevendaystominecraft;
 
 import com.mojang.logging.LogUtils;
+import com.sevendaystominecraft.block.ModBlockEntities;
+import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.command.LootStageCommand;
 import com.sevendaystominecraft.config.HeatmapConfig;
 import com.sevendaystominecraft.config.HordeConfig;
+import com.sevendaystominecraft.config.LootConfig;
 import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.ModEntities;
+import com.sevendaystominecraft.item.ModCreativeTabs;
+import com.sevendaystominecraft.item.ModItems;
+import com.sevendaystominecraft.menu.ModMenuTypes;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -15,17 +22,10 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-/**
- * 7 Days to Minecraft — Main mod entry point.
- * 
- * Total conversion mod bringing 7 Days to Die survival into Minecraft 1.21+.
- * Aligned to 7DTD 2.6 Experimental (Feb 25, 2026).
- * 
- * @see <a href="docs/7dtm_final_spec.md">Full Specification</a>
- */
 @Mod(SevenDaysToMinecraft.MOD_ID)
 public class SevenDaysToMinecraft {
 
@@ -35,89 +35,46 @@ public class SevenDaysToMinecraft {
     public SevenDaysToMinecraft(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("7 Days to Minecraft — Initializing...");
 
-        // ── Milestone #2: Register Data Attachments ─────────────────────
-        // Player stats (Food, Water, Stamina, Debuffs, Temperature)
-        // This DeferredRegister handles attachment type registration on the mod bus.
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
 
-        // ── Milestone #2: Register Server Config (survival.toml) ────────
         modContainer.registerConfig(ModConfig.Type.SERVER, SurvivalConfig.SPEC, "survival.toml");
-
-        // ── Milestone #3: Register Horde Config (horde.toml) ─────────
         modContainer.registerConfig(ModConfig.Type.SERVER, HordeConfig.SPEC, "horde.toml");
-
-        // ── Milestone #4: Register Zombie Config (zombies.toml) ──────
         modContainer.registerConfig(ModConfig.Type.SERVER, ZombieConfig.SPEC, "zombies.toml");
-
-        // ── Milestone #5: Register Heatmap Config (heatmap.toml) ──────
         modContainer.registerConfig(ModConfig.Type.SERVER, HeatmapConfig.SPEC, "heatmap.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, LootConfig.SPEC, "loot.toml");
 
-        // ── Milestone #4: Register Custom Entities ──────────────────
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
-        // Register mod lifecycle events
+        ModItems.ITEMS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModBlocks.BLOCK_ITEMS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+        ModMenuTypes.MENU_TYPES.register(modEventBus);
+        ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);
 
-        // Register game events on the NeoForge event bus
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
-
-        // Note: PlayerStatsHandler is registered via @EventBusSubscriber (auto-discovered)
-        // Note: ModNetworking is registered via @EventBusSubscriber(bus = Bus.MOD) (auto-discovered)
-        // Note: ModEntities.AttributeRegistration registered via @EventBusSubscriber(bus = Bus.MOD)
-
-        // TODO: Register remaining systems:
-        // - ModBlocks.register(modEventBus);      // Custom blocks
-        // - ModItems.register(modEventBus);       // Custom items
-        // - ModParticles.register(modEventBus);   // Custom particles (§14.7.2)
-        // - ModSounds.register(modEventBus);      // Custom sounds
+        NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
 
         LOGGER.info("7 Days to Minecraft — Mod registered successfully.");
     }
 
-    /**
-     * Common setup — runs on both client and server after registry events.
-     * Initialize cross-side systems (heatmap, temperature, AI, etc.)
-     */
     private void onCommonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("7DTM Common Setup — Initializing shared systems...");
-        // TODO: Initialize systems:
-        // - Heatmap chunk capability
-        // - Temperature calculator
-        // - Zombie behavior tree AI
-        // - Perk registry loader
-        // - Electricity grid manager
     }
 
-    /**
-     * Client setup — register renderers, screens, keybinds, particles.
-     * All visual/animation systems from §14 go here.
-     */
     private void onClientSetup(final FMLClientSetupEvent event) {
         LOGGER.info("7DTM Client Setup — Registering renderers and visual systems...");
-        // TODO: Register client-side systems:
-        // - Custom HUD overlay renderer (§14.1)
-        // - Sprint pose model extension (§14.7.1)
-        // - Sprint particle handler (§14.7.2)
-        // - Body language handler (§14.7.3)
-        // - Debuff vignette renderer (§14.5)
-        // - Temperature overlay renderer (§14.5)
-        // - Blood Moon atmosphere effects (§14.5)
-        // - Zombie glow layer renderer (§14.5)
-        // - Vehicle camera handler (§14.5)
-        // - Custom inventory/crafting screens (§14.2, §14.3)
-        // - Map screen (§14.4)
     }
 
-    /**
-     * Server starting — load configs, initialize heatmap data, register commands.
-     */
     private void onServerStarting(final ServerStartingEvent event) {
         LOGGER.info("7DTM Server Starting — Loading world data...");
-        // TODO: Initialize server-side:
-        // - Load/initialize heatmap data
-        // - Register /7dtm command tree (§15.4)
-        // - Initialize trader restock timers
-        // - Blood Moon scheduler
+    }
+
+    private void onRegisterCommands(final RegisterCommandsEvent event) {
+        LootStageCommand.register(event.getDispatcher());
+        LOGGER.info("7DTM: Registered /7dtm loot_stage command");
     }
 }
