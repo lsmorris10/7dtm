@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.horde;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.config.HordeConfig;
 
@@ -197,10 +198,10 @@ public class BloodMoonTracker extends SavedData {
     }
 
     public static int calculateGameDay(ServerLevel level) {
-        return (int) (level.getDayTime() / 24000L) + 1;
+        return (int) (level.getDayTime() / SevenDaysConstants.DAY_LENGTH) + 1;
     }
 
     public static int getTimeOfDay(ServerLevel level) {
-        return (int) (level.getDayTime() % 24000L);
+        return (int) (level.getDayTime() % SevenDaysConstants.DAY_LENGTH);
     }
 }

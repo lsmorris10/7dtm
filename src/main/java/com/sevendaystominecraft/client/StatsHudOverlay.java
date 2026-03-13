@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.client;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
@@ -64,7 +65,7 @@ public class StatsHudOverlay {
         int x = MARGIN_X;
         int y = MARGIN_Y;
 
-        int currentDay = (int) (mc.level.getDayTime() / 24000L) + 1;
+        int currentDay = (int) (mc.level.getDayTime() / SevenDaysConstants.DAY_LENGTH) + 1;
         graphics.drawString(mc.font, "Day: " + currentDay, x, y, TEXT_COLOR, true);
         y += 14;
 

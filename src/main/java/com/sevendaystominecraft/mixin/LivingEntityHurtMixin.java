@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.mixin;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.config.SurvivalConfig;
@@ -48,7 +49,7 @@ public abstract class LivingEntityHurtMixin {
         if (player.getRandom().nextFloat() < infectionChance) {
             if (!stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)
                     && !stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
-                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1, 24000);
+                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1, (int) SevenDaysConstants.DAY_LENGTH);
             }
         }
 

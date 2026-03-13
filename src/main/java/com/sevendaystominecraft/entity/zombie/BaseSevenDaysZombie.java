@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.entity.zombie;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.config.ZombieConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -206,8 +207,8 @@ public class BaseSevenDaysZombie extends Zombie {
 
     private void applyNightSpeedBonus() {
         if (level() instanceof ServerLevel serverLevel) {
-            long timeOfDay = serverLevel.getDayTime() % 24000;
-            boolean isNight = timeOfDay >= 13000 && timeOfDay < 23000;
+            long timeOfDay = serverLevel.getDayTime() % SevenDaysConstants.DAY_LENGTH;
+            boolean isNight = timeOfDay >= SevenDaysConstants.NIGHT_START && timeOfDay < SevenDaysConstants.NIGHT_END;
             double baseSpeed = convertSpeedToAttribute(variant.getBaseSpeed());
             if (modifier != null) {
                 ZombieConfig cfg = ZombieConfig.INSTANCE;

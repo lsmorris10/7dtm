@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.capability;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.network.SyncPlayerStatsPayload;
@@ -448,8 +449,8 @@ public class PlayerStatsHandler {
         float fahrenheit = 10.0f + (biomeTemp * 55.0f);
 
         // Time-of-day modifier: nighttime is cooler (−10°F)
-        long dayTime = player.level().getDayTime() % 24000;
-        if (dayTime > 13000 && dayTime < 23000) { // night
+        long dayTime = player.level().getDayTime() % SevenDaysConstants.DAY_LENGTH;
+        if (dayTime > SevenDaysConstants.NIGHT_START && dayTime < SevenDaysConstants.NIGHT_END) {
             fahrenheit -= 10.0f;
         }
 

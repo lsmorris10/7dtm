@@ -25,12 +25,12 @@ import java.util.List;
 @EventBusSubscriber(modid = SevenDaysToMinecraft.MOD_ID)
 public class BloodMoonEventHandler {
 
-    private static final int WARNING_TIME = 14000;
-    private static final int SKY_RED_TIME = 12000;
-    private static final int SIREN_TIME = 12500;
-    private static final int HORDE_START_TIME = 16000;
-    private static final int FINAL_WAVE_TIME = 22000;
-    private static final int DAWN_BURN_TIME = 23500;
+    private static final int WARNING_TIME = 28000;
+    private static final int SKY_RED_TIME = 24000;
+    private static final int SIREN_TIME = 25000;
+    private static final int HORDE_START_TIME = 32000;
+    private static final int FINAL_WAVE_TIME = 44000;
+    private static final int DAWN_BURN_TIME = 47000;
 
     @SubscribeEvent
     public static void onLevelTick(LevelTickEvent.Post event) {
@@ -183,7 +183,7 @@ public class BloodMoonEventHandler {
 
     private static void handlePostHorde(ServerLevel level, BloodMoonTracker tracker,
                                          int currentDay, int timeOfDay) {
-        if (timeOfDay >= DAWN_BURN_TIME && timeOfDay < SKY_RED_TIME) {
+        if (timeOfDay >= DAWN_BURN_TIME) {
             if (!tracker.hasBurnedAtDawn() && HordeConfig.INSTANCE.burnAtDawn.get()) {
                 tracker.setBurnedAtDawn(true);
                 burnSurvivingZombies(level);
