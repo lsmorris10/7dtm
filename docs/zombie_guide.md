@@ -4,6 +4,28 @@ A complete guide to every zombie type in the game, including their stats, abilit
 
 ---
 
+## General Zombie Behavior
+
+All 18 zombie types in 7 Days to Minecraft share these universal traits:
+
+**Day vs Night**
+- Zombies are slower and less aggressive during the day. At night (18:00-06:00), all zombies gain a **+50% movement speed bonus**, making nighttime significantly more dangerous.
+- Zombie spawn rates are **3x higher at night** compared to daytime.
+- Zombies do **not** burn in sunlight. Unlike vanilla Minecraft, the undead roam freely during the day — they're just slower and easier to manage.
+
+**Modifiers**
+- Any base zombie type can spawn with a modifier (Radiated, Charged, or Infernal) during late-game horde nights. A modified zombie keeps all of its normal abilities but gains boosted stats and an extra effect. See the [Modifiers](#modifiers) section for details.
+
+**Spawning**
+- Zombies spawn naturally in the world, but player activity increases spawns through the [Heatmap System](heatmap_guide.md). Mining, placing torches, sprinting, and explosions all generate heat that attracts more zombies.
+- Every 7 days, a **Blood Moon horde night** triggers a massive zombie assault regardless of heat levels. Horde composition scales with how many days you've survived.
+
+**Combat**
+- All zombies target the nearest player and will attack base structures if they can't reach you directly.
+- Zombie HP, damage, and speed vary widely by type — see each entry below for specifics.
+
+---
+
 ## Standard Zombies
 
 ### Walker
