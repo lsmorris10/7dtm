@@ -239,6 +239,11 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     @Override
+    public boolean isSunSensitive() {
+        return false;
+    }
+
+    @Override
     public boolean isSensitiveToWater() {
         return false;
     }
