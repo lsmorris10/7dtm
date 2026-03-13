@@ -26,7 +26,7 @@ public class StatsHudOverlay {
     private static final int BAR_HEIGHT = 8;
     private static final int BAR_SPACING = 3;
     private static final int MARGIN_X = 10;
-    private static final int MARGIN_Y = 10;
+    private static final int MARGIN_Y = 35;
     private static final int TEXT_OFFSET_X = 4;
     private static final int LABEL_WIDTH = 55;
 
@@ -64,10 +64,6 @@ public class StatsHudOverlay {
 
         int x = MARGIN_X;
         int y = MARGIN_Y;
-
-        int panelWidth = LABEL_WIDTH + BAR_WIDTH + 60;
-        int panelHeight = (BAR_HEIGHT + BAR_SPACING) * 4 + BAR_SPACING + 12 + 12 + 14;
-        graphics.fill(x - 4, y - 4, x + panelWidth + 4, y + panelHeight + 4, BG_COLOR);
 
         int currentDay = (int) (mc.level.getDayTime() / 24000L) + 1;
         graphics.drawString(mc.font, "Day: " + currentDay, x, y, TEXT_COLOR, true);
