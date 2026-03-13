@@ -27,6 +27,11 @@ src/main/java/com/sevendaystominecraft/
 │   └── SevenDaysPlayerStats.java   — Player stats implementation (Food, Water, Stamina, etc.)
 ├── client/
 │   ├── StatsHudOverlay.java        — HUD overlay for player stats + blood moon indicator
+│   ├── CompassOverlay.java         — 360° compass strip at top-center with cardinal/intercardinal markers + heat indicator
+│   ├── MinimapOverlay.java         — Top-right minimap with terrain colors, player dot, nearby player dots
+│   ├── NearbyPlayersClientState.java — Client-side state for synced nearby player positions
+│   ├── ChunkHeatClientState.java   — Client-side state for current chunk heat value
+│   ├── HudClientResetHandler.java  — Resets client HUD state on disconnect
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
 │   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types
@@ -74,9 +79,12 @@ src/main/java/com/sevendaystominecraft/
 │   ├── PlayerHealMixin.java        — Blocks vanilla passive regen
 │   └── SprintBlockMixin.java       — Sprint blocked when low stamina
 └── network/
-    ├── ModNetworking.java          — Packet channel registration (stats + blood moon)
+    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat)
     ├── SyncPlayerStatsPayload.java — Client/server stats sync packet
-    └── BloodMoonSyncPayload.java   — Blood moon state sync packet
+    ├── BloodMoonSyncPayload.java   — Blood moon state sync packet
+    ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64)
+    ├── SyncChunkHeatPayload.java   — Server→client current chunk heat value
+    └── NearbyPlayersBroadcaster.java — Server tick handler broadcasting nearby players + heat every 20 ticks
 ```
 
 ### Key Systems Implemented
@@ -185,4 +193,4 @@ src/main/java/com/sevendaystominecraft/
 
 ## Spec / Roadmap
 The full implementation is tracked in `docs/7dtm_final_spec.md` with 19 phases.
-Milestones 1-5 complete. Next priorities: sprint bug fix, loot/crafting system (§5-6).
+Milestones 1-5 complete. Milestone 6 (HUD polish) in progress: compass + minimap + player tracking added. Next priorities: sprint bug fix, loot/crafting system (§5-6).

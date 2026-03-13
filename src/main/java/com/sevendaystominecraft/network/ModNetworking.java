@@ -4,6 +4,8 @@ import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.client.BloodMoonClientState;
+import com.sevendaystominecraft.client.ChunkHeatClientState;
+import com.sevendaystominecraft.client.NearbyPlayersClientState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -55,6 +57,20 @@ public class ModNetworking {
                 ModNetworking::handleBloodMoonSync
         );
 
+        // Server → Client: nearby players sync
+        registrar.playToClient(
+                SyncNearbyPlayersPayload.TYPE,
+                SyncNearbyPlayersPayload.STREAM_CODEC,
+                ModNetworking::handleNearbyPlayersSync
+        );
+
+        // Server → Client: chunk heat sync
+        registrar.playToClient(
+                SyncChunkHeatPayload.TYPE,
+                SyncChunkHeatPayload.STREAM_CODEC,
+                ModNetworking::handleChunkHeatSync
+        );
+
         SevenDaysToMinecraft.LOGGER.debug("7DTM: Registered network payloads");
     }
 
@@ -66,6 +82,18 @@ public class ModNetworking {
                     payload.totalWaves(),
                     payload.dayNumber()
             );
+        });
+    }
+
+    private static void handleNearbyPlayersSync(SyncNearbyPlayersPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            NearbyPlayersClientState.update(payload.players());
+        });
+    }
+
+    private static void handleChunkHeatSync(SyncChunkHeatPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            ChunkHeatClientState.update(payload.chunkHeat());
         });
     }
 
