@@ -547,17 +547,19 @@
 
     (function() {
       var btn = document.getElementById('download-btn');
-      fetch('https://api.github.com/repos/lsmorris10/bzhs/releases/latest')
+      fetch('https://api.github.com/repos/lsmorris10/bzhs/releases')
         .then(function(response) {
-          if (!response.ok) throw new Error('No release found');
+          if (!response.ok) throw new Error('No releases found');
           return response.json();
         })
-        .then(function(data) {
+        .then(function(releases) {
+          if (!releases || releases.length === 0) throw new Error('No releases');
+          var latest = releases[0];
           var jarAsset = null;
-          if (data.assets && data.assets.length > 0) {
-            for (var i = 0; i < data.assets.length; i++) {
-              if (data.assets[i].name.toLowerCase().endsWith('.jar')) {
-                jarAsset = data.assets[i];
+          if (latest.assets && latest.assets.length > 0) {
+            for (var i = 0; i < latest.assets.length; i++) {
+              if (latest.assets[i].name.toLowerCase().endsWith('.jar')) {
+                jarAsset = latest.assets[i];
                 break;
               }
             }
@@ -565,7 +567,7 @@
           if (jarAsset) {
             btn.href = jarAsset.browser_download_url;
             btn.setAttribute('download', '');
-            btn.textContent = '⬇ Download Latest Release';
+            btn.textContent = '⬇ Download ' + latest.tag_name;
           } else {
             btn.href = 'https://github.com/lsmorris10/bzhs/releases';
             btn.textContent = '⬇ View Releases';
