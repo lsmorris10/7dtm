@@ -25,6 +25,12 @@
 
 **Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay).
 
+**March 14 Completed Work:**
+- Vanilla damage scaling to 100 HP — fall damage, drowning, fire, lava, cactus all proportionally scaled so 100 HP feels equivalent to vanilla 20 HP.
+- 48,000-tick day cycle sky fix — sun/moon visual cycle now correctly completes one full rotation in 48,000 ticks.
+- Darkness-based zombie speed — zombies speed up based on light level instead of tick-based day/night; replaces old tick-based night speed system.
+- Coal vein nerf — reduced coal ore vein sizes to balance resource acquisition.
+
 **Next Tasks:**
 - **Sprint bug fix** — Client-side Mixin on `LocalPlayer.aiStep()` to properly cancel sprint when stamina is depleted.
 - **Custom textures & models** — Replace scaled zombie renderers with proper custom models and textures for each variant.
@@ -45,7 +51,28 @@
 
 ---
 
+## Next Session — Debug & Test Checklist
+
+- **P1 (game-breaking):** Does the mod build and launch without crashes? Do all 18 zombie types spawn without errors?
+- **P2 (core — darkness speed):** Darkness-based zombie speed — do zombies speed up in dark caves during daytime? Do torches slow them down? Coal vein sizes reduced?
+- **P3 (core — day cycle):** 48,000-tick day cycle — does the sun/moon complete one full visual cycle in 48,000 ticks? Note: F3 day counter uses vanilla 24k logic and will differ from HUD — HUD is authoritative.
+- **P4 (core — damage scaling):** Vanilla damage scaling — does fall damage, drowning, fire, lava, cactus feel proportional to 100 HP (same danger as vanilla 20 HP)?
+- **P5 (HUD):** Compass at top-center showing cardinal directions? Minimap in top-right showing terrain + player dots? Stats bars (HP/Food/Water/Stamina) rendering without overlap?
+- **P6 (heatmap):** Mining/torches/sprinting raise chunk heat? Scouts at 25, Screamer at 50, mini-horde at 75, waves at 100?
+- **P7 (combat):** Zombie name tags + HP bars hidden behind walls? Sunlight doesn't burn 7DTM zombies?
+- **P8 (survival stats):** Sprint bug still present (known, deferred)? Stamina drain/regen rates feel correct? Food/water drain working?
+- **P9 (blood moon):** Every 7 days, warning → red sky → siren → horde → dawn burn sequence works?
+- **P10 (debuffs):** Bleeding/Infection/Fracture/etc. apply and clear correctly? `/7dtm cleardebuffs` works?
+
+---
+
 ## Recent Completed Work
+
+**March 14 Session [MERGED]**
+- Vanilla damage scaling to 100 HP (fall, drowning, fire, lava, cactus proportionally scaled)
+- 48,000-tick day cycle sky fix (sun/moon visual rotation corrected)
+- Darkness-based zombie speed (light-level-based, replaces tick-based night speed)
+- Coal vein nerf (reduced ore vein sizes)
 
 **March 12 Late-Session Work [MERGED]**
 - Zombie name tag occlusion fix (name tags and HP bars not visible through walls)
@@ -61,24 +88,3 @@
 - Debuffs persistence bug fixed (twice — `/7dtm cleardebuffs` command + `copyOnDeath` removal)
 - Debuffs guide created (`docs/debuffs_guide.md`)
 - Player base health set to 100 HP
-
-**Milestone 5 — Heatmap System (§1.3) [MERGED]**
-- Full per-chunk heatmap system with decay over time.
-- Triggers: Block break, torches, explosions, sprinting.
-- Spawning: Scout Walkers (Heat 25+), Screamer (50+), Mini-horde (75+), continuous Wave Mode (100+).
-- Added `/7dtm heat` and `/7dtm heat_clear` commands.
-
-**Milestone 4 — Custom Zombie System (§3.1-3.2) [MERGED]**
-- 18 custom zombie variants with configurable stats (HP, damage, speed, special abilities).
-- Modifiers implemented: Radiated (heals), Charged (lightning), Infernal (fire).
-- Bestiary guide added (`docs/zombie_guide.md`).
-- Entities use `ScaledZombieRenderer` with custom bounding boxes and double-line name tags (Name + HP).
-
-**Milestone 3 — Horde Night & Blood Moon System (§4.2) [MERGED]**
-- Full timeline: warning day before, red sky 18:00, siren 18:30, horde 22:00, dawn 06:00.
-- Sleep prevention integration.
-
-**Misc Polish & UI [MERGED]**
-- Vanilla hunger and health bars fully hidden.
-- Custom HUD now displays Health, Food, Water, and Stamina.
-- Post-merge Gradle verification script added.
