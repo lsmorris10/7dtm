@@ -11,14 +11,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Level.class)
 public abstract class LevelTimeOfDayMixin {
 
-    @Inject(method = "getTimeOfDay", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getSunAngle", at = @At("HEAD"), cancellable = true)
     private void sevendaystominecraft$stretchDayCycle(float partialTick, CallbackInfoReturnable<Float> cir) {
         Level self = (Level) (Object) this;
         if (self.dimension() == Level.OVERWORLD) {
             double smoothTime = (double) self.getDayTime() + (double) partialTick;
             double d = Mth.frac(smoothTime / (double) SevenDaysConstants.DAY_LENGTH - 0.25);
             double e = 0.5 - Math.cos(d * Math.PI) / 2.0;
-            cir.setReturnValue((float) (d * 2.0 + e) / 3.0F);
+            float timeOfDay = (float) (d * 2.0 + e) / 3.0F;
+            cir.setReturnValue(timeOfDay * (float) (Math.PI * 2));
         }
     }
 }
