@@ -64,6 +64,12 @@ public class SurvivalConfig {
     /** Player base max health in HP (spec §1.1: 100 HP) */
     public final ModConfigSpec.DoubleValue baseMaxHealth;
 
+    /** Multiplier applied to vanilla environmental damage (fall, drown, fire, etc.) to scale for 100 HP */
+    public final ModConfigSpec.DoubleValue vanillaDamageScale;
+
+    /** Multiplier applied to all damage dealt by players to scale for 100 HP world */
+    public final ModConfigSpec.DoubleValue playerDamageScale;
+
     // ── Health Regen ────────────────────────────────────────────────────
 
     /** Health regen per second when above thresholds (spec §1.1: 0.5/s) */
@@ -162,6 +168,12 @@ public class SurvivalConfig {
         baseMaxHealth = builder
                 .comment("Player base max health in HP (100 = 50 hearts)")
                 .defineInRange("baseMaxHealth", 100.0, 20.0, 500.0);
+        vanillaDamageScale = builder
+                .comment("Multiplier for vanilla environmental damage (fall, drown, fire, lava, cactus, etc.) to scale for 100 HP. Default 5.0 = 100/20.")
+                .defineInRange("vanillaDamageScale", 5.0, 0.1, 20.0);
+        playerDamageScale = builder
+                .comment("Multiplier for all damage dealt by players (melee, ranged, etc.) to scale for 100 HP world. Default 5.0 = 100/20.")
+                .defineInRange("playerDamageScale", 5.0, 0.1, 20.0);
         healthRegenRate = builder
                 .comment("Health regen per second when above food/water thresholds")
                 .defineInRange("healthRegenRate", 0.5, 0.0, 10.0);
