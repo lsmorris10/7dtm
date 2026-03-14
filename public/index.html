@@ -3,59 +3,366 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brutal Zombie Horde Survival</title>
+  <title>Brutal Zombie Horde Survival — Minecraft Mod</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body {
-      background-color: #800000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
     }
-    .content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    h1 {
-      color: #ffffff;
-      font-family: sans-serif;
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
+
+    .hero {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a0a0a 50%, #1a1a1a 100%);
       text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      border-bottom: 2px solid #800000;
     }
-    a {
+    .hero h1 {
       color: #ffffff;
-      font-family: sans-serif;
-      font-size: 1.5rem;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+    .version-tag {
+      display: inline-block;
+      background: #800000;
+      color: #fff;
+      padding: 0.3rem 1rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .hero p.tagline {
+      color: #bbb;
+      font-size: 1.15rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: #4CAF50;
+      color: #fff;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+    .download-btn:hover {
+      background: #43a047;
+      transform: translateY(-1px);
+      opacity: 1;
+    }
+    .download-note {
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+    }
+    .download-note a {
+      color: #aaa;
+      font-size: 0.85rem;
       text-decoration: underline;
     }
-    a:hover { opacity: 0.85; }
-    footer {
+    .download-note a:hover { color: #ccc; }
+
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      padding: 0 1rem;
+    }
+    .badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #ccc;
+      white-space: nowrap;
+    }
+    .badge a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .badge a:hover { color: #fff; text-decoration: underline; }
+
+    .section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+    .section h2 {
+      color: #fff;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #800000;
+      padding-left: 0.75rem;
+    }
+
+    .status-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
       padding: 1.5rem;
+    }
+    .status-version {
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+    }
+    .status-version strong {
+      color: #fff;
+    }
+    .status-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .status-columns h3 {
+      color: #4CAF50;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-columns .coming h3 {
+      color: #ff9800;
+    }
+    .status-columns ul {
+      list-style: none;
+      padding: 0;
+    }
+    .status-columns ul li {
+      color: #bbb;
+      font-size: 0.9rem;
+      padding: 0.2rem 0;
+    }
+    .status-columns ul li::before {
+      content: "✓ ";
+      color: #4CAF50;
+    }
+    .status-columns .coming ul li::before {
+      content: "→ ";
+      color: #ff9800;
+    }
+
+    .disclaimer {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem 1.5rem;
+    }
+    .disclaimer p {
+      color: #777;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 1rem;
+    }
+
+    .email-section {
+      background: rgba(128, 0, 0, 0.15);
+      border-top: 1px solid rgba(128, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(128, 0, 0, 0.3);
+      padding: 2.5rem 1.5rem;
       text-align: center;
     }
+    .email-section h2 {
+      color: #fff;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      border: none;
+      padding: 0;
+    }
+    .email-section p {
+      color: #aaa;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    .email-form {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+    .email-form input[type="email"] {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .email-form input[type="email"]::placeholder {
+      color: #888;
+    }
+    .email-form input[type="email"]:focus {
+      border-color: #800000;
+    }
+    .email-form button {
+      background: #800000;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .email-form button:hover {
+      background: #990000;
+    }
+    .form-success {
+      display: none;
+      color: #4CAF50;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .form-error {
+      display: none;
+      color: #f44336;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+    }
     footer p {
-      color: #cccccc;
-      font-family: sans-serif;
-      font-size: 0.85rem;
-      max-width: 600px;
-      line-height: 1.4;
+      color: #555;
+      font-size: 0.8rem;
+    }
+    footer a {
+      color: #888;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+    footer a:hover { color: #aaa; text-decoration: underline; }
+
+    a { color: #fff; text-decoration: underline; }
+    a:hover { opacity: 0.85; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+      .download-btn { padding: 0.85rem 2rem; font-size: 1.1rem; }
+      .status-columns { grid-template-columns: 1fr; gap: 1rem; }
+      .email-form { flex-direction: column; }
+      .email-form button { padding: 0.75rem; }
+      .trust-badges { gap: 0.5rem; }
+      .badge { font-size: 0.78rem; padding: 0.35rem 0.75rem; }
     }
   </style>
 </head>
 <body>
-  <div class="content">
+
+  <section class="hero">
     <h1>Brutal Zombie Horde Survival</h1>
-    <a href="https://github.com/lsmorris10/7dtm">View on GitHub</a>
+    <div class="version-tag">Minecraft 1.21.4 — Alpha</div>
+    <p class="tagline">A 7 Days to Die-inspired survival mod for Minecraft. Blood moons, zombie hordes, perks, crafting, and more.</p>
+
+    <a href="https://github.com/lsmorris10/7dtm/releases" class="download-btn">⬇ Download Latest Release</a>
+    <p class="download-note">Available on <a href="https://github.com/lsmorris10/7dtm">GitHub</a> — open source, always free</p>
+
+    <div class="trust-badges">
+      <span class="badge"><a href="https://github.com/lsmorris10/7dtm">Open Source</a></span>
+      <span class="badge">NeoForge 21.4.140</span>
+      <span class="badge">No Dependencies</span>
+      <span class="badge">Java 21</span>
+    </div>
+  </section>
+
+  <div class="section">
+    <h2>Current Status</h2>
+    <div class="status-card">
+      <p class="status-version"><strong>Alpha v0.1.0</strong> — Early development, actively updated</p>
+      <div class="status-columns">
+        <div class="working">
+          <h3>What's Working</h3>
+          <ul>
+            <li>Survival stats (thirst, stamina, infection)</li>
+            <li>18 zombie variants</li>
+            <li>Blood moon events</li>
+            <li>Zombie heatmap system</li>
+            <li>Loot & crafting overhaul</li>
+            <li>45 perks</li>
+          </ul>
+        </div>
+        <div class="coming">
+          <h3>Coming Next</h3>
+          <ul>
+            <li>Custom textures & models</li>
+            <li>World generation overhaul</li>
+            <li>Trader NPCs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-  <footer>
+
+  <div class="disclaimer">
     <p><strong>Disclaimer:</strong> This mod is unofficial fan-made content inspired by 7 Days to Die and is not affiliated with, endorsed by, or connected to The Fun Pimps in any way.</p>
+  </div>
+
+  <section class="email-section">
+    <h2>Stay in the Loop</h2>
+    <p>Get notified of updates and the official 1.0 release.</p>
+    <!--
+      FORMSPREE SETUP:
+      1. Create a free account at https://formspree.io
+      2. Create a new form and copy your form ID (e.g., "xabcdefg")
+      3. Replace "YOUR_FORM_ID" below with your actual form ID
+      Example: action="https://formspree.io/f/xabcdefg"
+    -->
+    <form class="email-form" id="signup-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Notify Me</button>
+    </form>
+    <p class="form-success" id="form-success">Thanks! You'll hear from us when there's news.</p>
+    <p class="form-error" id="form-error">Something went wrong. Please try again.</p>
+  </section>
+
+  <footer>
+    <p><a href="https://github.com/lsmorris10/7dtm">GitHub</a> · Brutal Zombie Horde Survival</p>
   </footer>
+
+  <script>
+    var form = document.getElementById('signup-form');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      document.getElementById('form-error').style.display = 'none';
+      fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      }).then(function(response) {
+        if (response.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          document.getElementById('form-error').style.display = 'block';
+        }
+      }).catch(function() {
+        document.getElementById('form-error').style.display = 'block';
+      });
+    });
+  </script>
 </body>
 </html>
