@@ -1,4 +1,4 @@
-# Project Notes
+# Project Notes — Brutal Zombie Horde Survival (BZHS)
 
 ---
 
@@ -25,11 +25,15 @@
 
 **Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay).
 
-**March 13 Completed Work:**
+**March 13–14 Completed Work:**
 - Vanilla damage scaling to 100 HP — fall damage, drowning, fire, lava, cactus all proportionally scaled so 100 HP feels equivalent to vanilla 20 HP.
 - 48,000-tick day cycle sky fix — sun/moon visual cycle now correctly completes one full rotation in 48,000 ticks.
 - Darkness-based zombie speed — zombies speed up based on light level instead of tick-based day/night; replaces old tick-based night speed system.
 - Coal vein nerf — reduced coal ore vein sizes to balance resource acquisition.
+- Project rebranded to "Brutal Zombie Horde Survival" (BZHS) — mod ID, display name, and all user-facing references updated (#43).
+- Landing page created and published, then upgraded to V2 with improved design (#40, #41, #45).
+- `.gitignore` updated to exclude `public/` folder artifacts (#46).
+- README.md status section restructured for clarity (#47).
 
 **Next Tasks:**
 - **Sprint bug fix** — Client-side Mixin on `LocalPlayer.aiStep()` to properly cancel sprint when stamina is depleted.
@@ -51,7 +55,7 @@
 
 ---
 
-## Next Session — Debug & Test Checklist
+## Next Session — Debug & Test Checklist (March 15)
 
 - **P1 (game-breaking):** Does the mod build and launch without crashes? Do all 18 zombie types spawn without errors?
 - **P2 (core — darkness speed):** Darkness-based zombie speed — do zombies speed up in dark caves during daytime? Do torches slow them down? Coal vein sizes reduced?
@@ -63,12 +67,21 @@
 - **P8 (survival stats):** Sprint bug still present (known, deferred)? Stamina drain/regen rates feel correct? Food/water drain working?
 - **P9 (blood moon):** Every 7 days, warning → red sky → siren → horde → dawn burn sequence works?
 - **P10 (debuffs):** Bleeding/Infection/Fracture/etc. apply and clear correctly? `/7dtm cleardebuffs` works?
+- **P11 (landing page):** Verify published landing page loads correctly and links work.
 
 ---
 
 ## Recent Completed Work
 
-**March 13 Session (in progress)**
+**March 14 Session**
+- Project rebranded to "Brutal Zombie Horde Survival" (BZHS) — mod ID, display name, and all user-facing references updated (#43)
+- Landing page created and published (#40, #41)
+- Landing page upgraded to V2 with improved layout and design (#45)
+- `.gitignore` updated to exclude `public/` folder build artifacts (#46)
+- README.md status section restructured with milestone tracking table (#47)
+- PROJECT_NOTES.md updated with March 14 status (#48)
+
+**March 13 Session**
 - Vanilla damage scaling to 100 HP (fall, drowning, fire, lava, cactus proportionally scaled)
 - 48,000-tick day cycle sky fix (sun/moon visual rotation corrected)
 - Darkness-based zombie speed (light-level-based, replaces tick-based night speed)
