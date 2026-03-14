@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Level.class)
 public abstract class LevelTimeOfDayMixin {
 
-    @Inject(method = "getTimeOfDay", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getSunAngle", at = @At("HEAD"), cancellable = true)
     private void sevendaystominecraft$stretchDayCycle(float partialTick, CallbackInfoReturnable<Float> cir) {
         Level self = (Level) (Object) this;
         if (self.dimension() == Level.OVERWORLD) {
