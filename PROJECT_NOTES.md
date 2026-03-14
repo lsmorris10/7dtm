@@ -38,6 +38,11 @@
    - Sprint can get stuck — holding W alone gives infinite sprint. Stamina drains but sprint doesn't cancel. Needs a client-side Mixin on `LocalPlayer.aiStep()`.
    - **Not on today's test list.** This is a known issue that requires a proper client-side fix.
 
+2. **F3 DEBUG SCREEN DAY COUNTER** (known cosmetic discrepancy):
+   - The F3 debug screen's "Day" counter uses vanilla's hardcoded `24000L` division inside `DebugScreenOverlay`, which is a deeply embedded formatted string render. Overriding it cleanly via Mixin would be fragile across MC updates.
+   - The mod HUD (`StatsHudOverlay`) already displays the correct day number based on the 48,000-tick cycle. Use the mod HUD as the authoritative day counter.
+   - The F3 day counter will show approximately double the actual day number (since vanilla thinks each 24k ticks = 1 day, but our cycle is 48k ticks).
+
 ---
 
 ## Recent Completed Work

@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.block.loot;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.block.ModBlockEntities;
 import com.sevendaystominecraft.config.LootConfig;
 import com.sevendaystominecraft.item.ModItems;
@@ -95,8 +96,8 @@ public class LootContainerBlockEntity extends BlockEntity {
             int effectiveRespawn = respawnDays > 0 ? respawnDays : containerRespawn;
 
             if (hasBeenLooted) {
-                long currentDay = level.getDayTime() / 24000L;
-                long lootedDay = lastLootedGameTime / 24000L;
+                long currentDay = level.getDayTime() / SevenDaysConstants.DAY_LENGTH;
+                long lootedDay = lastLootedGameTime / SevenDaysConstants.DAY_LENGTH;
                 if (currentDay - lootedDay < effectiveRespawn) return;
             }
         }

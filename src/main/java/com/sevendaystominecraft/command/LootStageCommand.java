@@ -2,6 +2,7 @@ package com.sevendaystominecraft.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.loot.LootStageCalculator;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -29,7 +30,7 @@ public class LootStageCommand {
 
         ServerPlayer player = source.getPlayer();
         int lootStage = LootStageCalculator.calculate(player);
-        long daysSurvived = player.level().getDayTime() / 24000L;
+        long daysSurvived = player.level().getDayTime() / SevenDaysConstants.DAY_LENGTH;
         int playerLevel = player.experienceLevel;
 
         source.sendSuccess(() -> Component.literal(

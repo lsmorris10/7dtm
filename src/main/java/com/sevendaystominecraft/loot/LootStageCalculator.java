@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.loot;
 
+import com.sevendaystominecraft.SevenDaysConstants;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.core.Holder;
@@ -10,7 +11,7 @@ public class LootStageCalculator {
 
     public static int calculate(ServerPlayer player) {
         int playerLevel = player.experienceLevel;
-        long daysSurvived = player.level().getDayTime() / 24000L;
+        long daysSurvived = player.level().getDayTime() / SevenDaysConstants.DAY_LENGTH;
         int biomeBonus = getBiomeBonus(player);
         int looterPerkBonus = 0;
 
