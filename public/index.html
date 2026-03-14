@@ -409,7 +409,7 @@
     <div class="version-tag">Minecraft 1.21.4 — NeoForge — Alpha</div>
     <p class="tagline">A 7 Days to Die-inspired survival overhaul for Minecraft. Blood moons, zombie hordes, 45 perks, full crafting rework, and much more.</p>
 
-    <a href="https://github.com/lsmorris10/bzhs/releases" class="download-btn">⬇ Download Latest Release</a>
+    <a href="https://github.com/lsmorris10/bzhs/releases" class="download-btn" id="download-btn">⬇ Download Latest Release</a>
     <p class="download-note">Available on <a href="https://github.com/lsmorris10/bzhs">GitHub</a> — open source, always free</p>
 
     <div class="trust-badges">
@@ -544,6 +544,38 @@
         document.getElementById('form-error').style.display = 'block';
       });
     });
+
+    (function() {
+      var btn = document.getElementById('download-btn');
+      fetch('https://api.github.com/repos/lsmorris10/bzhs/releases/latest')
+        .then(function(response) {
+          if (!response.ok) throw new Error('No release found');
+          return response.json();
+        })
+        .then(function(data) {
+          var jarAsset = null;
+          if (data.assets && data.assets.length > 0) {
+            for (var i = 0; i < data.assets.length; i++) {
+              if (data.assets[i].name.toLowerCase().endsWith('.jar')) {
+                jarAsset = data.assets[i];
+                break;
+              }
+            }
+          }
+          if (jarAsset) {
+            btn.href = jarAsset.browser_download_url;
+            btn.setAttribute('download', '');
+            btn.textContent = '⬇ Download Latest Release';
+          } else {
+            btn.href = 'https://github.com/lsmorris10/bzhs/releases';
+            btn.textContent = '⬇ View Releases';
+          }
+        })
+        .catch(function() {
+          btn.href = 'https://github.com/lsmorris10/bzhs/releases';
+          btn.textContent = '⬇ View Releases';
+        });
+    })();
   </script>
 </body>
 </html>
