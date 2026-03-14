@@ -124,7 +124,7 @@ Five server-side config files are generated in the `serverconfig/` folder:
 | [`docs/zombie_guide.md`](docs/zombie_guide.md) | All 18 zombie variants with stats, abilities, and behavior |
 | [`docs/heatmap_guide.md`](docs/heatmap_guide.md) | Heatmap system mechanics with exact values |
 | [`docs/debuffs_guide.md`](docs/debuffs_guide.md) | All 12 debuffs with triggers, effects, and durations |
-| [`docs/if-bored.md`](docs/if-bored.md) | Edge case testing scenarios |
+| [`docs/edge-case-testing.md`](docs/edge-case-testing.md) | Edge case testing scenarios |
 | [`docs/bzhs_final_spec.md`](docs/bzhs_final_spec.md) | Full implementation spec (2273 lines, 20 sections) |
 
 ---
