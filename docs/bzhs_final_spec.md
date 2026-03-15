@@ -206,7 +206,7 @@ Each level-up grants **1 perk point**. Every 10 levels grants **1 bonus attribut
 
 **POI template system:**
 - Templates stored as `.nbt` structure files in `/data/sevendaystominecraft/structures/pois/`.
-- Each template has metadata JSON: `tier` (1–5), `biomes` (allowed), `size` (footprint), `lootContainers` (list of positions + loot table IDs), `zombieSpawnPoints` (positions + variant weights), `questTarget` (bool).
+- Each template has metadata JSON: `tier` (1–5), `biomes` (allowed), `size` (footprint), `lootContainers` (list of positions + loot table IDs), `zombieSpawnPoints` (positions + variant weights), `questTarget` (bool). See §3.2.1 for the population logic that determines how many of these spawn points are filled per encounter.
 - Templates are rotatable (0/90/180/270) and mirror-able.
 - ~300 templates at launch; framework supports **data packs** for community templates.
 - **Datapack extensibility**: Third-party datapacks can add POIs by placing `.nbt` files and corresponding metadata JSON in `data/<namespace>/structures/pois/`. The mod scans all loaded datapacks at world load.
@@ -329,6 +329,84 @@ Root (Selector)
 - Night (18:00–06:00): Spawn rate ×3, all zombies sprint-capable gain +50% speed.
 - Blood Moon: Override all spawn rules. Dedicated horde spawner activates.
 - Spawn cap: `maxZombies = baseMax + (dayNumber × 2)` capped at config max (default 64 per player, configurable 16–256).
+- **POI interior spawning**: When a player enters a POI chunk, the POI zombie population system (§3.2.1) determines how many of the template's `zombieSpawnPoints` are filled.
+
+### 3.2.1 POI Zombie Population
+
+This subsection defines how the mod decides how many zombies populate a POI when a player encounters it. Each POI template declares a list of `zombieSpawnPoints` (see §2.2); this system determines which subset of those points are actually filled with zombies for a given POI instance.
+
+**Fill percentage by POI tier:**
+
+Each POI tier defines a base fill range — the minimum and maximum percentage of available `zombieSpawnPoints` that get populated. The actual fill percentage is randomized uniformly within the range for each POI instance.
+
+| POI Tier | Base Fill Range | Typical Use |
+|----------|----------------|-------------|
+| Tier 1 | 20–40% | Small houses, sheds, gas stations |
+| Tier 2 | 30–50% | Stores, offices, larger houses |
+| Tier 3 | 40–65% | Commercial buildings, factories, churches |
+| Tier 4 | 55–80% | Hospitals, skyscrapers, police stations |
+| Tier 5 | 70–100% | Military compounds, end-game bunkers |
+
+**Game day scaling:**
+
+As in-game days progress, the fill range shifts upward to reflect the growing apocalypse. A flat additive bonus is applied to both the min and max of the base fill range:
+
+| Day Range | Fill Bonus |
+|-----------|------------|
+| Day 1–7 | +0% (base range) |
+| Day 8–14 | +10% |
+| Day 15–28 | +15% |
+| Day 29+ | +20% |
+
+The bonus is added after the base range is looked up and before the biome multiplier is applied. Both min and max are capped at 100% after all modifiers.
+
+**Biome difficulty multiplier:**
+
+The biome's zombie density multiplier (from the §2.1 biome table) scales the computed fill percentage. After the day-scaled fill range is determined, both min and max are multiplied by the biome factor:
+
+`adjustedMin = min(tierMin + dayBonus, 100%) × biomeDensityMultiplier`
+`adjustedMax = min(tierMax + dayBonus, 100%) × biomeDensityMultiplier`
+
+The result is then clamped to [0%, 100%]. Biome multipliers from §2.1: Pine Forest ×0.6, Forest ×1.0, Plains ×1.0, Desert ×1.2, Snowy ×0.8, Burned Forest ×1.5, Wasteland ×2.5.
+
+**Global config multiplier:**
+
+After biome scaling, the final fill percentage is multiplied by `poi.fillMultiplier` from `zombies.toml` (float, default 1.0). This lets server operators globally tune POI zombie density. The result is clamped to [0%, 100%] after application.
+
+`finalMin = clamp(adjustedMin × poi.fillMultiplier, 0%, 100%)`
+`finalMax = clamp(adjustedMax × poi.fillMultiplier, 0%, 100%)`
+
+**Point selection:**
+
+1. Roll a random fill fraction `P` (0.0–1.0) uniformly within [`finalMin / 100`, `finalMax / 100`].
+2. Compute the zombie count: `fillCount = clamp(round(P × totalSpawnPoints), 1, totalSpawnPoints)`.
+3. Randomly select `fillCount` points from the template's `zombieSpawnPoints` list (uniform random without replacement).
+4. At each selected point, spawn a zombie whose variant is chosen according to that point's `variant weights` distribution (weighted random).
+
+**Minimum and maximum guarantees:**
+
+- **Minimum**: Every POI always spawns at least 1 zombie, regardless of tier, day, biome, or config math. If the computed `fillCount` rounds to 0, it is set to 1.
+- **Maximum (standard)**: The `fillCount` never exceeds the template's total `zombieSpawnPoints` count. The system cannot place zombies at positions that don't exist in the template.
+- **Maximum (Infested Clear)**: Infested Clear quests bypass the standard maximum — see Quest overrides below.
+
+**Quest overrides:**
+
+- **Clear quests**: Use the standard population system described above. The POI is populated normally when the quest resets the POI (§9 quest flow).
+- **Infested Clear quests**: Force 100% fill of all `zombieSpawnPoints` (every point is populated). In addition, bonus zombies equal to 25% of the total spawn point count (rounded up, minimum 2 bonus) are spawned at randomly selected existing spawn point positions, drawn from a separate feral/radiated variant pool. This means Infested Clear POIs can exceed the template's spawn point count.
+- **Quest POI resets** (§9 quest flow, line 702): When a POI resets for a quest, the population system runs fresh — a new random fill percentage is rolled and new points are selected. This ensures repeat visits feel different.
+
+**Worked example:**
+
+> A Tier 3 commercial POI template has 8 `zombieSpawnPoints`. A player enters this POI on day 14 in a Forest biome. Server config `poi.fillMultiplier` is default (1.0).
+>
+> 1. **Base fill range** (Tier 3): 40–65%
+> 2. **Day bonus** (day 14 falls in day 8–14): +10% → adjusted range: 50–75%
+> 3. **Biome multiplier** (Forest ×1.0): 50% × 1.0 = 50%, 75% × 1.0 = 75% → range stays 50–75%
+> 4. **Config multiplier** (1.0): no change → final range: 50–75%
+> 5. **Roll**: System rolls e.g. 62% → `fillCount = round(0.62 × 8) = 5`
+> 6. **Select**: 5 of the 8 spawn points are randomly chosen. Each spawns a zombie variant per its weight table.
+>
+> The same POI in **Wasteland** (×2.5) on day 14: adjusted range = 50% × 2.5 = 125% → clamped to 100%, 75% × 2.5 = 187% → clamped to 100%. All 8 spawn points are filled.
 
 ### 3.3 Animals (2.6 Updated)
 
@@ -1239,7 +1317,7 @@ All config in `config/sevendaystominecraft/`:
 | `main.toml` | Master toggles (enable/disable systems), difficulty presets |
 | `survival.toml` | Stat rates, debuff chances, temperature ranges |
 | `horde.toml` | Blood moon tuning (cycle, size, composition, scaling) |
-| `zombies.toml` | Per-variant HP/damage/speed overrides, spawn caps |
+| `zombies.toml` | Per-variant HP/damage/speed overrides, spawn caps, `poi.fillMultiplier` (float, default 1.0 — global scale for POI zombie fill percentage, see §3.2.1) |
 | `loot.toml` | Loot stage formula weights, respawn times, abundance |
 | `crafting.toml` | Quality tier thresholds, craft time multiplier |
 | `vehicles.toml` | Speed, fuel, enabled vehicle types, **vehicle mods** |
