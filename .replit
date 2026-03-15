@@ -1,4 +1,4 @@
-modules = ["java-graalvm22.3", "python-3.11"]
+modules = ["java-graalvm22.3", "python-3.11", "nodejs-20"]
 [agent]
 expertMode = true
 
@@ -20,7 +20,7 @@ args = "Build Mod"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Preview Site"
+args = "Dev History Dashboard"
 
 [[workflows.workflow]]
 name = "Build Mod"
@@ -34,16 +34,17 @@ args = "export JAVA_HOME=$(dirname $(dirname $(which java))) && ./gradlew build 
 outputType = "console"
 
 [[workflows.workflow]]
-name = "Preview Site"
+name = "Dev History Dashboard"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m http.server 5000 --directory public"
+args = "cd artifacts/dev-history-dashboard && PORT=5000 BASE_PATH='/' npm run dev"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
+isCanvasWorkflow = true
 
 [postMerge]
 path = "scripts/post-merge.sh"
@@ -52,6 +53,10 @@ timeoutMs = 180000
 [deployment]
 deploymentTarget = "static"
 publicDir = "public"
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
 
 [[ports]]
 localPort = 5000
