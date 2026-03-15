@@ -2,11 +2,13 @@ package com.sevendaystominecraft.capability;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.config.SurvivalConfig;
+import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.neoforged.bus.api.EventPriority;
@@ -29,6 +31,14 @@ public class VanillaDamageScaleHandler {
                 }
                 return;
             }
+
+            if (isVanillaMobDamage(source)) {
+                float scale = SurvivalConfig.INSTANCE.vanillaDamageScale.get().floatValue();
+                if (scale != 1.0f) {
+                    event.setNewDamage(event.getNewDamage() * scale);
+                }
+                return;
+            }
         }
 
         if (isPlayerSourced(source)) {
@@ -37,6 +47,22 @@ public class VanillaDamageScaleHandler {
                 event.setNewDamage(event.getNewDamage() * scale);
             }
         }
+    }
+
+    private static boolean isVanillaMobDamage(DamageSource source) {
+        Entity attacker = source.getEntity();
+        if (attacker == null) return false;
+        if (attacker instanceof Player) return false;
+        if (attacker instanceof BaseSevenDaysZombie) return false;
+
+        Entity direct = source.getDirectEntity();
+        if (direct instanceof Projectile projectile) {
+            Entity owner = projectile.getOwner();
+            if (owner instanceof Player) return false;
+            if (owner instanceof BaseSevenDaysZombie) return false;
+        }
+
+        return attacker instanceof LivingEntity;
     }
 
     private static boolean isPlayerSourced(DamageSource source) {
