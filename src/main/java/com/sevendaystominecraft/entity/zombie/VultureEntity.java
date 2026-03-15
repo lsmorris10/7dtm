@@ -62,8 +62,8 @@ public class VultureEntity extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 60.0)
-                .add(Attributes.ATTACK_DAMAGE, 12.0)
+                .add(Attributes.MAX_HEALTH, 12.0)
+                .add(Attributes.ATTACK_DAMAGE, 2.4)
                 .add(Attributes.MOVEMENT_SPEED, 0.4)
                 .add(Attributes.FLYING_SPEED, 0.4);
     }

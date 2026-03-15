@@ -59,8 +59,8 @@ public class DemolisherZombie extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 800.0)
-                .add(Attributes.ATTACK_DAMAGE, 30.0)
+                .add(Attributes.MAX_HEALTH, 160.0)
+                .add(Attributes.ATTACK_DAMAGE, 6.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
     }

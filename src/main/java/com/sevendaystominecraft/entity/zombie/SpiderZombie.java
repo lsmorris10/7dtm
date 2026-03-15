@@ -55,8 +55,8 @@ public class SpiderZombie extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 120.0)
-                .add(Attributes.ATTACK_DAMAGE, 14.0)
+                .add(Attributes.MAX_HEALTH, 24.0)
+                .add(Attributes.ATTACK_DAMAGE, 2.8)
                 .add(Attributes.MOVEMENT_SPEED, 0.18);
     }
 }

@@ -62,8 +62,8 @@ public class MutatedChuckZombie extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 250.0)
-                .add(Attributes.ATTACK_DAMAGE, 18.0)
+                .add(Attributes.MAX_HEALTH, 50.0)
+                .add(Attributes.ATTACK_DAMAGE, 3.6)
                 .add(Attributes.MOVEMENT_SPEED, 0.13);
     }
 

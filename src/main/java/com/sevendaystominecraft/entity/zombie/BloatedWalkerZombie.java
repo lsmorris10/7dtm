@@ -38,8 +38,8 @@ public class BloatedWalkerZombie extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0)
-                .add(Attributes.ATTACK_DAMAGE, 10.0)
+                .add(Attributes.MAX_HEALTH, 40.0)
+                .add(Attributes.ATTACK_DAMAGE, 2.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.07);
     }
 }

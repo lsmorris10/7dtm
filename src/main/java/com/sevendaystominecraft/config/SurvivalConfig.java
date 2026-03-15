@@ -61,14 +61,8 @@ public class SurvivalConfig {
 
     // ── Base Health ──────────────────────────────────────────────────────
 
-    /** Player base max health in HP (spec §1.1: 100 HP) */
+    /** Player base max health in HP (vanilla default: 20 HP) */
     public final ModConfigSpec.DoubleValue baseMaxHealth;
-
-    /** Multiplier applied to vanilla environmental damage (fall, drown, fire, etc.) to scale for 100 HP */
-    public final ModConfigSpec.DoubleValue vanillaDamageScale;
-
-    /** Multiplier applied to all damage dealt by players to scale for 100 HP world */
-    public final ModConfigSpec.DoubleValue playerDamageScale;
 
     // ── Health Regen ────────────────────────────────────────────────────
 
@@ -166,17 +160,11 @@ public class SurvivalConfig {
         // Health
         builder.push("health");
         baseMaxHealth = builder
-                .comment("Player base max health in HP (100 = 50 hearts)")
-                .defineInRange("baseMaxHealth", 100.0, 20.0, 500.0);
-        vanillaDamageScale = builder
-                .comment("Multiplier for vanilla environmental damage (fall, drown, fire, lava, cactus, etc.) to scale for 100 HP. Default 5.0 = 100/20.")
-                .defineInRange("vanillaDamageScale", 5.0, 0.1, 20.0);
-        playerDamageScale = builder
-                .comment("Multiplier for all damage dealt by players (melee, ranged, etc.) to scale for 100 HP world. Default 5.0 = 100/20.")
-                .defineInRange("playerDamageScale", 5.0, 0.1, 20.0);
+                .comment("Player base max health in HP (20 = vanilla default, 10 hearts)")
+                .defineInRange("baseMaxHealth", 20.0, 20.0, 500.0);
         healthRegenRate = builder
                 .comment("Health regen per second when above food/water thresholds")
-                .defineInRange("healthRegenRate", 0.5, 0.0, 10.0);
+                .defineInRange("healthRegenRate", 0.1, 0.0, 10.0);
         healthRegenFoodThreshold = builder
                 .comment("Food must be above this % of max for health regen")
                 .defineInRange("healthRegenFoodThreshold", 50.0, 0.0, 100.0);
@@ -195,10 +183,10 @@ public class SurvivalConfig {
                 .defineInRange("cascadeThreshold2", 10.0, 0.0, 100.0);
         cascadeHealthDrainSlow = builder
                 .comment("Health drain/sec when food/water < threshold2")
-                .defineInRange("cascadeHealthDrainSlow", 0.5, 0.0, 10.0);
+                .defineInRange("cascadeHealthDrainSlow", 0.1, 0.0, 10.0);
         cascadeHealthDrainFast = builder
                 .comment("Health drain/sec when food/water = 0")
-                .defineInRange("cascadeHealthDrainFast", 2.0, 0.0, 20.0);
+                .defineInRange("cascadeHealthDrainFast", 0.4, 0.0, 20.0);
         cascadeSpeedPenalty = builder
                 .comment("Movement speed penalty when food/water = 0 (0.4 = 40%)")
                 .defineInRange("cascadeSpeedPenalty", 0.4, 0.0, 1.0);

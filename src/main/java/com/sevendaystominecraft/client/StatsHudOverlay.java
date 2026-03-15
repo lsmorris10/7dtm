@@ -89,7 +89,9 @@ public class StatsHudOverlay {
         float hp = player.getHealth();
         float maxHp = player.getMaxHealth();
         float hpPct = (maxHp > 0) ? hp / maxHp : 0f;
-        drawStatBar(graphics, x, y, "HP", hpPct, hp, maxHp,
+        float displayHp = hp * 5.0f;
+        float displayMaxHp = maxHp * 5.0f;
+        drawStatBar(graphics, x, y, "HP", hpPct, displayHp, displayMaxHp,
                 hpPct < 0.3f ? HP_LOW_COLOR : HP_COLOR);
         y += BAR_HEIGHT + BAR_SPACING;
 

@@ -87,8 +87,8 @@ public class CopZombie extends BaseSevenDaysZombie {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
-                .add(Attributes.MAX_HEALTH, 350.0)
-                .add(Attributes.ATTACK_DAMAGE, 15.0)
+                .add(Attributes.MAX_HEALTH, 70.0)
+                .add(Attributes.ATTACK_DAMAGE, 3.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.12);
     }
 

@@ -354,33 +354,33 @@ public class PlayerStatsHandler {
     }
 
     private static void applyDebuffEffects(Player player, SevenDaysPlayerStats stats) {
-        // Bleeding: −1 HP/3sec per stack (max 3 stacks)
+        // Bleeding: −0.2 HP/3sec per stack (max 3 stacks)
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_BLEEDING)) {
             int stacks = Math.max(1, stats.getBleedingStacks());
             if (player.tickCount % 60 == 0) {
-                player.hurt(player.damageSources().magic(), 1.0f * stacks);
+                player.hurt(player.damageSources().magic(), 0.2f * stacks);
             }
         }
 
         // Infection Stage 1: −25% stamina regen (applied in applyStaminaRegen)
         // No direct damage, penalty handled via applyStaminaRegen
 
-        // Infection Stage 2: −0.5 HP/sec
+        // Infection Stage 2: −0.1 HP/sec
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
             if (player.tickCount % 20 == 0) {
-                player.hurt(player.damageSources().magic(), 0.5f);
+                player.hurt(player.damageSources().magic(), 0.1f);
             }
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_BURN)) {
             if (player.tickCount % 10 == 0) {
-                player.hurt(player.damageSources().onFire(), 1.0f);
+                player.hurt(player.damageSources().onFire(), 0.2f);
             }
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_RADIATION)) {
             if (player.tickCount % 100 == 0) {
-                player.hurt(player.damageSources().magic(), 1.0f);
+                player.hurt(player.damageSources().magic(), 0.2f);
             }
         }
 
