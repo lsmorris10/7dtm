@@ -20,7 +20,7 @@ public class DebuffCommand {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
         dispatcher.register(
-                Commands.literal("7dtm")
+                Commands.literal("bzhs")
                         .then(Commands.literal("cleardebuffs")
                                 .requires(source -> source.hasPermission(2))
                                 .executes(DebuffCommand::clearDebuffs))
@@ -38,8 +38,8 @@ public class DebuffCommand {
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
         PlayerStatsHandler.clearAllDebuffs(player, stats);
 
-        source.sendSuccess(() -> Component.literal("§7[7DTM] §aAll debuffs cleared."), false);
-        SevenDaysToMinecraft.LOGGER.info("7DTM: {} cleared all debuffs via command", player.getName().getString());
+        source.sendSuccess(() -> Component.literal("§7[BZHS] §aAll debuffs cleared."), false);
+        SevenDaysToMinecraft.LOGGER.info("BZHS: {} cleared all debuffs via command", player.getName().getString());
         return 1;
     }
 }

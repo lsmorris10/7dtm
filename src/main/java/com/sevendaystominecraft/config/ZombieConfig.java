@@ -113,7 +113,7 @@ public class ZombieConfig {
     public final ModConfigSpec.IntValue infernalFireTrailInterval;
 
     ZombieConfig(ModConfigSpec.Builder builder) {
-        builder.comment("7 Days to Minecraft — Zombie Configuration",
+        builder.comment("Brutal Zombie Horde Survival — Zombie Configuration",
                        "Per-variant HP/damage/speed overrides (spec §3.1)")
                .push("zombies");
 
@@ -134,7 +134,7 @@ public class ZombieConfig {
                 .comment("Light level threshold for darkness speed bonus. Zombies get the bonus when both block light and sky light are at or below this value.")
                 .defineInRange("darknessLightThreshold", 7, 0, 15);
         replaceVanillaHostiles = builder
-                .comment("Replace all vanilla hostile mob spawns with 7DTM zombie variants")
+                .comment("Replace all vanilla hostile mob spawns with BZHS zombie variants")
                 .define("replaceVanillaHostiles", true);
         builder.pop();
 

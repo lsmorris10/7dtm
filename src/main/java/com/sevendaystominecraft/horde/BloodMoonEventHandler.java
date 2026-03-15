@@ -51,7 +51,7 @@ public class BloodMoonEventHandler {
                 tracker.endBloodMoon();
                 syncBloodMoonState(level, false, 0, HordeConfig.INSTANCE.waveCount.get(), currentDay);
             }
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Day {} has begun", currentDay);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Day {} has begun", currentDay);
         }
 
         int cycle = HordeConfig.INSTANCE.hordeCycleLength.get();
@@ -60,8 +60,8 @@ public class BloodMoonEventHandler {
 
         if (isTomorrowBloodMoon && !tracker.hasSentWarning() && timeOfDay >= WARNING_TIME) {
             tracker.setSentWarning(true);
-            broadcastMessage(level, Component.literal("§c§l[7DTM] §eHorde Night Tomorrow! Prepare your defenses!"));
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Horde Night warning sent — blood moon tomorrow (day {})", currentDay + 1);
+            broadcastMessage(level, Component.literal("§c§l[BZHS] §eHorde Night Tomorrow! Prepare your defenses!"));
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Horde Night warning sent — blood moon tomorrow (day {})", currentDay + 1);
         }
 
         if (isTodayBloodMoon) {
@@ -89,7 +89,7 @@ public class BloodMoonEventHandler {
             BloodMoonSyncPayload payload = new BloodMoonSyncPayload(
                     true, tracker.getCurrentWave(), totalWaves, tracker.getGameDay());
             PacketDistributor.sendToPlayer(serverPlayer, payload);
-            SevenDaysToMinecraft.LOGGER.debug("[7DTM] Synced blood moon state to {} on login", 
+            SevenDaysToMinecraft.LOGGER.debug("[BZHS] Synced blood moon state to {} on login", 
                     serverPlayer.getName().getString());
         }
     }
@@ -113,9 +113,9 @@ public class BloodMoonEventHandler {
         if (!tracker.hasSentSkyRed() && timeOfDay >= SKY_RED_TIME) {
             tracker.setSentSkyRed(true);
             tracker.setPhase(BloodMoonTracker.Phase.PREP);
-            broadcastMessage(level, Component.literal("§4§l[7DTM] §cBlood Moon Rising! The sky turns red..."));
+            broadcastMessage(level, Component.literal("§4§l[BZHS] §cBlood Moon Rising! The sky turns red..."));
             syncBloodMoonState(level, true, 0, HordeConfig.INSTANCE.waveCount.get(), currentDay);
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Blood Moon sky effect activated — day {}", currentDay);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Blood Moon sky effect activated — day {}", currentDay);
         }
 
         if (!tracker.hasSentSiren() && timeOfDay >= SIREN_TIME) {
@@ -123,8 +123,8 @@ public class BloodMoonEventHandler {
             for (ServerPlayer player : level.players()) {
                 player.playNotifySound(SoundEvents.RAID_HORN.value(), SoundSource.HOSTILE, 1.5f, 0.5f);
             }
-            broadcastMessage(level, Component.literal("§4§l[7DTM] §c⚠ WARNING: Blood Moon siren!"));
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Blood Moon siren played");
+            broadcastMessage(level, Component.literal("§4§l[BZHS] §c⚠ WARNING: Blood Moon siren!"));
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Blood Moon siren played");
         }
 
         if (!tracker.hasStartedHorde() && timeOfDay >= HORDE_START_TIME) {
@@ -132,7 +132,7 @@ public class BloodMoonEventHandler {
             tracker.startBloodMoon();
             tracker.setCurrentWave(0);
 
-            broadcastMessage(level, Component.literal("§4§l[7DTM] §c§lHORDE NIGHT BEGINS! §fWave 1 incoming!"));
+            broadcastMessage(level, Component.literal("§4§l[BZHS] §c§lHORDE NIGHT BEGINS! §fWave 1 incoming!"));
             HordeSpawner.spawnWave(level, 0, currentDay);
             tracker.setCurrentWave(1);
 
@@ -140,7 +140,7 @@ public class BloodMoonEventHandler {
             tracker.setTicksUntilNextWave(intervalTicks);
 
             syncBloodMoonState(level, true, 1, HordeConfig.INSTANCE.waveCount.get(), currentDay);
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Horde Night started! Wave 1 spawned on day {}", currentDay);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Horde Night started! Wave 1 spawned on day {}", currentDay);
         }
     }
 
@@ -152,14 +152,14 @@ public class BloodMoonEventHandler {
         if (timeOfDay >= FINAL_WAVE_TIME) {
             if (!tracker.hasSpawnedFinalWave()) {
                 tracker.setSpawnedFinalWave(true);
-                broadcastMessage(level, Component.literal("§4§l[7DTM] §c§lFINAL WAVE! Hold the line!"));
+                broadcastMessage(level, Component.literal("§4§l[BZHS] §c§lFINAL WAVE! Hold the line!"));
                 HordeSpawner.spawnWave(level, totalWaves - 1, currentDay);
-                SevenDaysToMinecraft.LOGGER.info("[7DTM] Final wave spawned (wave {})", totalWaves);
+                SevenDaysToMinecraft.LOGGER.info("[BZHS] Final wave spawned (wave {})", totalWaves);
             }
 
             tracker.setPhase(BloodMoonTracker.Phase.POST);
-            broadcastMessage(level, Component.literal("§e§l[7DTM] §fThe horde thins... dawn approaches."));
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Horde spawning ended, entering post phase on day {}", currentDay);
+            broadcastMessage(level, Component.literal("§e§l[BZHS] §fThe horde thins... dawn approaches."));
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Horde spawning ended, entering post phase on day {}", currentDay);
             return;
         }
 
@@ -168,7 +168,7 @@ public class BloodMoonEventHandler {
 
             if (tracker.getTicksUntilNextWave() <= 0) {
                 broadcastMessage(level, Component.literal(
-                        "§4§l[7DTM] §cWave " + (currentWave + 1) + " incoming!"));
+                        "§4§l[BZHS] §cWave " + (currentWave + 1) + " incoming!"));
                 HordeSpawner.spawnWave(level, currentWave, currentDay);
                 tracker.setCurrentWave(currentWave + 1);
 
@@ -176,7 +176,7 @@ public class BloodMoonEventHandler {
                 tracker.setTicksUntilNextWave(intervalTicks);
 
                 syncBloodMoonState(level, true, currentWave + 1, totalWaves, currentDay);
-                SevenDaysToMinecraft.LOGGER.info("[7DTM] Wave {} spawned", currentWave + 1);
+                SevenDaysToMinecraft.LOGGER.info("[BZHS] Wave {} spawned", currentWave + 1);
             }
         }
     }
@@ -190,9 +190,9 @@ public class BloodMoonEventHandler {
             }
 
             tracker.endBloodMoon();
-            broadcastMessage(level, Component.literal("§a§l[7DTM] §fThe Blood Moon fades... You survived!"));
+            broadcastMessage(level, Component.literal("§a§l[BZHS] §fThe Blood Moon fades... You survived!"));
             syncBloodMoonState(level, false, 0, HordeConfig.INSTANCE.waveCount.get(), currentDay);
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Blood Moon ended on day {}", currentDay);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Blood Moon ended on day {}", currentDay);
         }
     }
 
@@ -210,7 +210,7 @@ public class BloodMoonEventHandler {
             }
         }
         if (burned > 0) {
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Dawn cleanup: {} horde zombies set on fire", burned);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Dawn cleanup: {} horde zombies set on fire", burned);
         }
     }
 

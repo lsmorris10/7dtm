@@ -22,7 +22,7 @@ public class HeatmapCommand {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
         dispatcher.register(
-                Commands.literal("7dtm")
+                Commands.literal("bzhs")
                         .then(Commands.literal("heat")
                                 .executes(HeatmapCommand::showHeat))
                         .then(Commands.literal("heat_clear")
@@ -61,13 +61,13 @@ public class HeatmapCommand {
                 25 * thresholdMult, 50 * thresholdMult, 75 * thresholdMult, 100 * thresholdMult);
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§7[7DTM] Chunk (%d, %d) Heat: %s%.1f§7/100%s",
+                String.format("§7[BZHS] Chunk (%d, %d) Heat: %s%.1f§7/100%s",
                         chunkPos.x, chunkPos.z, heatColor, heat, thresholds)
         ), false);
 
         int activeChunks = data.getAllChunkSources().size();
         source.sendSuccess(() -> Component.literal(
-                String.format("§7[7DTM] Active heated chunks: §f%d", activeChunks)
+                String.format("§7[BZHS] Active heated chunks: §f%d", activeChunks)
         ), false);
 
         return 1;
@@ -87,7 +87,7 @@ public class HeatmapCommand {
         data.setDirty();
         HeatmapSpawner.clearCooldowns();
 
-        source.sendSuccess(() -> Component.literal("§7[7DTM] §aHeatmap cleared."), false);
+        source.sendSuccess(() -> Component.literal("§7[BZHS] §aHeatmap cleared."), false);
         return 1;
     }
 }

@@ -51,7 +51,7 @@ public class StatsHudOverlay {
     @SubscribeEvent
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, OVERLAY_ID, StatsHudOverlay::render);
-        SevenDaysToMinecraft.LOGGER.info("7DTM: Registered stats HUD overlay (vanilla hunger bar hidden)");
+        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered stats HUD overlay (vanilla hunger bar hidden)");
     }
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {

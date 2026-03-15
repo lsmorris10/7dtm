@@ -17,6 +17,6 @@ public class ModScreens {
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.WORKSTATION_MENU.get(), WorkstationScreen::new);
         event.register(ModMenuTypes.LOOT_CONTAINER_MENU.get(), LootContainerScreen::new);
-        SevenDaysToMinecraft.LOGGER.info("7DTM: Registered workstation and loot container screens");
+        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered workstation and loot container screens");
     }
 }

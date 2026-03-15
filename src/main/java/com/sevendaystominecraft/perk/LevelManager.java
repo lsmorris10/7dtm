@@ -33,10 +33,10 @@ public class LevelManager {
 
             if (newLevel % 10 == 0) {
                 stats.addAttributePoints(1);
-                SevenDaysToMinecraft.LOGGER.info("[7DTM] {} reached level {} — earned 1 perk point + 1 bonus attribute point",
+                SevenDaysToMinecraft.LOGGER.info("[BZHS] {} reached level {} — earned 1 perk point + 1 bonus attribute point",
                         player.getName().getString(), newLevel);
             } else {
-                SevenDaysToMinecraft.LOGGER.info("[7DTM] {} reached level {} — earned 1 perk point",
+                SevenDaysToMinecraft.LOGGER.info("[BZHS] {} reached level {} — earned 1 perk point",
                         player.getName().getString(), newLevel);
             }
 

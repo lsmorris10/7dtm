@@ -64,7 +64,7 @@ public class HordeSpawner {
         CompositionRow comp = applyConfigThresholds(getComposition(dayNumber), dayNumber);
 
         SevenDaysToMinecraft.LOGGER.info(
-                "[7DTM Horde] Wave {} | Day {} | Size: {} ({} per player, {} players)",
+                "[BZHS Horde] Wave {} | Day {} | Size: {} ({} per player, {} players)",
                 waveIndex + 1, dayNumber, totalSize, perPlayer, players.size()
         );
 
@@ -90,7 +90,7 @@ public class HordeSpawner {
             }
 
             SevenDaysToMinecraft.LOGGER.info(
-                    "[7DTM Horde] Spawned {} zombies near {} (attempted {})",
+                    "[BZHS Horde] Spawned {} zombies near {} (attempted {})",
                     spawned, player.getName().getString(), attempts
             );
         }

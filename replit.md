@@ -1,7 +1,7 @@
 # Brutal Zombie Horde Survival (BZHS) — NeoForge Mod
 
 ## Project Overview
-A total conversion mod for Minecraft 1.21.4 (NeoForge) inspired by 7 Days to Die survival gameplay. Aligned to the style of 7 Days to Die 2.6 Experimental (Feb 2026). Previously known as "7 Days to Minecraft" — rebranded to avoid trademark concerns. Internal code (mod ID `sevendaystominecraft`, package names, `/7dtm` command prefix) remains unchanged.
+A total conversion mod for Minecraft 1.21.4 (NeoForge) inspired by 7 Days to Die survival gameplay. Aligned to the style of 7 Days to Die 2.6 Experimental (Feb 2026). Previously known as "7 Days to Minecraft" — rebranded to avoid trademark concerns. Internal code (mod ID `sevendaystominecraft`, package names) remains unchanged; commands use the `/bzhs` prefix.
 
 **Mod ID**: `sevendaystominecraft`  
 **Loader**: NeoForge 21.4.140  
@@ -54,7 +54,7 @@ src/main/java/com/sevendaystominecraft/
 │       ├── LootContainerMenu.java  — Container menu for loot containers
 │       └── LootContainerScreen.java — Client-side GUI for loot containers
 ├── command/
-│   └── LootStageCommand.java       — /7dtm loot_stage debug command
+│   └── LootStageCommand.java       — /bzhs loot_stage debug command
 ├── config/
 │   ├── SurvivalConfig.java         — Server-side survival config (survival.toml)
 │   ├── HordeConfig.java            — Server-side horde/blood moon config (horde.toml)
@@ -99,7 +99,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── HeatmapManager.java         — Server tick handler for heat decay + spawner integration
 │   ├── HeatEventHandler.java       — Event hooks: block break, torch place, explosion, sprint
 │   ├── HeatmapSpawner.java         — Threshold-based zombie spawning (scouts/screamer/mini-horde/waves)
-│   └── HeatmapCommand.java         — /7dtm heat debug command + /7dtm heat_clear admin command
+│   └── HeatmapCommand.java         — /bzhs heat debug command + /bzhs heat_clear admin command
 ├── horde/
 │   ├── BloodMoonTracker.java       — SavedData for day tracking & blood moon phase state
 │   ├── BloodMoonEventHandler.java  — Server tick handler for blood moon timeline + sleep prevention
@@ -109,7 +109,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── PerkDefinition.java       — Perk data class with rank requirements
 │   ├── PerkRegistry.java         — Static registry of all 45 perks (40 + 5 masteries)
 │   ├── LevelManager.java         — XP gain, level-up formula, zombie kill + block break hooks
-│   ├── PerkCommand.java          — /7dtm level, /7dtm perk, /7dtm attribute, /7dtm perks commands
+│   ├── PerkCommand.java          — /bzhs level, /bzhs perk, /bzhs attribute, /bzhs perks commands
 │   └── PerkEffectHandler.java    — Perk effect hooks (damage reduction, mining speed, unkillable, ghost)
 ├── mixin/
 │   ├── FoodDataMixin.java          — Cancels vanilla food saturation
@@ -185,7 +185,7 @@ src/main/java/com/sevendaystominecraft/
 - **Heat radiation**: Sources radiate to neighboring chunks with distance-based falloff (50% at center, less at edges)
 - **Heat cap**: 100 per chunk (spec-accurate); threshold multiplier scales spawn thresholds only
 - **HeatmapConfig**: `heatmap.toml` with enabled toggle, decayMultiplier (0.1-5.0), spawnThresholdMultiplier (0.5-3.0)
-- **Debug commands**: `/7dtm heat` shows current chunk heat + effective thresholds, `/7dtm heat_clear` (op-only) resets all heat data
+- **Debug commands**: `/bzhs heat` shows current chunk heat + effective thresholds, `/bzhs heat_clear` (op-only) resets all heat data
 
 ## Known Bugs / Issues
 1. **Sprint bug (known, unresolved)**: Sprint can get stuck — holding W alone gives infinite sprint (stamina drains but sprint doesn't cancel). Simplified from speed-heuristic approach to direct `isSprinting()` checks. Likely needs a client-side Mixin on `LocalPlayer.aiStep()` for proper fix.
@@ -241,7 +241,7 @@ Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (D
 - **Loot Stage**: Calculated per player: `floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)`, synced to client every 10 seconds
 - **Scrapping**: Tools/weapons/armor/electronics/food can be scrapped into materials, with workbench giving full yield and inventory giving 50%
 - **Config**: `loot.toml` with respawnDays, abundanceMultiplier, qualityScaling options
-- **Command**: `/7dtm loot_stage` shows player's current loot stage with breakdown
+- **Command**: `/bzhs loot_stage` shows player's current loot stage with breakdown
 - **4×4 Crafting Grid**: Deferred — Mixin complexity on NeoForge 1.21.4's CraftingMenu/InventoryMenu is too high; workstation-based crafting is implemented first as the task spec allows
 - `BlockEntityType` in NeoForge 1.21.4: No `Builder` class — use constructor directly: `new BlockEntityType<>(Supplier, Block...)`
 
@@ -264,6 +264,6 @@ Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (D
   - Well Insulated: ±10°F comfort zone per rank
   - Unkillable (Fortitude T10): Fatal damage → survive at 1 HP + 10s invulnerability (60 min cooldown)
   - Ghost (AGI T10): Stealth kills produce zero heatmap noise
-- **Commands**: `/7dtm level|stats`, `/7dtm perk <id> [rank]`, `/7dtm attribute <STR|PER|FOR|AGI|INT>`, `/7dtm perks`
+- **Commands**: `/bzhs level|stats`, `/bzhs perk <id> [rank]`, `/bzhs attribute <STR|PER|FOR|AGI|INT>`, `/bzhs perks`
 - **HUD**: XP bar + level counter added to stats overlay
 - **Persistence**: All XP/level/perk data serialized to NBT, synced via network payload, preserved through death/respawn

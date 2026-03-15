@@ -69,7 +69,7 @@
 - **P7 (combat):** Zombie name tags + HP bars hidden behind walls? Sunlight doesn't burn BZHS zombies?
 - **P8 (survival stats):** Sprint bug still present (known, deferred)? Stamina drain/regen rates feel correct? Food/water drain working?
 - **P9 (blood moon):** Every 7 days, warning → red sky → siren → horde → dawn burn sequence works? Blood moon timing correct with slower-tick cycle?
-- **P10 (debuffs):** Bleeding/Infection/Fracture/etc. apply and clear correctly? `/7dtm cleardebuffs` works?
+- **P10 (debuffs):** Bleeding/Infection/Fracture/etc. apply and clear correctly? `/bzhs cleardebuffs` works?
 - **P11 (landing page):** Verify published landing page loads correctly, download button fetches latest release JAR, and links work.
 
 ---
@@ -110,6 +110,6 @@
 - Stats HUD overlap fix (moved down below compass, removed background)
 - Night zombie speed increased to 2.25x
 - Day cycle doubled to 48,000 ticks
-- Debuffs persistence bug fixed (twice — `/7dtm cleardebuffs` command + `copyOnDeath` removal)
+- Debuffs persistence bug fixed (twice — `/bzhs cleardebuffs` command + `copyOnDeath` removal)
 - Debuffs guide created (`docs/debuffs_guide.md`)
 - Player base health set to 100 HP

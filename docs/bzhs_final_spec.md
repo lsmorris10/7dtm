@@ -1268,19 +1268,19 @@ Forge workstation UI:
 
 | Command | Arguments | Effect |
 |---------|-----------|--------|
-| `/7dtm day set <N>` | N = day number | Set current game day |
-| `/7dtm bloodmoon start` | — | Force immediate blood moon |
-| `/7dtm bloodmoon skip` | — | Skip next blood moon |
-| `/7dtm heat set <0-100>` | Chunk heat override | Set heatmap value |
-| `/7dtm spawner clear <radius>` | Blocks radius | Kill all zombies in area |
-| `/7dtm level <player> <N>` | Player, level | Set player level |
-| `/7dtm give <player> <item> [qty] [quality]` | Item registry name | Give item with quality |
-| `/7dtm trader reset` | — | Force all trader restocks |
-| `/7dtm poi regen <radius>` | Blocks | Regenerate POIs in radius |
-| `/7dtm debug heatmap` | — | Toggle heatmap visualization |
-| `/7dtm debug spawns` | — | Toggle spawn point visualization |
-| `/7dtm config reload` | — | Hot-reload config files |
-| `/7dtm weather radstorm` | — | Force radiation storm **(2.6 NEW)** |
+| `/bzhs day set <N>` | N = day number | Set current game day |
+| `/bzhs bloodmoon start` | — | Force immediate blood moon |
+| `/bzhs bloodmoon skip` | — | Skip next blood moon |
+| `/bzhs heat set <0-100>` | Chunk heat override | Set heatmap value |
+| `/bzhs spawner clear <radius>` | Blocks radius | Kill all zombies in area |
+| `/bzhs level <player> <N>` | Player, level | Set player level |
+| `/bzhs give <player> <item> [qty] [quality]` | Item registry name | Give item with quality |
+| `/bzhs trader reset` | — | Force all trader restocks |
+| `/bzhs poi regen <radius>` | Blocks | Regenerate POIs in radius |
+| `/bzhs debug heatmap` | — | Toggle heatmap visualization |
+| `/bzhs debug spawns` | — | Toggle spawn point visualization |
+| `/bzhs config reload` | — | Hot-reload config files |
+| `/bzhs weather radstorm` | — | Force radiation storm **(2.6 NEW)** |
 
 ### 15.5 Multiplayer Sync
 
@@ -1380,7 +1380,7 @@ All overrides use NeoForge Access Transformer + Mixin. No coremod ASM needed on 
 | `BlockEvent.BreakEvent` | Heatmap noise, XP gain, structural integrity check |
 | `RenderGuiLayerEvent` | Render custom HUD |
 | `ServerStartingEvent` | Load config, initialize heatmap data, register commands |
-| `RegisterCommandsEvent` | Register `/7dtm` command tree |
+| `RegisterCommandsEvent` | Register `/bzhs` command tree |
 | `GatherDataEvent` | Generate loot tables, recipes, structures via datagen |
 | `FMLClientSetupEvent` | Register custom screens, keybinds, renderers |
 | `RegisterEvent` (items/blocks/entities) | Register all custom content |
@@ -2247,7 +2247,7 @@ sevendaystominecraft/
 │   │   │   ├── weather/                           # Wasteland weather (2.6)
 │   │   │   ├── ui/                                # Custom HUD, screens
 │   │   │   ├── network/                           # Packet definitions
-│   │   │   ├── command/                           # /7dtm commands
+│   │   │   ├── command/                           # /bzhs commands
 │   │   │   ├── render/                            # Animation & VFX (NEW)
 │   │   │   │   ├── PlayerModelExtension.java       # Sprint pose logic (§14.7.1)
 │   │   │   │   ├── SprintParticleHandler.java      # Dust/breath/sweat VFX (§14.7.2)

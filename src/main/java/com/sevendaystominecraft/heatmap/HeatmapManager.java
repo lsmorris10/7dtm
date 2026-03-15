@@ -42,7 +42,7 @@ public class HeatmapManager {
 
         float totalHeat = data.getHeat(center);
         if (totalHeat >= 25) {
-            SevenDaysToMinecraft.LOGGER.debug("[7DTM Heatmap] Chunk ({}, {}) heat: {}",
+            SevenDaysToMinecraft.LOGGER.debug("[BZHS Heatmap] Chunk ({}, {}) heat: {}",
                     center.x, center.z, String.format("%.1f", totalHeat));
         }
     }

@@ -29,7 +29,7 @@ public class HordeConfig {
 
     HordeConfig(ModConfigSpec.Builder builder) {
 
-        builder.comment("7 Days to Minecraft — Horde Night / Blood Moon Configuration",
+        builder.comment("Brutal Zombie Horde Survival — Horde Night / Blood Moon Configuration",
                        "Spec reference: §4.1 (blood moon mechanics), §4.2 (scaling formula)")
                .push("horde");
 

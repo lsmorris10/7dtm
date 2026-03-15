@@ -54,7 +54,7 @@ public class ModNetworking {
                 ModNetworking::handleLootStageSync
         );
 
-        SevenDaysToMinecraft.LOGGER.debug("7DTM: Registered network payloads");
+        SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
     }
 
     private static void handleBloodMoonSync(BloodMoonSyncPayload payload, IPayloadContext context) {
@@ -82,7 +82,7 @@ public class ModNetworking {
 
     private static void handleLootStageSync(SyncLootStagePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            SevenDaysToMinecraft.LOGGER.debug("7DTM: Received loot stage sync: {}", payload.lootStage());
+            SevenDaysToMinecraft.LOGGER.debug("BZHS: Received loot stage sync: {}", payload.lootStage());
         });
     }
 

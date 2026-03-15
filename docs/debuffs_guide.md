@@ -11,7 +11,7 @@ Debuffs are negative status effects applied to your character through combat, en
 **Key mechanics:**
 - Debuffs use a **longest-duration-wins** rule. If you're hit with the same debuff again while it's already active, only the longer duration is kept — the timer never downgrades.
 - All debuffs are **cleared on death**. When you respawn, you start fresh with no active debuffs.
-- Admins can instantly remove all debuffs with the `/7dtm cleardebuffs` command (requires permission level 2+).
+- Admins can instantly remove all debuffs with the `/bzhs cleardebuffs` command (requires permission level 2+).
 
 ---
 
@@ -257,7 +257,7 @@ Radiation is a slow-burn damage debuff tied to [Radiated zombies](zombie_guide.m
 
 | Command | What It Does |
 |---------|-------------|
-| `/7dtm cleardebuffs` | Instantly removes all active debuffs from the player who runs it. Requires permission level 2 (operator). Clears bleeding stacks, all debuff timers, movement speed penalties, and the nausea effect from Concussion. |
+| `/bzhs cleardebuffs` | Instantly removes all active debuffs from the player who runs it. Requires permission level 2 (operator). Clears bleeding stacks, all debuff timers, movement speed penalties, and the nausea effect from Concussion. |
 
 ---
 

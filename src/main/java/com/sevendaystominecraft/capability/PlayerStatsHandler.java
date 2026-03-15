@@ -51,7 +51,7 @@ public class PlayerStatsHandler {
 
         if (player.tickCount % 20 == 0) {
             SevenDaysToMinecraft.LOGGER.info(
-                    "[7DTM DEBUG] {} | Food: {}/{} | Water: {}/{} | Stamina: {}/{} | Sprinting: {} | Temp: {}°F | Lvl: {} XP: {}",
+                    "[BZHS DEBUG] {} | Food: {}/{} | Water: {}/{} | Stamina: {}/{} | Sprinting: {} | Temp: {}°F | Lvl: {} XP: {}",
                     player.getName().getString(),
                     String.format("%.1f", stats.getFood()), String.format("%.1f", stats.getMaxFood()),
                     String.format("%.1f", stats.getWater()), String.format("%.1f", stats.getMaxWater()),
@@ -226,7 +226,7 @@ public class PlayerStatsHandler {
             applyBaseMaxHealth(serverPlayer);
             SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
             sendStatsToClient(serverPlayer, stats);
-            SevenDaysToMinecraft.LOGGER.debug("7DTM: Synced player stats to {} on login", serverPlayer.getName().getString());
+            SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
         }
     }
 

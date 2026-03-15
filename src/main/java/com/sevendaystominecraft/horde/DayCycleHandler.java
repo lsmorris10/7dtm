@@ -24,7 +24,7 @@ public class DayCycleHandler {
 
         if (level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
             level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false, level.getServer());
-            SevenDaysToMinecraft.LOGGER.info("[7DTM] Disabled vanilla daylight cycle — using TIME_SCALE={} slower-tick day cycle", SevenDaysConstants.TIME_SCALE);
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Disabled vanilla daylight cycle — using TIME_SCALE={} slower-tick day cycle", SevenDaysConstants.TIME_SCALE);
         }
 
         tickCounter++;

@@ -55,7 +55,7 @@ Wave mode is the heatmap's way of punishing sustained heavy activity. If you kee
 **To escape wave mode:**
 - Stop all activity in that chunk and let heat decay naturally below 75.
 - Move to a different area — heat is tracked per chunk, so a fresh chunk starts at 0.
-- Use `/7dtm heat_clear` to reset all heat (debug/admin command).
+- Use `/bzhs heat_clear` to reset all heat (debug/admin command).
 
 ---
 
@@ -75,8 +75,8 @@ You can adjust how fast heat decays globally using the config (see below).
 
 | Command | What It Does |
 |---------|-------------|
-| `/7dtm heat` | Shows the heat level of the chunk you're standing in, plus the spawn thresholds and total active heated chunks in the world |
-| `/7dtm heat_clear` | Resets ALL heat in every chunk to 0 and clears all spawn cooldowns. Debug/admin use. |
+| `/bzhs heat` | Shows the heat level of the chunk you're standing in, plus the spawn thresholds and total active heated chunks in the world |
+| `/bzhs heat_clear` | Resets ALL heat in every chunk to 0 and clears all spawn cooldowns. Debug/admin use. |
 
 ---
 

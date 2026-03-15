@@ -28,7 +28,7 @@ public class PerkCommand {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
         dispatcher.register(
-                Commands.literal("7dtm")
+                Commands.literal("bzhs")
                         .then(Commands.literal("level")
                                 .executes(PerkCommand::showLevel))
                         .then(Commands.literal("stats")
@@ -58,16 +58,16 @@ public class PerkCommand {
         float xpPct = (xpNeeded > 0) ? (float) stats.getXp() / xpNeeded * 100f : 0f;
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§6[7DTM] §fLevel: §e%d §7| XP: §e%d§7/§e%d §7(%.1f%%)",
+                String.format("§6[BZHS] §fLevel: §e%d §7| XP: §e%d§7/§e%d §7(%.1f%%)",
                         stats.getLevel(), stats.getXp(), xpNeeded, xpPct)
         ), false);
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§6[7DTM] §fPerk Points: §a%d §7| Attribute Points: §a%d",
+                String.format("§6[BZHS] §fPerk Points: §a%d §7| Attribute Points: §a%d",
                         stats.getPerkPoints(), stats.getAttributePoints())
         ), false);
 
-        StringBuilder attrLine = new StringBuilder("§6[7DTM] §fAttributes: ");
+        StringBuilder attrLine = new StringBuilder("§6[BZHS] §fAttributes: ");
         for (Attribute attr : Attribute.values()) {
             attrLine.append(String.format("§e%s§7:§f%d ", attr.getShortName(), stats.getAttributeLevel(attr)));
         }
@@ -76,7 +76,7 @@ public class PerkCommand {
 
         Map<String, Integer> perks = stats.getActivePerks();
         if (!perks.isEmpty()) {
-            StringBuilder perkLine = new StringBuilder("§6[7DTM] §fActive Perks: ");
+            StringBuilder perkLine = new StringBuilder("§6[BZHS] §fActive Perks: ");
             for (Map.Entry<String, Integer> entry : perks.entrySet()) {
                 PerkDefinition def = PerkRegistry.get(entry.getKey());
                 String name = def != null ? def.getDisplayName() : entry.getKey();
@@ -101,7 +101,7 @@ public class PerkCommand {
 
         PerkDefinition perk = PerkRegistry.get(perkId);
         if (perk == null) {
-            source.sendFailure(Component.literal("§c[7DTM] Unknown perk: " + perkId + ". Use /7dtm perks to list all."));
+            source.sendFailure(Component.literal("§c[BZHS] Unknown perk: " + perkId + ". Use /bzhs perks to list all."));
             return 0;
         }
 
@@ -110,20 +110,20 @@ public class PerkCommand {
 
         if (nextRank <= currentRank) {
             source.sendFailure(Component.literal(
-                    String.format("§c[7DTM] You already have %s at rank %d.", perk.getDisplayName(), currentRank)));
+                    String.format("§c[BZHS] You already have %s at rank %d.", perk.getDisplayName(), currentRank)));
             return 0;
         }
 
         if (nextRank > perk.getMaxRank()) {
             source.sendFailure(Component.literal(
-                    String.format("§c[7DTM] %s max rank is %d.", perk.getDisplayName(), perk.getMaxRank())));
+                    String.format("§c[BZHS] %s max rank is %d.", perk.getDisplayName(), perk.getMaxRank())));
             return 0;
         }
 
         int pointsNeeded = nextRank - currentRank;
         if (stats.getPerkPoints() < pointsNeeded) {
             source.sendFailure(Component.literal(
-                    String.format("§c[7DTM] Need %d perk point(s), you have %d.", pointsNeeded, stats.getPerkPoints())));
+                    String.format("§c[BZHS] Need %d perk point(s), you have %d.", pointsNeeded, stats.getPerkPoints())));
             return 0;
         }
 
@@ -131,7 +131,7 @@ public class PerkCommand {
         int currentAttrLevel = stats.getAttributeLevel(perk.getAttribute());
         if (currentAttrLevel < requiredAttrLevel) {
             source.sendFailure(Component.literal(
-                    String.format("§c[7DTM] %s rank %d requires %s level %d (you have %d).",
+                    String.format("§c[BZHS] %s rank %d requires %s level %d (you have %d).",
                             perk.getDisplayName(), nextRank, perk.getAttribute().getShortName(),
                             requiredAttrLevel, currentAttrLevel)));
             return 0;
@@ -141,7 +141,7 @@ public class PerkCommand {
         stats.addPerkPoints(-pointsNeeded);
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§a[7DTM] §fUnlocked §e%s §frank %d! §7(%s)",
+                String.format("§a[BZHS] §fUnlocked §e%s §frank %d! §7(%s)",
                         perk.getDisplayName(), nextRank, perk.getDescription())
         ), false);
 
@@ -159,21 +159,21 @@ public class PerkCommand {
         String attrName = StringArgumentType.getString(context, "attr");
         Attribute attribute = Attribute.fromShortName(attrName);
         if (attribute == null) {
-            source.sendFailure(Component.literal("§c[7DTM] Unknown attribute: " + attrName + ". Use STR/PER/FOR/AGI/INT."));
+            source.sendFailure(Component.literal("§c[BZHS] Unknown attribute: " + attrName + ". Use STR/PER/FOR/AGI/INT."));
             return 0;
         }
 
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
 
         if (stats.getAttributePoints() <= 0) {
-            source.sendFailure(Component.literal("§c[7DTM] No attribute points available."));
+            source.sendFailure(Component.literal("§c[BZHS] No attribute points available."));
             return 0;
         }
 
         int current = stats.getAttributeLevel(attribute);
         if (current >= 10) {
             source.sendFailure(Component.literal(
-                    String.format("§c[7DTM] %s is already at max level 10.", attribute.getDisplayName())));
+                    String.format("§c[BZHS] %s is already at max level 10.", attribute.getDisplayName())));
             return 0;
         }
 
@@ -182,7 +182,7 @@ public class PerkCommand {
 
         int newLevel = current + 1;
         source.sendSuccess(() -> Component.literal(
-                String.format("§a[7DTM] §f%s §eincreased to level %d!",
+                String.format("§a[BZHS] §f%s §eincreased to level %d!",
                         attribute.getDisplayName(), newLevel)
         ), false);
 
@@ -208,7 +208,7 @@ public class PerkCommand {
         }
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§7Total perks registered: %d. Use /7dtm perk <id> to unlock.", PerkRegistry.count())
+                String.format("§7Total perks registered: %d. Use /bzhs perk <id> to unlock.", PerkRegistry.count())
         ), false);
 
         return 1;

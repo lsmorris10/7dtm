@@ -82,7 +82,7 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
         screamCooldown = SCREAM_COOLDOWN_TICKS;
         totalScreams++;
 
-        SevenDaysToMinecraft.LOGGER.info("[7DTM] Screamer screamed! Spawned {} zombies (scream {}/{})",
+        SevenDaysToMinecraft.LOGGER.info("[BZHS] Screamer screamed! Spawned {} zombies (scream {}/{})",
                 spawnCount, totalScreams, MAX_SCREAMS);
     }
 

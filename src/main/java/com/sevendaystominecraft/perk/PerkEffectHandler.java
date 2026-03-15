@@ -48,10 +48,10 @@ public class PerkEffectHandler {
                 stats.setUnkillableCooldownEnd(currentTime + 72000L);
 
                 player.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal("§d[7DTM] Unkillable activated! 10s invulnerability."), true);
+                        net.minecraft.network.chat.Component.literal("§d[BZHS] Unkillable activated! 10s invulnerability."), true);
                 player.invulnerableTime = 200;
 
-                SevenDaysToMinecraft.LOGGER.info("[7DTM] Unkillable proc for {} — 60 min cooldown started",
+                SevenDaysToMinecraft.LOGGER.info("[BZHS] Unkillable proc for {} — 60 min cooldown started",
                         player.getName().getString());
             }
         }
@@ -81,7 +81,7 @@ public class PerkEffectHandler {
         if (player.isShiftKeyDown()) {
             if (player.level() instanceof ServerLevel serverLevel) {
                 ChunkPos chunkPos = new ChunkPos(event.getEntity().blockPosition());
-                SevenDaysToMinecraft.LOGGER.debug("[7DTM] Ghost perk: stealth kill, zero heatmap noise at ({}, {})",
+                SevenDaysToMinecraft.LOGGER.debug("[BZHS] Ghost perk: stealth kill, zero heatmap noise at ({}, {})",
                         chunkPos.x, chunkPos.z);
             }
         }

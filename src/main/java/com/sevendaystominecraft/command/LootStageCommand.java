@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class LootStageCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("7dtm")
+        dispatcher.register(Commands.literal("bzhs")
                 .then(Commands.literal("loot_stage")
                         .executes(LootStageCommand::showLootStage)
                 )
@@ -34,7 +34,7 @@ public class LootStageCommand {
         int playerLevel = player.experienceLevel;
 
         source.sendSuccess(() -> Component.literal(
-                String.format("§6[7DTM] §fLoot Stage: §e%d\n" +
+                String.format("§6[BZHS] §fLoot Stage: §e%d\n" +
                         "§7  Player Level: %d\n" +
                         "§7  Days Survived: %d\n" +
                         "§7  Formula: floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)",

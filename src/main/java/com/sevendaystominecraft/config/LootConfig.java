@@ -20,7 +20,7 @@ public class LootConfig {
     public final ModConfigSpec.BooleanValue qualityScaling;
 
     LootConfig(ModConfigSpec.Builder builder) {
-        builder.comment("7 Days to Minecraft — Loot & Crafting Configuration",
+        builder.comment("Brutal Zombie Horde Survival — Loot & Crafting Configuration",
                        "Controls loot container respawn, abundance, and quality scaling (spec §8)")
                .push("loot");
 

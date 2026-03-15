@@ -21,7 +21,7 @@ public class HeatmapConfig {
 
     HeatmapConfig(ModConfigSpec.Builder builder) {
 
-        builder.comment("7 Days to Minecraft — Heatmap Configuration",
+        builder.comment("Brutal Zombie Horde Survival — Heatmap Configuration",
                        "Per-chunk heat system that drives ambient zombie spawns (spec §1.3)",
                        "Higher heat = more zombie activity near noisy players")
                .push("heatmap");

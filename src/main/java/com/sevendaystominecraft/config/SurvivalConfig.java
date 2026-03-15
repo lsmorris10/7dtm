@@ -116,7 +116,7 @@ public class SurvivalConfig {
 
     SurvivalConfig(ModConfigSpec.Builder builder) {
 
-        builder.comment("7 Days to Minecraft — Survival Mechanics Configuration")
+        builder.comment("Brutal Zombie Horde Survival — Survival Mechanics Configuration")
                .push("survival");
 
         // Food & Water

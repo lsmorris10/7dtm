@@ -33,7 +33,7 @@ public class SevenDaysToMinecraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public SevenDaysToMinecraft(IEventBus modEventBus, ModContainer modContainer) {
-        LOGGER.info("7 Days to Minecraft — Initializing...");
+        LOGGER.info("BZHS — Initializing...");
 
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
 
@@ -58,23 +58,23 @@ public class SevenDaysToMinecraft {
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
         NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
 
-        LOGGER.info("7 Days to Minecraft — Mod registered successfully.");
+        LOGGER.info("BZHS — Mod registered successfully.");
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("7DTM Common Setup — Initializing shared systems...");
+        LOGGER.info("BZHS Common Setup — Initializing shared systems...");
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
-        LOGGER.info("7DTM Client Setup — Registering renderers and visual systems...");
+        LOGGER.info("BZHS Client Setup — Registering renderers and visual systems...");
     }
 
     private void onServerStarting(final ServerStartingEvent event) {
-        LOGGER.info("7DTM Server Starting — Loading world data...");
+        LOGGER.info("BZHS Server Starting — Loading world data...");
     }
 
     private void onRegisterCommands(final RegisterCommandsEvent event) {
         LootStageCommand.register(event.getDispatcher());
-        LOGGER.info("7DTM: Registered /7dtm loot_stage command");
+        LOGGER.info("BZHS: Registered /bzhs loot_stage command");
     }
 }

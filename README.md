@@ -88,19 +88,19 @@ A total conversion mod for **Minecraft 1.21.4** (NeoForge) inspired by **7 Days 
 
 ## Commands
 
-All commands use the `/7dtm` prefix (internal command name unchanged):
+All commands use the `/bzhs` prefix:
 
 | Command | Permission | Description |
 |---------|-----------|-------------|
-| `/7dtm heat` | All | Show current chunk heat level and thresholds |
-| `/7dtm heat_clear` | OP | Reset all heatmap data |
-| `/7dtm cleardebuffs` | OP | Clear all active debuffs and effects |
-| `/7dtm loot_stage` | All | Show your current loot stage breakdown |
-| `/7dtm level` | All | Show your XP, level, and available points |
-| `/7dtm stats` | All | Show your attribute levels and perk points |
-| `/7dtm perk <id> [rank]` | All | Unlock or upgrade a perk |
-| `/7dtm attribute <STR\|PER\|FOR\|AGI\|INT>` | All | Increase an attribute level |
-| `/7dtm perks` | All | List all available perks and requirements |
+| `/bzhs heat` | All | Show current chunk heat level and thresholds |
+| `/bzhs heat_clear` | OP | Reset all heatmap data |
+| `/bzhs cleardebuffs` | OP | Clear all active debuffs and effects |
+| `/bzhs loot_stage` | All | Show your current loot stage breakdown |
+| `/bzhs level` | All | Show your XP, level, and available points |
+| `/bzhs stats` | All | Show your attribute levels and perk points |
+| `/bzhs perk <id> [rank]` | All | Unlock or upgrade a perk |
+| `/bzhs attribute <STR\|PER\|FOR\|AGI\|INT>` | All | Increase an attribute level |
+| `/bzhs perks` | All | List all available perks and requirements |
 
 ---
 

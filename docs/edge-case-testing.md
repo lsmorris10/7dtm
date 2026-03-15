@@ -117,8 +117,8 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 - Thresholds: 25 = scouts, 50 = guaranteed Screamer, 75 = mini-horde (8–12), 100 = continuous waves every 90s
 - Does heat decay over time when the player stops doing noisy things?
 - Screamer scream behavior: scream spawns 4–8 walkers directly (not via heatmap), with a 3-scream cap and 600-tick cooldown. Note: screaming does NOT add heat — it spawns zombies independently of the heatmap system
-- Test `/7dtm heat` command to view current chunk heat
-- Test `/7dtm heat_clear` command to reset heat in the area
+- Test `/bzhs heat` command to view current chunk heat
+- Test `/bzhs heat_clear` command to reset heat in the area
 - Heatmap spawning is disabled during active Blood Moons — verify no overlap
 
 ---

@@ -71,21 +71,21 @@ public class HeatmapSpawner {
                     spawnWave(level, player, 8 + level.random.nextInt(5));
                     waveCooldowns.put(chunkKey, WAVE_COOLDOWN_TICKS);
                     SevenDaysToMinecraft.LOGGER.info(
-                            "[7DTM Heatmap] Continuous wave spawned near {} (heat: {})",
+                            "[BZHS Heatmap] Continuous wave spawned near {} (heat: {})",
                             player.getName().getString(), String.format("%.1f", heat));
                 }
             } else if (heat >= miniHordeThreshold && !hasCooldown(miniHordeCooldowns, chunkKey)) {
                 spawnHorde(level, player, 8 + level.random.nextInt(5));
                 miniHordeCooldowns.put(chunkKey, MINI_HORDE_COOLDOWN_TICKS);
                 SevenDaysToMinecraft.LOGGER.info(
-                        "[7DTM Heatmap] Mini-horde spawned near {} (heat: {})",
+                        "[BZHS Heatmap] Mini-horde spawned near {} (heat: {})",
                         player.getName().getString(), String.format("%.1f", heat));
             } else if (heat >= scoutThreshold && !hasCooldown(scoutCooldowns, chunkKey)) {
                 int count = 1 + level.random.nextInt(2);
                 spawnScouts(level, player, count);
                 scoutCooldowns.put(chunkKey, SCOUT_COOLDOWN_TICKS);
                 SevenDaysToMinecraft.LOGGER.info(
-                        "[7DTM Heatmap] {} scout(s) spawned near {} (heat: {})",
+                        "[BZHS Heatmap] {} scout(s) spawned near {} (heat: {})",
                         count, player.getName().getString(), String.format("%.1f", heat));
             }
 
@@ -93,7 +93,7 @@ public class HeatmapSpawner {
                 spawnScreamer(level, player);
                 screamerCooldowns.put(chunkKey, SCREAMER_COOLDOWN_TICKS);
                 SevenDaysToMinecraft.LOGGER.info(
-                        "[7DTM Heatmap] Screamer spawned near {} (heat: {})",
+                        "[BZHS Heatmap] Screamer spawned near {} (heat: {})",
                         player.getName().getString(), String.format("%.1f", heat));
             }
         }
