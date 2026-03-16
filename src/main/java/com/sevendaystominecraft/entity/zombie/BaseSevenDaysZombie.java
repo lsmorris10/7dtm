@@ -43,6 +43,11 @@ public class BaseSevenDaysZombie extends Zombie {
         goalSelector.addGoal(5, new ZombieInvestigateGoal(this));
     }
 
+    @Override
+    public void setCanBreakDoors(boolean canBreakDoors) {
+        super.setCanBreakDoors(false);
+    }
+
     public ZombieVariant getVariant() {
         return variant;
     }
