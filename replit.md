@@ -295,12 +295,24 @@ src/main/java/com/sevendaystominecraft/
 #### Weapons System — DONE
 - **Melee weapons**: 3 weapons via `SwordItem` + `ToolMaterial`:
   - Stone Club (4 dmg, -2.8 speed, wood durability), Baseball Bat (5 dmg, -2.6 speed), Iron Sledgehammer (9 dmg, -3.4 speed, iron durability)
-- **Ranged weapons**: 2 guns via `RangedWeaponItem` (right-click fire, ammo consumption, cooldown, durability):
-  - 9mm Pistol (8 dmg, 8-tick cooldown, 250 dur), AK-47 (12 dmg, 4-tick cooldown, 500 dur)
+- **Ranged weapons**: 2 guns via `GeoRangedWeaponItem` (Geckolib `GeoItem`, magazine system, reload state machine):
+  - 9mm Pistol (8 dmg, 8-tick cooldown, 15-round mag, 36-tick reload, 250 dur)
+  - AK-47 (12 dmg, 4-tick cooldown, 30-round mag, 50-tick reload, 500 dur)
+- **Grenade**: `GrenadeItem` (Geckolib `GeoItem`, right-click throws a `GrenadeEntity`):
+  - Throwable, 3-second fuse (60 ticks), 5-block explosion radius, stackable to 16
 - **Ammo**: 9mm Ammo, 7.62mm Ammo (stackable to 64)
 - **BulletEntity**: `ThrowableItemProjectile` with near-zero gravity (0.01), configurable damage, crit particles
+- **GrenadeEntity**: `ThrowableItemProjectile` with 0.05 gravity, 60-tick fuse, `Level.ExplosionInteraction.NONE` explosion
+- **Geckolib 4.8.5**: Added as dependency (`software.bernie.geckolib:geckolib-neoforge-1.21.4:4.8.5`)
+  - Maven: `https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/`
+  - Item JSON files for weapons use `{"model":{"type":"geckolib:geo_item"}}`
+  - 3D voxel-style `.geo.json` models at `assets/sevendaystominecraft/geo/item/`
+  - Keyframe animations at `assets/sevendaystominecraft/animations/item/`
+  - Placeholder textures at `assets/sevendaystominecraft/textures/item/`
+  - Animations: AK-47 (idle/fire/rack/reload), Pistol (idle/fire/reload), Grenade (idle/pin_pull/throw)
+  - Magazine system tracked via `CustomData` ItemStack component (NBT)
 - **Crafting**: Melee at Workbench, guns at Advanced Workbench, ammo at Chemistry Station
-- **Creative tab**: BZHS Weapons tab with all melee + ranged + ammo items
+- **Creative tab**: BZHS Weapons tab with all melee + ranged + ammo + grenade items
 
 ## Spec / Roadmap
 The full implementation is tracked in `docs/bzhs_final_spec.md` with 19 phases.

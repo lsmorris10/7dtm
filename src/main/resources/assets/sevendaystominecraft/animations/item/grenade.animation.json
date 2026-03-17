@@ -1,0 +1,68 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.grenade.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "1.0": [0, 3, 0],
+            "2.0": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.grenade.pin_pull": {
+      "loop": false,
+      "animation_length": 0.8,
+      "bones": {
+        "ring": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [3, 1, 0],
+            "0.8": [3, 1, 0]
+          }
+        },
+        "pin": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [3, 1, 0],
+            "0.8": [4, 2, 0]
+          }
+        },
+        "spoon": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [0, 0, 0],
+            "0.65": [-2, 1, 0],
+            "0.8": [-4, 3, 0]
+          },
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.5": [0, 0, 0],
+            "0.8": [-30, 0, 45]
+          }
+        }
+      }
+    },
+    "animation.grenade.throw": {
+      "loop": false,
+      "animation_length": 0.3,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.15": [-30, 0, 0],
+            "0.3": [-60, 0, 0]
+          },
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.3": [0, 2, -8]
+          }
+        }
+      }
+    }
+  }
+}

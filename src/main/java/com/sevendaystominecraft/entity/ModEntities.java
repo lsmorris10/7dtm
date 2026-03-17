@@ -3,6 +3,7 @@ package com.sevendaystominecraft.entity;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.entity.projectile.AcidBallEntity;
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
+import com.sevendaystominecraft.entity.projectile.GrenadeEntity;
 import com.sevendaystominecraft.entity.zombie.*;
 import com.sevendaystominecraft.territory.TerritoryLabelEntity;
 
@@ -131,6 +132,12 @@ public class ModEntities {
                     EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC)
                             .sized(0.15f, 0.15f).clientTrackingRange(4).updateInterval(2)
                             .build(key("bullet")));
+
+    public static final Supplier<EntityType<GrenadeEntity>> GRENADE =
+            ENTITY_TYPES.register("grenade", () ->
+                    EntityType.Builder.<GrenadeEntity>of(GrenadeEntity::new, MobCategory.MISC)
+                            .sized(0.25f, 0.25f).clientTrackingRange(6).updateInterval(4)
+                            .build(key("grenade")));
 
     public static final Supplier<EntityType<TerritoryLabelEntity>> TERRITORY_LABEL =
             ENTITY_TYPES.register("territory_label", () ->

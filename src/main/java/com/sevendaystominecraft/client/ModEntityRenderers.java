@@ -33,6 +33,7 @@ public class ModEntityRenderers {
 
         event.registerEntityRenderer(ModEntities.ACID_BALL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.BULLET.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.GRENADE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.TERRITORY_LABEL.get(), ctx -> new TerritoryLabelRenderer(ctx));
     }
 }

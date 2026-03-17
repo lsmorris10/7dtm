@@ -38,6 +38,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
+import software.bernie.geckolib.GeckoLib;
 
 @Mod(SevenDaysToMinecraft.MOD_ID)
 public class SevenDaysToMinecraft {
@@ -47,6 +48,7 @@ public class SevenDaysToMinecraft {
 
     public SevenDaysToMinecraft(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("BZHS — Initializing...");
+        new GeckoLib(modEventBus);
 
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
 

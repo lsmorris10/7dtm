@@ -1,7 +1,8 @@
 package com.sevendaystominecraft.item;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
-import com.sevendaystominecraft.item.weapon.RangedWeaponItem;
+import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
+import com.sevendaystominecraft.item.weapon.GrenadeItem;
 import com.sevendaystominecraft.sound.ModSounds;
 
 import net.minecraft.core.registries.Registries;
@@ -129,14 +130,20 @@ public class ModItems {
             () -> new Item(new Item.Properties().setId(key("ammo_762")).stacksTo(64)));
 
     public static final Supplier<Item> PISTOL_9MM = ITEMS.register("pistol_9mm",
-            () -> new RangedWeaponItem(
+            () -> new GeoRangedWeaponItem(
                     new Item.Properties().setId(key("pistol_9mm")).durability(250).stacksTo(1),
                     8.0f, 8, 3.0f, 2.0f, () -> AMMO_9MM.get(),
+                    15, 36, GeoRangedWeaponItem.WeaponType.PISTOL_9MM,
                     () -> ModSounds.GUN_FIRE_9MM.get()));
 
     public static final Supplier<Item> AK47 = ITEMS.register("ak47",
-            () -> new RangedWeaponItem(
+            () -> new GeoRangedWeaponItem(
                     new Item.Properties().setId(key("ak47")).durability(500).stacksTo(1),
                     12.0f, 4, 3.5f, 3.0f, () -> AMMO_762.get(),
+                    30, 50, GeoRangedWeaponItem.WeaponType.AK47,
                     () -> ModSounds.GUN_FIRE_AK47.get()));
+
+    public static final Supplier<Item> GRENADE = ITEMS.register("grenade",
+            () -> new GrenadeItem(
+                    new Item.Properties().setId(key("grenade")).stacksTo(16)));
 }

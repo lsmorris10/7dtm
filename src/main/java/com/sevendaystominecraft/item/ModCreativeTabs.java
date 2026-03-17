@@ -83,6 +83,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.AK47.get());
                         output.accept(ModItems.AMMO_9MM.get());
                         output.accept(ModItems.AMMO_762.get());
+                        output.accept(ModItems.GRENADE.get());
                     })
                     .build());
 

@@ -3,7 +3,6 @@
   "creativetab.sevendaystominecraft.workstations": "BZHS Workstations",
   "creativetab.sevendaystominecraft.weapons": "BZHS Weapons",
   "creativetab.sevendaystominecraft.loot_containers": "BZHS Loot Containers",
-
   "item.sevendaystominecraft.iron_scrap": "Iron Scrap",
   "item.sevendaystominecraft.iron_ingot": "Iron Ingot",
   "item.sevendaystominecraft.lead": "Lead",
@@ -36,7 +35,7 @@
   "item.sevendaystominecraft.ak47": "AK-47",
   "item.sevendaystominecraft.ammo_9mm": "9mm Ammo",
   "item.sevendaystominecraft.ammo_762": "7.62mm Ammo",
-
+  "item.sevendaystominecraft.grenade": "Grenade",
   "block.sevendaystominecraft.campfire_station": "Campfire",
   "block.sevendaystominecraft.grill": "Grill",
   "block.sevendaystominecraft.workbench": "Workbench",
@@ -52,7 +51,6 @@
   "block.sevendaystominecraft.kitchen_cabinet": "Kitchen Cabinet",
   "block.sevendaystominecraft.medicine_cabinet": "Medicine Cabinet",
   "block.sevendaystominecraft.bookshelf_container": "Bookshelf",
-
   "entity.sevendaystominecraft.walker": "Walker Zombie",
   "entity.sevendaystominecraft.crawler": "Crawler Zombie",
   "entity.sevendaystominecraft.frozen_lumberjack": "Frozen Lumberjack",
@@ -71,6 +69,7 @@
   "entity.sevendaystominecraft.charged": "Charged Zombie",
   "entity.sevendaystominecraft.infernal": "Infernal Zombie",
   "entity.sevendaystominecraft.behemoth": "Behemoth",
+  "entity.sevendaystominecraft.grenade": "Grenade",
 
   "subtitles.sevendaystominecraft.zombie_groan": "Zombie groans",
   "subtitles.sevendaystominecraft.zombie_scream": "Zombie screams",
