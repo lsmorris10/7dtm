@@ -2,6 +2,7 @@ package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.entity.ModEntities;
 
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ModEntityRenderers {
@@ -28,5 +29,7 @@ public class ModEntityRenderers {
         event.registerEntityRenderer(ModEntities.ZOMBIE_DOG.get(), ctx -> new ScaledZombieRenderer(ctx, 0.5f, NAME_TAG_EXTRA_HEIGHT));
         event.registerEntityRenderer(ModEntities.VULTURE.get(), ctx -> new ScaledZombieRenderer(ctx, 0.4f, NAME_TAG_EXTRA_HEIGHT));
         event.registerEntityRenderer(ModEntities.ZOMBIE_BEAR.get(), ctx -> new ScaledZombieRenderer(ctx, 1.5f, NAME_TAG_EXTRA_HEIGHT));
+
+        event.registerEntityRenderer(ModEntities.ACID_BALL.get(), ThrownItemRenderer::new);
     }
 }

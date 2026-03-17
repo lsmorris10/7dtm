@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
+import com.sevendaystominecraft.entity.projectile.AcidBallEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -10,7 +11,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -81,18 +83,12 @@ public class CopZombie extends BaseSevenDaysZombie {
     }
 
     private void shootBile(LivingEntity target) {
-        Vec3 direction = target.position().subtract(position()).normalize();
-        SmallFireball projectile = new SmallFireball(
-                level(), this,
-                direction.scale(1.5)
-        );
-        projectile.setPos(getX(), getEyeY() - 0.1, getZ());
-        level().addFreshEntity(projectile);
+        AcidBallEntity acidBall = new AcidBallEntity(level(), this, new ItemStack(Items.SLIME_BALL));
+        Vec3 direction = target.getEyePosition().subtract(getEyePosition()).normalize();
 
-        float bileDamage = ZombieConfig.INSTANCE.copBileDamage.get().floatValue();
-        if (level() instanceof ServerLevel sl) {
-            target.hurtServer(sl, damageSources().mobAttack(this), bileDamage);
-        }
+        acidBall.setPos(getX(), getEyeY() - 0.1, getZ());
+        acidBall.shoot(direction.x, direction.y, direction.z, 1.2f, 2.0f);
+        level().addFreshEntity(acidBall);
 
         playSound(SoundEvents.LLAMA_SPIT, 1.5f, 0.5f);
         bileCooldown = 60;
