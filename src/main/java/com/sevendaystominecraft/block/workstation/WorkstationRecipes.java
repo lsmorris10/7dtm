@@ -50,7 +50,7 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(ModItems.IRON_SCRAP.get(), 1)), new ItemStack(Items.IRON_INGOT), 200));
         recipes.add(recipe(List.of(ing(Items.IRON_INGOT, 1)), new ItemStack(ModItems.FORGED_IRON.get()), 300));
         recipes.add(recipe(List.of(ing(ModItems.LEAD.get(), 1)), new ItemStack(ModItems.FORGED_LEAD.get()), 250));
-        recipes.add(recipe(List.of(ing(ModItems.SAND.get(), 2), ing(ModItems.CLAY.get(), 1)), new ItemStack(ModItems.GLASS_JAR.get(), 3), 200));
+        recipes.add(recipe(List.of(ing(Items.SAND, 2), ing(Items.CLAY_BALL, 1)), new ItemStack(ModItems.GLASS_JAR.get(), 3), 200));
         recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 2)), new ItemStack(ModItems.NAIL.get(), 4), 100));
         recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 1)), new ItemStack(ModItems.SPRING.get(), 1), 150));
         RECIPES.put(WorkstationType.FORGE, recipes);
@@ -58,9 +58,9 @@ public final class WorkstationRecipes {
 
     private static void registerCementMixerRecipes() {
         List<WorkstationRecipe> recipes = new ArrayList<>();
-        recipes.add(recipe(List.of(ing(ModItems.SAND.get(), 2), ing(Items.COBBLESTONE, 2)), new ItemStack(ModItems.CONCRETE_MIX.get(), 4), 300));
+        recipes.add(recipe(List.of(ing(Items.SAND, 2), ing(Items.COBBLESTONE, 2)), new ItemStack(ModItems.CONCRETE_MIX.get(), 4), 300));
         recipes.add(recipe(List.of(ing(ModItems.CONCRETE_MIX.get(), 4)), new ItemStack(ModItems.CEMENT.get(), 2), 400));
-        recipes.add(recipe(List.of(ing(ModItems.SAND.get(), 4)), new ItemStack(Items.SANDSTONE, 2), 200));
+        recipes.add(recipe(List.of(ing(Items.SAND, 4)), new ItemStack(Items.SANDSTONE, 2), 200));
         RECIPES.put(WorkstationType.CEMENT_MIXER, recipes);
     }
 
@@ -80,12 +80,12 @@ public final class WorkstationRecipes {
     private static void registerChemistryStationRecipes() {
         List<WorkstationRecipe> recipes = new ArrayList<>();
         recipes.add(recipe(List.of(ing(ModItems.OIL_SHALE.get(), 2)), new ItemStack(ModItems.POLYMER.get(), 1), 250));
-        recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 2), ing(ModItems.COAL.get(), 1)), new ItemStack(ModItems.GUNPOWDER.get(), 2), 200));
+        recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 2), ing(Items.COAL, 1)), new ItemStack(Items.GUNPOWDER, 2), 200));
         recipes.add(recipe(List.of(ing(ModItems.OIL_SHALE.get(), 3)), new ItemStack(ModItems.GAS_CAN.get(), 1), 400));
         recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 1), ing(ModItems.GLASS_JAR.get(), 1)), new ItemStack(ModItems.ACID.get(), 1), 300));
         recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 3), ing(ModItems.GLASS_JAR.get(), 1), ing(ModItems.POLYMER.get(), 1)), new ItemStack(ModItems.ANTIBIOTICS.get(), 1), 400));
-        recipes.add(recipe(List.of(ing(ModItems.GUNPOWDER.get(), 1), ing(ModItems.FORGED_LEAD.get(), 1)), new ItemStack(ModItems.AMMO_9MM.get(), 8), 150));
-        recipes.add(recipe(List.of(ing(ModItems.GUNPOWDER.get(), 2), ing(ModItems.FORGED_LEAD.get(), 1), ing(ModItems.FORGED_IRON.get(), 1)), new ItemStack(ModItems.AMMO_762.get(), 8), 200));
+        recipes.add(recipe(List.of(ing(Items.GUNPOWDER, 1), ing(ModItems.FORGED_LEAD.get(), 1)), new ItemStack(ModItems.AMMO_9MM.get(), 8), 150));
+        recipes.add(recipe(List.of(ing(Items.GUNPOWDER, 2), ing(ModItems.FORGED_LEAD.get(), 1), ing(ModItems.FORGED_IRON.get(), 1)), new ItemStack(ModItems.AMMO_762.get(), 8), 200));
         RECIPES.put(WorkstationType.CHEMISTRY_STATION, recipes);
     }
 

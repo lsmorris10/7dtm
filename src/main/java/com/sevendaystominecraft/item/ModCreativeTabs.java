@@ -33,10 +33,10 @@ public class ModCreativeTabs {
                         output.accept(Items.IRON_INGOT);
                         output.accept(ModItems.LEAD.get());
                         output.accept(ModItems.NITRATE.get());
-                        output.accept(ModItems.COAL.get());
+                        output.accept(Items.COAL);
                         output.accept(ModItems.OIL_SHALE.get());
-                        output.accept(ModItems.CLAY.get());
-                        output.accept(ModItems.SAND.get());
+                        output.accept(Items.CLAY_BALL);
+                        output.accept(Items.SAND);
                         output.accept(ModItems.GLASS_JAR.get());
                         output.accept(ModItems.MECHANICAL_PARTS.get());
                         output.accept(ModItems.ELECTRICAL_PARTS.get());
@@ -48,7 +48,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.DUKES_CASINO_TOKEN.get());
                         output.accept(ModItems.CONCRETE_MIX.get());
                         output.accept(ModItems.ANTIBIOTICS.get());
-                        output.accept(ModItems.GUNPOWDER.get());
+                        output.accept(Items.GUNPOWDER);
                         output.accept(ModItems.GAS_CAN.get());
                         output.accept(ModItems.FORGED_LEAD.get());
                         output.accept(ModItems.NAIL.get());

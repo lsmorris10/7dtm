@@ -36,17 +36,8 @@ public class ModItems {
     public static final Supplier<Item> NITRATE = ITEMS.register("nitrate",
             () -> new Item(new Item.Properties().setId(key("nitrate")).stacksTo(64)));
 
-    public static final Supplier<Item> COAL = ITEMS.register("coal",
-            () -> new Item(new Item.Properties().setId(key("coal")).stacksTo(64)));
-
     public static final Supplier<Item> OIL_SHALE = ITEMS.register("oil_shale",
             () -> new Item(new Item.Properties().setId(key("oil_shale")).stacksTo(64)));
-
-    public static final Supplier<Item> CLAY = ITEMS.register("clay",
-            () -> new Item(new Item.Properties().setId(key("clay")).stacksTo(64)));
-
-    public static final Supplier<Item> SAND = ITEMS.register("sand",
-            () -> new Item(new Item.Properties().setId(key("sand")).stacksTo(64)));
 
     public static final Supplier<Item> GLASS_JAR = ITEMS.register("glass_jar",
             () -> new Item(new Item.Properties().setId(key("glass_jar")).stacksTo(64)));
@@ -80,9 +71,6 @@ public class ModItems {
 
     public static final Supplier<Item> ANTIBIOTICS = ITEMS.register("antibiotics",
             () -> new Item(new Item.Properties().setId(key("antibiotics")).stacksTo(64)));
-
-    public static final Supplier<Item> GUNPOWDER = ITEMS.register("gunpowder",
-            () -> new Item(new Item.Properties().setId(key("gunpowder")).stacksTo(64)));
 
     public static final Supplier<Item> GAS_CAN = ITEMS.register("gas_can",
             () -> new Item(new Item.Properties().setId(key("gas_can")).stacksTo(16)));

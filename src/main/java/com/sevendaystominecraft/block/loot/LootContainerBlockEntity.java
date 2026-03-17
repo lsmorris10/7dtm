@@ -168,7 +168,7 @@ public class LootContainerBlockEntity extends BlockEntity {
     private static ItemStack generateItemForType(LootContainerType type, int lootStage, Random random) {
         return switch (type) {
             case TRASH_PILE -> pickRandom(random, lootStage,
-                    ModItems.IRON_SCRAP, ModItems.DUCT_TAPE, ModItems.CLAY);
+                    ModItems.IRON_SCRAP, ModItems.DUCT_TAPE, () -> Items.CLAY_BALL);
             case CARDBOARD_BOX -> pickRandom(random, lootStage,
                     ModItems.IRON_SCRAP, ModItems.MECHANICAL_PARTS, ModItems.DUCT_TAPE, ModItems.POLYMER);
             case GUN_SAFE -> pickRandom(random, lootStage,
