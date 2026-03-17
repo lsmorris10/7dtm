@@ -2,7 +2,7 @@ package com.sevendaystominecraft.item.weapon;
 
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,15 +22,18 @@ public class RangedWeaponItem extends Item {
     private final float projectileSpeed;
     private final float inaccuracy;
     private final Supplier<Item> ammoSupplier;
+    private final Supplier<SoundEvent> fireSound;
 
     public RangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
-                            float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier) {
+                            float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier,
+                            Supplier<SoundEvent> fireSound) {
         super(properties);
         this.bulletDamage = bulletDamage;
         this.cooldownTicks = cooldownTicks;
         this.projectileSpeed = projectileSpeed;
         this.inaccuracy = inaccuracy;
         this.ammoSupplier = ammoSupplier;
+        this.fireSound = fireSound;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class RangedWeaponItem extends Item {
         }
 
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.5f, 1.2f);
+                fireSound.get(), SoundSource.PLAYERS, 1.5f, 1.0f);
 
         player.getCooldowns().addCooldown(held, cooldownTicks);
 

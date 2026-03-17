@@ -7,7 +7,7 @@ import com.sevendaystominecraft.network.BloodMoonSyncPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
+import com.sevendaystominecraft.sound.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -121,7 +121,7 @@ public class BloodMoonEventHandler {
         if (!tracker.hasSentSiren() && timeOfDay >= SIREN_TIME) {
             tracker.setSentSiren(true);
             for (ServerPlayer player : level.players()) {
-                player.playNotifySound(SoundEvents.RAID_HORN.value(), SoundSource.HOSTILE, 1.5f, 0.5f);
+                player.playNotifySound(ModSounds.BLOOD_MOON_SIREN.get(), SoundSource.HOSTILE, 1.5f, 0.5f);
             }
             broadcastMessage(level, Component.literal("§4§l[BZHS] §c⚠ WARNING: Blood Moon siren!"));
             SevenDaysToMinecraft.LOGGER.info("[BZHS] Blood Moon siren played");

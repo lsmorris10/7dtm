@@ -1,0 +1,50 @@
+{
+  "zombie_groan": {
+    "sounds": [
+      "sevendaystominecraft:zombie_groan"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_groan"
+  },
+  "zombie_scream": {
+    "sounds": [
+      "sevendaystominecraft:zombie_scream"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_scream"
+  },
+  "zombie_death": {
+    "sounds": [
+      "sevendaystominecraft:zombie_death"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_death"
+  },
+  "gun_fire_9mm": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_9mm"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_9mm"
+  },
+  "gun_fire_ak47": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_ak47"
+  },
+  "blood_moon_siren": {
+    "sounds": [
+      "sevendaystominecraft:blood_moon_siren"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.blood_moon_siren"
+  },
+  "workstation_ambient": {
+    "sounds": [
+      "sevendaystominecraft:workstation_ambient"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.workstation_ambient"
+  },
+  "block_break_zombie": {
+    "sounds": [
+      "sevendaystominecraft:block_break_zombie"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.block_break_zombie"
+  }
+}

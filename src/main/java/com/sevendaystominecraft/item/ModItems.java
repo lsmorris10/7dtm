@@ -2,6 +2,7 @@ package com.sevendaystominecraft.item;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.item.weapon.RangedWeaponItem;
+import com.sevendaystominecraft.sound.ModSounds;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -130,10 +131,12 @@ public class ModItems {
     public static final Supplier<Item> PISTOL_9MM = ITEMS.register("pistol_9mm",
             () -> new RangedWeaponItem(
                     new Item.Properties().setId(key("pistol_9mm")).durability(250).stacksTo(1),
-                    8.0f, 8, 3.0f, 2.0f, () -> AMMO_9MM.get()));
+                    8.0f, 8, 3.0f, 2.0f, () -> AMMO_9MM.get(),
+                    () -> ModSounds.GUN_FIRE_9MM.get()));
 
     public static final Supplier<Item> AK47 = ITEMS.register("ak47",
             () -> new RangedWeaponItem(
                     new Item.Properties().setId(key("ak47")).durability(500).stacksTo(1),
-                    12.0f, 4, 3.5f, 3.0f, () -> AMMO_762.get()));
+                    12.0f, 4, 3.5f, 3.0f, () -> AMMO_762.get(),
+                    () -> ModSounds.GUN_FIRE_AK47.get()));
 }

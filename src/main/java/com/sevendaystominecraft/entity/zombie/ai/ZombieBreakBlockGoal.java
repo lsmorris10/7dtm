@@ -2,8 +2,10 @@ package com.sevendaystominecraft.entity.zombie.ai;
 
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
+import com.sevendaystominecraft.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -142,6 +144,8 @@ public class ZombieBreakBlockGoal extends Goal {
 
         if (blockDamageAccumulated >= blockMaxHP) {
             serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
+            serverLevel.playSound(null, targetBlockPos, ModSounds.BLOCK_BREAK_ZOMBIE.get(),
+                    SoundSource.HOSTILE, 1.0f, 1.0f);
             serverLevel.destroyBlock(targetBlockPos, true, zombie);
             targetBlockPos = null;
         }

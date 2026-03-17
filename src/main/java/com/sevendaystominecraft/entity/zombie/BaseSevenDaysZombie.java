@@ -5,10 +5,13 @@ import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieBreakBlockGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieHordePathGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieInvestigateGoal;
+import com.sevendaystominecraft.sound.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -270,6 +273,16 @@ public class BaseSevenDaysZombie extends Zombie {
             base += modifier.getXpReward();
         }
         return base;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.ZOMBIE_GROAN.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return ModSounds.ZOMBIE_DEATH.get();
     }
 
     @Override

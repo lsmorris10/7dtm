@@ -70,5 +70,14 @@
   "entity.sevendaystominecraft.soldier": "Soldier Zombie",
   "entity.sevendaystominecraft.charged": "Charged Zombie",
   "entity.sevendaystominecraft.infernal": "Infernal Zombie",
-  "entity.sevendaystominecraft.behemoth": "Behemoth"
+  "entity.sevendaystominecraft.behemoth": "Behemoth",
+
+  "subtitles.sevendaystominecraft.zombie_groan": "Zombie groans",
+  "subtitles.sevendaystominecraft.zombie_scream": "Zombie screams",
+  "subtitles.sevendaystominecraft.zombie_death": "Zombie dies",
+  "subtitles.sevendaystominecraft.gun_fire_9mm": "9mm gunshot",
+  "subtitles.sevendaystominecraft.gun_fire_ak47": "AK-47 gunshot",
+  "subtitles.sevendaystominecraft.blood_moon_siren": "Blood Moon siren wails",
+  "subtitles.sevendaystominecraft.workstation_ambient": "Workstation hums",
+  "subtitles.sevendaystominecraft.block_break_zombie": "Zombie smashes block"
 }

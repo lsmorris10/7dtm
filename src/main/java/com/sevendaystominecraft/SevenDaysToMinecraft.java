@@ -21,6 +21,7 @@ import com.sevendaystominecraft.item.ModCreativeTabs;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 import com.sevendaystominecraft.network.ModNetworking;
+import com.sevendaystominecraft.sound.ModSounds;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -60,6 +61,7 @@ public class SevenDaysToMinecraft {
         ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        ModSounds.SOUND_EVENTS.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);

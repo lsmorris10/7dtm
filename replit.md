@@ -240,6 +240,17 @@ src/main/java/com/sevendaystominecraft/
 - `Entity.hurt()` is `final` → override `actuallyHurt(ServerLevel, DamageSource, float)` for damage interception
 - `doHurtTarget()` signature: `doHurtTarget(ServerLevel serverLevel, Entity target)`
 - `SoundEvents.LLAMA_SPIT`, `GHAST_SCREAM`, `RAVAGER_ROAR`, `LIGHTNING_BOLT_THUNDER` — direct `SoundEvent`, no `.value()` needed
+
+### Custom Sound System
+- **`ModSounds.java`** (`com.sevendaystominecraft.sound`) — DeferredRegister for all custom SoundEvents
+- **sounds.json** at `assets/sevendaystominecraft/sounds.json` — maps event IDs to OGG paths
+- **OGG files** in `assets/sevendaystominecraft/sounds/` — placeholder silent OGGs (replace with real audio)
+- 8 sound events: `zombie_groan`, `zombie_scream`, `zombie_death`, `gun_fire_9mm`, `gun_fire_ak47`, `blood_moon_siren`, `workstation_ambient`, `block_break_zombie`
+- `RangedWeaponItem` constructor takes `Supplier<SoundEvent> fireSound` parameter
+- `BaseSevenDaysZombie` overrides `getAmbientSound()` and `getDeathSound()`
+- `BloodMoonEventHandler` siren uses `ModSounds.BLOOD_MOON_SIREN`
+- `ZombieBreakBlockGoal` plays `BLOCK_BREAK_ZOMBIE` on block destruction
+- Subtitle translations in `en_us.json` under `subtitles.sevendaystominecraft.*`
 - `convertsInWater()` → `isSensitiveToWater()`; `isSunSensitive()` removed entirely
 - `isGlowing()` → `isCurrentlyGlowing()`
 - `getExperienceReward()` → `getBaseExperienceReward(ServerLevel level)`
