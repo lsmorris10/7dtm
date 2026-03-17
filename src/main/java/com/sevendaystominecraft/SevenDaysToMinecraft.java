@@ -92,7 +92,15 @@ public class SevenDaysToMinecraft {
     private void onServerStarting(final ServerStartingEvent event) {
         LOGGER.info("BZHS Server Starting — Loading world data...");
         DayCycleHandler.reset();
+        migrateLegacyDamageMultiplier();
+    }
 
+    private void migrateLegacyDamageMultiplier() {
+        double current = SurvivalConfig.INSTANCE.playerDamageMultiplier.get();
+        if (current == 2.0) {
+            SurvivalConfig.INSTANCE.playerDamageMultiplier.set(1.0);
+            LOGGER.warn("BZHS: Migrated legacy playerDamageMultiplier from 2.0 to 1.0 (old default from pre-Task#83 worlds)");
+        }
     }
 
     private void onRegisterCommands(final RegisterCommandsEvent event) {
