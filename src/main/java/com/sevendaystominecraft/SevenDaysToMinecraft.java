@@ -74,11 +74,6 @@ public class SevenDaysToMinecraft {
         LOGGER.info("BZHS Server Starting — Loading world data...");
         DayCycleHandler.reset();
 
-        double baseMaxHealth = SurvivalConfig.INSTANCE.baseMaxHealth.get();
-        if (baseMaxHealth > 200.0) {
-            LOGGER.warn("[BZHS] baseMaxHealth is {} which exceeds the recommended maximum of 200. "
-                    + "Consider deleting your config file to regenerate defaults (100 HP).", baseMaxHealth);
-        }
     }
 
     private void onRegisterCommands(final RegisterCommandsEvent event) {

@@ -59,11 +59,6 @@ public class SurvivalConfig {
     /** Stamina regen per second while walking (spec §1.1: 4/s) */
     public final ModConfigSpec.DoubleValue staminaRegenWalking;
 
-    // ── Base Health ──────────────────────────────────────────────────────
-
-    /** Player base max health in HP (vanilla = 20, 10 hearts) */
-    public final ModConfigSpec.DoubleValue baseMaxHealth;
-
     // ── Health Regen ────────────────────────────────────────────────────
 
     /** Health regen per second when above thresholds (spec §1.1: 0.5/s) */
@@ -180,9 +175,6 @@ public class SurvivalConfig {
 
         // Health
         builder.push("health");
-        baseMaxHealth = builder
-                .comment("Player base max health in HP (vanilla = 20, 10 hearts)")
-                .defineInRange("baseMaxHealth", 20.0, 20.0, 200.0);
         healthRegenRate = builder
                 .comment("Health regen per second when above food/water thresholds")
                 .defineInRange("healthRegenRate", 0.1, 0.0, 10.0);
@@ -281,7 +273,7 @@ public class SurvivalConfig {
         builder.push("combat");
         playerDamageMultiplier = builder
                 .comment("Multiplier for player damage dealt to BZHS zombie entities (2.0 = double damage)")
-                .defineInRange("playerDamageMultiplier", 2.0, 0.1, 10.0);
+                .defineInRange("playerDamageMultiplier", 1.0, 0.1, 10.0);
         builder.pop();
 
         // Sync

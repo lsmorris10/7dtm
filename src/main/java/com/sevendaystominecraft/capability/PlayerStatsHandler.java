@@ -50,9 +50,6 @@ public class PlayerStatsHandler {
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "hypothermia_slowdown");
     private static final ResourceLocation FREEZE_SLOWDOWN_ID =
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "freeze_slowdown");
-    private static final ResourceLocation BASE_HEALTH_MODIFIER_ID =
-            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "base_max_health");
-
     private static final ResourceLocation CARDIO_SPEED_ID =
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "cardio_speed_bonus");
 
@@ -257,7 +254,6 @@ public class PlayerStatsHandler {
                 clearAllDebuffs(event.getEntity(), newStats);
             }
         }
-        applyBaseMaxHealth(event.getEntity());
     }
 
     public static void clearAllDebuffs(Player player, SevenDaysPlayerStats stats) {
@@ -324,38 +320,31 @@ public class PlayerStatsHandler {
         }
     }
 
+    private static final ResourceLocation LEGACY_HEALTH_MODIFIER_ID =
+            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "base_max_health");
+
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            applyBaseMaxHealth(serverPlayer);
+            removeLegacyHealthModifier(serverPlayer);
             SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
             sendStatsToClient(serverPlayer, stats);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
         }
     }
 
-    private static void applyBaseMaxHealth(Player player) {
-        double configuredMax = SurvivalConfig.INSTANCE.baseMaxHealth.get();
-        double vanillaBase = 20.0;
-        double bonus = configuredMax - vanillaBase;
-
+    private static void removeLegacyHealthModifier(Player player) {
         AttributeInstance healthAttr = player.getAttribute(Attributes.MAX_HEALTH);
         if (healthAttr == null) return;
-
-        boolean hadModifier = healthAttr.getModifier(BASE_HEALTH_MODIFIER_ID) != null;
-
-        healthAttr.removeModifier(BASE_HEALTH_MODIFIER_ID);
-        if (bonus != 0.0) {
-            healthAttr.addPermanentModifier(new AttributeModifier(
-                    BASE_HEALTH_MODIFIER_ID, bonus, AttributeModifier.Operation.ADD_VALUE));
-        }
-
-        if (!hadModifier) {
-            player.setHealth(player.getMaxHealth());
-        } else if (player.getHealth() > player.getMaxHealth()) {
-            player.setHealth(player.getMaxHealth());
+        if (healthAttr.getModifier(LEGACY_HEALTH_MODIFIER_ID) != null) {
+            healthAttr.removeModifier(LEGACY_HEALTH_MODIFIER_ID);
+            if (player.getHealth() > player.getMaxHealth()) {
+                player.setHealth(player.getMaxHealth());
+            }
+            SevenDaysToMinecraft.LOGGER.info("BZHS: Removed legacy health modifier from {}", player.getName().getString());
         }
     }
+
 
     public static void sendStatsToClient(ServerPlayer player, SevenDaysPlayerStats stats) {
         int[] attrLevels = new int[Attribute.values().length];
