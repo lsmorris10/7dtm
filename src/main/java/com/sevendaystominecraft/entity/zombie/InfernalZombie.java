@@ -47,9 +47,11 @@ public class InfernalZombie extends BaseSevenDaysZombie {
             int interval = ZombieConfig.INSTANCE.infernalFireTrailInterval.get();
             if (fireTrailTicks >= interval && getDeltaMovement().horizontalDistanceSqr() > 0.001) {
                 fireTrailTicks = 0;
-                BlockPos pos = blockPosition();
-                if (level().getBlockState(pos).isAir()) {
-                    level().setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+                if (level() instanceof ServerLevel sl && sl.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) {
+                    BlockPos pos = blockPosition();
+                    if (level().getBlockState(pos).isAir()) {
+                        level().setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+                    }
                 }
             }
         }

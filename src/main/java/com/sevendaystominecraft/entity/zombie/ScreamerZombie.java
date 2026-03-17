@@ -10,8 +10,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -21,8 +23,10 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
 
     private int screamCooldown = 0;
     private int totalScreams = 0;
+    private boolean hasFled = false;
     private static final int MAX_SCREAMS = 3;
     private static final int SCREAM_COOLDOWN_TICKS = 600;
+    private static final int FLEE_DURATION_TICKS = 100;
 
     public ScreamerZombie(EntityType<? extends Zombie> type, Level level) {
         super(type, level, ZombieVariant.SCREAMER);
@@ -31,7 +35,8 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        goalSelector.addGoal(1, new ScreamGoal(this));
+        goalSelector.addGoal(1, new ScreamerFleeGoal(this));
+        goalSelector.addGoal(2, new ScreamGoal(this));
     }
 
     @Override
@@ -81,6 +86,7 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
 
         screamCooldown = SCREAM_COOLDOWN_TICKS;
         totalScreams++;
+        hasFled = false;
 
         SevenDaysToMinecraft.LOGGER.info("[BZHS] Screamer screamed! Spawned {} zombies (scream {}/{})",
                 spawnCount, totalScreams, MAX_SCREAMS);
@@ -95,7 +101,6 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
 
     private static class ScreamGoal extends Goal {
         private final ScreamerZombie screamer;
-        private boolean hasScreamed = false;
 
         ScreamGoal(ScreamerZombie screamer) {
             this.screamer = screamer;
@@ -114,16 +119,69 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
         @Override
         public void start() {
             screamer.performScream();
-            hasScreamed = true;
         }
 
         @Override
         public boolean canContinueToUse() {
-            if (hasScreamed) {
-                hasScreamed = false;
+            return false;
+        }
+    }
+
+    private static class ScreamerFleeGoal extends Goal {
+        private final ScreamerZombie screamer;
+        private int fleeTicks = 0;
+
+        ScreamerFleeGoal(ScreamerZombie screamer) {
+            this.screamer = screamer;
+            setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (screamer.hasFled) return false;
+            if (screamer.totalScreams <= 0) return false;
+            if (screamer.screamCooldown < SCREAM_COOLDOWN_TICKS - 10) return false;
+            LivingEntity target = screamer.getTarget();
+            return target != null && target.isAlive() && screamer.distanceTo(target) < 10.0;
+        }
+
+        @Override
+        public void start() {
+            fleeTicks = 0;
+            fleeFromTarget();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (fleeTicks >= FLEE_DURATION_TICKS) {
+                screamer.hasFled = true;
                 return false;
             }
-            return false;
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            fleeTicks++;
+            if (fleeTicks % 20 == 0) {
+                fleeFromTarget();
+            }
+        }
+
+        private void fleeFromTarget() {
+            LivingEntity target = screamer.getTarget();
+            if (target == null) return;
+
+            double dx = screamer.getX() - target.getX();
+            double dz = screamer.getZ() - target.getZ();
+            double dist = Math.sqrt(dx * dx + dz * dz);
+            if (dist < 0.01) { dx = 1; dz = 0; dist = 1; }
+
+            double fleeX = screamer.getX() + (dx / dist) * 10;
+            double fleeZ = screamer.getZ() + (dz / dist) * 10;
+            double fleeY = screamer.getY();
+
+            screamer.getNavigation().moveTo(fleeX, fleeY, fleeZ, 1.5);
         }
     }
 }

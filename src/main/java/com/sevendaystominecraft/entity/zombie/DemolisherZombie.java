@@ -1,18 +1,24 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class DemolisherZombie extends BaseSevenDaysZombie {
 
     private boolean hasExploded = false;
+    private boolean fuseActive = false;
+    private int fuseTicks = 0;
+    private static final int FUSE_DURATION = 60;
 
     public DemolisherZombie(EntityType<? extends Zombie> type, Level level) {
         super(type, level, ZombieVariant.DEMOLISHER);
@@ -29,6 +35,35 @@ public class DemolisherZombie extends BaseSevenDaysZombie {
         setHealth((float) hp);
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damage);
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!level().isClientSide() && !hasExploded) {
+            float hpPercent = getHealth() / getMaxHealth();
+            if (hpPercent <= 0.25f && !fuseActive) {
+                fuseActive = true;
+                fuseTicks = 0;
+            }
+
+            if (fuseActive) {
+                fuseTicks++;
+                if (fuseTicks % 10 == 0) {
+                    playSound(SoundEvents.TNT_PRIMED, 2.0f, 1.0f + (fuseTicks / (float) FUSE_DURATION));
+                }
+                if (fuseTicks >= FUSE_DURATION) {
+                    triggerExplosion();
+                }
+            }
+        }
+
+        if (fuseActive && level().isClientSide() && tickCount % 2 == 0) {
+            level().addParticle(ParticleTypes.FLAME,
+                    getRandomX(0.5), getRandomY(), getRandomZ(0.5),
+                    0, 0.05, 0);
+        }
     }
 
     @Override
@@ -53,7 +88,12 @@ public class DemolisherZombie extends BaseSevenDaysZombie {
         if (hasExploded) return;
         hasExploded = true;
         int radius = ZombieConfig.INSTANCE.demolisherExplosionRadius.get();
-        level().explode(this, getX(), getY(), getZ(), radius, Level.ExplosionInteraction.MOB);
+        Level.ExplosionInteraction interaction = Level.ExplosionInteraction.NONE;
+        if (level() instanceof ServerLevel sl) {
+            interaction = sl.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
+                    ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
+        }
+        level().explode(this, getX(), getY(), getZ(), radius, interaction);
         discard();
     }
 

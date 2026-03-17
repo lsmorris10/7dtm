@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -54,7 +55,12 @@ public class CopZombie extends BaseSevenDaysZombie {
     public void die(DamageSource source) {
         if (!level().isClientSide() && !hasExploded) {
             hasExploded = true;
-            level().explode(this, getX(), getY(), getZ(), 3, Level.ExplosionInteraction.MOB);
+            Level.ExplosionInteraction interaction = Level.ExplosionInteraction.NONE;
+            if (level() instanceof ServerLevel sl) {
+                interaction = sl.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
+                        ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
+            }
+            level().explode(this, getX(), getY(), getZ(), 3, interaction);
         }
         super.die(source);
     }
@@ -66,7 +72,9 @@ public class CopZombie extends BaseSevenDaysZombie {
             float hpPercent = getHealth() / getMaxHealth();
             if (hpPercent <= 0.2f) {
                 hasExploded = true;
-                level().explode(this, getX(), getY(), getZ(), 3, Level.ExplosionInteraction.MOB);
+                Level.ExplosionInteraction interaction = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
+                        ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
+                level().explode(this, getX(), getY(), getZ(), 3, interaction);
                 discard();
             }
         }
