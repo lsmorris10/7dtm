@@ -100,22 +100,25 @@ public class ModItems {
     public static final Supplier<Item> CEMENT = ITEMS.register("cement",
             () -> new Item(new Item.Properties().setId(key("cement")).stacksTo(64)));
 
-    public static final ToolMaterial WOOD_MATERIAL = new ToolMaterial(
-            BlockTags.INCORRECT_FOR_STONE_TOOL, 131, 2.0f, 0.0f, 10, ItemTags.PLANKS);
+    public static final ToolMaterial STONE_CLUB_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_STONE_TOOL, 100, 2.0f, 0.0f, 10, ItemTags.STONE_CRAFTING_MATERIALS);
 
-    public static final ToolMaterial IRON_MATERIAL = new ToolMaterial(
+    public static final ToolMaterial WOOD_BAT_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_STONE_TOOL, 200, 2.0f, 0.0f, 10, ItemTags.PLANKS);
+
+    public static final ToolMaterial IRON_SLEDGE_MATERIAL = new ToolMaterial(
             BlockTags.INCORRECT_FOR_IRON_TOOL, 500, 6.0f, 2.0f, 14, ItemTags.IRON_ORES);
 
     public static final Supplier<Item> STONE_CLUB = ITEMS.register("stone_club",
-            () -> new SwordItem(WOOD_MATERIAL, 4.0f, -2.8f,
+            () -> new SwordItem(STONE_CLUB_MATERIAL, 4.0f, -2.8f,
                     new Item.Properties().setId(key("stone_club"))));
 
     public static final Supplier<Item> BASEBALL_BAT = ITEMS.register("baseball_bat",
-            () -> new SwordItem(WOOD_MATERIAL, 5.0f, -2.6f,
+            () -> new SwordItem(WOOD_BAT_MATERIAL, 5.0f, -2.6f,
                     new Item.Properties().setId(key("baseball_bat"))));
 
     public static final Supplier<Item> IRON_SLEDGEHAMMER = ITEMS.register("iron_sledgehammer",
-            () -> new SwordItem(IRON_MATERIAL, 9.0f, -3.4f,
+            () -> new SwordItem(IRON_SLEDGE_MATERIAL, 9.0f, -3.4f,
                     new Item.Properties().setId(key("iron_sledgehammer"))));
 
     public static final Supplier<Item> AMMO_9MM = ITEMS.register("ammo_9mm",
