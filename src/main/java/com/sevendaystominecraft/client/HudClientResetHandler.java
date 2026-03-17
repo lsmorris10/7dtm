@@ -20,6 +20,7 @@ public class HudClientResetHandler {
     public static void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         NearbyPlayersClientState.reset();
         ChunkHeatClientState.reset();
+        TerritoryClientState.reset();
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
     }

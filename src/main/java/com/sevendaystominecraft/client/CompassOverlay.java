@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.territory.TerritoryCompassRenderer;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -90,6 +91,7 @@ public class CompassOverlay {
         }
 
         renderHeatIndicator(graphics, mc, stripX, stripY, stripWidth);
+        TerritoryCompassRenderer.render(graphics, stripX, stripY, stripWidth, compassBearing, centerX);
     }
 
     private static void renderHeatIndicator(GuiGraphics graphics, Minecraft mc, int stripX, int stripY, int stripWidth) {

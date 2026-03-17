@@ -6,6 +6,7 @@ import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.client.BloodMoonClientState;
 import com.sevendaystominecraft.client.ChunkHeatClientState;
 import com.sevendaystominecraft.client.NearbyPlayersClientState;
+import com.sevendaystominecraft.client.TerritoryClientState;
 import com.sevendaystominecraft.perk.Attribute;
 
 import net.minecraft.world.entity.player.Player;
@@ -43,11 +44,16 @@ public class ModNetworking {
                 ModNetworking::handleChunkHeatSync
         );
 
-        // Server → Client: loot stage sync
         registrar.playToClient(
                 SyncLootStagePayload.TYPE,
                 SyncLootStagePayload.STREAM_CODEC,
                 ModNetworking::handleLootStageSync
+        );
+
+        registrar.playToClient(
+                SyncTerritoryPayload.TYPE,
+                SyncTerritoryPayload.STREAM_CODEC,
+                ModNetworking::handleTerritorySync
         );
 
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
@@ -79,6 +85,12 @@ public class ModNetworking {
     private static void handleLootStageSync(SyncLootStagePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Received loot stage sync: {}", payload.lootStage());
+        });
+    }
+
+    private static void handleTerritorySync(SyncTerritoryPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            TerritoryClientState.update(payload.territories());
         });
     }
 

@@ -29,6 +29,7 @@ public class LootContainerBlockEntity extends BlockEntity {
     private NonNullList<ItemStack> items;
     private long lastLootedGameTime = -1;
     private boolean hasBeenLooted = false;
+    private int territoryTier = 0;
 
     public LootContainerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LOOT_CONTAINER_BE.get(), pos, state);
@@ -51,6 +52,15 @@ public class LootContainerBlockEntity extends BlockEntity {
 
     public LootContainerType getContainerType() {
         return containerType;
+    }
+
+    public void setTerritoryTier(int tier) {
+        this.territoryTier = Math.max(0, Math.min(5, tier));
+        setChanged();
+    }
+
+    public int getTerritoryTier() {
+        return territoryTier;
     }
 
     public NonNullList<ItemStack> getItems() {
@@ -103,6 +113,9 @@ public class LootContainerBlockEntity extends BlockEntity {
         }
 
         int lootStage = LootStageCalculator.calculate(player);
+        if (territoryTier > 0) {
+            lootStage = Math.min(100, lootStage + (territoryTier - 1) * 15);
+        }
         double abundance = LootConfig.INSTANCE.abundanceMultiplier.get();
         boolean qualityEnabled = LootConfig.INSTANCE.qualityScaling.get();
 
@@ -193,6 +206,9 @@ public class LootContainerBlockEntity extends BlockEntity {
         tag.putLong("LastLootedGameTime", lastLootedGameTime);
         tag.putBoolean("HasBeenLooted", hasBeenLooted);
         tag.putString("ContainerType", containerType.name());
+        if (territoryTier > 0) {
+            tag.putInt("TerritoryTier", territoryTier);
+        }
     }
 
     @Override
@@ -211,5 +227,6 @@ public class LootContainerBlockEntity extends BlockEntity {
         ContainerHelper.loadAllItems(tag, items, registries);
         lastLootedGameTime = tag.getLong("LastLootedGameTime");
         hasBeenLooted = tag.getBoolean("HasBeenLooted");
+        territoryTier = tag.contains("TerritoryTier") ? tag.getInt("TerritoryTier") : 0;
     }
 }

@@ -29,15 +29,17 @@ src/main/java/com/sevendaystominecraft/
 │   └── SevenDaysPlayerStats.java   — Player stats implementation (Food, Water, Stamina, etc.)
 ├── client/
 │   ├── StatsHudOverlay.java        — HUD overlay for player stats + blood moon indicator
-│   ├── CompassOverlay.java         — 360° compass strip at top-center with cardinal/intercardinal markers + heat indicator
+│   ├── CompassOverlay.java         — 360° compass strip at top-center with cardinal/intercardinal markers + heat indicator + territory markers
 │   ├── MinimapOverlay.java         — Top-right minimap with terrain colors, player dot, nearby player dots
 │   ├── NearbyPlayersClientState.java — Client-side state for synced nearby player positions
 │   ├── ChunkHeatClientState.java   — Client-side state for current chunk heat value
+│   ├── TerritoryClientState.java   — Client-side state for nearby territory data (synced from server)
 │   ├── HudClientResetHandler.java  — Resets client HUD state on disconnect
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
-│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types
-│   └── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
+│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label
+│   ├── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
+│   └── TerritoryLabelRenderer.java — Entity renderer for territory floating label (uses EntityRenderState)
 ├── block/
 │   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations + loot containers)
 │   ├── ModBlockEntities.java       — Block entity type registration
@@ -54,7 +56,8 @@ src/main/java/com/sevendaystominecraft/
 │       ├── LootContainerMenu.java  — Container menu for loot containers
 │       └── LootContainerScreen.java — Client-side GUI for loot containers
 ├── command/
-│   └── LootStageCommand.java       — /bzhs loot_stage debug command
+│   ├── LootStageCommand.java       — /bzhs loot_stage debug command
+│   └── TerritoryCommand.java       — /bzhs territory list|listall debug commands
 ├── config/
 │   ├── SurvivalConfig.java         — Server-side survival config (survival.toml)
 │   ├── HordeConfig.java            — Server-side horde/blood moon config (horde.toml)
@@ -63,6 +66,17 @@ src/main/java/com/sevendaystominecraft/
 │   └── LootConfig.java             — Loot config (loot.toml): respawnDays, abundanceMultiplier, qualityScaling
 ├── crafting/
 │   └── ScrappingSystem.java        — Item scrapping into component materials (workbench vs inventory yield)
+├── territory/
+│   ├── TerritoryTier.java          — Tier 1-5 enum with star rating, size, zombie pool, loot counts, spawn weights
+│   ├── TerritoryType.java          — Category enum (Residential/Commercial/Industrial/Military/Wilderness/Medical) with loot type mapping
+│   ├── TerritoryRecord.java        — Per-territory instance: origin, tier, type, cleared status, zombie count
+│   ├── TerritoryData.java          — SavedData: persists all territories by ID, chunk-to-territory index, spatial lookup
+│   ├── TerritoryStructureBuilder.java — Procedural placeholder structure generator (floor/walls/roof/loot placement per tier)
+│   ├── TerritoryZombieSpawner.java — Tier-appropriate zombie population at interior spawn positions
+│   ├── TerritoryWorldGenerator.java — ChunkEvent.Load hook: probabilistic territory placement with minimum spacing
+│   ├── TerritoryBroadcaster.java   — @EventBusSubscriber: 60-tick server tick broadcasts nearby territories (≤512 blocks) to clients
+│   ├── TerritoryCompassRenderer.java — Client-side compass marker rendering for nearby territories (color by tier)
+│   └── TerritoryLabelEntity.java   — Entity with synced label text + tier, persisted, updates on clear
 ├── entity/
 │   ├── ModEntities.java            — DeferredRegister for all custom entity types + attribute events
 │   └── zombie/
@@ -124,11 +138,12 @@ src/main/java/com/sevendaystominecraft/
 │   ├── PlayerHealMixin.java        — Blocks vanilla passive regen
 │   └── SprintBlockMixin.java       — Sprint blocked when low stamina
 └── network/
-    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat)
+    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory)
     ├── SyncPlayerStatsPayload.java — Client/server stats sync packet
     ├── BloodMoonSyncPayload.java   — Blood moon state sync packet
     ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64)
     ├── SyncChunkHeatPayload.java   — Server→client current chunk heat value
+    ├── SyncTerritoryPayload.java   — Server→client territory entries (id, pos, tier, label)
     └── NearbyPlayersBroadcaster.java — Server tick handler broadcasting nearby players + heat every 20 ticks
 ```
 
@@ -199,6 +214,22 @@ src/main/java/com/sevendaystominecraft/
 - **Heat cap**: 100 per chunk (spec-accurate); threshold multiplier scales spawn thresholds only
 - **HeatmapConfig**: `heatmap.toml` with enabled toggle, decayMultiplier (0.1-5.0), spawnThresholdMultiplier (0.5-3.0)
 - **Debug commands**: `/bzhs heat` shows current chunk heat + effective thresholds, `/bzhs heat_clear` (op-only) resets all heat data
+
+#### Territory POI System (Spec §2.2 — First Version) — DONE
+- **TerritoryTier** (1-5): Star ratings (★ to ★★★★★), size ranges (5×5 to 15×15), zombie pools, loot counts, spawn weights (Tier 1-2 common, Tier 4-5 rare)
+- **TerritoryType**: 6 categories (Residential, Commercial, Industrial, Military, Wilderness, Medical) each mapped to appropriate loot container types
+- **TerritoryRecord**: Per-instance data (origin, tier, type, cleared status, zombie count) serialized to NBT
+- **TerritoryData** (SavedData): Persists all territories across server restarts; spatial hasNearby check for minimum spacing (16-chunk min separation); getNearby for client sync
+- **TerritoryStructureBuilder**: Procedural structure generation (floor/walls/roof) using tier-appropriate vanilla blocks (oak planks → cobblestone → stone bricks → iron blocks for military); places loot containers inside; collects interior zombie spawn positions
+- **TerritoryZombieSpawner**: Spawns tier-appropriate zombies at interior positions on chunk load; marks territory zombie count for cleared detection; zombies tagged `bzhs_territory_<id>` for tracking
+- **TerritoryWorldGenerator**: `ChunkEvent.Load` hook; 1-in-40 chance per chunk in Overworld; deterministic per-chunk seed (so re-loading doesn't re-generate); 16-chunk minimum spacing enforced via data check
+- **TerritoryLabelEntity**: Custom entity with synced `LABEL_TEXT`/`TIER` data; floating custom name renders via EntityRenderer name tag system; updates to cleared state every 100 ticks; persisted between sessions; implements `hurtServer` → false (immune)
+- **TerritoryLabelRenderer**: Extends `EntityRenderer<TerritoryLabelEntity, EntityRenderState>` using NeoForge 1.21.4's two-type-param pattern; relies on base class `renderNameTag()` for label display
+- **TerritoryBroadcaster**: `@EventBusSubscriber` server tick handler sends `SyncTerritoryPayload` to each player every 60 ticks with all territories within 512 blocks
+- **TerritoryClientState**: Thread-safe `CopyOnWriteArrayList` storing nearby territories for compass rendering
+- **TerritoryCompassRenderer**: Draws tier-colored markers on the compass strip (green Tier 1-2, yellow Tier 3, red Tier 4-5) pointing toward territory direction; renders star rating above each marker
+- **TerritoryCommand**: `/bzhs territory list` shows nearby territories (256 block radius) with coords/status; `/bzhs territory listall` (op-only) shows all territories on the level
+- **SyncTerritoryPayload**: Network packet with list of `TerritoryEntry` records (id, pos, tier, label string) using manual ByteBuf codec
 
 ## Known Bugs / Issues
 1. **Sprint bug (known, unresolved)**: Sprint can get stuck — holding W alone gives infinite sprint (stamina drains but sprint doesn't cancel). Simplified from speed-heuristic approach to direct `isSprinting()` checks. Likely needs a client-side Mixin on `LocalPlayer.aiStep()` for proper fix.

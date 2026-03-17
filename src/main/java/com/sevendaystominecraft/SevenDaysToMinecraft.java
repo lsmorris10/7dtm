@@ -5,10 +5,12 @@ import com.sevendaystominecraft.block.ModBlockEntities;
 import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.command.LootStageCommand;
+import com.sevendaystominecraft.command.TerritoryCommand;
 import com.sevendaystominecraft.config.HeatmapConfig;
 import com.sevendaystominecraft.config.HordeConfig;
 import com.sevendaystominecraft.config.LootConfig;
 import com.sevendaystominecraft.config.SurvivalConfig;
+import com.sevendaystominecraft.config.TerritoryConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.client.CompassOverlay;
 import com.sevendaystominecraft.client.MinimapOverlay;
@@ -17,6 +19,7 @@ import com.sevendaystominecraft.client.ModScreens;
 import com.sevendaystominecraft.client.StatsHudOverlay;
 import com.sevendaystominecraft.horde.DayCycleHandler;
 import com.sevendaystominecraft.entity.ModEntities;
+import com.sevendaystominecraft.territory.TerritoryWorldGenerator;
 import com.sevendaystominecraft.item.ModCreativeTabs;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
@@ -52,6 +55,7 @@ public class SevenDaysToMinecraft {
         modContainer.registerConfig(ModConfig.Type.SERVER, ZombieConfig.SPEC, "zombies.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, HeatmapConfig.SPEC, "heatmap.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, LootConfig.SPEC, "loot.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, TerritoryConfig.SPEC, "territory.toml");
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
@@ -79,6 +83,7 @@ public class SevenDaysToMinecraft {
 
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);
         NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
+        NeoForge.EVENT_BUS.addListener(TerritoryWorldGenerator::onChunkLoad);
 
         LOGGER.info("BZHS — Mod registered successfully.");
     }
@@ -108,6 +113,7 @@ public class SevenDaysToMinecraft {
 
     private void onRegisterCommands(final RegisterCommandsEvent event) {
         LootStageCommand.register(event.getDispatcher());
-        LOGGER.info("BZHS: Registered /bzhs loot_stage command");
+        TerritoryCommand.register(event.getDispatcher());
+        LOGGER.info("BZHS: Registered /bzhs commands");
     }
 }

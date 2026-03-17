@@ -4,6 +4,7 @@ import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.entity.projectile.AcidBallEntity;
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
 import com.sevendaystominecraft.entity.zombie.*;
+import com.sevendaystominecraft.territory.TerritoryLabelEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -130,6 +131,12 @@ public class ModEntities {
                     EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC)
                             .sized(0.15f, 0.15f).clientTrackingRange(4).updateInterval(2)
                             .build(key("bullet")));
+
+    public static final Supplier<EntityType<TerritoryLabelEntity>> TERRITORY_LABEL =
+            ENTITY_TYPES.register("territory_label", () ->
+                    EntityType.Builder.<TerritoryLabelEntity>of(TerritoryLabelEntity::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f).clientTrackingRange(12).updateInterval(20)
+                            .build(key("territory_label")));
 
     public static class AttributeRegistration {
         public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {

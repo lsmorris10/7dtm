@@ -4,6 +4,7 @@ import com.sevendaystominecraft.entity.ModEntities;
 
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import com.sevendaystominecraft.client.TerritoryLabelRenderer;
 
 public class ModEntityRenderers {
 
@@ -32,5 +33,6 @@ public class ModEntityRenderers {
 
         event.registerEntityRenderer(ModEntities.ACID_BALL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.BULLET.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.TERRITORY_LABEL.get(), ctx -> new TerritoryLabelRenderer(ctx));
     }
 }
