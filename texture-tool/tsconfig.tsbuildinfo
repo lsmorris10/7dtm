@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/components/BatchMode.tsx","./src/components/DropZone.tsx","./src/components/SingleMode.tsx","./src/components/TexturePreview.tsx","./src/lib/aiGeneration.ts","./src/lib/manifest.ts","./src/lib/palette.ts","./src/lib/processor.ts"],"version":"5.6.3"}

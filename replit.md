@@ -298,3 +298,27 @@ Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (D
 - **Commands**: `/bzhs level|stats`, `/bzhs perk <id> [rank]`, `/bzhs attribute <STR|PER|FOR|AGI|INT>`, `/bzhs perks`
 - **HUD**: XP bar + level counter added to stats overlay
 - **Persistence**: All XP/level/perk data serialized to NBT, synced via network payload, preserved through death/respawn
+
+## Texture Tool (texture-tool/)
+
+A standalone Vite + React web app for creating Minecraft-ready 16×16 pixel textures.
+
+**Port**: 5000 (Texture Tool workflow — primary webview)  
+**Location**: `texture-tool/`
+
+### Features
+- **Single Mode**: Upload a photo → see side-by-side preview of original and 16×16 texture → download PNG
+- **Batch Mode**: Paste `item_name | description` list → upload photos or generate with AI per item → download as ZIP
+- **Processing pipeline**: slight shrink + vignette → color quantize to Minecraft palette → nearest-neighbor resize to 16×16 → PNG export
+- **Manifest**: ZIP includes `manifest.json` with item names, descriptions, and settings; supports re-import for re-generation
+- **Adjustable settings**: shrink factor, vignette strength, palette quantization toggle
+
+### Key Files
+- `texture-tool/src/lib/processor.ts` — Canvas-based image processing pipeline
+- `texture-tool/src/lib/palette.ts` — Minecraft block color palette (66 colors)
+- `texture-tool/src/lib/manifest.ts` — Manifest create/parse utilities
+- `texture-tool/src/lib/aiGeneration.ts` — AI generation stub (requires `/api/generate-image` endpoint)
+- `texture-tool/src/components/SingleMode.tsx` — Single texture upload UI
+- `texture-tool/src/components/BatchMode.tsx` — Batch processing UI with ZIP download
+- `texture-tool/src/components/DropZone.tsx` — Drag-and-drop file upload
+- `texture-tool/src/components/TexturePreview.tsx` — Side-by-side preview component

@@ -22,6 +22,10 @@ args = "Build Mod"
 task = "workflow.run"
 args = "Preview Site"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Texture Tool"
+
 [[workflows.workflow]]
 name = "Build Mod"
 author = "agent"
@@ -39,7 +43,19 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m http.server 5000 --directory public"
+args = "python3 -m http.server 3000 --directory public"
+waitForPort = 3000
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "Texture Tool"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd texture-tool && npm run dev"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -56,7 +72,3 @@ publicDir = "public"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3000
