@@ -972,6 +972,14 @@ Vehicle mods are installed at a Workbench. Max 2 mods per vehicle (4×4/Gyro all
 
 **Damage reduction formula**: `damageReduction = armorRating × 0.01 × (1 + armorSkillBonus)`, capped at 85%.
 
+**Armor Stand Compatibility**: All 7 armor sets (Cloth through Power Armor) are designed to work with vanilla Minecraft armor stands.
+
+- **Placement & removal**: Any vanilla-slot armor piece (Head, Chest, Legs, Boots — see Gloves exception below) can be placed onto a vanilla armor stand and removed via right-click, using the same equip/unequip interaction as the vanilla helmet/chestplate/leggings/boots slots.
+- **Visual rendering**: Each piece renders on the stand using its correct custom model and texture for that tier. The stand displays whichever pieces are currently equipped, with no placeholder or missing-texture fallback.
+- **Data preservation**: Quality tier, current durability, and all installed armor mods are retained in the item NBT when placed on or removed from a stand. No data is stripped or reset by the stand interaction.
+- **Power Armor on stands**: Power Armor displays in its unpowered visual state when on a stand (stand entities have no battery slot). No powered effects (reduced movement penalty, active HUD overlays) are active. The unpowered appearance must be a complete, intentional model rather than a broken or invisible fallback.
+- **Gloves slot (non-vanilla)**: Armor stands have no vanilla off-hand-equivalent slot for Gloves. Gloves pieces **cannot** be placed on a vanilla armor stand. Attempting to do so produces a brief chat/action-bar message: *"Armor stands cannot hold Gloves."* Gloves are explicitly excluded from stand interactions; no workaround or dummy slot is created.
+
 ### 12.6 Combat Mechanics
 
 - **Headshots**: ×2.5 damage (×3.0 with sniper perk; **×4.0 with Eagle Eye mastery**).
@@ -2121,7 +2129,7 @@ public class SprintParticleHandler {
 | 11 | **Workstations (Forge, Workbench, Chemistry, Campfire)** | 2 | Critical | ★★★ | #10 | 3 |
 | 12 | **XP/Level + Perk system (with Tier 10 masteries)** | 2 | Critical | ★★★★ | #2 | 3 |
 | 13 | **Melee + ranged weapons (all)** | 2 | Critical | ★★★ | #10, #12 | 3 |
-| 14 | **Armor system + clothing** | 2 | High | ★★★ | #10, #4 | 2 |
+| 14 | **Armor system + clothing (incl. armor stand compatibility)** | 2 | High | ★★★ | #10, #4 | 2 |
 | 15 | **World gen (biomes + city/POI)** | 2 | Critical | ★★★★★ | #1 | 6 |
 | 16 | **All zombie variants (incl. Charged/Infernal 2.6)** | 2 | High | ★★★★ | #5, #6 | 3 |
 | 17 | **Building + block upgrades + traps** | 2 | High | ★★★ | #10, #11 | 3 |
