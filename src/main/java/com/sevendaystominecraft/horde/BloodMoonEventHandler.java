@@ -120,8 +120,10 @@ public class BloodMoonEventHandler {
 
         if (!tracker.hasSentSiren() && timeOfDay >= SIREN_TIME) {
             tracker.setSentSiren(true);
-            for (ServerPlayer player : level.players()) {
-                player.playNotifySound(ModSounds.BLOOD_MOON_SIREN.get(), SoundSource.HOSTILE, 1.5f, 0.5f);
+            if (ModSounds.isAvailable(ModSounds.BLOOD_MOON_SIREN)) {
+                for (ServerPlayer player : level.players()) {
+                    player.playNotifySound(ModSounds.BLOOD_MOON_SIREN.get(), SoundSource.HOSTILE, 1.5f, 0.5f);
+                }
             }
             broadcastMessage(level, Component.literal("§4§l[BZHS] §c⚠ WARNING: Blood Moon siren!"));
             SevenDaysToMinecraft.LOGGER.info("[BZHS] Blood Moon siren played");

@@ -86,6 +86,8 @@ public class BaseSevenDaysZombie extends Zombie {
                                          EntitySpawnReason reason, @Nullable SpawnGroupData spawnData) {
         spawnData = super.finalizeSpawn(level, difficulty, reason, spawnData);
         applyAllStats();
+        ModSounds.playAtEntity(ModSounds.ZOMBIE_SCREAM, this,
+                net.minecraft.sounds.SoundSource.HOSTILE, 1.0f, 0.8f + this.getRandom().nextFloat() * 0.4f);
         return spawnData;
     }
 

@@ -144,7 +144,7 @@ public class ZombieBreakBlockGoal extends Goal {
 
         if (blockDamageAccumulated >= blockMaxHP) {
             serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
-            serverLevel.playSound(null, targetBlockPos, ModSounds.BLOCK_BREAK_ZOMBIE.get(),
+            ModSounds.playAtBlock(ModSounds.BLOCK_BREAK_ZOMBIE, serverLevel, targetBlockPos,
                     SoundSource.HOSTILE, 1.0f, 1.0f);
             serverLevel.destroyBlock(targetBlockPos, true, zombie);
             targetBlockPos = null;

@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.item.weapon;
 
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
+import com.sevendaystominecraft.sound.ModSounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -61,8 +62,7 @@ public class RangedWeaponItem extends Item {
             sl.addFreshEntity(bullet);
         }
 
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                fireSound.get(), SoundSource.PLAYERS, 1.5f, 1.0f);
+        ModSounds.playAtEntity(fireSound, player, SoundSource.PLAYERS, 1.5f, 1.0f);
 
         player.getCooldowns().addCooldown(held, cooldownTicks);
 
