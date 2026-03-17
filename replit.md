@@ -90,9 +90,11 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all custom items (17 core materials + Dukes Casino Token)
-│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Loot Containers
-│   └── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo)
+│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Loot Containers
+│   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
+│   └── weapon/
+│       └── RangedWeaponItem.java   — Right-click-to-fire ranged weapon (ammo consumption, cooldown, durability)
 ├── loot/
 │   ├── LootStageCalculator.java    — Loot stage formula: floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)
 │   └── LootStageHandler.java       — Periodic loot stage sync to client
@@ -240,9 +242,19 @@ src/main/java/com/sevendaystominecraft/
 - Sprint detection: avoid speed-based heuristics; use `player.isSprinting()` directly and handle client-side via Mixin or sync packets
 - Config pattern: Static `SPEC` + `INSTANCE` via `new ModConfigSpec.Builder().configure(Klass::new)`
 
+#### Weapons System — DONE
+- **Melee weapons**: 3 weapons via `SwordItem` + `ToolMaterial`:
+  - Stone Club (4 dmg, -2.8 speed, wood durability), Baseball Bat (5 dmg, -2.6 speed), Iron Sledgehammer (9 dmg, -3.4 speed, iron durability)
+- **Ranged weapons**: 2 guns via `RangedWeaponItem` (right-click fire, ammo consumption, cooldown, durability):
+  - 9mm Pistol (8 dmg, 8-tick cooldown, 250 dur), AK-47 (12 dmg, 4-tick cooldown, 500 dur)
+- **Ammo**: 9mm Ammo, 7.62mm Ammo (stackable to 64)
+- **BulletEntity**: `ThrowableItemProjectile` with near-zero gravity (0.01), configurable damage, crit particles
+- **Crafting**: Melee at Workbench, guns at Advanced Workbench, ammo at Chemistry Station
+- **Creative tab**: BZHS Weapons tab with all melee + ranged + ammo items
+
 ## Spec / Roadmap
 The full implementation is tracked in `docs/bzhs_final_spec.md` with 19 phases.
-Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Next priorities: sprint bug fix, custom textures/models, world generation.
+Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Milestone 10 (Weapons): DONE — melee + ranged weapons, ammo, crafting recipes. Next priorities: sprint bug fix, custom textures/models, world generation.
 
 ## Loot & Crafting System (Spec §6) — DONE
 - **Items**: 17 core materials + Dukes Casino Token registered via ModItems with creative tabs

@@ -1,11 +1,16 @@
 package com.sevendaystominecraft.item;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.item.weapon.RangedWeaponItem;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.ToolMaterial;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -94,4 +99,38 @@ public class ModItems {
 
     public static final Supplier<Item> CEMENT = ITEMS.register("cement",
             () -> new Item(new Item.Properties().setId(key("cement")).stacksTo(64)));
+
+    public static final ToolMaterial WOOD_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_STONE_TOOL, 131, 2.0f, 0.0f, 10, ItemTags.PLANKS);
+
+    public static final ToolMaterial IRON_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_IRON_TOOL, 500, 6.0f, 2.0f, 14, ItemTags.IRON_ORES);
+
+    public static final Supplier<Item> STONE_CLUB = ITEMS.register("stone_club",
+            () -> new SwordItem(WOOD_MATERIAL, 4.0f, -2.8f,
+                    new Item.Properties().setId(key("stone_club"))));
+
+    public static final Supplier<Item> BASEBALL_BAT = ITEMS.register("baseball_bat",
+            () -> new SwordItem(WOOD_MATERIAL, 5.0f, -2.6f,
+                    new Item.Properties().setId(key("baseball_bat"))));
+
+    public static final Supplier<Item> IRON_SLEDGEHAMMER = ITEMS.register("iron_sledgehammer",
+            () -> new SwordItem(IRON_MATERIAL, 9.0f, -3.4f,
+                    new Item.Properties().setId(key("iron_sledgehammer"))));
+
+    public static final Supplier<Item> AMMO_9MM = ITEMS.register("ammo_9mm",
+            () -> new Item(new Item.Properties().setId(key("ammo_9mm")).stacksTo(64)));
+
+    public static final Supplier<Item> AMMO_762 = ITEMS.register("ammo_762",
+            () -> new Item(new Item.Properties().setId(key("ammo_762")).stacksTo(64)));
+
+    public static final Supplier<Item> PISTOL_9MM = ITEMS.register("pistol_9mm",
+            () -> new RangedWeaponItem(
+                    new Item.Properties().setId(key("pistol_9mm")).durability(250).stacksTo(1),
+                    8.0f, 8, 3.0f, 2.0f, () -> AMMO_9MM.get()));
+
+    public static final Supplier<Item> AK47 = ITEMS.register("ak47",
+            () -> new RangedWeaponItem(
+                    new Item.Properties().setId(key("ak47")).durability(500).stacksTo(1),
+                    12.0f, 4, 3.5f, 3.0f, () -> AMMO_762.get()));
 }

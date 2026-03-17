@@ -71,6 +71,21 @@ public class ModCreativeTabs {
                     })
                     .build());
 
+    public static final Supplier<CreativeModeTab> WEAPONS_TAB = CREATIVE_TABS.register("weapons",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("creativetab.sevendaystominecraft.weapons"))
+                    .icon(() -> new ItemStack(ModItems.AK47.get()))
+                    .displayItems((params, output) -> {
+                        output.accept(ModItems.STONE_CLUB.get());
+                        output.accept(ModItems.BASEBALL_BAT.get());
+                        output.accept(ModItems.IRON_SLEDGEHAMMER.get());
+                        output.accept(ModItems.PISTOL_9MM.get());
+                        output.accept(ModItems.AK47.get());
+                        output.accept(ModItems.AMMO_9MM.get());
+                        output.accept(ModItems.AMMO_762.get());
+                    })
+                    .build());
+
     public static final Supplier<CreativeModeTab> LOOT_CONTAINERS_TAB = CREATIVE_TABS.register("loot_containers",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("creativetab.sevendaystominecraft.loot_containers"))

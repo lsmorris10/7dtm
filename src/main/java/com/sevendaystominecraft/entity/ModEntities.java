@@ -2,6 +2,7 @@ package com.sevendaystominecraft.entity;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.entity.projectile.AcidBallEntity;
+import com.sevendaystominecraft.entity.projectile.BulletEntity;
 import com.sevendaystominecraft.entity.zombie.*;
 
 import net.minecraft.core.registries.Registries;
@@ -123,6 +124,12 @@ public class ModEntities {
                     EntityType.Builder.<AcidBallEntity>of(AcidBallEntity::new, MobCategory.MISC)
                             .sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10)
                             .build(key("acid_ball")));
+
+    public static final Supplier<EntityType<BulletEntity>> BULLET =
+            ENTITY_TYPES.register("bullet", () ->
+                    EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC)
+                            .sized(0.15f, 0.15f).clientTrackingRange(4).updateInterval(2)
+                            .build(key("bullet")));
 
     public static class AttributeRegistration {
         public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {

@@ -31,5 +31,6 @@ public class ModEntityRenderers {
         event.registerEntityRenderer(ModEntities.ZOMBIE_BEAR.get(), ctx -> new ScaledZombieRenderer(ctx, 1.5f, NAME_TAG_EXTRA_HEIGHT));
 
         event.registerEntityRenderer(ModEntities.ACID_BALL.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.BULLET.get(), ThrownItemRenderer::new);
     }
 }
