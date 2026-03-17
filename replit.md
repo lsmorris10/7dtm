@@ -218,6 +218,14 @@ src/main/java/com/sevendaystominecraft/
 - `gradlew` script created for Linux (gradlew.bat only existed for Windows)
 - `gradle/wrapper/gradle-wrapper.jar` downloaded separately (excluded from git)
 
+## GitHub Sync
+- **Remote**: `origin` → `https://github.com/lsmorris10/bzhs`
+- **Branch**: `master`
+- **Push from Replit**: No GitHub auth is configured in this Replit environment. Pushes must be done manually:
+  1. Open the **Git** tab in the Replit sidebar (Version Control panel)
+  2. Use the "Push" button to sync commits to GitHub
+  3. Alternatively, on your local PC: `git remote add replit <replit-git-url>` then `git pull replit master`
+
 ## Development Notes
 - No frontend web server — this is a pure Java Minecraft mod
 - Use `./gradlew build` to compile and package the mod JAR
