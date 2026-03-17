@@ -99,7 +99,8 @@ public class SevenDaysToMinecraft {
         double current = SurvivalConfig.INSTANCE.playerDamageMultiplier.get();
         if (current == 2.0) {
             SurvivalConfig.INSTANCE.playerDamageMultiplier.set(1.0);
-            LOGGER.warn("BZHS: Migrated legacy playerDamageMultiplier from 2.0 to 1.0 (old default from pre-Task#83 worlds)");
+            LOGGER.warn("BZHS: Migrated legacy playerDamageMultiplier from 2.0 to 1.0 " +
+                    "(old default from pre-Task#83 worlds). Set a different value in survival.toml to override.");
         }
     }
 
