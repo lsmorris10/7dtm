@@ -47,6 +47,8 @@ public class LootContainerMenu extends AbstractContainerMenu {
         }
     }
 
+    public int getContainerSlotCount() { return containerSlotCount; }
+
     public static LootContainerMenu fromNetwork(int containerId, Inventory playerInv, RegistryFriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         BlockEntity be = playerInv.player.level().getBlockEntity(pos);

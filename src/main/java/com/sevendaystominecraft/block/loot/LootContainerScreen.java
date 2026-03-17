@@ -9,15 +9,25 @@ public class LootContainerScreen extends AbstractContainerScreen<LootContainerMe
 
     public LootContainerScreen(LootContainerMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
+
+        int slotCount = menu.getContainerSlotCount();
+        int cols = Math.min(slotCount, 9);
+        int rows = (int) Math.ceil((double) slotCount / cols);
+
         this.imageWidth = 176;
-        this.imageHeight = 166;
+        this.imageHeight = rows * 18 + 115;
+
+        this.titleLabelX = 8;
+        this.titleLabelY = 6;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = 18 + rows * 18 + 3;
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, 0xFFC6C6C6);
 
-        graphics.fill(leftPos + 7, topPos + 7, leftPos + imageWidth - 7, topPos + 14, 0xFF555555);
+        graphics.fill(leftPos + 4, topPos + 4, leftPos + imageWidth - 4, topPos + 16, 0xFF555555);
 
         for (var slot : menu.slots) {
             int sx = leftPos + slot.x - 1;
@@ -25,6 +35,12 @@ public class LootContainerScreen extends AbstractContainerScreen<LootContainerMe
             graphics.fill(sx, sy, sx + 18, sy + 18, 0xFF8B8B8B);
             graphics.fill(sx + 1, sy + 1, sx + 17, sy + 17, 0xFF373737);
         }
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFFFFF, false);
+        graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040, false);
     }
 
     @Override

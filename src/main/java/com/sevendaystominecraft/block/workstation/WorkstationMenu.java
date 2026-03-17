@@ -18,6 +18,7 @@ public class WorkstationMenu extends AbstractContainerMenu {
 
     private final WorkstationBlockEntity blockEntity;
     private final ContainerData data;
+    private final int playerInvY;
 
     public WorkstationMenu(int containerId, Inventory playerInv, WorkstationBlockEntity blockEntity) {
         super(ModMenuTypes.WORKSTATION_MENU.get(), containerId);
@@ -60,22 +61,32 @@ public class WorkstationMenu extends AbstractContainerMenu {
             addSlot(new WorkstationSlot(container, slotIndex++, outputStartX + col * 18, 17 + row * 18, false));
         }
 
+        int inputRows = (int) Math.ceil((double) type.getInputSlots() / 3.0);
+        int outputRows = (int) Math.ceil((double) type.getOutputSlots() / 3.0);
+        int maxSlotRows = Math.max(inputRows, outputRows);
+        int workstationBottom = 17 + maxSlotRows * 18;
+
         if (type.usesFuel()) {
+            int fuelY = workstationBottom + 4;
             for (int i = 0; i < type.getFuelSlots(); i++) {
-                addSlot(new WorkstationSlot(container, slotIndex++, 26 + i * 18, 53, true));
+                addSlot(new WorkstationSlot(container, slotIndex++, 26 + i * 18, fuelY, true));
             }
+            workstationBottom = fuelY + 18;
         }
 
+        this.playerInvY = workstationBottom + 14;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, playerInvY + row * 18));
             }
         }
 
         for (int col = 0; col < 9; col++) {
-            addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
+            addSlot(new Slot(playerInv, col, 8 + col * 18, playerInvY + 58));
         }
     }
+
+    public int getPlayerInvY() { return playerInvY; }
 
     public static WorkstationMenu fromNetwork(int containerId, Inventory playerInv, RegistryFriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
