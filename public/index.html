@@ -82,6 +82,13 @@
     .download-btn:active {
       transform: translateY(0);
     }
+    .version-menu { margin-top: 0.75rem; text-align: center; }
+    .version-toggle { background: none; border: 1px solid #555; color: #aaa; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: border-color 0.2s, color 0.2s; }
+    .version-toggle:hover { border-color: #888; color: #ccc; }
+    .version-list { list-style: none; padding: 0; margin: 0.5rem 0 0 0; display: none; }
+    .version-list.open { display: block; }
+    .version-list li a { color: #4CAF50; text-decoration: none; font-size: 0.9rem; padding: 0.25rem 0; display: inline-block; }
+    .version-list li a:hover { text-decoration: underline; }
     .download-note {
       color: #777;
       font-size: 0.85rem;
@@ -410,8 +417,8 @@
     <p class="tagline">A 7 Days to Die-inspired survival overhaul for Minecraft. Blood moons, zombie hordes, 45 perks, full crafting rework, and much more.</p>
 
     <p style="color: #aaa; font-size: 0.95rem; margin-bottom: 0.75rem;">Install <strong>NeoForge 21.4.140</strong> for Minecraft 1.21.4, then drag the .jar into your mods folder.</p>
-    <a href="https://github.com/lsmorris10/bzhs/releases" class="download-btn" id="download-btn">⬇ Download Latest Release</a>
-    <p class="download-note">Available on <a href="https://github.com/lsmorris10/bzhs">GitHub</a> — open source, always free</p>
+    <a href="./BrutalZombieHordeSurvival-0.1.0-alpha.jar" class="download-btn" id="download-btn" download>⬇ Download v0.1.0-alpha</a>
+            <p class="download-note">Available on <a href="https://github.com/lsmorris10/bzhs">GitHub</a> — open source, always free</p>
 
     <div class="trust-badges">
       <span class="badge"><a href="https://github.com/lsmorris10/bzhs">Open Source</a></span>
@@ -511,7 +518,7 @@
       <li><span class="dot">●</span> Darkness-based zombie speed replaces old tick-based day/night system</li>
       <li><span class="dot">●</span> Vanilla damage scaling proportionally adjusted for 100 HP (fall, drowning, fire, lava, cactus)</li>
       <li><span class="dot">●</span> Mod JAR and metadata renamed to match BZHS branding</li>
-      <li><span class="dot">●</span> Download button fetches latest release directly from GitHub</li>
+      <li><span class="dot">●</span> Download button serves the .jar directly from this site</li>
     </ul>
   </div>
 
@@ -555,40 +562,6 @@
         document.getElementById('form-error').style.display = 'block';
       });
     });
-
-    (function() {
-      var btn = document.getElementById('download-btn');
-      fetch('https://api.github.com/repos/lsmorris10/bzhs/releases')
-        .then(function(response) {
-          if (!response.ok) throw new Error('No releases found');
-          return response.json();
-        })
-        .then(function(releases) {
-          if (!releases || releases.length === 0) throw new Error('No releases');
-          var latest = releases[0];
-          var jarAsset = null;
-          if (latest.assets && latest.assets.length > 0) {
-            for (var i = 0; i < latest.assets.length; i++) {
-              if (latest.assets[i].name.toLowerCase().endsWith('.jar')) {
-                jarAsset = latest.assets[i];
-                break;
-              }
-            }
-          }
-          if (jarAsset) {
-            btn.href = jarAsset.browser_download_url;
-            btn.setAttribute('download', '');
-            btn.textContent = '⬇ Download ' + latest.tag_name;
-          } else {
-            btn.href = 'https://github.com/lsmorris10/bzhs/releases';
-            btn.textContent = '⬇ View Releases';
-          }
-        })
-        .catch(function() {
-          btn.href = 'https://github.com/lsmorris10/bzhs/releases';
-          btn.textContent = '⬇ View Releases';
-        });
-    })();
   </script>
 </body>
 </html>
