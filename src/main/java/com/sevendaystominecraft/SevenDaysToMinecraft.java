@@ -23,6 +23,7 @@ import com.sevendaystominecraft.territory.TerritoryWorldGenerator;
 import com.sevendaystominecraft.item.ModCreativeTabs;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
+import com.sevendaystominecraft.magazine.ModMagazines;
 import com.sevendaystominecraft.network.ModNetworking;
 import com.sevendaystominecraft.sound.ModSounds;
 
@@ -68,6 +69,7 @@ public class SevenDaysToMinecraft {
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ModSounds.SOUND_EVENTS.register(modEventBus);
+        ModMagazines.ITEMS.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);

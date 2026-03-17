@@ -10,7 +10,9 @@
         "LivingEntityHurtMixin",
         "SprintBlockMixin"
     ],
-    "client": [],
+    "client": [
+        "LocalPlayerSprintMixin"
+    ],
     "injectors": {
         "defaultRequire": 1
     }

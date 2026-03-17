@@ -179,16 +179,17 @@ Copy the JAR into your Minecraft `mods/` folder (requires NeoForge 21.4.140 for 
 - 100 HP player base health
 - Vanilla mob damage scaling for all mobs
 - Placeholder texture audit (`docs/texture_audit.md`)
+- Sound system foundation (8 custom events, gated playback, subtitles)
+- Context-aware gameplay music system (day/night/combat/blood moon)
+- Territory POIs (star-rated points of interest with procedural structures)
+- 3D weapon animations via Geckolib (AK-47, 9mm Pistol, Grenade)
+- GeckoLib bundled via Jar-in-Jar (single-file mod distribution)
 
-### In Progress
-- Sound system foundation
-- Territory POIs (location-specific world generation points of interest)
-- 3D weapon animations via Geckolib
+- Sprint fix: client-side `LocalPlayer.aiStep()` mixin prevents rubber-banding
+- Skill books / magazines: 6 series (36 items), per-issue bonuses, series mastery tracking
 
 ### Planned / Next
-- Replace 349 placeholder textures with real pixel art (prioritize HUD icons, weapons, workstations)
-- Sprint bug fix (client-side Mixin on `LocalPlayer.aiStep()`)
+- Replace placeholder textures with real pixel art (prioritize HUD icons, weapons, workstations)
 - World generation (custom biomes, structures, POIs)
-- Skill books
 - Trader NPCs
 - Vehicle system

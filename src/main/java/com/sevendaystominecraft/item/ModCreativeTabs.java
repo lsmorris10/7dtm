@@ -2,12 +2,14 @@ package com.sevendaystominecraft.item;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.ModBlocks;
+import com.sevendaystominecraft.magazine.ModMagazines;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -101,6 +103,20 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.KITCHEN_CABINET_BLOCK.get());
                         output.accept(ModBlocks.MEDICINE_CABINET_BLOCK.get());
                         output.accept(ModBlocks.BOOKSHELF_CONTAINER_BLOCK.get());
+                    })
+                    .build());
+
+    public static final Supplier<CreativeModeTab> MAGAZINES_TAB = CREATIVE_TABS.register("magazines",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("creativetab.sevendaystominecraft.magazines"))
+                    .icon(() -> {
+                        Supplier<Item> first = ModMagazines.getMagazineItem("pistol_pete", 1);
+                        return first != null ? new ItemStack(first.get()) : new ItemStack(Items.BOOK);
+                    })
+                    .displayItems((params, output) -> {
+                        for (Supplier<Item> mag : ModMagazines.getAllMagazineItems()) {
+                            output.accept(mag.get());
+                        }
                     })
                     .build());
 }

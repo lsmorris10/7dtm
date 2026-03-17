@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.sevendaystominecraft.magazine.MagazinePlayerData;
 import com.sevendaystominecraft.perk.Attribute;
 
 import net.minecraft.core.HolderLookup;
@@ -28,6 +29,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     private float maxStamina = DEFAULT_MAX_STAMINA;
 
     private boolean staminaExhausted = false;
+
+    private final MagazinePlayerData magazineData = new MagazinePlayerData();
 
     private float coreTemperature = DEFAULT_CORE_TEMP;
 
@@ -196,6 +199,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     @Override public long getUnkillableCooldownEnd() { return unkillableCooldownEnd; }
     @Override public void setUnkillableCooldownEnd(long worldTimeTick) { this.unkillableCooldownEnd = worldTimeTick; }
 
+    public MagazinePlayerData getMagazineData() { return magazineData; }
+
     // =====================================================================
     // copyFrom
     // =====================================================================
@@ -229,6 +234,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         this.activePerks.putAll(other.getActivePerks());
 
         this.unkillableCooldownEnd = other.getUnkillableCooldownEnd();
+
+        if (other instanceof SevenDaysPlayerStats concrete) {
+            this.magazineData.copyFrom(concrete.getMagazineData());
+        }
     }
 
     // =====================================================================
@@ -278,6 +287,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         }
 
         tag.putLong("UnkillableCooldown", unkillableCooldownEnd);
+
+        tag.put("Magazines", magazineData.save());
 
         return tag;
     }
@@ -335,6 +346,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         }
 
         unkillableCooldownEnd = tag.contains("UnkillableCooldown") ? tag.getLong("UnkillableCooldown") : 0;
+
+        if (tag.contains("Magazines")) {
+            magazineData.load(tag.getCompound("Magazines"));
+        }
     }
 
     // ── Known debuff IDs from spec §1.2 ─────────────────────────────────

@@ -233,7 +233,7 @@ src/main/java/com/sevendaystominecraft/
 - **SyncTerritoryPayload**: Network packet with list of `TerritoryEntry` records (id, pos, tier, label string) using manual ByteBuf codec
 
 ## Known Bugs / Issues
-1. **Sprint bug (known, unresolved)**: Sprint can get stuck — holding W alone gives infinite sprint (stamina drains but sprint doesn't cancel). Simplified from speed-heuristic approach to direct `isSprinting()` checks. Likely needs a client-side Mixin on `LocalPlayer.aiStep()` for proper fix.
+1. **Sprint bug (FIXED)**: Added `LocalPlayerSprintMixin` targeting `LocalPlayer.aiStep()` (client-side mixin in `sevendaystominecraft.mixins.json` "client" array). Cancels sprinting client-side when stamina exhausted, fracture, electrocuted, or stunned — prevents rubber-banding.
 2. **Temperature**: Adjustment rate changed to 0.3°F/s — needs long-term gameplay verification
 3. **Debuffs**: All 12 types have triggers and effects implemented; gameplay balance verification pending
 4. **Horde spawn balance**: Needs verification that spawn counts match intended difficulty
@@ -319,7 +319,19 @@ src/main/java/com/sevendaystominecraft/
 
 ## Spec / Roadmap
 The full implementation is tracked in `docs/bzhs_final_spec.md` with 19 phases.
-Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Milestone 10 (Weapons): DONE — melee + ranged weapons, ammo, crafting recipes. Next priorities: sprint bug fix, custom textures/models, world generation.
+Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Milestone 10 (Weapons): DONE — melee + ranged weapons, ammo, crafting recipes. Milestone 11 (Skill Books/Magazines): DONE — 6 series, 36 items, mastery tracking. Next priorities: custom textures/models, world generation, traders.
+
+### Magazine / Skill Book System
+- **Package**: `com.sevendaystominecraft.magazine`
+- **MagazineSeries**: Record defining a series (id, displayName, issueCount, issueDescriptions, masteryDescription)
+- **MagazineRegistry**: Static registry of all 6 series (pistol_pete x7, bar_brawler x5, ranger_dan x7, the_fixer x5, wasteland_chef x5, urban_combat x7)
+- **MagazinePlayerData**: Per-player read tracking stored in `SevenDaysPlayerStats` → serialized to NBT under "Magazines" key
+- **MagazineItem**: Right-click to read; grants permanent passive bonus; consumes item; tracks completion; awards mastery on series completion
+- **ModMagazines**: DeferredRegister auto-generates all 36 item registrations from MagazineRegistry
+- **Creative tab**: "BZHS Magazines" tab shows all magazine items
+- Items: `magazine_<seriesId>_<issue>` (e.g., `magazine_pistol_pete_1` through `magazine_pistol_pete_7`)
+- Tooltips show series name, issue bonus, and mastery reward
+- Each magazine is stacksTo(1), consumed on use, cannot be re-read
 
 ## Loot & Crafting System (Spec §6) — DONE
 - **Items**: 17 core materials + Dukes Casino Token registered via ModItems with creative tabs
