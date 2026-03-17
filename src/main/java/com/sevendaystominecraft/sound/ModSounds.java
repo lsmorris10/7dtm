@@ -26,6 +26,11 @@ public class ModSounds {
     public static final Supplier<SoundEvent> WORKSTATION_AMBIENT = register("workstation_ambient");
     public static final Supplier<SoundEvent> BLOCK_BREAK_ZOMBIE = register("block_break_zombie");
 
+    public static final Supplier<SoundEvent> MUSIC_EXPLORATION_DAY = register("music_exploration_day");
+    public static final Supplier<SoundEvent> MUSIC_EXPLORATION_NIGHT = register("music_exploration_night");
+    public static final Supplier<SoundEvent> MUSIC_BLOOD_MOON = register("music_blood_moon");
+    public static final Supplier<SoundEvent> MUSIC_COMBAT = register("music_combat");
+
     private static Supplier<SoundEvent> register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));

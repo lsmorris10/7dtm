@@ -34,9 +34,10 @@ src/main/java/com/sevendaystominecraft/
 │   ├── NearbyPlayersClientState.java — Client-side state for synced nearby player positions
 │   ├── ChunkHeatClientState.java   — Client-side state for current chunk heat value
 │   ├── TerritoryClientState.java   — Client-side state for nearby territory data (synced from server)
-│   ├── HudClientResetHandler.java  — Resets client HUD state on disconnect
+│   ├── HudClientResetHandler.java  — Resets client HUD state on disconnect (including MusicManager)
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
+│   ├── MusicManager.java           — Context-aware music system (Day/Night/Combat/BloodMoon priority)
 │   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label
 │   ├── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
 │   └── TerritoryLabelRenderer.java — Entity renderer for territory floating label (uses EntityRenderState)

@@ -14,6 +14,7 @@ public class HudClientResetHandler {
     public static void onPlayerLogin(ClientPlayerNetworkEvent.LoggingIn event) {
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
+        MusicManager.reset();
     }
 
     @SubscribeEvent
@@ -23,5 +24,6 @@ public class HudClientResetHandler {
         TerritoryClientState.reset();
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
+        MusicManager.reset();
     }
 }

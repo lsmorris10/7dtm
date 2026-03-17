@@ -46,5 +46,41 @@
       "sevendaystominecraft:block_break_zombie"
     ],
     "subtitle": "subtitles.sevendaystominecraft.block_break_zombie"
+  },
+  "music_exploration_day": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/exploration_day",
+        "stream": true
+      }
+    ]
+  },
+  "music_exploration_night": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/exploration_night",
+        "stream": true
+      }
+    ]
+  },
+  "music_blood_moon": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/blood_moon",
+        "stream": true
+      }
+    ]
+  },
+  "music_combat": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/combat",
+        "stream": true
+      }
+    ]
   }
 }
