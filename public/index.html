@@ -473,7 +473,7 @@
   <div class="section">
     <h2>Development Status</h2>
     <div class="status-card">
-      <p class="status-version"><strong>Alpha v0.1.0</strong> — Active development &middot; Updated March 15, 2026</p>
+      <p class="status-version"><strong>Alpha v0.1.0</strong> — Active development &middot; Updated March 17, 2026</p>
 
       <ul class="milestone-list">
         <li><span class="check">✓</span> Project scaffold &amp; architecture</li>
@@ -485,6 +485,11 @@
         <li><span class="check">✓</span> XP, leveling &amp; 45 perks</li>
         <li><span class="check">✓</span> Blood Moon / Horde Night</li>
         <li><span class="check">✓</span> HUD — compass, minimap, stats overlay</li>
+        <li><span class="check">✓</span> Zombie AI (behavior tree + variant abilities)</li>
+        <li><span class="check">✓</span> Workstation recipe processing system</li>
+        <li><span class="check">✓</span> Basic melee &amp; ranged weapons</li>
+        <li><span class="check">✓</span> Icon-based HUD for health, armor, food &amp; water</li>
+        <li><span class="check">✓</span> en_us.json language file (items, blocks, entities)</li>
       </ul>
 
       <p style="color:#999; font-size:0.82rem; margin-bottom:0.4rem; margin-top:0.75rem; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Post-Milestone Improvements</p>
@@ -496,14 +501,21 @@
         <li><span class="check">✓</span> Mob damage scaling for all vanilla mobs</li>
         <li><span class="check">✓</span> LevelTimeOfDayMixin crash fix</li>
         <li><span class="check">✓</span> Mod JAR &amp; metadata rebrand</li>
+        <li><span class="check">✓</span> Zombie AI completion (variant special abilities)</li>
+        <li><span class="check">✓</span> Weapons system (melee &amp; ranged)</li>
+        <li><span class="check">✓</span> Workstation recipe processing</li>
+        <li><span class="check">✓</span> Icon-based HUD (health, armor, food &amp; water)</li>
+        <li><span class="check">✓</span> en_us.json language file</li>
+        <li><span class="check">✓</span> Deprecated API fixes (NeoForge 1.21.4)</li>
+        <li><span class="check">✓</span> Legacy damage multiplier config cleanup</li>
       </ul>
 
       <div class="coming-section">
         <h3>Coming Next</h3>
         <ul class="coming-list">
-          <li>Sprint bug fix — proper stamina-based sprint cancellation</li>
-          <li>Custom textures &amp; models for zombie variants</li>
-          <li>World generation — custom biomes, structures &amp; POIs</li>
+          <li>Sound system foundation — ambient audio, zombie groans, weapon sounds</li>
+          <li>Territory POI system — labeled points of interest with difficulty ratings</li>
+          <li>3D weapon animations with Geckolib — AK-47 bolt, reload, firing</li>
         </ul>
       </div>
     </div>
@@ -512,12 +524,12 @@
   <div class="section recent-section">
     <h2>Recent Changes</h2>
     <ul class="recent-list">
-      <li><span class="dot">●</span> Day cycle refactored to slower-tick approach — doubled day length using vanilla 24k time scale</li>
-      <li><span class="dot">●</span> Vanilla mob damage scaling extended to all mobs for balanced 100 HP combat</li>
-      <li><span class="dot">●</span> LevelTimeOfDayMixin crash fix — corrected mixin target for stable startup</li>
-      <li><span class="dot">●</span> Darkness-based zombie speed replaces old tick-based day/night system</li>
-      <li><span class="dot">●</span> Vanilla damage scaling proportionally adjusted for 100 HP (fall, drowning, fire, lava, cactus)</li>
-      <li><span class="dot">●</span> Mod JAR and metadata renamed to match BZHS branding</li>
+      <li><span class="dot">●</span> Zombie AI variant abilities — Charged chain lightning, Infernal fire trail, Cop acid vomit, Demolisher explosion, Screamer flee behavior</li>
+      <li><span class="dot">●</span> Workstation recipe processing system — functional Forge, Workbench, and Chemistry Station crafting</li>
+      <li><span class="dot">●</span> Basic weapons system — Stone Club, Baseball Bat, Iron Sledgehammer, 9mm Pistol, AK-47 with ammo consumption</li>
+      <li><span class="dot">●</span> Icon-based HUD — heart icons for health, shield icons for armor, drumstick &amp; droplet icons for food and water</li>
+      <li><span class="dot">●</span> en_us.json language file — localized names for all mod items, blocks, entities, and creative tabs</li>
+      <li><span class="dot">●</span> Deprecated NeoForge API fixes and legacy damage multiplier config cleanup</li>
       <li><span class="dot">●</span> Download button serves the .jar directly from this site</li>
     </ul>
   </div>
