@@ -45,15 +45,6 @@ public class StatsHudOverlay {
 
     private static final float LOW_THRESHOLD = 0.3f;
 
-    private static final ResourceLocation HEART_FULL = guiTexture("heart_full");
-    private static final ResourceLocation HEART_HALF = guiTexture("heart_half");
-    private static final ResourceLocation HEART_EMPTY = guiTexture("heart_empty");
-    private static final ResourceLocation HEART_LOW = guiTexture("heart_low");
-
-    private static final ResourceLocation ARMOR_FULL = guiTexture("armor_full");
-    private static final ResourceLocation ARMOR_HALF = guiTexture("armor_half");
-    private static final ResourceLocation ARMOR_EMPTY = guiTexture("armor_empty");
-
     private static final ResourceLocation WATER_FULL = guiTexture("water_full");
     private static final ResourceLocation WATER_HALF = guiTexture("water_half");
     private static final ResourceLocation WATER_EMPTY = guiTexture("water_empty");
@@ -128,56 +119,7 @@ public class StatsHudOverlay {
 
         int hotbarTop = screenHeight - 22 - 1;
 
-        int leftBaseX = screenWidth / 2 - 91;
         int rightBaseX = screenWidth / 2 + 91;
-
-        float hp = player.getHealth();
-        float maxHp = player.getMaxHealth();
-        int totalHearts = (int) Math.ceil(maxHp / 2.0);
-        int heartRows = (int) Math.ceil(totalHearts / (double) ICONS_PER_ROW);
-        float hpPct = (maxHp > 0) ? hp / maxHp : 0f;
-        boolean heartLow = hpPct < LOW_THRESHOLD;
-        boolean heartFlash = heartLow && (System.currentTimeMillis() / 500) % 2 == 0;
-
-        int healthBottomY = hotbarTop - 2;
-        for (int row = 0; row < heartRows; row++) {
-            int rowY = healthBottomY - (row + 1) * (ICON_SIZE + 1);
-            int heartsInRow = Math.min(ICONS_PER_ROW, totalHearts - row * ICONS_PER_ROW);
-            for (int i = 0; i < heartsInRow; i++) {
-                int heartIndex = row * ICONS_PER_ROW + i;
-                float heartMinHp = heartIndex * 2.0f;
-                int iconX = leftBaseX + i * ICON_STEP;
-
-                ResourceLocation icon;
-                if (hp >= heartMinHp + 2.0f) {
-                    icon = heartFlash ? HEART_LOW : HEART_FULL;
-                } else if (hp >= heartMinHp + 1.0f) {
-                    icon = heartFlash ? HEART_LOW : HEART_HALF;
-                } else {
-                    icon = HEART_EMPTY;
-                }
-                blitIcon(graphics, icon, iconX, rowY);
-            }
-        }
-
-        int armorValue = player.getArmorValue();
-        if (armorValue > 0) {
-            int armorIcons = 10;
-            int armorY = healthBottomY - heartRows * (ICON_SIZE + 1) - (ICON_SIZE + 1);
-            float armorPer = armorValue / 2.0f;
-            for (int i = 0; i < armorIcons; i++) {
-                int iconX = leftBaseX + i * ICON_STEP;
-                ResourceLocation icon;
-                if (armorPer >= i + 1) {
-                    icon = ARMOR_FULL;
-                } else if (armorPer >= i + 0.5f) {
-                    icon = ARMOR_HALF;
-                } else {
-                    icon = ARMOR_EMPTY;
-                }
-                blitIcon(graphics, icon, iconX, armorY);
-            }
-        }
 
         float water = stats.getWater();
         float maxWater = stats.getMaxWater();

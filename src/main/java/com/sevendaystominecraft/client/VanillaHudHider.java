@@ -11,11 +11,4 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 @EventBusSubscriber(modid = SevenDaysToMinecraft.MOD_ID, value = Dist.CLIENT)
 public class VanillaHudHider {
 
-    @SubscribeEvent
-    public static void onRenderGuiLayerPre(RenderGuiLayerEvent.Pre event) {
-        if (VanillaGuiLayers.PLAYER_HEALTH.equals(event.getName())
-                || VanillaGuiLayers.ARMOR_LEVEL.equals(event.getName())) {
-            event.setCanceled(true);
-        }
-    }
 }
