@@ -133,10 +133,6 @@ public class StatsHudOverlay {
         int skillLabelWidth = mc.font.width(skillLabel);
         graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 10, XP_COLOR, true);
 
-        String enchLabel = "Enchanting XP";
-        int enchLabelWidth = mc.font.width(enchLabel);
-        graphics.drawString(mc.font, enchLabel, (screenWidth - enchLabelWidth) / 2, vanillaXpBarY + 5, 0xFF88FF88, true);
-
         int rightBaseX = screenWidth / 2 + 91;
 
         float water = stats.getWater();
