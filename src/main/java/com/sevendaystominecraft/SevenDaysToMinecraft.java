@@ -60,6 +60,7 @@ public class SevenDaysToMinecraft {
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
+        ModMagazines.class.getName();
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlocks.BLOCK_ITEMS.register(modEventBus);
@@ -67,7 +68,6 @@ public class SevenDaysToMinecraft {
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ModSounds.SOUND_EVENTS.register(modEventBus);
-        ModMagazines.ITEMS.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);
