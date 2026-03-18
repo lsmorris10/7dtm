@@ -165,20 +165,17 @@
 - `attribute_agility.png`, `attribute_fortitude.png`, `attribute_intellect.png`
 - `attribute_perception.png`, `attribute_strength.png`
 
-#### Perk Icons (45)
-- `advanced_engineering.png`, `archery.png`, `better_barter.png`, `brawler.png`
-- `charismatic_nature.png`, `daring_adventurer.png`, `deep_cuts.png`
-- `demolitions_expert.png`, `electrocutioner.png`, `flurry_of_blows.png`
-- `from_the_shadows.png`, `grease_monkey.png`, `gunslinger.png`
-- `healing_factor.png`, `heavy_armor.png`, `hidden_strike.png`
-- `iron_gut.png`, `light_armor.png`, `living_off_the_land.png`
-- `lock_picking.png`, `lucky_looter.png`, `master_chef.png`
-- `miner_69er.png`, `mother_lode.png`, `pack_mule.png`
-- `pain_tolerance.png`, `parkour.png`, `physician.png`
-- `pummel_pete.png`, `rifle_guy.png`, `robotics_inventor.png`
-- `rule1_cardio.png`, `run_and_gun.png`, `self_medicated.png`
-- `sexual_tyrannosaurus.png`, `skull_crusher.png`, `spear_master.png`
-- `treasure_hunter.png`, `well_insulated.png`
+#### Perk Icons (39)
+- `advanced_engineering.png`, `archery.png`, `better_barter.png`, `bold_explorer.png`
+- `brawler.png`, `campfire_cook.png`, `charismatic_nature.png`, `deep_cuts.png`
+- `deep_striker.png`, `deep_veins.png`, `demolitions_expert.png`, `electrocutioner.png`
+- `field_medic.png`, `flurry_of_blows.png`, `gearhead.png`, `green_thumb.png`
+- `gunslinger.png`, `healing_factor.png`, `heavy_armor.png`, `iron_fists.png`
+- `iron_gut.png`, `keen_scavenger.png`, `light_armor.png`, `lock_picking.png`
+- `nightstalker.png`, `pack_mule.png`, `pain_tolerance.png`, `parkour.png`
+- `physician.png`, `rifle_guy.png`, `robotics_inventor.png`, `rule1_cardio.png`
+- `run_and_gun.png`, `shadow_strike.png`, `skull_crusher.png`, `spear_master.png`
+- `treasure_hunter.png`, `unstoppable_force.png`, `well_insulated.png`
 
 ---
 
