@@ -125,7 +125,7 @@ public class StatsHudOverlay {
         float maxWater = stats.getMaxWater();
         float waterPct = (maxWater > 0) ? water / maxWater : 0f;
         boolean waterLow = waterPct < LOW_THRESHOLD;
-        int waterY = hotbarTop - 2 - (ICON_SIZE + 1);
+        int waterY = hotbarTop - 2 - 2 * (ICON_SIZE + 1);
         for (int i = 0; i < ICONS_PER_ROW; i++) {
             int iconIndex = ICONS_PER_ROW - 1 - i;
             int iconX = rightBaseX - (i + 1) * ICON_STEP;
