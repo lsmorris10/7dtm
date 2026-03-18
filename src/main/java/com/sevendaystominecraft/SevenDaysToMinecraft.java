@@ -60,7 +60,7 @@ public class SevenDaysToMinecraft {
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
-        ModMagazines.class.getName();
+        ModMagazines.init();
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlocks.BLOCK_ITEMS.register(modEventBus);

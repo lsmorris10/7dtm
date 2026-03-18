@@ -31,6 +31,9 @@ public class ModMagazines {
         }
     }
 
+    public static void init() {
+    }
+
     public static Collection<Supplier<Item>> getAllMagazineItems() {
         return Collections.unmodifiableCollection(MAGAZINE_ITEMS.values());
     }

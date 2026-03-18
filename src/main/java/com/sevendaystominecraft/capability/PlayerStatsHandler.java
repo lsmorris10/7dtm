@@ -341,10 +341,14 @@ public class PlayerStatsHandler {
         if (healthAttr == null) return;
         if (healthAttr.getModifier(LEGACY_HEALTH_MODIFIER_ID) != null) {
             healthAttr.removeModifier(LEGACY_HEALTH_MODIFIER_ID);
-            if (player.getHealth() > player.getMaxHealth()) {
-                player.setHealth(player.getMaxHealth());
-            }
             SevenDaysToMinecraft.LOGGER.info("BZHS: Removed legacy health modifier from {}", player.getName().getString());
+        }
+        if (healthAttr.getBaseValue() != 20.0) {
+            healthAttr.setBaseValue(20.0);
+            SevenDaysToMinecraft.LOGGER.info("BZHS: Reset max health to 20 for {}", player.getName().getString());
+        }
+        if (player.getHealth() > player.getMaxHealth()) {
+            player.setHealth(player.getMaxHealth());
         }
     }
 

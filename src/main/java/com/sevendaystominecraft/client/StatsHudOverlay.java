@@ -45,21 +45,6 @@ public class StatsHudOverlay {
 
     private static final float LOW_THRESHOLD = 0.3f;
 
-    private static final ResourceLocation HEART_FULL = guiTexture("heart_full");
-    private static final ResourceLocation HEART_HALF = guiTexture("heart_half");
-    private static final ResourceLocation HEART_EMPTY = guiTexture("heart_empty");
-    private static final ResourceLocation HEART_LOW = guiTexture("heart_low");
-
-    private static final ResourceLocation ARMOR_FULL = guiTexture("armor_full");
-    private static final ResourceLocation ARMOR_HALF = guiTexture("armor_half");
-    private static final ResourceLocation ARMOR_EMPTY = guiTexture("armor_empty");
-
-    private static final ResourceLocation FOOD_FULL = guiTexture("food_full");
-    private static final ResourceLocation FOOD_HALF = guiTexture("food_half");
-    private static final ResourceLocation FOOD_EMPTY = guiTexture("food_empty");
-    private static final ResourceLocation FOOD_LOW = guiTexture("food_low");
-    private static final ResourceLocation FOOD_HALF_LOW = guiTexture("food_half_low");
-
     private static final ResourceLocation WATER_FULL = guiTexture("water_full");
     private static final ResourceLocation WATER_HALF = guiTexture("water_half");
     private static final ResourceLocation WATER_EMPTY = guiTexture("water_empty");
@@ -104,11 +89,6 @@ public class StatsHudOverlay {
         float staminaPct = (stats.getMaxStamina() > 0) ? stats.getStamina() / stats.getMaxStamina() : 0f;
         drawStatBar(graphics, x, y, "Stamina", staminaPct, stats.getStamina(), stats.getMaxStamina(),
                 staminaPct < LOW_THRESHOLD ? STAMINA_LOW_COLOR : STAMINA_COLOR);
-        y += BAR_HEIGHT + BAR_SPACING;
-
-        int xpNeeded = LevelManager.xpToNextLevel(stats.getLevel());
-        float xpPct = (xpNeeded > 0) ? (float) stats.getXp() / xpNeeded : 0f;
-        drawXpBar(graphics, x, y, xpPct, stats.getXp(), xpNeeded);
         y += BAR_HEIGHT + BAR_SPACING + 2;
 
         float temp = stats.getCoreTemperature();
@@ -134,83 +114,32 @@ public class StatsHudOverlay {
 
         int hotbarTop = screenHeight - 22 - 1;
 
-        int leftBaseX = screenWidth / 2 - 91;
+        int vanillaXpBarY = screenHeight - 29;
+        int skillXpBarHeight = 3;
+        int skillXpY = vanillaXpBarY - skillXpBarHeight - 1;
+        int xpBarWidth = 182;
+        int xpBarX = (screenWidth - xpBarWidth) / 2;
+
+        int xpNeeded = LevelManager.xpToNextLevel(stats.getLevel());
+        float xpPct = (xpNeeded > 0) ? (float) stats.getXp() / xpNeeded : 0f;
+
+        graphics.fill(xpBarX, skillXpY, xpBarX + xpBarWidth, skillXpY + skillXpBarHeight, 0xFF111111);
+        int filledWidth = Math.round(xpBarWidth * Math.max(0f, Math.min(1f, xpPct)));
+        if (filledWidth > 0) {
+            graphics.fill(xpBarX, skillXpY, xpBarX + filledWidth, skillXpY + skillXpBarHeight, XP_COLOR);
+        }
+
+        String skillLabel = String.format("Skill XP: %d/%d", stats.getXp(), xpNeeded);
+        int skillLabelWidth = mc.font.width(skillLabel);
+        graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 10, XP_COLOR, true);
+
         int rightBaseX = screenWidth / 2 + 91;
-
-        float hp = player.getHealth();
-        float maxHp = player.getMaxHealth();
-        int totalHearts = (int) Math.ceil(maxHp / 5.0);
-        int heartRows = (int) Math.ceil(totalHearts / (double) ICONS_PER_ROW);
-        float hpPct = (maxHp > 0) ? hp / maxHp : 0f;
-        boolean heartLow = hpPct < LOW_THRESHOLD;
-        boolean heartFlash = heartLow && (System.currentTimeMillis() / 500) % 2 == 0;
-
-        int healthBottomY = hotbarTop - 2;
-        for (int row = 0; row < heartRows; row++) {
-            int rowY = healthBottomY - (row + 1) * (ICON_SIZE + 1);
-            int heartsInRow = Math.min(ICONS_PER_ROW, totalHearts - row * ICONS_PER_ROW);
-            for (int i = 0; i < heartsInRow; i++) {
-                int heartIndex = row * ICONS_PER_ROW + i;
-                float heartMinHp = heartIndex * 5.0f;
-                int iconX = leftBaseX + i * ICON_STEP;
-
-                ResourceLocation icon;
-                if (hp >= heartMinHp + 5.0f) {
-                    icon = heartFlash ? HEART_LOW : HEART_FULL;
-                } else if (hp >= heartMinHp + 2.5f) {
-                    icon = heartFlash ? HEART_LOW : HEART_HALF;
-                } else {
-                    icon = HEART_EMPTY;
-                }
-                blitIcon(graphics, icon, iconX, rowY);
-            }
-        }
-
-        int armorValue = player.getArmorValue();
-        if (armorValue > 0) {
-            int armorIcons = 10;
-            int armorY = healthBottomY - heartRows * (ICON_SIZE + 1) - (ICON_SIZE + 1);
-            float armorPer = armorValue / 2.0f;
-            for (int i = 0; i < armorIcons; i++) {
-                int iconX = leftBaseX + i * ICON_STEP;
-                ResourceLocation icon;
-                if (armorPer >= i + 1) {
-                    icon = ARMOR_FULL;
-                } else if (armorPer >= i + 0.5f) {
-                    icon = ARMOR_HALF;
-                } else {
-                    icon = ARMOR_EMPTY;
-                }
-                blitIcon(graphics, icon, iconX, armorY);
-            }
-        }
-
-        float food = stats.getFood();
-        float maxFood = stats.getMaxFood();
-        float foodPct = (maxFood > 0) ? food / maxFood : 0f;
-        boolean foodLow = foodPct < LOW_THRESHOLD;
-        int foodY = hotbarTop - 2 - (ICON_SIZE + 1);
-        for (int i = 0; i < ICONS_PER_ROW; i++) {
-            int iconIndex = ICONS_PER_ROW - 1 - i;
-            int iconX = rightBaseX - (i + 1) * ICON_STEP;
-            float iconMinPct = iconIndex * 0.1f;
-
-            ResourceLocation icon;
-            if (foodPct >= iconMinPct + 0.1f) {
-                icon = foodLow ? FOOD_LOW : FOOD_FULL;
-            } else if (foodPct >= iconMinPct + 0.05f) {
-                icon = foodLow ? FOOD_HALF_LOW : FOOD_HALF;
-            } else {
-                icon = FOOD_EMPTY;
-            }
-            blitIcon(graphics, icon, iconX, foodY);
-        }
 
         float water = stats.getWater();
         float maxWater = stats.getMaxWater();
         float waterPct = (maxWater > 0) ? water / maxWater : 0f;
         boolean waterLow = waterPct < LOW_THRESHOLD;
-        int waterY = foodY + ICON_SIZE + 1;
+        int waterY = hotbarTop - 2 - 3 * (ICON_SIZE + 1);
         for (int i = 0; i < ICONS_PER_ROW; i++) {
             int iconIndex = ICONS_PER_ROW - 1 - i;
             int iconX = rightBaseX - (i + 1) * ICON_STEP;
@@ -248,24 +177,5 @@ public class StatsHudOverlay {
         graphics.drawString(mc.font, pctText, barX + BAR_WIDTH + 4, y, TEXT_COLOR, true);
     }
 
-    private static void drawXpBar(GuiGraphics graphics, int x, int y,
-                                   float pct, int current, int needed) {
-        Minecraft mc = Minecraft.getInstance();
-
-        graphics.drawString(mc.font, "XP:", x, y, TEXT_COLOR, true);
-
-        int barX = x + LABEL_WIDTH;
-
-        graphics.fill(barX - 1, y - 1, barX + BAR_WIDTH + 1, y + BAR_HEIGHT + 1, BORDER_COLOR);
-        graphics.fill(barX, y, barX + BAR_WIDTH, y + BAR_HEIGHT, 0xFF111111);
-
-        int filledWidth = Math.round(BAR_WIDTH * Math.max(0f, Math.min(1f, pct)));
-        if (filledWidth > 0) {
-            graphics.fill(barX, y, barX + filledWidth, y + BAR_HEIGHT, XP_COLOR);
-        }
-
-        String xpText = String.format("%d/%d", current, needed);
-        graphics.drawString(mc.font, xpText, barX + BAR_WIDTH + 4, y, TEXT_COLOR, true);
-    }
 
 }
