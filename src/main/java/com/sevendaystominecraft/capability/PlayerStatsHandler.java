@@ -108,7 +108,6 @@ public class PlayerStatsHandler {
         boolean wasExhausted = stats.isStaminaExhausted();
         if (wasExhausted && staminaPct >= 40f) {
             stats.setStaminaExhausted(false);
-            sendStatsToClient(serverPlayer, stats);
         }
 
         if (stats.isStaminaExhausted() && player.isSprinting()) {
@@ -124,7 +123,6 @@ public class PlayerStatsHandler {
             if (stats.getStamina() <= 0) {
                 stats.setStaminaExhausted(true);
                 player.setSprinting(false);
-                sendStatsToClient(serverPlayer, stats);
             }
         } else if (!stats.isStaminaExhausted() && isPlayerMoving(player)) {
             float regenRate = (float) (cfg.staminaRegenWalking.get() / 20.0);
@@ -136,6 +134,19 @@ public class PlayerStatsHandler {
 
         if (!player.onGround() && player.getDeltaMovement().y > 0.1 && player.fallDistance < 0.1f) {
             stats.setStamina(stats.getStamina() - cfg.staminaDrainJump.get().floatValue() * staminaCostMult);
+            if (stats.getStamina() <= 0 && !stats.isStaminaExhausted()) {
+                stats.setStaminaExhausted(true);
+                player.setSprinting(false);
+            }
+        }
+
+        boolean isNowExhausted = stats.isStaminaExhausted();
+        if (wasExhausted != isNowExhausted) {
+            sendStatsToClient(serverPlayer, stats);
+        }
+
+        if (isNowExhausted && player.isSprinting()) {
+            player.setSprinting(false);
         }
 
         // ── 3. Starvation / Dehydration Cascade (§1.1) ─────────────────

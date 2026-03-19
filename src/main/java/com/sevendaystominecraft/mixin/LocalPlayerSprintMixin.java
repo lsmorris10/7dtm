@@ -19,6 +19,7 @@ public abstract class LocalPlayerSprintMixin {
         if (self.hasData(ModAttachments.PLAYER_STATS.get())) {
             SevenDaysPlayerStats stats = self.getData(ModAttachments.PLAYER_STATS.get());
             if (stats.isStaminaExhausted()
+                    || stats.getStamina() <= 0
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_FRACTURE)
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_ELECTROCUTED)
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_STUNNED)) {
