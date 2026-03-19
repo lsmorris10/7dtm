@@ -53,13 +53,13 @@ outputType = "console"
 name = "Texture Tool"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd texture-tool && npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd texture-tool && npm install && npm run dev"
+waitForPort = 5000
 
 [postMerge]
 path = "scripts/post-merge.sh"
@@ -76,7 +76,3 @@ externalPort = 3001
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3000
