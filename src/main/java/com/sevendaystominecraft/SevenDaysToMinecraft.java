@@ -81,6 +81,7 @@ public class SevenDaysToMinecraft {
             modEventBus.addListener(CompassOverlay::onRegisterGuiLayers);
             modEventBus.addListener(StatsHudOverlay::onRegisterGuiLayers);
             modEventBus.addListener(MinimapOverlay::onRegisterGuiLayers);
+            NeoForge.EVENT_BUS.addListener(StatsHudOverlay::onRenderGuiLayerPre);
         }
 
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);

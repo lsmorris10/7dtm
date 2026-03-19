@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 public class StatsHudOverlay {
@@ -64,6 +65,15 @@ public class StatsHudOverlay {
         SevenDaysToMinecraft.LOGGER.info("BZHS: Registered stats HUD overlay (vanilla hearts/armor/food hidden)");
     }
 
+    public static void onRenderGuiLayerPre(RenderGuiLayerEvent.Pre event) {
+        ResourceLocation name = event.getName();
+        if (name.equals(VanillaGuiLayers.PLAYER_HEALTH)
+                || name.equals(VanillaGuiLayers.ARMOR_LEVEL)
+                || name.equals(VanillaGuiLayers.FOOD_LEVEL)) {
+            event.setCanceled(true);
+        }
+    }
+
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -112,13 +122,15 @@ public class StatsHudOverlay {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
-        int hotbarTop = screenHeight - 22 - 1;
-
-        int vanillaXpBarY = screenHeight - 29;
-        int skillXpBarHeight = 3;
-        int skillXpY = vanillaXpBarY - skillXpBarHeight - 1;
         int xpBarWidth = 182;
         int xpBarX = (screenWidth - xpBarWidth) / 2;
+        int skillXpBarHeight = 3;
+
+        int hotbarTop = screenHeight - 22 - 1;
+
+        int waterY = hotbarTop - ICON_SIZE - 4;
+
+        int skillXpY = waterY - skillXpBarHeight - 6;
 
         int xpNeeded = LevelManager.xpToNextLevel(stats.getLevel());
         float xpPct = (xpNeeded > 0) ? (float) stats.getXp() / xpNeeded : 0f;
@@ -131,19 +143,15 @@ public class StatsHudOverlay {
 
         String skillLabel = String.format("Skill XP: %d/%d", stats.getXp(), xpNeeded);
         int skillLabelWidth = mc.font.width(skillLabel);
-        graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 10, XP_COLOR, true);
-
-        int rightBaseX = screenWidth / 2 + 91;
+        graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 12, XP_COLOR, true);
 
         float water = stats.getWater();
         float maxWater = stats.getMaxWater();
         float waterPct = (maxWater > 0) ? water / maxWater : 0f;
         boolean waterLow = waterPct < LOW_THRESHOLD;
-        int waterY = hotbarTop - 2 - 3 * (ICON_SIZE + 1);
         for (int i = 0; i < ICONS_PER_ROW; i++) {
-            int iconIndex = ICONS_PER_ROW - 1 - i;
-            int iconX = rightBaseX - (i + 1) * ICON_STEP;
-            float iconMinPct = iconIndex * 0.1f;
+            int iconX = xpBarX + Math.round(i * (xpBarWidth - ICON_SIZE) / (float) (ICONS_PER_ROW - 1));
+            float iconMinPct = i * 0.1f;
 
             ResourceLocation icon;
             if (waterPct >= iconMinPct + 0.1f) {
