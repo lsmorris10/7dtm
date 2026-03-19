@@ -9,7 +9,6 @@ import com.sevendaystominecraft.perk.LevelManager;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -28,8 +27,14 @@ public class StatsHudOverlay {
     private static final int MARGIN_Y = 35;
     private static final int LABEL_WIDTH = 55;
 
+    private static final int HEALTH_COLOR = 0xFFCC3333;
+    private static final int HEALTH_LOW_COLOR = 0xFF881111;
     private static final int STAMINA_COLOR = 0xFF33CC33;
     private static final int STAMINA_LOW_COLOR = 0xFFCC3333;
+    private static final int FOOD_COLOR = 0xFFCC8833;
+    private static final int FOOD_LOW_COLOR = 0xFFCC3333;
+    private static final int WATER_COLOR = 0xFF3388CC;
+    private static final int WATER_LOW_COLOR = 0xFF224488;
     private static final int XP_COLOR = 0xFF9933FF;
     private static final int BORDER_COLOR = 0xFF333333;
     private static final int TEXT_COLOR = 0xFFFFFFFF;
@@ -39,26 +44,7 @@ public class StatsHudOverlay {
     private static final int TEMP_NORMAL_COLOR = 0xFFAAFFAA;
     private static final int LEVEL_COLOR = 0xFFFFDD00;
 
-    private static final int ICON_SIZE = 9;
-    private static final int ICON_SPACING = 1;
-    private static final int ICONS_PER_ROW = 10;
-    private static final int ICON_STEP = ICON_SIZE + ICON_SPACING;
-
     private static final float LOW_THRESHOLD = 0.3f;
-
-    private static final ResourceLocation WATER_FULL = guiTexture("water_full");
-    private static final ResourceLocation WATER_HALF = guiTexture("water_half");
-    private static final ResourceLocation WATER_EMPTY = guiTexture("water_empty");
-    private static final ResourceLocation WATER_LOW = guiTexture("water_low");
-    private static final ResourceLocation WATER_HALF_LOW = guiTexture("water_half_low");
-
-    private static ResourceLocation guiTexture(String name) {
-        return ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "textures/gui/" + name + ".png");
-    }
-
-    private static void blitIcon(GuiGraphics graphics, ResourceLocation texture, int x, int y) {
-        graphics.blit(RenderType::guiTextured, texture, x, y, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
-    }
 
     public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, OVERLAY_ID, StatsHudOverlay::render);
@@ -83,11 +69,11 @@ public class StatsHudOverlay {
         if (!player.hasData(ModAttachments.PLAYER_STATS.get())) return;
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
 
-        renderTopLeftStats(graphics, mc, stats);
-        renderIconHud(graphics, mc, player, stats);
+        renderTopLeftStats(graphics, mc, player, stats);
+        renderBottomCenterXp(graphics, mc, stats);
     }
 
-    private static void renderTopLeftStats(GuiGraphics graphics, Minecraft mc, SevenDaysPlayerStats stats) {
+    private static void renderTopLeftStats(GuiGraphics graphics, Minecraft mc, Player player, SevenDaysPlayerStats stats) {
         int x = MARGIN_X;
         int y = MARGIN_Y;
 
@@ -96,9 +82,30 @@ public class StatsHudOverlay {
         graphics.drawString(mc.font, dayAndLevel, x, y, LEVEL_COLOR, true);
         y += 14;
 
+        float health = player.getHealth();
+        float maxHealth = player.getMaxHealth();
+        float healthPct = (maxHealth > 0) ? health / maxHealth : 0f;
+        drawStatBar(graphics, x, y, "Health", healthPct, health, maxHealth,
+                healthPct < LOW_THRESHOLD ? HEALTH_LOW_COLOR : HEALTH_COLOR);
+        y += BAR_HEIGHT + BAR_SPACING + 2;
+
         float staminaPct = (stats.getMaxStamina() > 0) ? stats.getStamina() / stats.getMaxStamina() : 0f;
         drawStatBar(graphics, x, y, "Stamina", staminaPct, stats.getStamina(), stats.getMaxStamina(),
                 staminaPct < LOW_THRESHOLD ? STAMINA_LOW_COLOR : STAMINA_COLOR);
+        y += BAR_HEIGHT + BAR_SPACING + 2;
+
+        float food = stats.getFood();
+        float maxFood = stats.getMaxFood();
+        float foodPct = (maxFood > 0) ? food / maxFood : 0f;
+        drawStatBar(graphics, x, y, "Food", foodPct, food, maxFood,
+                foodPct < LOW_THRESHOLD ? FOOD_LOW_COLOR : FOOD_COLOR);
+        y += BAR_HEIGHT + BAR_SPACING + 2;
+
+        float water = stats.getWater();
+        float maxWater = stats.getMaxWater();
+        float waterPct = (maxWater > 0) ? water / maxWater : 0f;
+        drawStatBar(graphics, x, y, "Water", waterPct, water, maxWater,
+                waterPct < LOW_THRESHOLD ? WATER_LOW_COLOR : WATER_COLOR);
         y += BAR_HEIGHT + BAR_SPACING + 2;
 
         float temp = stats.getCoreTemperature();
@@ -118,7 +125,7 @@ public class StatsHudOverlay {
         }
     }
 
-    private static void renderIconHud(GuiGraphics graphics, Minecraft mc, Player player, SevenDaysPlayerStats stats) {
+    private static void renderBottomCenterXp(GuiGraphics graphics, Minecraft mc, SevenDaysPlayerStats stats) {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
@@ -127,10 +134,7 @@ public class StatsHudOverlay {
         int skillXpBarHeight = 3;
 
         int hotbarTop = screenHeight - 22 - 1;
-
-        int waterY = hotbarTop - ICON_SIZE - 4;
-
-        int skillXpY = waterY - skillXpBarHeight - 6;
+        int skillXpY = hotbarTop - skillXpBarHeight - 4;
 
         int xpNeeded = LevelManager.xpToNextLevel(stats.getLevel());
         float xpPct = (xpNeeded > 0) ? (float) stats.getXp() / xpNeeded : 0f;
@@ -144,25 +148,6 @@ public class StatsHudOverlay {
         String skillLabel = String.format("Skill XP: %d/%d", stats.getXp(), xpNeeded);
         int skillLabelWidth = mc.font.width(skillLabel);
         graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 12, XP_COLOR, true);
-
-        float water = stats.getWater();
-        float maxWater = stats.getMaxWater();
-        float waterPct = (maxWater > 0) ? water / maxWater : 0f;
-        boolean waterLow = waterPct < LOW_THRESHOLD;
-        for (int i = 0; i < ICONS_PER_ROW; i++) {
-            int iconX = xpBarX + Math.round(i * (xpBarWidth - ICON_SIZE) / (float) (ICONS_PER_ROW - 1));
-            float iconMinPct = i * 0.1f;
-
-            ResourceLocation icon;
-            if (waterPct >= iconMinPct + 0.1f) {
-                icon = waterLow ? WATER_LOW : WATER_FULL;
-            } else if (waterPct >= iconMinPct + 0.05f) {
-                icon = waterLow ? WATER_HALF_LOW : WATER_HALF;
-            } else {
-                icon = WATER_EMPTY;
-            }
-            blitIcon(graphics, icon, iconX, waterY);
-        }
     }
 
     private static void drawStatBar(GuiGraphics graphics, int x, int y,
