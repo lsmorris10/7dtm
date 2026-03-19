@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.level.ChunkEvent;
@@ -40,6 +41,9 @@ public class TerritoryWorldGenerator {
         BlockPos candidate = new BlockPos(blockX, 64, blockZ);
 
         if (data.hasNearby(candidate, minSpacing)) return;
+
+        var biome = serverLevel.getBiome(candidate);
+        if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER)) return;
 
         TerritoryTier tier = TerritoryTier.roll(serverLevel.random);
         TerritoryType type = TerritoryType.random(serverLevel.random);
