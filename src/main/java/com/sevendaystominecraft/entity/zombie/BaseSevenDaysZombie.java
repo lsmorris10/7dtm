@@ -304,7 +304,7 @@ public class BaseSevenDaysZombie extends Zombie {
     public static AttributeSupplier.Builder createBaseZombieAttributes() {
         return Zombie.createAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)
-                .add(Attributes.ATTACK_DAMAGE, 1.6)
+                .add(Attributes.ATTACK_DAMAGE, 3.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1)
                 .add(Attributes.FOLLOW_RANGE, 48.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.0);

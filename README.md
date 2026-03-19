@@ -22,7 +22,7 @@ A total conversion mod for **Minecraft 1.21.4** (NeoForge) inspired by **7 Days 
 - 360° **compass strip** at top-center with cardinal/intercardinal markers and heat level indicator
 - **Minimap** in top-right corner with terrain colors, player dot, and nearby player tracking
 - Day counter, temperature readout, debuff display, and XP bar
-- Player base health set to **100 HP** (50 hearts) for balanced combat against custom zombies
+- Player base health stays at vanilla **20 HP** (10 hearts) for balanced combat against custom zombies
 - Vanilla hunger bar, health hearts, and passive regen disabled via Mixins
 
 ### Debuffs (12 Types)
@@ -176,8 +176,8 @@ Copy the JAR into your Minecraft `mods/` folder (requires NeoForge 21.4.140 for 
 - Icon-based HUD (hearts, food, water, armor icon rows)
 - Compass, minimap, and player tracking
 - Extended day cycle via slower-tick refactor (TIME_SCALE=2, vanilla 24k dayTime preserved)
-- 100 HP player base health
-- Vanilla mob damage scaling for all mobs
+- 20 HP vanilla player base health
+- Zombie stats balanced for vanilla 20 HP scale
 - Placeholder texture audit (`docs/texture_audit.md`)
 - Sound system foundation (8 custom events, gated playback, subtitles)
 - Context-aware gameplay music system (day/night/combat/blood moon)

@@ -84,7 +84,7 @@ public class BehemothZombie extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 400.0)
-                .add(Attributes.ATTACK_DAMAGE, 10.0)
+                .add(Attributes.ATTACK_DAMAGE, 18.8)
                 .add(Attributes.MOVEMENT_SPEED, 0.08)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
     }

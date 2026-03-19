@@ -42,7 +42,7 @@ public class FeralWightZombie extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 60.0)
-                .add(Attributes.ATTACK_DAMAGE, 4.0)
+                .add(Attributes.ATTACK_DAMAGE, 7.5)
                 .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 }

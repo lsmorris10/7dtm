@@ -21,7 +21,7 @@ A total conversion mod inspired by 7 Days to Die 2.6. One full JAR, no dependenc
 - **17 materials + Dukes tokens** — full material economy
 - **XP, leveling, 45 perks** — 5 attribute trees, kill/mine XP, perk unlocks
 - **Extended day cycle** — TIME_SCALE=2 slower-tick; one day = ~40 real minutes, vanilla 24k dayTime preserved
-- **100 HP player base** — all vanilla mob/environmental damage proportionally scaled
+- **20 HP vanilla player base** — zombie stats proportionally balanced for vanilla 20 HP scale
 - **Landing page** — published with GitHub Releases download button and Ko-fi/Patreon funding page
 
 ---

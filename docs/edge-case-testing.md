@@ -16,7 +16,7 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 - Infernal zombie fire trail: do fire blocks actually spawn behind it as it walks (every 20 ticks)? Is the zombie itself fire-immune?
 - Nurse healing aura: does it heal other zombies within 5 blocks at 5 HP/sec? What happens with multiple Nurses stacking heals on one target?
 - Mutated Chuck vomit attack: does the ranged vomit reach 11 blocks? (Uses SmallFireball projectile, no custom debuff application — only contact damage)
-- Frozen Lumberjack: does it spawn correctly? Verify 150 HP / 12 damage / 0.9 speed base stats
+- Frozen Lumberjack: does it spawn correctly? Verify 30 HP / 4.5 damage / 0.9 speed base stats
 - Bloated Walker death explosion: does the 2-block radius work? Can the explosion trigger a Demolisher's chest-hit explosion if one is nearby?
 - Demolisher chest-hit explosion: does hitting it in the chest (vs. head/legs) actually trigger the 8-block explosion? What counts as a "chest hit"?
 - Cop acid spit: does the ranged bile attack work at 8-block range? (Uses SmallFireball projectile — `copBileDamage` config exists but is not wired to the projectile; damage comes from the SmallFireball itself.) Does the Cop explode at <20% HP? Does it also explode on death?
@@ -25,7 +25,7 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 - Feral Wight permanent sprint: does it always run regardless of day/night? Does `setSprinting(true)` every tick cause animation glitches?
 - Zombie Dog pack spawning: do they actually spawn in groups? Is their 3.5 speed correct and not absurdly fast?
 - Vulture flight: does the swoop attack work? Can it path through solid blocks? Does it get stuck in terrain?
-- Behemoth ground pound: does the 6-block AoE radius work? Does it deal 75% of its base damage (37.5)? Does knockback apply?
+- Behemoth ground pound: does the 6-block AoE radius work? Does it deal 75% of its base damage (14.1)? Does knockback apply?
 - Darkness speed bonus: do zombies get the darkness speed bonus when both block light AND sky light ≤ 7? Night speed bonus applies when dayTime is 13000–23000 (vanilla 24k scale). When both night and darkness conditions are true, verify the max of the two bonuses is used (not additive)
 - Zombie block destruction: do zombies bash through walls? Do they prefer weaker materials (wood over concrete) via the A* cost formula?
 
@@ -33,9 +33,9 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 
 ## Player Survival Stats
 
-- Base health: confirm player starts with 100 HP (50 hearts). There is NO per-level max HP scaling — health is a flat 100 HP
+- Base health: confirm player starts with 20 HP (10 hearts, vanilla default). There is NO per-level max HP scaling — health is a flat 20 HP
 - Health regen: 0.5 HP/sec, only when BOTH food AND water are >50% — test with food at 60% but water at 40% (should NOT regen)
-- Vanilla damage scaling: all vanilla environmental damage sources (fall, drown, fire, lava, cactus, etc.) are scaled ×5 to match the 100 HP pool. Player-dealt damage is also scaled ×5
+- Vanilla damage scaling: all vanilla environmental damage sources (fall, drown, fire, lava, cactus, etc.) use vanilla damage values balanced against the 20 HP pool
 - Stamina exhaustion cycle: drain stamina to 0 → confirm sprinting is blocked → confirm it only re-enables at 40% (not immediately when stamina ticks above 0)
 - Stamina regen rates: 8/sec at rest, 4/sec while walking — verify these are accurate
 - Stamina costs: sprint (-10/s), melee swing (-12), mining (-5), jump (-8) — test each individually
@@ -205,7 +205,7 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 - Death loop: if the player dies and respawns in a dangerous area (Wasteland, active Blood Moon), can they stabilize or do they instantly die again?
 - Darkness speed in caves: zombies underground (block light ≤ 7, sky light ≤ 7) should get the darkness speed bonus even during daytime — verify caves are extra dangerous
 - Extended day cycle: verify the slower-tick approach (TIME_SCALE=2) doubles the real-time day length while keeping dayTime on the vanilla 24,000-tick scale. All time-dependent systems (blood moon, zombie behavior, temperature) should use standard dayTime values, not doubled values
-- 100 HP pool interactions: verify damage from all sources (zombies, fall, fire, starvation, debuffs) is balanced for the 100 HP pool
+- 20 HP pool interactions: verify damage from all sources (zombies, fall, fire, starvation, debuffs) is balanced for the vanilla 20 HP pool
 - Miner 69er + heatmap from mining: does the +15% mining speed per rank cause faster heat buildup (more blocks broken per minute)?
 - Healing Factor during combat: does the +20% health regen per rank meaningfully offset damage taken in fights?
 - Rule 1: Cardio sprint speed + heatmap: does the sprint speed bonus from Cardio perks generate heat faster due to more distance covered?

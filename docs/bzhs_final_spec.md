@@ -262,25 +262,25 @@ Each level-up grants **1 perk point**. Every 10 levels grants **1 bonus attribut
 
 | Variant | HP | Damage | Speed (b/s) | Special | Spawn Day | XP (2.6) | Loot |
 |---------|-----|--------|-------------|---------|-----------|----------|------|
-| **Walker** | 100 | 8 | 1.0 | Basic, slow | 1+ | 200 | Rotten flesh, cloth |
-| **Crawler** | 60 | 10 | 0.8 | Low profile, hard to hit | 1+ | 150 | Cloth, bones |
-| **Frozen Lumberjack** | 150 | 12 | 0.9 | Snow biome exclusive | 1+ | 250 | Wood, nails |
-| **Bloated Walker** | 200 | 10 | 0.7 | Explodes on death (2-block radius) | 3+ | 300 | Rotten flesh, fat |
-| **Spider Zombie** | 120 | 14 | 1.8 | Climbs walls, jumps 3 blocks | 5+ | 300 | Acid, spider gland |
-| **Feral Wight** | 300 | 20 | 2.5 | Always sprints, glowing eyes | 7+ | 350 | Iron, mechanical parts |
-| **Cop** | 350 | 15 melee / 25 bile | 1.2 | Acid spit (8-block range, 3sec CD), explodes at 20% HP | 14+ | 400 | Acid, pistol parts |
-| **Screamer** | 80 | 5 | 1.5 | Screams → spawns 4–8 zombies, flees | 7+ | 250 | Cloth, antibiotics |
-| **Zombie Dog** | 80 | 18 | 3.5 | Pack spawns (3–5), fast, no climb | 3+ | 200 | Bones, animal fat |
-| **Vulture** | 60 | 12 | 4.0 (flying) | Dive attacks, hard to hit | 7+ | 200 | Feathers, rotten flesh |
-| **Demolisher** | 800 | 30 | 1.0 | C4 vest: chest-hit → 8-block explosion; must headshot | 21+ | 800 | Mechanical parts, explosives |
+| **Walker** | 20 | 3.0 | 1.0 | Basic, slow | 1+ | 200 | Rotten flesh, cloth |
+| **Crawler** | 12 | 3.8 | 0.8 | Low profile, hard to hit | 1+ | 150 | Cloth, bones |
+| **Frozen Lumberjack** | 30 | 4.5 | 0.9 | Snow biome exclusive | 1+ | 250 | Wood, nails |
+| **Bloated Walker** | 40 | 3.8 | 0.7 | Explodes on death (2-block radius) | 3+ | 300 | Rotten flesh, fat |
+| **Spider Zombie** | 24 | 5.3 | 1.8 | Climbs walls, jumps 3 blocks | 5+ | 300 | Acid, spider gland |
+| **Feral Wight** | 60 | 7.5 | 2.5 | Always sprints, glowing eyes | 7+ | 350 | Iron, mechanical parts |
+| **Cop** | 70 | 5.6 melee | 1.2 | Acid spit (8-block range, 3sec CD), explodes at 20% HP | 14+ | 400 | Acid, pistol parts |
+| **Screamer** | 16 | 1.9 | 1.5 | Screams → spawns 4–8 zombies, flees | 7+ | 250 | Cloth, antibiotics |
+| **Zombie Dog** | 16 | 6.8 | 3.5 | Pack spawns (3–5), fast, no climb | 3+ | 200 | Bones, animal fat |
+| **Vulture** | 12 | 4.5 | 4.0 (flying) | Dive attacks, hard to hit | 7+ | 200 | Feathers, rotten flesh |
+| **Demolisher** | 160 | 11.3 | 1.0 | C4 vest: chest-hit → 8-block explosion; must headshot | 21+ | 800 | Mechanical parts, explosives |
 | **Radiated (any base)** | ×2 HP | ×1.5 dmg | ×1.3 speed | Green glow, regen 2 HP/sec | 28+ | 500 | Rare schematics, advanced parts |
 | **Charged (2.6 NEW)** | ×1.8 HP | ×1.3 dmg | ×1.2 speed | **Blue glow**; chain lightning on hit (arcs to entities within 3 blocks, stuns 1.5sec, −5 HP per arc, max 3 chain targets) | 21+ | 550 | Electrical parts, rare components |
 | **Infernal (2.6 NEW)** | ×1.8 HP | ×1.4 dmg | ×1.1 speed | **Orange glow**; leaves fire trail (1 fire block/sec while moving); melee hit applies Burn debuff (5 sec) | 21+ | 550 | Oil shale, rare components |
-| **Mutated Chuck** | 250 | 18 | 1.3 | Ranged vomit attack (2.6: **~11 block range**, up from 8) | 14+ | 350 | Rotten flesh, acid |
-| **Zombie Bear** | 600 | 35 | 2.0 | Charges, AoE swipe | 14+ | 500 | Animal fat, bones, meat |
-| **Nurse** | 120 | 10 | 1.0 | Heals nearby zombies 5 HP/sec in 5-block radius | 7+ | 250 | First aid, painkillers |
-| **Soldier** | 400 | 25 | 1.5 | Military loot, higher block damage | 14+ | 400 | Ammo, weapon parts |
-| **Behemoth** (Boss) | 2000 | 50 | 0.8 | Immune to knockback, AoE ground pound (6-block radius) | 35+ (rare) | 2000 | Unique schematics, tier 6 items |
+| **Mutated Chuck** | 50 | 6.8 | 1.3 | Ranged vomit attack (2.6: **~11 block range**, up from 8) | 14+ | 350 | Rotten flesh, acid |
+| **Zombie Bear** | 120 | 13.1 | 2.0 | Charges, AoE swipe | 14+ | 500 | Animal fat, bones, meat |
+| **Nurse** | 24 | 3.8 | 1.0 | Heals nearby zombies 5 HP/sec in 5-block radius | 7+ | 250 | First aid, painkillers |
+| **Soldier** | 80 | 9.4 | 1.5 | Military loot, higher block damage | 14+ | 400 | Ammo, weapon parts |
+| **Behemoth** (Boss) | 400 | 18.8 | 0.8 | Immune to knockback, AoE ground pound (6-block radius) | 35+ (rare) | 2000 | Unique schematics, tier 6 items |
 
 **2.6 Biome Spawn Adjustments (Snow & Wasteland):**
 - Snow/Tundra: Radiated, Charged, and Infernal Chuck zombies now appear at day 21+ (previously only Walkers/Lumberjacks). Spawn weight: 15% Charged, 10% Infernal, 15% Radiated in day 28+ pools.

@@ -29,7 +29,7 @@ public class FrozenLumberjackZombie extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 30.0)
-                .add(Attributes.ATTACK_DAMAGE, 2.4)
+                .add(Attributes.ATTACK_DAMAGE, 4.5)
                 .add(Attributes.MOVEMENT_SPEED, 0.09);
     }
 }

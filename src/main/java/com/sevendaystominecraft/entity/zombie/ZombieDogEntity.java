@@ -42,7 +42,7 @@ public class ZombieDogEntity extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 16.0)
-                .add(Attributes.ATTACK_DAMAGE, 3.6)
+                .add(Attributes.ATTACK_DAMAGE, 6.8)
                 .add(Attributes.MOVEMENT_SPEED, 0.35);
     }
 }

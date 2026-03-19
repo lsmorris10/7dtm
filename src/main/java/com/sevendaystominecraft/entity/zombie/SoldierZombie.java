@@ -29,7 +29,7 @@ public class SoldierZombie extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 80.0)
-                .add(Attributes.ATTACK_DAMAGE, 5.0)
+                .add(Attributes.ATTACK_DAMAGE, 9.4)
                 .add(Attributes.MOVEMENT_SPEED, 0.15)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.3);
     }

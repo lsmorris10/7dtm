@@ -26,7 +26,7 @@ public class InfernalZombie extends BaseSevenDaysZombie {
         ZombieConfig cfg = ZombieConfig.INSTANCE;
         double hp = variant.getBaseHP() > 0 ? variant.getBaseHP() : 20.0;
         hp *= cfg.infernalHPMult.get();
-        double damage = variant.getBaseDamage() > 0 ? variant.getBaseDamage() : 1.6;
+        double damage = variant.getBaseDamage() > 0 ? variant.getBaseDamage() : 3.0;
         damage *= cfg.infernalDamageMult.get();
         double speed = convertSpeedToAttribute(
                 (variant.getBaseSpeed() > 0 ? variant.getBaseSpeed() : 1.0) * cfg.infernalSpeedMult.get()
@@ -80,7 +80,7 @@ public class InfernalZombie extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 36.0)
-                .add(Attributes.ATTACK_DAMAGE, 2.24)
+                .add(Attributes.ATTACK_DAMAGE, 4.2)
                 .add(Attributes.MOVEMENT_SPEED, 0.11);
     }
 }

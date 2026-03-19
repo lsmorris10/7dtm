@@ -164,26 +164,26 @@ public class ZombieConfig {
         builder.pop();
 
         builder.push("walker");
-        walkerHP = builder.defineInRange("hp", 4.0, 1.0, 1000.0);
-        walkerDamage = builder.defineInRange("damage", 0.32, 0.1, 100.0);
+        walkerHP = builder.defineInRange("hp", 20.0, 1.0, 1000.0);
+        walkerDamage = builder.defineInRange("damage", 3.0, 0.1, 100.0);
         walkerSpeed = builder.defineInRange("speed", 1.0, 0.1, 5.0);
         builder.pop();
 
         builder.push("crawler");
-        crawlerHP = builder.defineInRange("hp", 2.4, 1.0, 1000.0);
-        crawlerDamage = builder.defineInRange("damage", 0.4, 0.1, 100.0);
+        crawlerHP = builder.defineInRange("hp", 12.0, 1.0, 1000.0);
+        crawlerDamage = builder.defineInRange("damage", 3.8, 0.1, 100.0);
         crawlerSpeed = builder.defineInRange("speed", 0.8, 0.1, 5.0);
         builder.pop();
 
         builder.push("frozen_lumberjack");
-        frozenLumberjackHP = builder.defineInRange("hp", 6.0, 1.0, 1000.0);
-        frozenLumberjackDamage = builder.defineInRange("damage", 0.48, 0.1, 100.0);
+        frozenLumberjackHP = builder.defineInRange("hp", 30.0, 1.0, 1000.0);
+        frozenLumberjackDamage = builder.defineInRange("damage", 4.5, 0.1, 100.0);
         frozenLumberjackSpeed = builder.defineInRange("speed", 0.9, 0.1, 5.0);
         builder.pop();
 
         builder.push("bloated_walker");
-        bloatedWalkerHP = builder.defineInRange("hp", 8.0, 1.0, 1000.0);
-        bloatedWalkerDamage = builder.defineInRange("damage", 0.4, 0.1, 100.0);
+        bloatedWalkerHP = builder.defineInRange("hp", 40.0, 1.0, 1000.0);
+        bloatedWalkerDamage = builder.defineInRange("damage", 3.8, 0.1, 100.0);
         bloatedWalkerSpeed = builder.defineInRange("speed", 0.7, 0.1, 5.0);
         bloatedExplosionRadius = builder
                 .comment("Explosion radius on death (in blocks)")
@@ -191,48 +191,48 @@ public class ZombieConfig {
         builder.pop();
 
         builder.push("spider_zombie");
-        spiderZombieHP = builder.defineInRange("hp", 4.8, 1.0, 1000.0);
-        spiderZombieDamage = builder.defineInRange("damage", 0.56, 0.1, 100.0);
+        spiderZombieHP = builder.defineInRange("hp", 24.0, 1.0, 1000.0);
+        spiderZombieDamage = builder.defineInRange("damage", 5.3, 0.1, 100.0);
         spiderZombieSpeed = builder.defineInRange("speed", 1.8, 0.1, 5.0);
         builder.pop();
 
         builder.push("feral_wight");
-        feralWightHP = builder.defineInRange("hp", 12.0, 1.0, 2000.0);
-        feralWightDamage = builder.defineInRange("damage", 0.8, 0.1, 200.0);
+        feralWightHP = builder.defineInRange("hp", 60.0, 1.0, 2000.0);
+        feralWightDamage = builder.defineInRange("damage", 7.5, 0.1, 200.0);
         feralWightSpeed = builder.defineInRange("speed", 2.5, 0.1, 5.0);
         builder.pop();
 
         builder.push("cop");
-        copHP = builder.defineInRange("hp", 14.0, 1.0, 2000.0);
-        copDamage = builder.defineInRange("damage", 0.6, 0.1, 200.0);
+        copHP = builder.defineInRange("hp", 70.0, 1.0, 2000.0);
+        copDamage = builder.defineInRange("damage", 5.6, 0.1, 200.0);
         copSpeed = builder.defineInRange("speed", 1.2, 0.1, 5.0);
         copBileDamage = builder.defineInRange("bileDamage", 5.0, 0.1, 100.0);
         copBileRange = builder.defineInRange("bileRange", 10, 4, 20);
         builder.pop();
 
         builder.push("screamer");
-        screamerHP = builder.defineInRange("hp", 3.2, 1.0, 1000.0);
-        screamerDamage = builder.defineInRange("damage", 0.2, 0.1, 100.0);
+        screamerHP = builder.defineInRange("hp", 16.0, 1.0, 1000.0);
+        screamerDamage = builder.defineInRange("damage", 1.9, 0.1, 100.0);
         screamerSpeed = builder.defineInRange("speed", 1.5, 0.1, 5.0);
         screamerSpawnMin = builder.defineInRange("spawnMin", 4, 1, 16);
         screamerSpawnMax = builder.defineInRange("spawnMax", 8, 2, 32);
         builder.pop();
 
         builder.push("zombie_dog");
-        zombieDogHP = builder.defineInRange("hp", 3.2, 1.0, 1000.0);
-        zombieDogDamage = builder.defineInRange("damage", 0.72, 0.1, 100.0);
+        zombieDogHP = builder.defineInRange("hp", 16.0, 1.0, 1000.0);
+        zombieDogDamage = builder.defineInRange("damage", 6.8, 0.1, 100.0);
         zombieDogSpeed = builder.defineInRange("speed", 3.5, 0.1, 8.0);
         builder.pop();
 
         builder.push("vulture");
-        vultureHP = builder.defineInRange("hp", 2.4, 1.0, 1000.0);
-        vultureDamage = builder.defineInRange("damage", 0.48, 0.1, 100.0);
+        vultureHP = builder.defineInRange("hp", 12.0, 1.0, 1000.0);
+        vultureDamage = builder.defineInRange("damage", 4.5, 0.1, 100.0);
         vultureSpeed = builder.defineInRange("speed", 4.0, 0.1, 8.0);
         builder.pop();
 
         builder.push("demolisher");
-        demolisherHP = builder.defineInRange("hp", 32.0, 10.0, 5000.0);
-        demolisherDamage = builder.defineInRange("damage", 1.2, 0.1, 200.0);
+        demolisherHP = builder.defineInRange("hp", 160.0, 10.0, 5000.0);
+        demolisherDamage = builder.defineInRange("damage", 11.3, 0.1, 200.0);
         demolisherSpeed = builder.defineInRange("speed", 1.0, 0.1, 5.0);
         demolisherExplosionRadius = builder
                 .comment("Explosion radius when hit in chest")
@@ -240,8 +240,8 @@ public class ZombieConfig {
         builder.pop();
 
         builder.push("mutated_chuck");
-        mutatedChuckHP = builder.defineInRange("hp", 10.0, 1.0, 2000.0);
-        mutatedChuckDamage = builder.defineInRange("damage", 0.72, 0.1, 200.0);
+        mutatedChuckHP = builder.defineInRange("hp", 50.0, 1.0, 2000.0);
+        mutatedChuckDamage = builder.defineInRange("damage", 6.8, 0.1, 200.0);
         mutatedChuckSpeed = builder.defineInRange("speed", 1.3, 0.1, 5.0);
         mutatedChuckVomitRange = builder
                 .comment("Range of vomit attack in blocks (2.6: 11)")
@@ -249,14 +249,14 @@ public class ZombieConfig {
         builder.pop();
 
         builder.push("zombie_bear");
-        zombieBearHP = builder.defineInRange("hp", 24.0, 10.0, 5000.0);
-        zombieBearDamage = builder.defineInRange("damage", 1.4, 0.1, 200.0);
+        zombieBearHP = builder.defineInRange("hp", 120.0, 10.0, 5000.0);
+        zombieBearDamage = builder.defineInRange("damage", 13.1, 0.1, 200.0);
         zombieBearSpeed = builder.defineInRange("speed", 2.0, 0.1, 5.0);
         builder.pop();
 
         builder.push("nurse");
-        nurseHP = builder.defineInRange("hp", 4.8, 1.0, 1000.0);
-        nurseDamage = builder.defineInRange("damage", 0.4, 0.1, 100.0);
+        nurseHP = builder.defineInRange("hp", 24.0, 1.0, 1000.0);
+        nurseDamage = builder.defineInRange("damage", 3.8, 0.1, 100.0);
         nurseSpeed = builder.defineInRange("speed", 1.0, 0.1, 5.0);
         nurseHealRate = builder
                 .comment("HP healed per second to nearby zombies")
@@ -267,14 +267,14 @@ public class ZombieConfig {
         builder.pop();
 
         builder.push("soldier");
-        soldierHP = builder.defineInRange("hp", 16.0, 1.0, 2000.0);
-        soldierDamage = builder.defineInRange("damage", 1.0, 0.1, 200.0);
+        soldierHP = builder.defineInRange("hp", 80.0, 1.0, 2000.0);
+        soldierDamage = builder.defineInRange("damage", 9.4, 0.1, 200.0);
         soldierSpeed = builder.defineInRange("speed", 1.5, 0.1, 5.0);
         builder.pop();
 
         builder.push("behemoth");
-        behemothHP = builder.defineInRange("hp", 80.0, 50.0, 10000.0);
-        behemothDamage = builder.defineInRange("damage", 2.0, 0.1, 500.0);
+        behemothHP = builder.defineInRange("hp", 400.0, 50.0, 10000.0);
+        behemothDamage = builder.defineInRange("damage", 18.8, 0.1, 500.0);
         behemothSpeed = builder.defineInRange("speed", 0.8, 0.1, 5.0);
         behemothGroundPoundRadius = builder
                 .comment("Ground pound AoE radius in blocks")

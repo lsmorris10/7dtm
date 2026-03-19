@@ -334,32 +334,12 @@ public class PlayerStatsHandler {
         }
     }
 
-    private static final ResourceLocation LEGACY_HEALTH_MODIFIER_ID =
-            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "base_max_health");
-
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            removeLegacyHealthModifier(serverPlayer);
             SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
             sendStatsToClient(serverPlayer, stats);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
-        }
-    }
-
-    private static void removeLegacyHealthModifier(Player player) {
-        AttributeInstance healthAttr = player.getAttribute(Attributes.MAX_HEALTH);
-        if (healthAttr == null) return;
-        if (healthAttr.getModifier(LEGACY_HEALTH_MODIFIER_ID) != null) {
-            healthAttr.removeModifier(LEGACY_HEALTH_MODIFIER_ID);
-            SevenDaysToMinecraft.LOGGER.info("BZHS: Removed legacy health modifier from {}", player.getName().getString());
-        }
-        if (healthAttr.getBaseValue() != 20.0) {
-            healthAttr.setBaseValue(20.0);
-            SevenDaysToMinecraft.LOGGER.info("BZHS: Reset max health to 20 for {}", player.getName().getString());
-        }
-        if (player.getHealth() > player.getMaxHealth()) {
-            player.setHealth(player.getMaxHealth());
         }
     }
 

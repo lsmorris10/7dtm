@@ -140,7 +140,7 @@
 - One-line install tutorial added above download button (#58)
 - LevelTimeOfDayMixin crash fix — target corrected from `getTimeOfDay` to `getSunAngle` (#59)
 - Day cycle refactored to slower-tick approach — 0.5 ticks/server tick via `setDayTime`, no custom sky rendering (#60)
-- Vanilla mob damage scaling extended to all vanilla mobs for 100 HP balance (#61)
+- Vanilla mob damage scaling extended to all vanilla mobs (#61)
 
 **March 14 Session**
 - Project rebranded to "Brutal Zombie Horde Survival" (BZHS) — mod ID, display name, and all user-facing references updated (#43)
@@ -151,7 +151,7 @@
 - PROJECT_NOTES.md updated with March 14 status (#48)
 
 **March 13 Session**
-- Vanilla damage scaling to 100 HP (fall, drowning, fire, lava, cactus proportionally scaled)
+- Vanilla damage scaling (fall, drowning, fire, lava, cactus proportionally scaled)
 - 48,000-tick day cycle sky fix — **superseded by slower-tick refactor (#60)**
 - Darkness-based zombie speed — **later expanded to dual system: night dayTime check + darkness light-level check (#66)**
 - Coal vein nerf (reduced ore vein sizes)
@@ -169,4 +169,4 @@
 - Day cycle doubled to 48,000 ticks — **superseded by slower-tick refactor (#60)**
 - Debuffs persistence bug fixed (twice — `/bzhs cleardebuffs` command + `copyOnDeath` removal)
 - Debuffs guide created (`docs/debuffs_guide.md`)
-- Player base health set to 100 HP
+- Player base health set to vanilla 20 HP

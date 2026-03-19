@@ -69,7 +69,7 @@ public class ZombieBearEntity extends BaseSevenDaysZombie {
     public static AttributeSupplier.Builder createAttributes() {
         return createBaseZombieAttributes()
                 .add(Attributes.MAX_HEALTH, 120.0)
-                .add(Attributes.ATTACK_DAMAGE, 7.0)
+                .add(Attributes.ATTACK_DAMAGE, 13.1)
                 .add(Attributes.MOVEMENT_SPEED, 0.2)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.6);
     }
