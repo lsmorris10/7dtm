@@ -160,10 +160,10 @@ public class TerritoryStructureBuilder {
 
     private static Block getWallBlock(TerritoryType type, TerritoryTier tier) {
         return switch (type) {
-            case MILITARY -> (tier.getTier() >= 4) ? Blocks.IRON_BLOCK : Blocks.STONE_BRICKS;
+            case MILITARY -> (tier.getTier() >= 4) ? Blocks.DEEPSLATE_BRICKS : Blocks.STONE_BRICKS;
             case INDUSTRIAL -> Blocks.STONE_BRICKS;
             case COMMERCIAL -> Blocks.STONE;
-            case MEDICAL -> Blocks.QUARTZ_BLOCK;
+            case MEDICAL -> Blocks.WHITE_CONCRETE;
             case WILDERNESS -> Blocks.OAK_LOG;
             default -> (tier.getTier() >= 3) ? Blocks.COBBLESTONE : Blocks.OAK_PLANKS;
         };
@@ -179,7 +179,7 @@ public class TerritoryStructureBuilder {
 
     private static Block getRoofBlock(TerritoryType type, TerritoryTier tier) {
         return switch (type) {
-            case MILITARY -> Blocks.IRON_BLOCK;
+            case MILITARY -> Blocks.DEEPSLATE_BRICKS;
             case INDUSTRIAL -> Blocks.STONE_BRICKS;
             case WILDERNESS -> Blocks.OAK_SLAB;
             default -> Blocks.COBBLESTONE_SLAB;
