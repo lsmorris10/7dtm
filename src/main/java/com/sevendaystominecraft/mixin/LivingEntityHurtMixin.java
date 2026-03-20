@@ -7,6 +7,7 @@ import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
 import com.sevendaystominecraft.entity.zombie.ChargedZombie;
 import com.sevendaystominecraft.entity.zombie.CopZombie;
+import com.sevendaystominecraft.entity.zombie.FeralWightZombie;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,38 +28,47 @@ public abstract class LivingEntityHurtMixin {
     ) {
         if (!((Object) this instanceof Player player)) return;
         if (player.level().isClientSide()) return;
-        if (source.getEntity() == null || !(source.getEntity() instanceof LivingEntity attacker)) return;
         if (!player.hasData(ModAttachments.PLAYER_STATS.get())) return;
-
-        boolean isZombie = attacker instanceof BaseSevenDaysZombie || attacker instanceof Zombie;
-        if (!isZombie) return;
 
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
         SurvivalConfig cfg = SurvivalConfig.INSTANCE;
 
-        float bleedChance = cfg.bleedingChance.get().floatValue();
-        if (player.getRandom().nextFloat() < bleedChance) {
-            int currentStacks = stats.getBleedingStacks();
-            if (currentStacks < SevenDaysPlayerStats.MAX_BLEEDING_STACKS) {
-                stats.setBleedingStacks(currentStacks + 1);
+        boolean isZombie = (source.getEntity() instanceof BaseSevenDaysZombie)
+                || (source.getEntity() instanceof Zombie);
+
+        if (isZombie && source.getEntity() instanceof LivingEntity) {
+            float bleedChance = cfg.bleedingChance.get().floatValue();
+            if (player.getRandom().nextFloat() < bleedChance) {
+                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_BLEEDING, cfg.bleedingDuration.get());
             }
-            stats.addDebuff(SevenDaysPlayerStats.DEBUFF_BLEEDING, 72000);
-        }
 
-        float infectionChance = cfg.infectionBaseChance.get().floatValue();
-        if (player.getRandom().nextFloat() < infectionChance) {
-            if (!stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)
-                    && !stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
-                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1, (int) SevenDaysConstants.REAL_TICKS_PER_DAY);
+            float infectionChance = cfg.infectionBaseChance.get().floatValue();
+            if (source.getEntity() instanceof FeralWightZombie) {
+                infectionChance += 0.05f;
+            }
+            if (player.getRandom().nextFloat() < infectionChance) {
+                if (!stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)
+                        && !stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
+                    stats.addDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1, cfg.infection1Duration.get());
+                }
+            }
+
+            if (source.getEntity() instanceof ChargedZombie) {
+                applyFreeze(stats, SevenDaysPlayerStats.DEBUFF_ELECTROCUTED, 30);
+            }
+
+            if (source.getEntity() instanceof CopZombie && source.getDirectEntity() != source.getEntity()) {
+                applyFreeze(stats, SevenDaysPlayerStats.DEBUFF_STUNNED, 40);
             }
         }
 
-        if (attacker instanceof ChargedZombie) {
-            applyFreeze(stats, SevenDaysPlayerStats.DEBUFF_ELECTROCUTED, 30);
-        }
-
-        if (attacker instanceof CopZombie && source.getDirectEntity() != source.getEntity()) {
-            applyFreeze(stats, SevenDaysPlayerStats.DEBUFF_STUNNED, 40);
+        String damageType = source.type().msgId();
+        boolean isFireDamage = damageType.equals("onFire")
+                || damageType.equals("inFire")
+                || damageType.equals("lava")
+                || source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE);
+        if (isFireDamage) {
+            stats.addDebuff(SevenDaysPlayerStats.DEBUFF_BURN, cfg.burnDuration.get());
         }
     }
 

@@ -50,6 +50,11 @@ public class ModCreativeTabs {
                         output.accept(ModItems.SURVIVORS_COIN.get());
                         output.accept(ModItems.CONCRETE_MIX.get());
                         output.accept(ModItems.ANTIBIOTICS.get());
+                        output.accept(ModItems.BANDAGE.get());
+                        output.accept(ModItems.SPLINT.get());
+                        output.accept(ModItems.PAINKILLER.get());
+                        output.accept(ModItems.ALOE_CREAM.get());
+                        output.accept(ModItems.FIRST_AID_KIT.get());
                         output.accept(Items.GUNPOWDER);
                         output.accept(ModItems.GAS_CAN.get());
                         output.accept(ModItems.FORGED_LEAD.get());

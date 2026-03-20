@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.ToolMaterial;
@@ -70,7 +72,33 @@ public class ModItems {
             () -> new Item(new Item.Properties().setId(key("concrete_mix")).stacksTo(64)));
 
     public static final Supplier<Item> ANTIBIOTICS = ITEMS.register("antibiotics",
-            () -> new Item(new Item.Properties().setId(key("antibiotics")).stacksTo(64)));
+            () -> new TreatmentItem(new Item.Properties().setId(key("antibiotics")).stacksTo(64),
+                    SevenDaysPlayerStats.DEBUFF_INFECTION_1,
+                    SevenDaysPlayerStats.DEBUFF_INFECTION_2,
+                    SevenDaysPlayerStats.DEBUFF_DYSENTERY));
+
+    public static final Supplier<Item> BANDAGE = ITEMS.register("bandage",
+            () -> new TreatmentItem(new Item.Properties().setId(key("bandage")).stacksTo(64),
+                    SevenDaysPlayerStats.DEBUFF_BLEEDING));
+
+    public static final Supplier<Item> SPLINT = ITEMS.register("splint",
+            () -> new TreatmentItem(new Item.Properties().setId(key("splint")).stacksTo(64),
+                    SevenDaysPlayerStats.DEBUFF_SPRAIN,
+                    SevenDaysPlayerStats.DEBUFF_FRACTURE));
+
+    public static final Supplier<Item> PAINKILLER = ITEMS.register("painkiller",
+            () -> new TreatmentItem(new Item.Properties().setId(key("painkiller")).stacksTo(64),
+                    SevenDaysPlayerStats.DEBUFF_CONCUSSION));
+
+    public static final Supplier<Item> ALOE_CREAM = ITEMS.register("aloe_cream",
+            () -> new TreatmentItem(new Item.Properties().setId(key("aloe_cream")).stacksTo(64),
+                    SevenDaysPlayerStats.DEBUFF_BURN));
+
+    public static final Supplier<Item> FIRST_AID_KIT = ITEMS.register("first_aid_kit",
+            () -> new TreatmentItem(new Item.Properties().setId(key("first_aid_kit")).stacksTo(16),
+                    SevenDaysPlayerStats.DEBUFF_BLEEDING,
+                    SevenDaysPlayerStats.DEBUFF_SPRAIN,
+                    SevenDaysPlayerStats.DEBUFF_FRACTURE));
 
     public static final Supplier<Item> GAS_CAN = ITEMS.register("gas_can",
             () -> new Item(new Item.Properties().setId(key("gas_can")).stacksTo(16)));

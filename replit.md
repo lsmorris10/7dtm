@@ -105,8 +105,9 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo)
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items)
 │   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Loot Containers, Magazines
+│   ├── TreatmentItem.java          — Single-use right-click consumable that removes specific debuffs
 │   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
 │   └── weapon/
 │       └── RangedWeaponItem.java   — Right-click-to-fire ranged weapon (ammo consumption, cooldown, durability)
@@ -241,7 +242,7 @@ src/main/java/com/sevendaystominecraft/
 ## Known Bugs / Issues
 1. **Sprint bug (FIXED)**: Added `LocalPlayerSprintMixin` targeting `LocalPlayer.aiStep()` (client-side mixin in `sevendaystominecraft.mixins.json` "client" array). Cancels sprinting client-side when stamina exhausted, fracture, electrocuted, or stunned — prevents rubber-banding.
 2. **Temperature**: Adjustment rate changed to 0.3°F/s — needs long-term gameplay verification
-3. **Debuffs**: All 12 types have triggers and effects implemented; gameplay balance verification pending
+3. **Debuffs**: 12 debuffs (radiation removed) with 7DTD-faithful values (20 HP scale), treatment items (Bandage, Splint, Painkiller, Aloe Cream, First Aid Kit), infection stage 1→2 progression, dysentery triggers (rotten flesh/water bottles)
 4. **Horde spawn balance**: Needs verification that spawn counts match intended difficulty
 
 ## Workflow

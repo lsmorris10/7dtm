@@ -39,10 +39,7 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
     private final Map<String, Integer> debuffs = new HashMap<>();
 
-    /** Bleeding stacks: 0–3. Each stack increases bleed damage. */
-    private int bleedingStacks = 0;
-
-    public static final int MAX_BLEEDING_STACKS = 3;
+    
 
     private int xp = 0;
     private int level = 1;
@@ -111,28 +108,26 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         return debuffs.containsKey(debuffId);
     }
 
-    @Override
-    public int getBleedingStacks() { return bleedingStacks; }
+    private boolean infection1Expired = false;
 
-    @Override
-    public void setBleedingStacks(int stacks) {
-        this.bleedingStacks = Math.max(0, Math.min(MAX_BLEEDING_STACKS, stacks));
-    }
+    public boolean isInfection1Expired() { return infection1Expired; }
+    public void clearInfection1Expired() { infection1Expired = false; }
 
     @Override
     public void tickDebuffs() {
+        infection1Expired = false;
         Iterator<Map.Entry<String, Integer>> it = debuffs.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Integer> entry = it.next();
             int remaining = entry.getValue() - 1;
             if (remaining <= 0) {
+                if (entry.getKey().equals(DEBUFF_INFECTION_1)) {
+                    infection1Expired = true;
+                }
                 it.remove();
             } else {
                 entry.setValue(remaining);
             }
-        }
-        if (!hasDebuff(DEBUFF_BLEEDING)) {
-            bleedingStacks = 0;
         }
     }
 
@@ -217,7 +212,6 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         this.coreTemperature = other.getCoreTemperature();
         this.coldExposureTicks = other.getColdExposureTicks();
         this.heatExposureTicks = other.getHeatExposureTicks();
-        this.bleedingStacks = other.getBleedingStacks();
         this.debuffs.clear();
         this.debuffs.putAll(other.getDebuffs());
 
@@ -257,8 +251,6 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         tag.putFloat("CoreTemp", coreTemperature);
         tag.putInt("ColdExposureTicks", coldExposureTicks);
         tag.putInt("HeatExposureTicks", heatExposureTicks);
-        tag.putInt("BleedingStacks", bleedingStacks);
-
         if (!debuffs.isEmpty()) {
             CompoundTag debuffTag = new CompoundTag();
             for (Map.Entry<String, Integer> entry : debuffs.entrySet()) {
@@ -305,8 +297,6 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         coreTemperature = tag.contains("CoreTemp") ? tag.getFloat("CoreTemp") : DEFAULT_CORE_TEMP;
         coldExposureTicks = tag.contains("ColdExposureTicks") ? tag.getInt("ColdExposureTicks") : 0;
         heatExposureTicks = tag.contains("HeatExposureTicks") ? tag.getInt("HeatExposureTicks") : 0;
-        bleedingStacks = tag.contains("BleedingStacks") ? tag.getInt("BleedingStacks") : 0;
-
         debuffs.clear();
         if (tag.contains("Debuffs")) {
             CompoundTag debuffTag = tag.getCompound("Debuffs");
@@ -356,7 +346,7 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     public static final String[] KNOWN_DEBUFF_IDS = {
         "bleeding", "infection_1", "infection_2", "dysentery",
         "sprain", "fracture", "concussion", "burn",
-        "hypothermia", "hyperthermia", "radiation",
+        "hypothermia", "hyperthermia",
         "electrocuted", "stunned"
     };
 
@@ -370,7 +360,6 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     public static final String DEBUFF_BURN = "burn";
     public static final String DEBUFF_HYPOTHERMIA = "hypothermia";
     public static final String DEBUFF_HYPERTHERMIA = "hyperthermia";
-    public static final String DEBUFF_RADIATION = "radiation";
     public static final String DEBUFF_ELECTROCUTED = "electrocuted";
     public static final String DEBUFF_STUNNED = "stunned";
 

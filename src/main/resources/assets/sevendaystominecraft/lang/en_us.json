@@ -116,5 +116,10 @@
   "biome.sevendaystominecraft.snowy_tundra": "Snowy Tundra",
   "biome.sevendaystominecraft.burned_forest": "Burned Forest",
   "biome.sevendaystominecraft.wasteland": "Wasteland",
-  "item.sevendaystominecraft.survivors_coin": "Survivor's Coin"
+  "item.sevendaystominecraft.survivors_coin": "Survivor's Coin",
+  "item.sevendaystominecraft.bandage": "Bandage",
+  "item.sevendaystominecraft.splint": "Splint",
+  "item.sevendaystominecraft.painkiller": "Painkiller",
+  "item.sevendaystominecraft.aloe_cream": "Aloe Cream",
+  "item.sevendaystominecraft.first_aid_kit": "First Aid Kit"
 }

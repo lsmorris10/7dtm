@@ -37,10 +37,6 @@ public interface ISevenDaysPlayerStats {
     boolean hasDebuff(String debuffId);
     void tickDebuffs();
 
-    /** Current bleeding stacks (0–3). Damage scales with stacks. */
-    int getBleedingStacks();
-    void setBleedingStacks(int stacks);
-
     // ── XP & Leveling (§1.4) ────────────────────────────────────────────
     int getXp();
     void setXp(int xp);

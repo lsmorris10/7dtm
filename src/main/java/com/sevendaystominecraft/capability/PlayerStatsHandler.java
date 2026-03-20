@@ -274,7 +274,6 @@ public class PlayerStatsHandler {
         for (String id : SevenDaysPlayerStats.KNOWN_DEBUFF_IDS) {
             stats.removeDebuff(id);
         }
-        stats.setBleedingStacks(0);
         stats.setColdExposureTicks(0);
         stats.setHeatExposureTicks(0);
 
@@ -287,6 +286,7 @@ public class PlayerStatsHandler {
         }
 
         player.removeEffect(MobEffects.CONFUSION);
+        player.removeEffect(MobEffects.DIG_SLOWDOWN);
     }
 
     @SubscribeEvent
@@ -316,6 +316,35 @@ public class PlayerStatsHandler {
             float waterAmount = cfg.waterPerDrink.get().floatValue();
             stats.setWater(Math.min(stats.getMaxWater(), stats.getWater() + waterAmount));
             changed = true;
+        }
+
+        if (stack.is(Items.ROTTEN_FLESH)) {
+            stats.addDebuff(SevenDaysPlayerStats.DEBUFF_DYSENTERY, cfg.dysenteryDuration.get());
+            changed = true;
+        }
+
+        if (stack.is(Items.POTION)) {
+            var potionContents = stack.get(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
+            boolean isWaterBottle = potionContents != null
+                    && potionContents.potion().isPresent()
+                    && potionContents.potion().get().is(net.minecraft.world.item.alchemy.Potions.WATER);
+            if (isWaterBottle) {
+                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_DYSENTERY, cfg.dysenteryDuration.get());
+                changed = true;
+            }
+        }
+
+        if (stack.is(Items.MILK_BUCKET)) {
+            stats.removeDebuff(SevenDaysPlayerStats.DEBUFF_DYSENTERY);
+            stats.removeDebuff(SevenDaysPlayerStats.DEBUFF_BURN);
+            changed = true;
+        }
+
+        if (stack.is(Items.HONEY_BOTTLE)) {
+            if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)) {
+                stats.removeDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1);
+                changed = true;
+            }
         }
 
         if (changed) {
@@ -433,7 +462,15 @@ public class PlayerStatsHandler {
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)) {
-            regenPerTick *= 0.75f;
+            regenPerTick *= cfg.infection1StaminaRegenMult.get().floatValue();
+        }
+
+        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
+            regenPerTick *= cfg.infection2StaminaRegenMult.get().floatValue();
+        }
+
+        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_HYPERTHERMIA)) {
+            regenPerTick *= cfg.hyperthermiaStaminaRegenMult.get().floatValue();
         }
 
         int cardioRank = stats.getPerkRank("rule1_cardio");
@@ -446,54 +483,65 @@ public class PlayerStatsHandler {
 
     private static void applyDebuffEffects(Player player, SevenDaysPlayerStats stats) {
         ServerLevel serverLevel = (ServerLevel) player.level();
+        SurvivalConfig cfg = SurvivalConfig.INSTANCE;
+
+        if (stats.isInfection1Expired()) {
+            stats.clearInfection1Expired();
+            if (!stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
+                stats.addDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2, Integer.MAX_VALUE);
+            }
+        }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_BLEEDING)) {
-            int stacks = Math.max(1, stats.getBleedingStacks());
-            if (player.tickCount % 60 == 0) {
-                player.hurtServer(serverLevel, player.damageSources().magic(), 0.2f * stacks);
+            if (player.tickCount % 20 == 0) {
+                player.hurtServer(serverLevel, player.damageSources().magic(),
+                        cfg.bleedingDamagePerSec.get().floatValue());
+                stats.setStamina(stats.getStamina() - cfg.bleedingStaminaDrainPerSec.get().floatValue());
+            }
+        }
+
+        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_1)) {
+            int interval = cfg.infection1HpDrainInterval.get();
+            if (player.tickCount % interval == 0) {
+                player.hurtServer(serverLevel, player.damageSources().magic(),
+                        cfg.infection1HpDrain.get().floatValue());
             }
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_INFECTION_2)) {
             if (player.tickCount % 20 == 0) {
-                player.hurtServer(serverLevel, player.damageSources().magic(), 0.1f);
+                player.hurtServer(serverLevel, player.damageSources().magic(),
+                        cfg.infection2DamagePerSec.get().floatValue());
             }
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_BURN)) {
-            if (player.tickCount % 10 == 0) {
-                player.hurtServer(serverLevel, player.damageSources().onFire(), 0.2f);
+            if (player.isInWater()) {
+                stats.removeDebuff(SevenDaysPlayerStats.DEBUFF_BURN);
+            } else if (player.tickCount % 20 == 0) {
+                player.hurtServer(serverLevel, player.damageSources().onFire(),
+                        cfg.burnDamagePerSec.get().floatValue());
             }
         }
 
-        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_RADIATION)) {
-            if (player.tickCount % 100 == 0) {
-                player.hurtServer(serverLevel, player.damageSources().magic(), 0.2f);
-            }
-        }
-
-        // Dysentery: water drains ×3, food drains ×2
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_DYSENTERY)) {
-            SurvivalConfig cfg = SurvivalConfig.INSTANCE;
             float extraWater = (float) (cfg.waterDrainPerMinute.get() * 2.0 / 1200.0);
             stats.setWater(stats.getWater() - extraWater);
             float extraFood = (float) (cfg.foodDrainPerMinute.get() / 1200.0);
             stats.setFood(stats.getFood() - extraFood);
+            if (player.tickCount % 100 == 0) {
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, false, false, true));
+            }
         }
 
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_HYPOTHERMIA)) {
-            SurvivalConfig cfg = SurvivalConfig.INSTANCE;
-            float extraStamina = (float) (cfg.staminaDrainSprint.get() / 20.0);
-            stats.setStamina(stats.getStamina() - extraStamina * 0.5f);
+            int interval = cfg.hypothermiaHpDrainInterval.get();
+            if (player.tickCount % interval == 0) {
+                player.hurtServer(serverLevel, player.damageSources().magic(),
+                        cfg.hypothermiaHpDrain.get().floatValue());
+            }
         }
 
-        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_HYPERTHERMIA)) {
-            SurvivalConfig cfg = SurvivalConfig.INSTANCE;
-            float extraWater = (float) (cfg.waterDrainPerMinute.get() * 2.0 / 1200.0);
-            stats.setWater(stats.getWater() - extraWater);
-        }
-
-        // Electrocuted/Stunned: freeze player movement (apply extreme slowdown)
         boolean frozen = stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_ELECTROCUTED)
                 || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_STUNNED);
         applyDebuffModifier(player, FREEZE_SLOWDOWN_ID, frozen, -1.0f);
@@ -502,26 +550,28 @@ public class PlayerStatsHandler {
             player.setSprinting(false);
         }
 
-        // Sprain: −30% movement speed
         boolean sprained = stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_SPRAIN)
                 && !stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_FRACTURE);
         applyDebuffModifier(player, SPRAIN_SLOWDOWN_ID, sprained, -0.3f);
+        if (sprained && player.isSprinting()) {
+            player.setSprinting(false);
+        }
 
-        // Fracture: −60% movement speed (overrides sprain)
         boolean fractured = stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_FRACTURE);
         applyDebuffModifier(player, FRACTURE_SLOWDOWN_ID, fractured, -0.6f);
         if (fractured && player.isSprinting()) {
             player.setSprinting(false);
         }
 
-        // Hypothermia: −20% movement speed
         boolean hypothermic = stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_HYPOTHERMIA);
         applyDebuffModifier(player, HYPOTHERMIA_SLOWDOWN_ID, hypothermic, -0.2f);
 
-        // Concussion: apply Nausea for aim sway/screen wobble
         if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_CONCUSSION)) {
             if (!player.hasEffect(MobEffects.CONFUSION)) {
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 40, 0, false, false, true));
+            }
+            if (!player.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 40, 1, false, false, true));
             }
         }
     }

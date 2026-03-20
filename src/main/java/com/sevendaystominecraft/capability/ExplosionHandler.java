@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.capability;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.entity.zombie.CopZombie;
 import com.sevendaystominecraft.entity.zombie.DemolisherZombie;
 
@@ -19,7 +20,6 @@ import java.util.List;
 public class ExplosionHandler {
 
     private static final double CONCUSSION_RADIUS = 3.0;
-    private static final int CONCUSSION_DURATION = 900;
     private static final int STUNNED_DURATION = 40;
 
     @SubscribeEvent
@@ -28,6 +28,8 @@ public class ExplosionHandler {
         Vec3 center = explosion.center();
         Entity sourceEntity = explosion.getDirectSourceEntity();
         boolean isZombieBlast = sourceEntity instanceof CopZombie || sourceEntity instanceof DemolisherZombie;
+
+        SurvivalConfig cfg = SurvivalConfig.INSTANCE;
 
         AABB searchArea = new AABB(
                 center.x - CONCUSSION_RADIUS, center.y - CONCUSSION_RADIUS, center.z - CONCUSSION_RADIUS,
@@ -43,7 +45,7 @@ public class ExplosionHandler {
             if (dist > CONCUSSION_RADIUS) continue;
 
             SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
-            stats.addDebuff(SevenDaysPlayerStats.DEBUFF_CONCUSSION, CONCUSSION_DURATION);
+            stats.addDebuff(SevenDaysPlayerStats.DEBUFF_CONCUSSION, cfg.concussionDuration.get());
 
             if (isZombieBlast) {
                 applyFreeze(stats, STUNNED_DURATION);

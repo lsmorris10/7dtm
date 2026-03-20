@@ -89,11 +89,37 @@ public class SurvivalConfig {
 
     // ── Debuff Chances ──────────────────────────────────────────────────
 
-    /** Bleeding chance on zombie melee hit (spec §1.2: 30%) */
     public final ModConfigSpec.DoubleValue bleedingChance;
-
-    /** Base infection chance on zombie hit (spec §1.2: 10%, +5% per feral) */
     public final ModConfigSpec.DoubleValue infectionBaseChance;
+
+    // ── Debuff Durations & Damage ────────────────────────────────────────
+
+    public final ModConfigSpec.IntValue bleedingDuration;
+    public final ModConfigSpec.DoubleValue bleedingDamagePerSec;
+    public final ModConfigSpec.DoubleValue bleedingStaminaDrainPerSec;
+
+    public final ModConfigSpec.IntValue infection1Duration;
+    public final ModConfigSpec.DoubleValue infection1StaminaRegenMult;
+    public final ModConfigSpec.DoubleValue infection1HpDrain;
+    public final ModConfigSpec.IntValue infection1HpDrainInterval;
+
+    public final ModConfigSpec.DoubleValue infection2DamagePerSec;
+    public final ModConfigSpec.DoubleValue infection2StaminaRegenMult;
+
+    public final ModConfigSpec.IntValue dysenteryDuration;
+
+    public final ModConfigSpec.IntValue sprainDuration;
+    public final ModConfigSpec.IntValue fractureDuration;
+
+    public final ModConfigSpec.IntValue concussionDuration;
+
+    public final ModConfigSpec.IntValue burnDuration;
+    public final ModConfigSpec.DoubleValue burnDamagePerSec;
+
+    public final ModConfigSpec.DoubleValue hypothermiaHpDrain;
+    public final ModConfigSpec.IntValue hypothermiaHpDrainInterval;
+
+    public final ModConfigSpec.DoubleValue hyperthermiaStaminaRegenMult;
 
     // ── Temperature ─────────────────────────────────────────────────────
 
@@ -213,6 +239,70 @@ public class SurvivalConfig {
         infectionBaseChance = builder
                 .comment("Base infection chance on zombie hit (0.1 = 10%)")
                 .defineInRange("infectionBaseChance", 0.1, 0.0, 1.0);
+
+        bleedingDuration = builder
+                .comment("Bleeding duration in ticks (1200 = 60 sec)")
+                .defineInRange("bleedingDuration", 1200, 20, 72000);
+        bleedingDamagePerSec = builder
+                .comment("Bleeding HP damage per second (0.2 = 1% of 20 HP)")
+                .defineInRange("bleedingDamagePerSec", 0.2, 0.0, 10.0);
+        bleedingStaminaDrainPerSec = builder
+                .comment("Bleeding stamina drain per second")
+                .defineInRange("bleedingStaminaDrainPerSec", 1.0, 0.0, 50.0);
+
+        infection1Duration = builder
+                .comment("Infection Stage 1 duration in ticks (336000 = ~7 in-game days at 2x time scale)")
+                .defineInRange("infection1Duration", 336000, 200, 1000000);
+        infection1StaminaRegenMult = builder
+                .comment("Infection Stage 1 stamina regen multiplier (0.5 = 50% reduction)")
+                .defineInRange("infection1StaminaRegenMult", 0.5, 0.0, 1.0);
+        infection1HpDrain = builder
+                .comment("Infection Stage 1 HP drain per tick interval (0.05)")
+                .defineInRange("infection1HpDrain", 0.05, 0.0, 10.0);
+        infection1HpDrainInterval = builder
+                .comment("Infection Stage 1 HP drain interval in ticks (40 = every 2 sec)")
+                .defineInRange("infection1HpDrainInterval", 40, 1, 1200);
+
+        infection2DamagePerSec = builder
+                .comment("Infection Stage 2 HP damage per second (0.2 = 1%/sec)")
+                .defineInRange("infection2DamagePerSec", 0.2, 0.0, 10.0);
+        infection2StaminaRegenMult = builder
+                .comment("Infection Stage 2 stamina regen multiplier (0.25 = 75% reduction)")
+                .defineInRange("infection2StaminaRegenMult", 0.25, 0.0, 1.0);
+
+        dysenteryDuration = builder
+                .comment("Dysentery duration in ticks (2400 = 120 sec)")
+                .defineInRange("dysenteryDuration", 2400, 20, 72000);
+
+        sprainDuration = builder
+                .comment("Sprain duration in ticks (2400 = 120 sec)")
+                .defineInRange("sprainDuration", 2400, 20, 72000);
+        fractureDuration = builder
+                .comment("Fracture duration in ticks (6000 = 300 sec)")
+                .defineInRange("fractureDuration", 6000, 20, 144000);
+
+        concussionDuration = builder
+                .comment("Concussion duration in ticks (600 = 30 sec)")
+                .defineInRange("concussionDuration", 600, 20, 72000);
+
+        burnDuration = builder
+                .comment("Burn duration in ticks (600 = 30 sec)")
+                .defineInRange("burnDuration", 600, 20, 72000);
+        burnDamagePerSec = builder
+                .comment("Burn HP damage per second (0.2 = 1%/sec)")
+                .defineInRange("burnDamagePerSec", 0.2, 0.0, 10.0);
+
+        hypothermiaHpDrain = builder
+                .comment("Hypothermia HP drain per interval (0.1)")
+                .defineInRange("hypothermiaHpDrain", 0.1, 0.0, 10.0);
+        hypothermiaHpDrainInterval = builder
+                .comment("Hypothermia HP drain interval in ticks (40 = every 2 sec)")
+                .defineInRange("hypothermiaHpDrainInterval", 40, 1, 1200);
+
+        hyperthermiaStaminaRegenMult = builder
+                .comment("Hyperthermia stamina regen multiplier (0.5 = 50% reduction)")
+                .defineInRange("hyperthermiaStaminaRegenMult", 0.5, 0.0, 1.0);
+
         builder.pop();
 
         // Temperature

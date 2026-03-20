@@ -23,6 +23,7 @@ public abstract class SprintBlockMixin {
             if (stats.isStaminaExhausted()
                     || stats.getStamina() <= 0
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_FRACTURE)
+                    || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_SPRAIN)
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_ELECTROCUTED)
                     || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_STUNNED)) {
                 ci.cancel();

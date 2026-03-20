@@ -74,6 +74,8 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.COBBLESTONE, 3), ing(Items.STICK, 2)), new ItemStack(ModItems.STONE_CLUB.get(), 1), 0));
         recipes.add(recipe(List.of(ing(Items.OAK_PLANKS, 3), ing(ModItems.NAIL.get(), 2), ing(ModItems.DUCT_TAPE.get(), 1)), new ItemStack(ModItems.BASEBALL_BAT.get(), 1), 0));
         recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 5), ing(Items.STICK, 2)), new ItemStack(ModItems.IRON_SLEDGEHAMMER.get(), 1), 0));
+        recipes.add(recipe(List.of(ing(Items.PAPER, 2), ing(Items.STRING, 1)), new ItemStack(ModItems.BANDAGE.get(), 2), 0));
+        recipes.add(recipe(List.of(ing(Items.STICK, 2), ing(Items.STRING, 1)), new ItemStack(ModItems.SPLINT.get(), 1), 0));
         RECIPES.put(WorkstationType.WORKBENCH, recipes);
     }
 
@@ -86,6 +88,9 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 3), ing(ModItems.GLASS_JAR.get(), 1), ing(ModItems.POLYMER.get(), 1)), new ItemStack(ModItems.ANTIBIOTICS.get(), 1), 400));
         recipes.add(recipe(List.of(ing(Items.GUNPOWDER, 1), ing(ModItems.FORGED_LEAD.get(), 1)), new ItemStack(ModItems.AMMO_9MM.get(), 8), 150));
         recipes.add(recipe(List.of(ing(Items.GUNPOWDER, 2), ing(ModItems.FORGED_LEAD.get(), 1), ing(ModItems.FORGED_IRON.get(), 1)), new ItemStack(ModItems.AMMO_762.get(), 8), 200));
+        recipes.add(recipe(List.of(ing(ModItems.GLASS_JAR.get(), 1), ing(ModItems.NITRATE.get(), 1)), new ItemStack(ModItems.PAINKILLER.get(), 1), 200));
+        recipes.add(recipe(List.of(ing(Items.VINE, 2), ing(ModItems.GLASS_JAR.get(), 1)), new ItemStack(ModItems.ALOE_CREAM.get(), 1), 200));
+        recipes.add(recipe(List.of(ing(ModItems.BANDAGE.get(), 1), ing(ModItems.ANTIBIOTICS.get(), 1)), new ItemStack(ModItems.FIRST_AID_KIT.get(), 1), 300));
         RECIPES.put(WorkstationType.CHEMISTRY_STATION, recipes);
     }
 
