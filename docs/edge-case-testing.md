@@ -6,8 +6,8 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 
 ## Zombie Combat & AI
 
-- Spawn all 16 base zombie types one at a time and confirm none crash the game (Walker, Crawler, Frozen Lumberjack, Bloated Walker, Spider Zombie, Feral Wight, Cop, Screamer, Zombie Dog, Vulture, Demolisher, Mutated Chuck, Zombie Bear, Nurse, Soldier, Behemoth)
-- Spawn each modifier variant (Radiated, Charged, Infernal) on every eligible base type (Walker, Crawler, Feral Wight, Cop, Soldier) — verify stat multipliers apply correctly:
+- Spawn all 18 zombie types one at a time and confirm none crash the game (Walker, Crawler, Frostbitten Woodsman, Bloated Shambler, Wall Creeper, Feral Wraith, Riot Husk, Banshee, Zombie Dog, Vulture, Wrecking Husk, Mutated Brute, Zombie Bear, Nurse, Soldier, Charged, Infernal, Behemoth)
+- Spawn each modifier variant (Radiated, Charged, Infernal) on every eligible base type (Walker, Crawler, Feral Wraith, Riot Husk, Soldier) — verify stat multipliers apply correctly:
   - Radiated: HP ×2.0, Damage ×1.5, Speed ×1.3
   - Charged: HP ×1.8, Damage ×1.3, Speed ×1.2
   - Infernal: HP ×1.8, Damage ×1.4, Speed ×1.1
@@ -15,14 +15,14 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 - Charged zombie chain lightning: does it actually arc to 3 nearby entities (configurable)? Chain targets take 5.0 `chargedChainDamage` via lightningBolt damage and get `setTicksFrozen(30)` (vanilla freeze), which is separate from the player-specific `DEBUFF_ELECTROCUTED` applied via `LivingEntityHurtMixin`
 - Infernal zombie fire trail: do fire blocks actually spawn behind it as it walks (every 20 ticks)? Is the zombie itself fire-immune?
 - Nurse healing aura: does it heal other zombies within 5 blocks at 5 HP/sec? What happens with multiple Nurses stacking heals on one target?
-- Mutated Chuck vomit attack: does the ranged vomit reach 11 blocks? (Uses SmallFireball projectile, no custom debuff application — only contact damage)
-- Frozen Lumberjack: does it spawn correctly? Verify 30 HP / 4.5 damage / 0.9 speed base stats
-- Bloated Walker death explosion: does the 2-block radius work? Can the explosion trigger a Demolisher's chest-hit explosion if one is nearby?
-- Demolisher chest-hit explosion: does hitting it in the chest (vs. head/legs) actually trigger the 8-block explosion? What counts as a "chest hit"?
-- Cop acid spit: does the ranged bile attack work at 8-block range? (Uses SmallFireball projectile — `copBileDamage` config exists but is not wired to the projectile; damage comes from the SmallFireball itself.) Does the Cop explode at <20% HP? Does it also explode on death?
-- Screamer summoning: does the shriek spawn 4–8 zombies? Does the 3-summon cap work, or can it keep screaming forever?
-- Spider Zombie wall climbing: can it scale vertical surfaces? Do overhangs stop it? Does it get stuck on ceilings?
-- Feral Wight permanent sprint: does it always run regardless of day/night? Does `setSprinting(true)` every tick cause animation glitches?
+- Mutated Brute vomit attack: does the ranged vomit reach 11 blocks? (Uses SmallFireball projectile, no custom debuff application — only contact damage)
+- Bloated Shambler death explosion: does the 2-block radius work? Can the explosion trigger a Wrecking Husk's chest-hit explosion if one is nearby?
+- Wrecking Husk chest-hit explosion: does hitting it in the chest (vs. head/legs) actually trigger the 8-block explosion? What counts as a "chest hit"?
+- Riot Husk acid spit: does the ranged bile attack work at 8-block range? (Uses AcidBall projectile — damage comes from the projectile itself.) Does the Riot Husk explode at <20% HP? Does it also explode on death?
+- Banshee summoning: does the shriek spawn 4–8 zombies? Does the 3-summon cap work, or can it keep screaming forever?
+- Wall Creeper wall climbing: can it scale vertical surfaces? Do overhangs stop it? Does it get stuck on ceilings?
+- Feral Wraith permanent sprint: does it always run regardless of day/night? Does `setSprinting(true)` every tick cause animation glitches?
+- Frostbitten Woodsman: does it spawn correctly? Verify 30 HP / 4.5 damage / 0.9 speed base stats
 - Zombie Dog pack spawning: do they actually spawn in groups? Is their 3.5 speed correct and not absurdly fast?
 - Vulture flight: does the swoop attack work? Can it path through solid blocks? Does it get stuck in terrain?
 - Behemoth ground pound: does the 6-block AoE radius work? Does it deal 75% of its base damage (14.1)? Does knockback apply?
@@ -55,7 +55,7 @@ A go-to checklist of known edge cases, tricky interactions, and things worth tes
 - Fracture vs. Sprain: fall 4–7 blocks = Sprain (-30% speed, 30 min); fall 8+ blocks = Fracture (-60% speed, no sprint, 60 min) — does Fracture override Sprain? (In code, Sprain modifier is only applied when Fracture is NOT active)
 - Concussion: explosion within 3 blocks applies 45s (900 ticks) of Nausea. Verify the screen wobble effect triggers
 - Electrocuted (Charged zombie melee hit on player): no movement for 1.5s (30 ticks) — does the stun actually freeze the player? (Note: the 5 HP `chargedChainDamage` is applied to chain-lightning targets via a separate code path, not as part of the Electrocuted debuff itself)
-- Stunned (Cop/Demolisher explosion): no movement for 2s (40 ticks) — Stunned and Electrocuted share the same movement-freeze slot (only the longer duration applies; the other is removed)
+- Stunned (Riot Husk/Wrecking Husk explosion): no movement for 2s (40 ticks) — Stunned and Electrocuted share the same movement-freeze slot (only the longer duration applies; the other is removed)
 
 ### Debuffs with effects coded but no automatic trigger path yet
 
@@ -97,9 +97,9 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 - Dawn burn at dayTime 23500: do all surviving horde zombies within 128 blocks ignite?
 - Wave size escalation: +25% per wave index (wave 1 = base, wave 2 = ×1.25, wave 3 = ×1.5, wave 4 = ×1.75)
 - Wave composition thresholds:
-  - Day 7: Walkers (70%) + Crawlers (20%) + Ferals (10%, but only if day ≥ 14 via config — otherwise redistributed to Walkers)
-  - Day 14: adds Cops (feralDay config = 14 enables Ferals and Cops)
-  - Day 21: adds Demolishers (demolisherDay = 21) and Charged/Infernal modifier variants (chargedDay/infernalDay = 21)
+  - Day 7: Walkers (70%) + Crawlers (20%) + Feral Wraiths (10%, but only if day ≥ 14 via config — otherwise redistributed to Walkers)
+  - Day 14: adds Riot Husks (feralDay config = 14 enables Feral Wraiths and Riot Husks)
+  - Day 21: adds Wrecking Husks (demolisherDay = 21) and Charged/Infernal modifier variants (chargedDay/infernalDay = 21)
   - Day 28+: Radiated modifier variants begin appearing
 - Sleep blocking: can the player use a bed during Blood Moon? Should get "You cannot sleep during a Blood Moon!" message
 - Horde scaling formula: `baseCount * (1 + cycle * difficultyMultiplier)^1.2` — does wave size actually grow on day 14, 21, 28?
@@ -110,16 +110,53 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 
 ## Heatmap System
 
-- Block breaking adds +0.5 heat (radius 3) — mine a big area and watch for Screamers
+- Block breaking adds +0.5 heat (radius 3) — mine a big area and watch for Banshees
 - Torch placement adds +2.0 heat (radius 1) — place several torches and check if scouts show up
 - Explosions add +25.0 heat (radius 6) — set off TNT and see the heat spike
 - Sprinting adds +0.2/sec (radius 2) — sprint around for a while and monitor heat
-- Thresholds: 25 = scouts, 50 = guaranteed Screamer, 75 = mini-horde (8–12), 100 = continuous waves every 90s
+- Thresholds: 25 = scouts, 50 = guaranteed Banshee, 75 = mini-horde (8–12), 100 = continuous waves every 90s
 - Does heat decay over time when the player stops doing noisy things?
-- Screamer scream behavior: scream spawns 4–8 walkers directly (not via heatmap), with a 3-scream cap and 600-tick cooldown. Note: screaming does NOT add heat — it spawns zombies independently of the heatmap system
+- Banshee scream behavior: scream spawns 4–8 walkers directly (not via heatmap), with a 3-scream cap and 600-tick cooldown. Note: screaming does NOT add heat — it spawns zombies independently of the heatmap system
 - Test `/bzhs heat` command to view current chunk heat
 - Test `/bzhs heat_clear` command to reset heat in the area
 - Heatmap spawning is disabled during active Blood Moons — verify no overlap
+
+---
+
+## Village Settlements & Sleeper Zombies
+
+- Village cluster generation: do settlements spawn with the expected building types (Abandoned House, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost)?
+- Sleeper spawning: do sleeper zombies spawn inside village buildings when the territory is generated?
+- Sleeper count scaling: does the number of sleepers per building increase with territory tier?
+- Biome density multiplier: does the biome's zombie density multiplier affect sleeper count?
+- Min spawn day enforcement: when `enforceMinSpawnDay` is enabled, are high-tier zombies excluded from sleeper pools on early days?
+- Trader Outpost safe zone: does the Trader Outpost building type spawn with 0 zombies (safe zone)?
+- Territory cleared state: once all sleepers in a territory are killed, does the territory mark as cleared?
+- Loot containers in buildings: do village buildings contain the correct loot container types for their building type?
+- Village building variety: does the weighted random building selection produce a reasonable mix of building types?
+
+---
+
+## Campfire (Vanilla Block Integration)
+
+- Right-clicking a lit vanilla campfire opens the BZHS campfire workstation UI (3 input, 1 output, 1 fuel)
+- Right-clicking with a Shovel, Flint and Steel, or Fire Charge does NOT open the workstation UI (vanilla behavior preserved)
+- Right-clicking an unlit campfire does NOT open the workstation UI
+- Soul campfires are excluded — only regular campfires open the BZHS UI
+- Campfire workstation data persists across chunk unloads and server restarts (saved via `CampfireWorkstationSavedData`)
+- Breaking a campfire drops all items stored in the workstation data
+- Campfire heatmap contribution: lit campfire adds +1 heat/min (2-chunk radius), capped at +10 total
+- Campfire recipes process correctly with fuel consumption (Murky Water Bottle + Glass Bottle → Boiled Water Bottle, raw meat cooking, tea recipes)
+
+---
+
+## Water Bottle Consolidation
+
+- Vanilla water bottles (from filling glass bottles in water) automatically convert to Murky Water Bottle items when picked up
+- Conversion happens every player tick for all inventory slots
+- Murky Water Bottle + Glass Bottle can be cooked at a campfire to produce Boiled Water Bottle (safe drinking water)
+- No Glass Jars exist in the mod — the Forge no longer has a Glass Jar recipe
+- The Dew Collector (if present) works with the new water bottle workflow instead of Glass Jars
 
 ---
 
@@ -146,7 +183,7 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 
 ## XP, Leveling & Perks
 
-- XP from zombie kills: verify each zombie type awards its XP value (e.g., Walker 200, Feral Wight 350, Behemoth 2000). Modifier zombies add their modifier's XP reward on top
+- XP from zombie kills: verify each zombie type awards its XP value (e.g., Walker 200, Feral Wraith 350, Behemoth 2000). Modifier zombies add their modifier's XP reward on top
 - XP from mining: verify block hardness determines XP (≤0.5 = 1 XP, ≤2.0 = 2 XP, ≤5.0 = 3 XP, ≤10.0 = 4 XP, >10.0 = 5 XP)
 - XP-to-level formula: `1000 * (level ^ 1.05)` — verify XP requirements increase per level
 - Perk point per level: every level-up grants 1 perk point
@@ -168,7 +205,7 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 ## Crafting & Workstations
 
 - Test all workstation types: Campfire (fuel, 3 in / 1 out), Grill (fuel, 3 in / 1 out), Workbench (no fuel, 4 in / 4 out), Forge (fuel, 3 in / 3 out), Cement Mixer (fuel, 2 in / 2 out), Chemistry Station (no fuel, 4 in / 4 out), Advanced Workbench (no fuel, 6 in / 6 out)
-- Forge smelting: does it consume fuel and process recipes correctly? (Iron Scrap → Iron Ingot, Iron Ingot → Forged Iron, Sand + Clay → Glass Jar ×3)
+- Forge smelting: does it consume fuel and process recipes correctly? (Iron Scrap → Iron Ingot, Iron Ingot → Forged Iron)
 - Campfire/Grill cooking: do food recipes produce correct output with fuel consumption? (Beef → Cooked Beef, Porkchop → Cooked Porkchop, Chicken → Cooked Chicken, Mutton → Cooked Mutton, Cod → Cooked Cod, Salmon → Cooked Salmon, Potato → Baked Potato)
 - Fuel-based stations only: `serverTick` only processes crafts for stations with `usesFuel() = true` (Campfire, Grill, Forge, Cement Mixer). Workbench, Chemistry Station, and Advanced Workbench do NOT auto-process — verify if manual/non-fuel crafting is implemented or if these stations are UI-only
 - Scrapping at workbench: verify 100% yield multiplier (full scrap return)
@@ -196,9 +233,9 @@ These debuffs have their effects fully implemented in `PlayerStatsHandler.applyD
 - Radiated Nurse: does it heal itself AND nearby zombies while regenerating 2 HP/sec on its own?
 - Infernal zombie in a wooden base: does the fire trail set the base on fire and cause structural collapse?
 - Charged zombie hitting a player with Fracture: movement is already -60%, then Electrocuted stuns for 1.5s — do the effects layer correctly? (Stunned/Electrocuted share a freeze slot, so both shouldn't stack)
-- Bloated Walker exploding during Blood Moon near other zombies — does it damage the horde or just players?
-- Screamer during Blood Moon: Screamer scream spawning is independent of heatmap (direct spawn via `performScream()`). A Screamer CAN spawn extra zombies during Blood Moon since scream behavior is not gated by heatmap state — verify if this creates unintended double-spawning
-- Demolisher explosion destroying support blocks: does it trigger structural integrity collapse?
+- Bloated Shambler exploding during Blood Moon near other zombies — does it damage the horde or just players?
+- Banshee during Blood Moon: Banshee scream spawning is independent of heatmap (direct spawn via `performScream()`). A Banshee CAN spawn extra zombies during Blood Moon since scream behavior is not gated by heatmap state — verify if this creates unintended double-spawning
+- Wrecking Husk explosion destroying support blocks: does it trigger structural integrity collapse?
 - Heatmap + Blood Moon overlap: heatmap spawner skips ticking when Blood Moon is active — verify no double spawns
 - Starvation + Bleeding + Infection Stage 1: starvation drains HP while infection reduces stamina regen — does the player degrade quickly?
 - Temperature extremes during Blood Moon: hypothermia/hyperthermia effects are coded but not yet auto-triggered by temperature — once trigger paths are added, test if stamina drain during horde makes combat impossible

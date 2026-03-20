@@ -25,7 +25,7 @@ Debuffs are negative status effects applied to your character through combat, en
 | **Sprain** | Fall 4–7 blocks | 30 minutes | −30% movement speed |
 | **Fracture** | Fall 8+ blocks | 60 minutes | −60% movement speed, no sprinting |
 | **Concussion** | Explosion within 3 blocks | 45 seconds | Nausea (screen wobble) |
-| **Stunned** | Cop acid hit / zombie explosion | 2 seconds | Complete movement freeze |
+| **Stunned** | Riot Husk acid hit / zombie explosion | 2 seconds | Complete movement freeze |
 | **Electrocuted** | Charged zombie melee | 1.5 seconds | Complete movement freeze |
 | **Burn** | Fire, Infernal zombies | Varies | −2 HP/sec |
 | **Dysentery** | Contaminated food/water | Varies | Water drain ×3, food drain ×2 |
@@ -127,9 +127,9 @@ A Fracture automatically clears any existing Sprain when applied, since it's the
 | Stacking | No — re-application refreshes the timer if the new duration is longer. |
 | Cure | Wait for the timer to expire (45 seconds), or die and respawn. |
 
-Concussions disorient you with a swirling screen effect, making it difficult to aim and navigate. They're triggered by any explosion — TNT, Creepers, [Cop](zombie_guide.md#cop) death explosions, [Demolisher](zombie_guide.md#demolisher) detonations, and [Bloated Walker](zombie_guide.md#bloated-walker) death blasts all count.
+Concussions disorient you with a swirling screen effect, making it difficult to aim and navigate. They're triggered by any explosion — TNT, Creepers, [Riot Husk](zombie_guide.md#riot-husk) death explosions, [Wrecking Husk](zombie_guide.md#wrecking-husk) detonations, and [Bloated Shambler](zombie_guide.md#bloated-shambler) death blasts all count.
 
-If the explosion was caused by a zombie (Cop or Demolisher), you also receive the Stunned debuff on top of the Concussion.
+If the explosion was caused by a zombie (Riot Husk or Wrecking Husk), you also receive the Stunned debuff on top of the Concussion.
 
 ---
 
@@ -137,7 +137,7 @@ If the explosion was caused by a zombie (Cop or Demolisher), you also receive th
 
 | Property | Value |
 |----------|-------|
-| Trigger | Cop acid projectile hit, or zombie-caused explosion within 3 blocks |
+| Trigger | Riot Husk acid projectile hit, or zombie-caused explosion within 3 blocks |
 | Duration | 40 ticks (2 seconds) |
 | Effect | Complete movement freeze — you cannot move or sprint |
 | Stacking | No — shares a slot with Electrocuted. Only the longer-duration freeze is kept. |
@@ -147,7 +147,7 @@ Being stunned locks you in place completely. Your movement speed is reduced to z
 
 Stunned and Electrocuted are **mutually exclusive** — if you get hit by both sources in quick succession, only the one with the longer remaining duration stays active. They never stack.
 
-The [Cop zombie's](zombie_guide.md#cop) acid projectile triggers Stunned on hit. Zombie-caused explosions (from Cops or [Demolishers](zombie_guide.md#demolisher)) also apply Stunned to players within the blast radius.
+The [Riot Husk's](zombie_guide.md#riot-husk) acid projectile triggers Stunned on hit. Zombie-caused explosions (from Riot Husks or [Wrecking Husks](zombie_guide.md#wrecking-husk)) also apply Stunned to players within the blast radius.
 
 ---
 
@@ -155,13 +155,13 @@ The [Cop zombie's](zombie_guide.md#cop) acid projectile triggers Stunned on hit.
 
 | Property | Value |
 |----------|-------|
-| Trigger | Melee hit from a [Charged zombie](zombie_guide.md#charged-day-21) |
+| Trigger | Melee hit from a [Charged zombie](zombie_guide.md#charged) |
 | Duration | 30 ticks (1.5 seconds) |
 | Effect | Complete movement freeze — you cannot move or sprint |
 | Stacking | No — shares a slot with Stunned. Only the longer-duration freeze is kept. |
 | Cure | Wait 1.5 seconds for the timer to expire. |
 
-Electrocuted works identically to Stunned — total movement lockdown for a brief window. The difference is the source: [Charged zombies](zombie_guide.md#charged-day-21) apply Electrocuted on every melee hit, giving them a crowd-control ability that can pin you down in the middle of a fight.
+Electrocuted works identically to Stunned — total movement lockdown for a brief window. The difference is the source: [Charged zombies](zombie_guide.md#charged) apply Electrocuted on every melee hit, giving them a crowd-control ability that can pin you down in the middle of a fight.
 
 Since Electrocuted and Stunned share a slot, getting hit by a Charged zombie while already Stunned from an explosion will only keep the longer freeze. They don't chain into extended lockdowns.
 
@@ -171,13 +171,13 @@ Since Electrocuted and Stunned share a slot, getting hit by a Charged zombie whi
 
 | Property | Value |
 |----------|-------|
-| Trigger | Fire damage, [Infernal zombie](zombie_guide.md#infernal-day-21) contact |
+| Trigger | Fire damage, [Infernal zombie](zombie_guide.md#infernal) contact |
 | Duration | Varies by source |
 | Effect | −2 HP per second (1 HP every 10 ticks) |
 | Stacking | No |
 | Cure | Wait for the timer to expire, extinguish fire, or die and respawn. |
 
-Burn deals consistent fire damage for its duration. [Infernal zombies](zombie_guide.md#infernal-day-21) leave fire trails and ignite players on melee contact, making them a persistent burn source during late-game horde nights. Standing in fire or lava also triggers the Burn debuff.
+Burn deals consistent fire damage for its duration. [Infernal zombies](zombie_guide.md#infernal) leave fire trails and ignite players on melee contact, making them a persistent burn source during late-game horde nights. Standing in fire or lava also triggers the Burn debuff.
 
 At 2 HP per second, Burn kills quickly if you can't heal through it.
 
@@ -244,10 +244,10 @@ Radiation is a slow-burn damage debuff tied to [Radiated zombies](zombie_guide.m
 ## General Tips
 
 - **Bleeding is inevitable** — with a 30% chance per zombie hit, you'll get it constantly. Plan your healing around it rather than trying to avoid it entirely.
-- **Kill Nurses fast** — their healing aura keeps zombies alive longer, which means more hits on you and more chances for Bleeding and Infection. See the [Zombie Bestiary](zombie_guide.md#nurse) for details.
+- **Kill Nurses first** — their healing aura keeps zombies alive longer, which means more hits on you and more chances for Bleeding and Infection. See the [Zombie Bestiary](zombie_guide.md#nurse) for details.
 - **Watch your fall distance** — Sprain and Fracture have no RNG; they're guaranteed on the right fall height. A Fracture at the wrong moment (horde night, low supplies) can be a death sentence.
-- **Avoid explosion clusters** — Concussion from one explosion is manageable. Concussion + Stunned from a Cop or Demolisher explosion while surrounded by zombies is not.
-- **Charged zombies demand range** — Their guaranteed Electrocuted-on-hit means melee fighting a Charged zombie will get you frozen repeatedly. Use ranged weapons when possible. See [Charged modifier](zombie_guide.md#charged-day-21).
+- **Avoid explosion clusters** — Concussion from one explosion is manageable. Concussion + Stunned from a Riot Husk or Wrecking Husk explosion while surrounded by zombies is not.
+- **Charged zombies demand range** — Their guaranteed Electrocuted-on-hit means melee fighting a Charged zombie will get you frozen repeatedly. Use ranged weapons when possible. See [Charged zombie](zombie_guide.md#charged).
 - **Temperature debuffs are environmental** — Hypothermia and Hyperthermia clear themselves when you fix the temperature problem. Carry water in deserts and stay warm in snow biomes.
 - **Death is a valid cure** — All debuffs clear on respawn. If you're stacked with Bleeding, Infection Stage 2, and a Fracture, sometimes dying intentionally is the most practical option.
 

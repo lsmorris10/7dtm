@@ -34,13 +34,13 @@ Heat thresholds determine what shows up. Once a chunk's total heat crosses a thr
 | Heat Level | What Happens | Spawn Count | Cooldown |
 |------------|-------------|-------------|----------|
 | **25+** | **Scout patrol** — Walker zombies investigate the area | 1-2 Walkers | 30 seconds |
-| **50+** | **Screamer arrives** — a Screamer zombie spawns independently | 1 Screamer | 60 seconds |
-| **75+** | **Mini-horde** — a mixed group attacks | 8-12 zombies (Walkers, Crawlers, Feral Wights, Spider Zombies, Bloated Walkers) | 90 seconds |
-| **100** | **Wave mode** — continuous assault begins | 8-12 per wave (adds Cops to the mix) | 90 seconds between waves |
+| **50+** | **Banshee arrives** — a Banshee zombie spawns independently | 1 Banshee | 60 seconds |
+| **75+** | **Mini-horde** — a mixed group attacks | 8-12 zombies (Walkers, Crawlers, Feral Wraiths, Wall Creepers, Bloated Shamblers) | 90 seconds |
+| **100** | **Wave mode** — continuous assault begins | 8-12 per wave (adds Riot Husks to the mix) | 90 seconds between waves |
 
 **Important details:**
-- The Screamer spawns on its own check — it can appear alongside scouts or a mini-horde.
-- Wave mode zombies include Cop zombies in addition to the mini-horde lineup.
+- The Banshee spawns on its own check — it can appear alongside scouts or a mini-horde.
+- Wave mode zombies include Riot Husks in addition to the mini-horde lineup.
 - Mini-hordes and wave spawns prefer dark locations (light level 7 or below, or nighttime). If no dark spot is found, they'll spawn anywhere valid.
 - Scouts spawn at any valid surface position 20-48 blocks from the player.
 
@@ -88,7 +88,7 @@ The heatmap system is configurable via `heatmap.toml` in your config folder:
 |---------|---------|-------|-------------|
 | `enabled` | true | true/false | Turns the entire heatmap system on or off |
 | `decayMultiplier` | 1.0 | 0.1 - 5.0 | Scales all decay rates. 2.0 = heat fades twice as fast. 0.5 = heat lingers twice as long. |
-| `spawnThresholdMultiplier` | 1.0 | 0.5 - 3.0 | Scales the spawn thresholds. 0.5 = scouts at 12.5, screamer at 25, etc. 2.0 = scouts at 50, screamer at 100, etc. |
+| `spawnThresholdMultiplier` | 1.0 | 0.5 - 3.0 | Scales the spawn thresholds. 0.5 = scouts at 12.5, Banshee at 25, etc. 2.0 = scouts at 50, Banshee at 100, etc. |
 
 **Examples:**
 - Want a harder experience? Set `spawnThresholdMultiplier` to 0.5 — zombies come at half the normal heat levels.
@@ -98,7 +98,7 @@ The heatmap system is configurable via `heatmap.toml` in your config folder:
 
 ## Tips
 
-- **Mining sessions** generate steady heat from block breaks. Long mining runs in one chunk will eventually attract scouts, then screamers, then mini-hordes.
+- **Mining sessions** generate steady heat from block breaks. Long mining runs in one chunk will eventually attract scouts, then Banshees, then mini-hordes.
 - **Building a base** with lots of torches adds up fast — each torch is +2 heat. Placing 13 torches in one chunk hits the scout threshold.
 - **TNT/explosions** are the fastest way to spike heat — a single explosion adds +25 and spreads wide.
 - **Moving around** helps. If you spread your activity across multiple chunks, no single chunk reaches dangerous levels.

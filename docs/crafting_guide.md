@@ -16,10 +16,10 @@ Items you craft (and find) come in **quality tiers** ranging from Poor to Legend
 
 | Workstation | Unlock Requirement | Fuel | Input Slots | Output Slots | Key Recipes |
 |-------------|-------------------|------|-------------|--------------|-------------|
-| **Campfire** | Available from start | Wood, Coal | 3 | 1 | Boiled Water, Grilled Meat, Charred Meat, basic teas |
+| **Campfire** (vanilla block) | Available from start | Wood, Coal | 3 | 1 | Boiled Water Bottle, Grilled Meat, Charred Meat, basic teas |
 | **Grill** | Master Chef 2 | Wood, Coal, Gas | 3 | 1 | Stews, Corn Bread, Chili Dog, Beer, advanced meals |
 | **Workbench** | Available (basic) / Adv Engineering 3 (advanced) | None | 4 | 4 | Tools, weapons, armor, mods, ammo |
-| **Forge** | Advanced Engineering 1 | Wood, Coal | 3 | 3 | Smelt ores → ingots, forge items, Glass Jars |
+| **Forge** | Advanced Engineering 1 | Wood, Coal | 3 | 3 | Smelt ores → ingots, forge items |
 | **Cement Mixer** | Advanced Engineering 2 | Electricity or fuel | 2 | 2 | Cobblestone → Concrete Mix → Concrete Blocks |
 | **Chemistry Station** | Physician 1 | None | 4 | 4 | Advanced meds, gunpowder, dyes, acid, gas, polymer |
 | **Advanced Workbench** | Advanced Engineering 5 | Requires electricity (no fuel slot) | 6 | 6 | Tier 5 weapons, turrets, vehicle parts |
@@ -28,27 +28,31 @@ Items you craft (and find) come in **quality tiers** ranging from Poor to Legend
 
 ## Workstation Details
 
-### Campfire
+### Campfire (Vanilla Block)
 
 | Property | Value |
 |----------|-------|
 | Unlock | Default — available immediately |
-| Fuel | Wood, Coal |
+| Fuel | Wood, Coal (vanilla campfire fuel) |
 | Slots | 3 input, 1 output, 1 fuel |
 
-The Campfire is your first and most important workstation. You can place one from the start of the game with no perk requirements. It handles basic cooking and water purification — two things you need constantly in the early game.
+The Campfire uses the **vanilla Minecraft campfire block** — you do not craft a custom workstation. Place a vanilla campfire, light it, and right-click it to open the BZHS crafting UI. The campfire handles basic cooking and water purification — two things you need constantly in the early game.
+
+Right-clicking a lit campfire with a Shovel, Flint and Steel, or Fire Charge preserves vanilla behavior (extinguishing, relighting, etc.) and does not open the crafting UI. Soul campfires are not used by BZHS.
 
 **Key recipes:**
 
 | Recipe | Ingredients | Effect |
 |--------|-------------|--------|
-| Boiled Water | Murky Water + Glass Jar | Safe drinking water (+20 hydration) |
+| Boiled Water Bottle | Murky Water Bottle + Glass Bottle | Safe drinking water (+20 hydration) |
 | Grilled Meat | Raw Meat (any) | +20 fullness, −3 hydration |
 | Charred Meat | Raw Meat (quick cook) | +12 fullness, −5 hydration, 10% food poisoning risk |
-| Goldenrod Tea | Goldenrod + Boiled Water | +25 hydration, cures Dysentery |
-| Red Tea | Chrysanthemum + Boiled Water | +20 hydration, +1 HP/sec for 60 sec |
+| Goldenrod Tea | Goldenrod + Boiled Water Bottle | +25 hydration, cures Dysentery |
+| Red Tea | Chrysanthemum + Boiled Water Bottle | +20 hydration, +1 HP/sec for 60 sec |
 
-The Campfire also generates heatmap activity (+1 heat/min, capped at +10, 2-chunk radius) while running. Keep this in mind during long cooking sessions — extended use can attract zombie scouts.
+**Water purification workflow:** Fill a glass bottle in water (vanilla mechanic) → the vanilla water bottle auto-converts to **Murky Water Bottle** in your inventory → cook Murky Water Bottle + Glass Bottle at the campfire to produce **Boiled Water Bottle**. No Glass Jars are needed.
+
+The Campfire generates heatmap activity (+1 heat/min, capped at +10, 2-chunk radius) while lit and running. Keep this in mind during long cooking sessions — extended use can attract zombie scouts.
 
 ---
 
@@ -67,13 +71,13 @@ The Grill is the Campfire's upgrade. It unlocks advanced recipes that provide be
 | Recipe | Ingredients | Effect |
 |--------|-------------|--------|
 | Corn Bread | Corn Meal + Egg + Water | +25 fullness, +5 hydration |
-| Vegetable Stew | Potato + Corn + Mushroom + Boiled Water | +35 fullness, +15 hydration, +20% stamina regen (5 min) |
-| Meat Stew | Raw Meat + Potato + Corn + Boiled Water | +45 fullness, +15 hydration, +1 HP/sec (5 min) |
+| Vegetable Stew | Potato + Corn + Mushroom + Boiled Water Bottle | +35 fullness, +15 hydration, +20% stamina regen (5 min) |
+| Meat Stew | Raw Meat + Potato + Corn + Boiled Water Bottle | +45 fullness, +15 hydration, +1 HP/sec (5 min) |
 | Blueberry Pie | Blueberry + Corn Meal + Egg + Animal Fat | +30 fullness, +5 hydration, +10% XP (10 min) |
 | Chili Dog | Grilled Meat + Corn Bread + Canned Chili | +50 fullness, +5 hydration, +30% stamina regen |
 | Sham Sandwich | Sham (canned) + Corn Bread + Mushroom | +35 fullness, +5 hydration |
-| Coffee | Coffee Beans + Boiled Water | +2 fullness, +10 hydration, +50% stamina regen (5 min) |
-| Beer | Hops + Corn Meal + Boiled Water (ferment 30 min) | +5 fullness, +15 hydration, +10% melee damage / −5% accuracy (5 min) |
+| Coffee | Coffee Beans + Boiled Water Bottle | +2 fullness, +10 hydration, +50% stamina regen (5 min) |
+| Beer | Hops + Corn Meal + Boiled Water Bottle (ferment 30 min) | +5 fullness, +15 hydration, +10% melee damage / −5% accuracy (5 min) |
 
 Meat Stew and Chili Dog are the best food items in the game for sustained survival. Coffee is essential for any extended building, mining, or combat session due to the massive stamina regen boost.
 
@@ -140,9 +144,6 @@ The Forge smelts raw ores into usable ingots and produces forged components. It 
 | Forged Iron Blade | Iron Ingot ×3 | Blade ×1 | 30 sec |
 | Nails | Iron Ingot ×1 | Nails ×12 | 10 sec |
 | Anvil | Forged Iron ×10 | Anvil ×1 (forge tool) | 120 sec |
-| Glass Jar | Sand ×2 + Clay ×1 | Glass Jar ×3 | 15 sec |
-
-**Glass Jar crafting** is a key 2.6 addition. Glass Jars are needed for the Dew Collector (water production), Boiled Water recipes, and Molotov crafting. No Crucible is required — just Sand and Clay in the Forge.
 
 The Forge generates significant heatmap activity (+3 heat/min, capped at +30, 4-chunk radius) while running. Extended forging sessions will attract unwanted attention.
 
@@ -314,36 +315,36 @@ The mod introduces 17 key materials used across all crafting systems. Here's whe
 | **Nitrate** | Mining nitrate ore, desert surface deposits | Gunpowder (at Chemistry Station), farm fertilizer |
 | **Coal** | Mining coal ore, harvesting trees | Forge/Campfire fuel, gunpowder component |
 | **Oil Shale** | Mining in desert biome | Gas and Polymer (refined at Chemistry Station) |
-| **Clay** | Digging soil/dirt | Forge recipes, Cement Mixer, Glass Jars |
-| **Sand** | Desert biome, riverbeds | Glass Jars (Forge), cement |
-| **Glass Jar** | Forge (Sand ×2 + Clay ×1 → ×3) | Dew Collector fuel, Boiled Water, Molotov cocktails |
+| **Clay** | Digging soil/dirt | Forge recipes, Cement Mixer |
+| **Sand** | Desert biome, riverbeds | Cement |
+| **Murky Water Bottle** | Fill glass bottle in water (auto-converts from vanilla water bottle) | Boiled Water Bottle (cook at Campfire with Glass Bottle) |
 | **Mechanical Parts** | Scrapping tools (30% chance), loot | Weapons, vehicles, workstation crafting |
 | **Electrical Parts** | Scrapping electronics (×1–3), loot | Electricity system components, turrets, Stun Baton |
 | **Duct Tape** | Craft (cloth + glue) or loot | Repairs, Plaster Casts (fracture cure), various recipes |
 | **Forged Iron** | Forge (from Iron Ingots) | Building upgrades (Reinforced Concrete → Steel path), Anvil |
 | **Forged Steel** | Forge (Iron Ingot ×1 + Clay ×1, requires Crucible) | Steel building tier, advanced tools and weapons |
-| **Acid** | Chemistry Station, Cop zombie drops | Chemistry recipes, trap crafting |
+| **Acid** | Chemistry Station, Riot Husk drops | Chemistry recipes, trap crafting |
 | **Polymer** | Chemistry Station (from Oil Shale), scrapping electronics (50% chance) | Advanced weapons, vehicle parts |
-| **Dukes Casino Tokens** | Safes, quest rewards, selling to traders | Currency — used for all trader purchases (stacks to 50,000) |
+| **Survivor's Coins** | Safes, quest rewards, selling to traders | Currency — used for all trader purchases (stacks to 50,000) |
 
 ### Material Acquisition Tips
 
 - **Iron** is everywhere — mine ore veins, scrap found tools and weapons, loot Working Stiff crates in hardware stores.
 - **Lead and Nitrate** are the ammo bottleneck. Lead comes from mining; Nitrate is found both underground and on desert surfaces. Prioritize these once you start using firearms.
 - **Oil Shale** is desert-exclusive. You need it for Gas (vehicle fuel) and Polymer (advanced crafting). Plan desert expeditions or set up a desert outpost.
-- **Mechanical Parts** are rare and valuable. They drop from scrapping tools (30% chance) and from Feral Wight kills. Don't scrap them — you need them for workstations and vehicles.
-- **Glass Jars** are a 2.6 addition. You craft them at the Forge from Sand and Clay (no Crucible needed). Keep a steady supply — the Dew Collector consumes them to produce water, and there's only a 60% chance of getting the jar back after use.
+- **Mechanical Parts** are rare and valuable. They drop from scrapping tools (30% chance) and from Feral Wraith kills. Don't scrap them — you need them for workstations and vehicles.
+- **Water bottles replace Glass Jars** — fill a glass bottle in water (vanilla mechanic) and it auto-converts to Murky Water Bottle. Cook Murky Water Bottle + Glass Bottle at a campfire to get Boiled Water Bottle. No Glass Jars needed.
 - **Forged Steel** requires the Crucible tool in the Forge, which itself costs Forged Iron ×10 + Clay. Plan this upgrade early in mid-game.
 
 ---
 
 ## Tips
 
-- **Build a Campfire immediately** — boiling water and cooking meat are your top survival priorities on day 1. You need safe water to avoid Dysentery and cooked food to keep your fullness up.
-- **Rush Advanced Engineering 1** for the Forge. Smelting iron opens up most of the crafting tree and lets you start making Glass Jars for water production.
+- **Place a Campfire immediately** — purifying water and cooking meat are your top survival priorities on day 1. Place a vanilla campfire, light it, and right-click it to open the BZHS crafting UI. You need purified water to avoid Dysentery and cooked food to keep your fullness up.
+- **Rush Advanced Engineering 1** for the Forge. Smelting iron opens up most of the crafting tree.
 - **Always scrap at a Workbench** — the 50% inventory penalty adds up fast. Carry junk items back to base rather than scrapping them in the field.
 - **Quality tier 3 (Great) is the baseline** — at ×1.00 stat multiplier, it's the "normal" version of any item. Tiers 1–2 are below standard; tiers 4–5 are above. Don't invest heavily in crafting early-game Poor items when you'll replace them soon.
 - **Legendary items can't be crafted** — if you find a Tier 6 item, treasure it. They only come from loot at Loot Stage 100+ or quest rewards.
-- **The Forge generates heat** — running the Forge adds +3 heat/min to your chunk (capped at +30), which can attract Screamers and mini-hordes. Forge in batches and let the heat decay between sessions, or accept the combat risk.
+- **The Forge generates heat** — running the Forge adds +3 heat/min to your chunk (capped at +30), which can attract Banshees and mini-hordes. Forge in batches and let the heat decay between sessions, or accept the combat risk.
 - **Gas requires planning** — you need Oil Shale (desert mining) refined at a Chemistry Station (Physician 1 perk). Vehicles are useless without fuel, so unlock the Chemistry Station before building your first vehicle.
 - **Cement Mixer unlocks concrete** — the jump from Cobblestone (500 HP) to Concrete (1500 HP) is massive for base defense. Prioritize this before your first horde night if possible.

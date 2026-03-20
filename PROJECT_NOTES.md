@@ -23,7 +23,7 @@
 
 ## Current Status & Next Up
 
-**Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay).
+**Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay). Plus: Village settlements, campfire merge, water bottle consolidation.
 
 **March 16–17 Major Completed Work:**
 - Zombie AI behavior tree refactored (#72) — fully layered, priority-ordered, conditions-checked AI system
@@ -59,6 +59,12 @@
 **March 18 Completed Work:**
 - Perk icon renames (#117) — perk icon texture filenames updated to match renamed perk IDs from trademark sweep
 - Registry crash fix (#118) — fixed startup crash caused by stale registry references after the trademark name sweep
+
+**March 19–20 Completed Work:**
+- Village overhaul (#135) — village settlement system with 8 building types (Abandoned House, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost), sleeper zombie spawning, per-building loot containers
+- Campfire merge (#136) — campfire workstation merged into vanilla campfire block; right-clicking a lit vanilla campfire opens the BZHS crafting UI
+- Water bottle consolidation (#137) — Glass Jars removed; vanilla water bottles auto-convert to Murky Water via `WaterBottleConversionHandler`; purify at campfire
+- AK-47 fix (#138) — AK-47 weapon bug resolved
 
 **Current Focus / In Progress:**
 - Overworld biome placement — surface builder / noise router for custom biome definitions (definitions exist, placement pending)
@@ -108,6 +114,13 @@
 ---
 
 ## Recent Completed Work
+
+**March 19–20 Session (Tasks #135–#139)**
+- Village overhaul (#135) — village settlement system with 8 building types and sleeper zombies
+- Campfire merge (#136) — campfire workstation merged into vanilla campfire block
+- Water bottle consolidation (#137) — Glass Jars replaced with vanilla water bottle → Murky Water auto-conversion
+- AK-47 fix (#138) — AK-47 weapon bug resolved
+- Docs update + zombie guide (#139) — all docs updated with renamed zombie names, zombie_guide.md created, campfire/water bottle changes reflected in crafting_guide.md, JAR rebuilt
 
 **March 18 Session (Tasks #117–#118)**
 - Perk icon renames (#117) — texture filenames updated to match renamed perk IDs
