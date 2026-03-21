@@ -2,6 +2,7 @@ package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEntry;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,11 @@ public class MinimapOverlay {
     private static final int OTHER_PLAYER_DOT_SIZE = 3;
     private static final int SAMPLE_STEP = 4;
     private static final int PIXEL_SIZE = SAMPLE_STEP;
+    private static final int COLOR_EASY   = 0xFF44FF44;
+    private static final int COLOR_MEDIUM = 0xFFFFCC00;
+    private static final int COLOR_HARD   = 0xFFFF4444;
+    private static final int COLOR_CLEARED = 0xFF888888;
+    private static final int TERRITORY_DOT_SIZE = 4;
 
     private static int[] terrainCache = null;
     private static int cachedPlayerX = Integer.MIN_VALUE;
@@ -95,6 +101,8 @@ public class MinimapOverlay {
 
         renderOtherPlayers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
+        renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
+
         int halfDot = PLAYER_DOT_SIZE / 2;
         graphics.fill(centerX - halfDot, centerY - halfDot,
                 centerX + halfDot, centerY + halfDot, PLAYER_DOT_COLOR);
@@ -103,6 +111,70 @@ public class MinimapOverlay {
         String coordsText = String.format("(%d, %d)", playerBlockX, playerBlockZ);
         int coordsWidth = mc.font.width(coordsText);
         graphics.drawString(mc.font, coordsText, mapX + (MAP_SIZE - coordsWidth) / 2, mapY + MAP_SIZE + 3, 0xFFCCCCCC, true);
+    }
+
+    private static void renderTerritories(GuiGraphics graphics, Minecraft mc, Player player,
+                                            int centerX, int centerY, int mapX, int mapY,
+                                            double cosYaw, double sinYaw) {
+        List<TerritoryEntry> territories = TerritoryClientState.getTerritories();
+        if (territories.isEmpty()) return;
+
+        for (TerritoryEntry entry : territories) {
+            double dx = entry.x() - player.getX();
+            double dz = entry.z() - player.getZ();
+
+            double screenDx = -(dx * cosYaw + dz * sinYaw);
+            double screenDy = dx * sinYaw - dz * cosYaw;
+
+            int dotX = centerX + (int) screenDx;
+            int dotY = centerY + (int) screenDy;
+
+            int halfDot = TERRITORY_DOT_SIZE / 2;
+
+            int playerZoneRadius = PLAYER_DOT_SIZE + 8;
+            if (Math.abs(dotX - centerX) < playerZoneRadius &&
+                Math.abs(dotY - centerY) < playerZoneRadius) {
+                continue;
+            }
+
+            if (!isInsideRoundedRect(dotX - halfDot - mapX, dotY - halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) ||
+                !isInsideRoundedRect(dotX + halfDot - mapX, dotY + halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                continue;
+            }
+
+            boolean cleared = entry.label().endsWith("[Cleared]");
+            int color = cleared ? COLOR_CLEARED : getTierColor(entry.tier());
+
+            graphics.fill(dotX - halfDot, dotY - halfDot,
+                    dotX + halfDot, dotY + halfDot, color);
+
+            String stars = "\u2605".repeat(entry.tier());
+            String labelName = entry.label();
+            if (cleared) {
+                labelName = labelName.replace(" [Cleared]", "");
+            }
+            String[] parts = labelName.split(" ");
+            String shortName = parts.length > 0 ? parts[0] : labelName;
+            if (cleared) {
+                shortName = shortName + "\u2713";
+            }
+            String abbrevLabel = stars + " " + shortName;
+
+            int textWidth = mc.font.width(abbrevLabel);
+            int textX = dotX - textWidth / 2;
+            int textY = dotY + halfDot + 1;
+
+            if (isInsideRoundedRect(textX - mapX, textY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
+                isInsideRoundedRect(textX + textWidth - mapX, textY + mc.font.lineHeight - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                graphics.drawString(mc.font, abbrevLabel, textX, textY, color, true);
+            }
+        }
+    }
+
+    private static int getTierColor(int tier) {
+        if (tier <= 2) return COLOR_EASY;
+        if (tier == 3) return COLOR_MEDIUM;
+        return COLOR_HARD;
     }
 
     private static void renderOtherPlayers(GuiGraphics graphics, Minecraft mc, Player localPlayer,

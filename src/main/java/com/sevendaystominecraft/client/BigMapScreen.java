@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEntry;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,6 +23,10 @@ public class BigMapScreen extends Screen {
     private static final int OTHER_PLAYER_DOT_SIZE = 5;
     private static final int TITLE_COLOR = 0xFFCCCCCC;
     private static final int COORD_COLOR = 0xFFAAAAAA;
+    private static final int COLOR_EASY   = 0xFF44FF44;
+    private static final int COLOR_MEDIUM = 0xFFFFCC00;
+    private static final int COLOR_HARD   = 0xFFFF4444;
+    private static final int COLOR_CLEARED = 0xFF888888;
 
     private int[] terrainCache = null;
     private int cachedPlayerX = Integer.MIN_VALUE;
@@ -93,6 +98,8 @@ public class BigMapScreen extends Screen {
 
         renderOtherPlayers(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
 
+        renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
+
         renderPlayerMarker(graphics, centerX, centerY, player.getYRot());
 
         String titleText = this.title.getString();
@@ -136,6 +143,60 @@ public class BigMapScreen extends Screen {
             if (e2 > -dy) { err -= dy; x1 += sx; }
             if (e2 < dx) { err += dx; y1 += sy; }
         }
+    }
+
+    private void renderTerritories(GuiGraphics graphics, Minecraft mc, Player player,
+                                    int centerX, int centerY, int mapX, int mapY,
+                                    int mapDisplaySize, float scale) {
+        List<TerritoryEntry> territories = TerritoryClientState.getTerritories();
+        if (territories.isEmpty()) return;
+
+        for (TerritoryEntry entry : territories) {
+            double dx = entry.x() - player.getX();
+            double dz = entry.z() - player.getZ();
+
+            int screenX = centerX + (int) (dx * scale);
+            int screenY = centerY + (int) (dz * scale);
+
+            boolean cleared = entry.label().endsWith("[Cleared]");
+            int color = cleared ? COLOR_CLEARED : getTierColor(entry.tier());
+
+            String displayLabel = entry.label();
+            if (cleared) {
+                displayLabel = displayLabel.replace(" [Cleared]", "") + " \u2713";
+            }
+
+            int labelWidth = mc.font.width(displayLabel);
+            int labelX = screenX - labelWidth / 2;
+            int labelY = screenY - 5;
+            int padding = 2;
+
+            int boxLeft = labelX - padding;
+            int boxTop = labelY - padding;
+            int boxRight = labelX + labelWidth + padding;
+            int boxBottom = labelY + mc.font.lineHeight + padding;
+
+            if (boxLeft < mapX || boxRight > mapX + mapDisplaySize ||
+                boxTop < mapY || boxBottom > mapY + mapDisplaySize) {
+                continue;
+            }
+
+            int playerZoneRadius = PLAYER_DOT_SIZE + 12;
+            if (Math.abs(screenX - centerX) < playerZoneRadius + labelWidth / 2 &&
+                Math.abs(screenY - centerY) < playerZoneRadius + mc.font.lineHeight / 2) {
+                continue;
+            }
+
+            graphics.fill(boxLeft, boxTop, boxRight, boxBottom, 0x88000000);
+
+            graphics.drawString(mc.font, displayLabel, labelX, labelY, color, true);
+        }
+    }
+
+    private static int getTierColor(int tier) {
+        if (tier <= 2) return COLOR_EASY;
+        if (tier == 3) return COLOR_MEDIUM;
+        return COLOR_HARD;
     }
 
     private void renderOtherPlayers(GuiGraphics graphics, Minecraft mc, Player localPlayer,

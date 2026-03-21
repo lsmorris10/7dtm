@@ -46,13 +46,17 @@ public class TerritoryBroadcaster {
             for (TerritoryRecord record : nearby) {
                 checkSleeperAwakening(level, player, playerPos, record, entryRange);
 
+                String label = record.getLabel();
+                if (record.isCleared()) {
+                    label = label + " [Cleared]";
+                }
                 entries.add(new TerritoryEntry(
                         record.getId(),
                         record.getOrigin().getX(),
                         record.getOrigin().getY(),
                         record.getOrigin().getZ(),
                         record.getTier().getTier(),
-                        record.getLabel()
+                        label
                 ));
             }
 
