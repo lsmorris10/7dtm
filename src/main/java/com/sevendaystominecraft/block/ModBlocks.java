@@ -3,6 +3,7 @@ package com.sevendaystominecraft.block;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.loot.LootContainerBlock;
 import com.sevendaystominecraft.block.loot.LootContainerType;
+import com.sevendaystominecraft.block.loot.VendingMachineBlock;
 import com.sevendaystominecraft.block.vehicle.VehicleWreckageBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationType;
@@ -117,7 +118,7 @@ public class ModBlocks {
             () -> new LootContainerBlock(metalContainerProps("fuel_cache"), LootContainerType.FUEL_CACHE));
 
     public static final Supplier<Block> VENDING_MACHINE_BLOCK = registerWithItem("vending_machine",
-            () -> new LootContainerBlock(metalContainerProps("vending_machine"), LootContainerType.VENDING_MACHINE));
+            () -> new VendingMachineBlock(metalContainerProps("vending_machine")));
 
     public static final Supplier<Block> MAILBOX_BLOCK = registerWithItem("mailbox",
             () -> new LootContainerBlock(containerProps("mailbox"), LootContainerType.MAILBOX));

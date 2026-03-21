@@ -132,5 +132,13 @@
   "screen.sevendaystominecraft.big_map": "Map",
   "gui.sevendaystominecraft.map_tab": "Map",
   "gui.sevendaystominecraft.map_close_hint": "Press M or Escape to close",
-  "gui.sevendaystominecraft.map_position": "Position: %d, %d  |  Facing: %s"
+  "gui.sevendaystominecraft.map_position": "Position: %d, %d  |  Facing: %s",
+  "block.sevendaystominecraft.vending_machine": "Vending Machine",
+  "block.sevendaystominecraft.tool_crate": "Tool Crate",
+  "block.sevendaystominecraft.fuel_cache": "Fuel Cache",
+  "block.sevendaystominecraft.mailbox": "Mailbox",
+  "block.sevendaystominecraft.farm_crate": "Farm Crate",
+  "block.sevendaystominecraft.burnt_car": "Burnt Car",
+  "block.sevendaystominecraft.broken_truck": "Broken Truck",
+  "block.sevendaystominecraft.wrecked_camper": "Wrecked Camper"
 }

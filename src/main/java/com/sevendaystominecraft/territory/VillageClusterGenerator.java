@@ -252,8 +252,16 @@ public class VillageClusterGenerator {
     }
 
     private static void placeVendingMachine(ServerLevel level, BlockPos pos, TerritoryTier tier, RandomSource random) {
+        if (pos.getY() >= level.getMaxY() || !level.getBlockState(pos.above()).canBeReplaced()) return;
         Block block = ModBlocks.VENDING_MACHINE_BLOCK.get();
-        setBlock(level, pos, block.defaultBlockState());
+        BlockState lowerState = block.defaultBlockState()
+                .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
+                        net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER);
+        BlockState upperState = lowerState
+                .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
+                        net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER);
+        setBlock(level, pos, lowerState);
+        setBlock(level, pos.above(), upperState);
         if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
             be.setTerritoryTier(tier.getTier());
         }
