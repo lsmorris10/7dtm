@@ -195,11 +195,6 @@ public class StatsHudOverlay {
                 }
                 if (nearest != null) {
                     sb.append("  |  ").append(nearest.getLabelText());
-                    int tier = nearest.getTerritoryTier();
-                    if (tier > 0) {
-                        sb.append("  Difficulty: ");
-                        for (int i = 0; i < tier; i++) sb.append("*");
-                    }
                 }
             }
 
