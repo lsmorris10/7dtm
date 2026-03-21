@@ -2,10 +2,7 @@ package com.sevendaystominecraft.territory;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,7 +12,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @EventBusSubscriber(modid = SevenDaysToMinecraft.MOD_ID)
 public class VillagerSuppressionHandler {
 
-    private static final int VILLAGE_POI_RADIUS = 64;
+    private static final double MOD_TERRITORY_RADIUS = 80.0;
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
@@ -26,19 +23,13 @@ public class VillagerSuppressionHandler {
 
         BlockPos villagerPos = villager.blockPosition();
 
-        if (isNearVanillaVillage(serverLevel, villagerPos)) {
+        if (isNearModTerritory(serverLevel, villagerPos)) {
             event.setCanceled(true);
         }
     }
 
-    private static boolean isNearVanillaVillage(ServerLevel level, BlockPos pos) {
-        PoiManager poiManager = level.getPoiManager();
-        return poiManager.findAll(
-                holder -> holder.is(PoiTypes.MEETING),
-                p -> true,
-                pos,
-                VILLAGE_POI_RADIUS,
-                PoiManager.Occupancy.ANY
-        ).findAny().isPresent();
+    private static boolean isNearModTerritory(ServerLevel level, BlockPos pos) {
+        TerritoryData data = TerritoryData.getOrCreate(level);
+        return !data.getNearby(pos, MOD_TERRITORY_RADIUS).isEmpty();
     }
 }
