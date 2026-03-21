@@ -17,8 +17,8 @@ public class TerritoryLabelEntity extends Entity {
             SynchedEntityData.defineId(TerritoryLabelEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> TIER =
             SynchedEntityData.defineId(TerritoryLabelEntity.class, EntityDataSerializers.INT);
-
-    private int territoryId = -1;
+    private static final EntityDataAccessor<Integer> TERRITORY_ID =
+            SynchedEntityData.defineId(TerritoryLabelEntity.class, EntityDataSerializers.INT);
 
     public TerritoryLabelEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -30,6 +30,7 @@ public class TerritoryLabelEntity extends Entity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(LABEL_TEXT, "Territory");
         builder.define(TIER, 1);
+        builder.define(TERRITORY_ID, -1);
     }
 
     public void setLabelText(String text) {
@@ -51,11 +52,11 @@ public class TerritoryLabelEntity extends Entity {
     }
 
     public void setTerritoryId(int id) {
-        this.territoryId = id;
+        this.entityData.set(TERRITORY_ID, id);
     }
 
     public int getTerritoryId() {
-        return territoryId;
+        return this.entityData.get(TERRITORY_ID);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class TerritoryLabelEntity extends Entity {
         super.tick();
         if (!level().isClientSide() && tickCount % 100 == 0 && level() instanceof ServerLevel serverLevel) {
             TerritoryData data = TerritoryData.getOrCreate(serverLevel);
-            TerritoryRecord record = data.getTerritoryById(territoryId);
+            TerritoryRecord record = data.getTerritoryById(getTerritoryId());
             if (record != null && record.isCleared()) {
                 String clearedLabel = "§a" + record.getLabel() + " §7[Cleared]";
                 if (!clearedLabel.equals(getLabelText())) {
@@ -92,7 +93,7 @@ public class TerritoryLabelEntity extends Entity {
             setTerritoryTier(tag.getInt("tier"));
         }
         if (tag.contains("territoryId")) {
-            territoryId = tag.getInt("territoryId");
+            setTerritoryId(tag.getInt("territoryId"));
         }
     }
 
@@ -100,6 +101,6 @@ public class TerritoryLabelEntity extends Entity {
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putString("label", getLabelText());
         tag.putInt("tier", getTerritoryTier());
-        tag.putInt("territoryId", territoryId);
+        tag.putInt("territoryId", getTerritoryId());
     }
 }

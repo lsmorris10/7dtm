@@ -15,6 +15,8 @@ public class HudClientResetHandler {
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
         MusicManager.reset();
+        TerritoryAnnouncement.reset();
+        StatsHudOverlay.resetAreaState();
     }
 
     @SubscribeEvent
@@ -25,5 +27,13 @@ public class HudClientResetHandler {
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
         MusicManager.reset();
+        TerritoryAnnouncement.reset();
+        StatsHudOverlay.resetAreaState();
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(ClientPlayerNetworkEvent.Clone event) {
+        TerritoryAnnouncement.reset();
+        StatsHudOverlay.resetAreaState();
     }
 }

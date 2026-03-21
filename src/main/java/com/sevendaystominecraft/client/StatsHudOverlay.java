@@ -159,6 +159,13 @@ public class StatsHudOverlay {
     private static String cachedAreaText = "";
     private static long lastAreaUpdateTick = 0;
     private static final int AREA_UPDATE_INTERVAL = 20;
+    private static int lastNearestTerritoryEntityId = -1;
+
+    public static void resetAreaState() {
+        cachedAreaText = "";
+        lastAreaUpdateTick = 0;
+        lastNearestTerritoryEntityId = -1;
+    }
 
     private static void renderBottomLeftArea(GuiGraphics graphics, Minecraft mc, Player player) {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
@@ -195,7 +202,18 @@ public class StatsHudOverlay {
                 }
                 if (nearest != null) {
                     sb.append("  |  ").append(nearest.getLabelText());
+                    int territoryId = nearest.getTerritoryId();
+                    if (territoryId != lastNearestTerritoryEntityId) {
+                        lastNearestTerritoryEntityId = territoryId;
+                        TerritoryAnnouncement.trigger(
+                                nearest.getLabelText(),
+                                nearest.getTerritoryTier(),
+                                territoryId
+                        );
+                    }
                 }
+            } else {
+                lastNearestTerritoryEntityId = -1;
             }
 
             cachedAreaText = sb.toString();
