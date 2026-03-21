@@ -156,6 +156,20 @@ public class VillageClusterGenerator {
         if (y <= 0) return null;
 
         BlockPos candidate = new BlockPos(x, y, z);
+
+        BlockState surfaceBlock = level.getBlockState(candidate.below());
+        if (surfaceBlock.liquid() || level.getBlockState(candidate).liquid()) return null;
+
+        for (int cx = -4; cx <= 4; cx += 4) {
+            for (int cz = -4; cz <= 4; cz += 4) {
+                int checkY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x + cx, z + cz);
+                BlockPos checkPos = new BlockPos(x + cx, checkY, z + cz);
+                if (level.getBlockState(checkPos).liquid() || level.getBlockState(checkPos.below()).liquid()) {
+                    return null;
+                }
+            }
+        }
+
         for (BlockPos existing : placed) {
             double dist = Math.sqrt(
                     Math.pow(candidate.getX() - existing.getX(), 2) +

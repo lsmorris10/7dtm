@@ -6,11 +6,16 @@ import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.perk.LevelManager;
 
+import com.sevendaystominecraft.territory.TerritoryLabelEntity;
+
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -71,6 +76,7 @@ public class StatsHudOverlay {
 
         renderTopLeftStats(graphics, mc, player, stats);
         renderBottomCenterXp(graphics, mc, stats);
+        renderBottomLeftArea(graphics, mc, player);
     }
 
     private static void renderTopLeftStats(GuiGraphics graphics, Minecraft mc, Player player, SevenDaysPlayerStats stats) {
@@ -148,6 +154,74 @@ public class StatsHudOverlay {
         String skillLabel = String.format("Skill XP: %d/%d", stats.getXp(), xpNeeded);
         int skillLabelWidth = mc.font.width(skillLabel);
         graphics.drawString(mc.font, skillLabel, (screenWidth - skillLabelWidth) / 2, skillXpY - 12, XP_COLOR, true);
+    }
+
+    private static String cachedAreaText = "";
+    private static long lastAreaUpdateTick = 0;
+    private static final int AREA_UPDATE_INTERVAL = 20;
+
+    private static void renderBottomLeftArea(GuiGraphics graphics, Minecraft mc, Player player) {
+        int screenHeight = mc.getWindow().getGuiScaledHeight();
+        int x = MARGIN_X;
+        int y = screenHeight - 30;
+
+        long currentTick = player.tickCount;
+        if (currentTick - lastAreaUpdateTick >= AREA_UPDATE_INTERVAL || cachedAreaText.isEmpty()) {
+            lastAreaUpdateTick = currentTick;
+            StringBuilder sb = new StringBuilder();
+
+            if (mc.level != null) {
+                Holder<Biome> biomeHolder = mc.level.getBiome(player.blockPosition());
+                String biomeKey = biomeHolder.unwrapKey()
+                        .map(k -> k.location().getPath())
+                        .orElse("unknown");
+                String biomeName = formatBiomeName(biomeKey);
+                sb.append(biomeName);
+            }
+
+            java.util.List<TerritoryLabelEntity> labels = mc.level.getEntitiesOfClass(
+                    TerritoryLabelEntity.class,
+                    new AABB(player.blockPosition()).inflate(80)
+            );
+            if (!labels.isEmpty()) {
+                TerritoryLabelEntity nearest = null;
+                double nearestDist = Double.MAX_VALUE;
+                for (TerritoryLabelEntity label : labels) {
+                    double dist = player.distanceToSqr(label);
+                    if (dist < nearestDist) {
+                        nearestDist = dist;
+                        nearest = label;
+                    }
+                }
+                if (nearest != null) {
+                    sb.append("  |  ").append(nearest.getLabelText());
+                    int tier = nearest.getTerritoryTier();
+                    if (tier > 0) {
+                        sb.append("  Difficulty: ");
+                        for (int i = 0; i < tier; i++) sb.append("*");
+                    }
+                }
+            }
+
+            cachedAreaText = sb.toString();
+        }
+
+        if (!cachedAreaText.isEmpty()) {
+            graphics.drawString(mc.font, cachedAreaText, x, y, 0xFFCCCCCC, true);
+        }
+    }
+
+    private static String formatBiomeName(String path) {
+        String[] parts = path.split("_");
+        StringBuilder result = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                if (result.length() > 0) result.append(" ");
+                result.append(Character.toUpperCase(part.charAt(0)));
+                if (part.length() > 1) result.append(part.substring(1));
+            }
+        }
+        return result.toString();
     }
 
     private static void drawStatBar(GuiGraphics graphics, int x, int y,

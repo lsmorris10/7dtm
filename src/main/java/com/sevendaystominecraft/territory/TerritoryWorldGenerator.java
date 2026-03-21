@@ -64,6 +64,7 @@ public class TerritoryWorldGenerator {
         if (surfaceY <= 0) return;
 
         BlockPos origin = new BlockPos(blockX, surfaceY, blockZ);
+        if (serverLevel.getBlockState(origin).liquid() || serverLevel.getBlockState(origin.below()).liquid()) return;
 
         try {
             VillageClusterGenerator.VillageResult villageResult =
