@@ -7,9 +7,12 @@ import com.sevendaystominecraft.client.BloodMoonClientState;
 import com.sevendaystominecraft.client.ChunkHeatClientState;
 import com.sevendaystominecraft.client.NearbyPlayersClientState;
 import com.sevendaystominecraft.client.TerritoryClientState;
+import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.perk.Attribute;
 
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -56,7 +59,25 @@ public class ModNetworking {
                 ModNetworking::handleTerritorySync
         );
 
+        registrar.playToServer(
+                FireWeaponPayload.TYPE,
+                FireWeaponPayload.STREAM_CODEC,
+                ModNetworking::handleFireWeapon
+        );
+
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
+    }
+
+    private static void handleFireWeapon(FireWeaponPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+
+            ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
+            if (held.getItem() instanceof GeoRangedWeaponItem weapon) {
+                weapon.fireWeapon(player.level(), player, payload.aiming());
+            }
+        });
     }
 
     private static void handleBloodMoonSync(BloodMoonSyncPayload payload, IPayloadContext context) {

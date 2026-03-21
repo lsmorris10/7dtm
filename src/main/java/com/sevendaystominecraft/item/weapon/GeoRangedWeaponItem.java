@@ -48,6 +48,9 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    public static final float ADS_FOV_MULTIPLIER = 0.5f;
+    public static final float ADS_INACCURACY_MULTIPLIER = 0.3f;
+
     public enum WeaponType {
         AK47("animation.ak47"),
         PISTOL_9MM("animation.pistol_9mm");
@@ -128,14 +131,28 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
+    }
+
+    public void fireWeapon(Level level, Player player, boolean isADS) {
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack held = player.getItemInHand(hand);
 
+        if (!(held.getItem() instanceof GeoRangedWeaponItem)) {
+            return;
+        }
+
         if (player.getCooldowns().isOnCooldown(held)) {
-            return InteractionResult.FAIL;
+            return;
         }
 
         if (isReloading(held)) {
-            return InteractionResult.FAIL;
+            return;
         }
 
         int currentAmmo = getCurrentAmmo(held);
@@ -149,18 +166,20 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
             if (!level.isClientSide()) {
                 startReload(level, player, hand, held);
             }
-            return InteractionResult.SUCCESS;
+            return;
         }
 
         if (!player.isCreative()) {
             setCurrentAmmo(held, currentAmmo - 1);
         }
 
+        float currentInaccuracy = isADS ? inaccuracy * ADS_INACCURACY_MULTIPLIER : inaccuracy;
+
         if (level instanceof ServerLevel sl) {
             BulletEntity bullet = new BulletEntity(level, player, bulletDamage);
             Vec3 look = player.getLookAngle();
             bullet.setPos(player.getX(), player.getEyeY() - 0.1, player.getZ());
-            bullet.shoot(look.x, look.y, look.z, projectileSpeed, inaccuracy);
+            bullet.shoot(look.x, look.y, look.z, projectileSpeed, currentInaccuracy);
             sl.addFreshEntity(bullet);
         }
 
@@ -181,8 +200,6 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         if (held.isDamageableItem()) {
             held.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
         }
-
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -297,5 +314,9 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
     public WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    public float getInaccuracy() {
+        return inaccuracy;
     }
 }
