@@ -6,12 +6,9 @@ import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEnt
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
@@ -230,18 +227,6 @@ public class MinimapOverlay {
     }
 
     private static int getTopBlockColor(Level level, int x, int z) {
-        int topY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, x, z);
-        if (topY <= -64) return 0xFF222222;
-
-        BlockPos pos = new BlockPos(x, topY - 1, z);
-        BlockState state = level.getBlockState(pos);
-        MapColor mapColor = state.getMapColor(level, pos);
-
-        if (mapColor == MapColor.NONE) return 0xFF222222;
-
-        int col = mapColor.col;
-        if (col == 0) return 0xFF222222;
-
-        return 0xFF000000 | col;
+        return TerrainColorHelper.getTopBlockColor(level, x, z);
     }
 }

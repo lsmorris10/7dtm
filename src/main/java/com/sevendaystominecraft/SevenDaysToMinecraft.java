@@ -13,8 +13,10 @@ import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.config.TerritoryConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.client.CompassOverlay;
+import com.sevendaystominecraft.client.InventoryMapButton;
 import com.sevendaystominecraft.client.MinimapOverlay;
 import com.sevendaystominecraft.client.ModEntityRenderers;
+import com.sevendaystominecraft.client.ModKeyBindings;
 import com.sevendaystominecraft.client.ModScreens;
 import com.sevendaystominecraft.client.StatsHudOverlay;
 import com.sevendaystominecraft.horde.DayCycleHandler;
@@ -81,7 +83,10 @@ public class SevenDaysToMinecraft {
             modEventBus.addListener(CompassOverlay::onRegisterGuiLayers);
             modEventBus.addListener(StatsHudOverlay::onRegisterGuiLayers);
             modEventBus.addListener(MinimapOverlay::onRegisterGuiLayers);
+            modEventBus.addListener(ModKeyBindings::onRegisterKeyMappings);
             NeoForge.EVENT_BUS.addListener(StatsHudOverlay::onRenderGuiLayerPre);
+            NeoForge.EVENT_BUS.addListener(ModKeyBindings::onClientTick);
+            NeoForge.EVENT_BUS.addListener(InventoryMapButton::onScreenInit);
         }
 
         NeoForge.EVENT_BUS.addListener(this::onServerStarting);

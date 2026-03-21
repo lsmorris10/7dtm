@@ -126,5 +126,11 @@
   "item.sevendaystominecraft.chrysanthemum": "Chrysanthemum",
   "item.sevendaystominecraft.charred_meat": "Charred Meat",
   "item.sevendaystominecraft.goldenrod_tea": "Goldenrod Tea",
-  "item.sevendaystominecraft.red_tea": "Red Tea"
+  "item.sevendaystominecraft.red_tea": "Red Tea",
+  "key.categories.sevendaystominecraft": "7 Days to Minecraft",
+  "key.sevendaystominecraft.open_map": "Open Map",
+  "screen.sevendaystominecraft.big_map": "Map",
+  "gui.sevendaystominecraft.map_tab": "Map",
+  "gui.sevendaystominecraft.map_close_hint": "Press M or Escape to close",
+  "gui.sevendaystominecraft.map_position": "Position: %d, %d  |  Facing: %s"
 }
