@@ -2,6 +2,10 @@ package com.sevendaystominecraft.entity.projectile;
 
 import com.sevendaystominecraft.entity.ModEntities;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +19,13 @@ import net.minecraft.world.phys.HitResult;
 
 public class BulletEntity extends ThrowableItemProjectile {
 
+    private static final EntityDataAccessor<Float> DATA_GRAVITY =
+            SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DATA_MAX_LIFETIME =
+            SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.INT);
+
     private float bulletDamage = 8.0f;
+    private int lifeTicks = 0;
 
     public BulletEntity(EntityType<? extends ThrowableItemProjectile> type, Level level) {
         super(type, level);
@@ -24,6 +34,20 @@ public class BulletEntity extends ThrowableItemProjectile {
     public BulletEntity(Level level, LivingEntity shooter, float damage) {
         super(ModEntities.BULLET.get(), shooter, level, new ItemStack(Items.IRON_NUGGET));
         this.bulletDamage = damage;
+    }
+
+    public BulletEntity(Level level, LivingEntity shooter, float damage, double gravity, int maxLifetime) {
+        super(ModEntities.BULLET.get(), shooter, level, new ItemStack(Items.IRON_NUGGET));
+        this.bulletDamage = damage;
+        this.entityData.set(DATA_GRAVITY, (float) gravity);
+        this.entityData.set(DATA_MAX_LIFETIME, maxLifetime);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_GRAVITY, 0.01f);
+        builder.define(DATA_MAX_LIFETIME, 60);
     }
 
     public void setBulletDamage(float damage) {
@@ -37,7 +61,42 @@ public class BulletEntity extends ThrowableItemProjectile {
 
     @Override
     protected double getDefaultGravity() {
-        return 0.01;
+        return this.entityData.get(DATA_GRAVITY);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        lifeTicks++;
+        if (lifeTicks >= this.entityData.get(DATA_MAX_LIFETIME) && !level().isClientSide()) {
+            discard();
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putFloat("BulletGravity", this.entityData.get(DATA_GRAVITY));
+        tag.putInt("BulletMaxLifetime", this.entityData.get(DATA_MAX_LIFETIME));
+        tag.putFloat("BulletDamage", this.bulletDamage);
+        tag.putInt("BulletLifeTicks", this.lifeTicks);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("BulletGravity")) {
+            this.entityData.set(DATA_GRAVITY, tag.getFloat("BulletGravity"));
+        }
+        if (tag.contains("BulletMaxLifetime")) {
+            this.entityData.set(DATA_MAX_LIFETIME, tag.getInt("BulletMaxLifetime"));
+        }
+        if (tag.contains("BulletDamage")) {
+            this.bulletDamage = tag.getFloat("BulletDamage");
+        }
+        if (tag.contains("BulletLifeTicks")) {
+            this.lifeTicks = tag.getInt("BulletLifeTicks");
+        }
     }
 
     @Override

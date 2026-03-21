@@ -45,6 +45,8 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
     private final int reloadTicks;
     private final WeaponType weaponType;
     private final Supplier<SoundEvent> fireSoundSupplier;
+    private final double bulletGravity;
+    private final int bulletMaxLife;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -66,6 +68,15 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier,
                                int magazineCapacity, int reloadTicks, WeaponType weaponType,
                                Supplier<SoundEvent> fireSoundSupplier) {
+        this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, 0.01, 60);
+    }
+
+    public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
+                               float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier,
+                               int magazineCapacity, int reloadTicks, WeaponType weaponType,
+                               Supplier<SoundEvent> fireSoundSupplier,
+                               double bulletGravity, int bulletMaxLife) {
         super(properties);
         this.bulletDamage = bulletDamage;
         this.cooldownTicks = cooldownTicks;
@@ -76,6 +87,8 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         this.reloadTicks = reloadTicks;
         this.weaponType = weaponType;
         this.fireSoundSupplier = fireSoundSupplier;
+        this.bulletGravity = bulletGravity;
+        this.bulletMaxLife = bulletMaxLife;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
@@ -176,7 +189,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         float currentInaccuracy = isADS ? inaccuracy * ADS_INACCURACY_MULTIPLIER : inaccuracy;
 
         if (level instanceof ServerLevel sl) {
-            BulletEntity bullet = new BulletEntity(level, player, bulletDamage);
+            BulletEntity bullet = new BulletEntity(level, player, bulletDamage, bulletGravity, bulletMaxLife);
             Vec3 look = player.getLookAngle();
             bullet.setPos(player.getX(), player.getEyeY() - 0.1, player.getZ());
             bullet.shoot(look.x, look.y, look.z, projectileSpeed, currentInaccuracy);

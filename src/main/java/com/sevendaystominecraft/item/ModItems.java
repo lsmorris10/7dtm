@@ -149,9 +149,10 @@ public class ModItems {
     public static final Supplier<Item> AK47 = ITEMS.register("ak47",
             () -> new GeoRangedWeaponItem(
                     new Item.Properties().setId(key("ak47")).durability(500).stacksTo(1),
-                    12.0f, 4, 3.5f, 3.0f, () -> AMMO_762.get(),
+                    12.0f, 4, 5.25f, 3.0f, () -> AMMO_762.get(),
                     30, 50, GeoRangedWeaponItem.WeaponType.AK47,
-                    () -> ModSounds.GUN_FIRE_AK47.get()));
+                    () -> ModSounds.GUN_FIRE_AK47.get(),
+                    0.005, 200));
 
     public static final Supplier<Item> GRENADE = ITEMS.register("grenade",
             () -> new GrenadeItem(
