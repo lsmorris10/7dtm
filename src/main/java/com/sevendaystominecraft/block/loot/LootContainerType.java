@@ -31,4 +31,9 @@ public enum LootContainerType {
     public String getDisplayName() { return displayName; }
     public int getDefaultRespawnDays() { return defaultRespawnDays; }
     public int getSlotCount() { return slotCount; }
+
+    public boolean isWallFurniture() {
+        return this == VENDING_MACHINE || this == KITCHEN_CABINET
+                || this == MEDICINE_CABINET || this == BOOKSHELF || this == GUN_SAFE;
+    }
 }

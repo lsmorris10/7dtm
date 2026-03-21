@@ -65,7 +65,7 @@ public class VillageBuildingBuilder {
         buildFoundation(level, base, halfX, halfZ, floorBlock);
         buildWalls(level, base, halfX, halfZ, wallHeight, wallBlock, frameBlock);
         placeWindows(level, base, halfX, halfZ, wallHeight, random);
-        placeDoor(level, base, halfX, halfZ, buildingType, random);
+        int doorSide = placeDoor(level, base, halfX, halfZ, buildingType, random);
         if (!willHaveSecondFloor) {
             buildPeakedRoof(level, base, halfX, halfZ, wallHeight, roofBlock);
         }
@@ -79,14 +79,14 @@ public class VillageBuildingBuilder {
         }
 
         collectInteriorPositions(base, halfX, halfZ, zombieSpawnPos);
-        placeLoot(level, base, halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random);
+        placeLoot(level, base, halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random, doorSide);
 
         if (willHaveSecondFloor) {
             int secondFloorY = wallHeight + 1;
             buildSecondFloor(level, base, halfX, halfZ, secondFloorY, wallBlock, floorBlock, frameBlock, random);
             placeWindows(level, base.above(secondFloorY), halfX, halfZ, wallHeight, random);
             collectInteriorPositions(base.above(secondFloorY), halfX, halfZ, zombieSpawnPos);
-            placeLoot(level, base.above(secondFloorY), halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random);
+            placeLoot(level, base.above(secondFloorY), halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random, doorSide);
             buildPeakedRoof(level, base, halfX, halfZ, secondFloorY + wallHeight, roofBlock);
         }
 
@@ -167,7 +167,7 @@ public class VillageBuildingBuilder {
         }
     }
 
-    private static void placeDoor(ServerLevel level, BlockPos base, int halfX, int halfZ,
+    private static int placeDoor(ServerLevel level, BlockPos base, int halfX, int halfZ,
                                    VillageBuildingType buildingType, RandomSource random) {
         int side = random.nextInt(4);
         BlockPos doorBase;
@@ -189,6 +189,7 @@ public class VillageBuildingBuilder {
                 .setValue(DoorBlock.FACING, facing);
         setBlock(level, doorBase, lowerDoor);
         setBlock(level, doorBase.above(), upperDoor);
+        return side;
     }
 
     private static Block getDoorBlock(VillageBuildingType type) {
@@ -361,20 +362,40 @@ public class VillageBuildingBuilder {
     private static void placeLoot(ServerLevel level, BlockPos base, int halfX, int halfZ, int wallHeight,
                                    TerritoryTier tier, VillageBuildingType buildingType,
                                    List<BlockPos> lootPos, List<LootContainerType> lootTypes,
-                                   RandomSource random) {
+                                   RandomSource random, int doorSide) {
         int innerHalfX = halfX - 1;
         int innerHalfZ = halfZ - 1;
         if (innerHalfX <= 0 || innerHalfZ <= 0) return;
 
         int count = buildingType.getLootCount(tier.getTier());
+        int wallCycle = 0;
         for (int i = 0; i < count; i++) {
             int attempts = 0;
+            LootContainerType lootType = buildingType.pickLoot(random);
+
             while (attempts < 20) {
-                int dx = random.nextInt(innerHalfX * 2 + 1) - innerHalfX;
-                int dz = random.nextInt(innerHalfZ * 2 + 1) - innerHalfZ;
+                int dx, dz;
+                if (lootType.isWallFurniture()) {
+                    int wall = (wallCycle + random.nextInt(2)) % 4;
+                    int freeRangeX = Math.max(1, innerHalfX - 1);
+                    int freeRangeZ = Math.max(1, innerHalfZ - 1);
+                    switch (wall) {
+                        case 0 -> { dz = -innerHalfZ; dx = random.nextInt(freeRangeX * 2 + 1) - freeRangeX; }
+                        case 1 -> { dz = innerHalfZ;  dx = random.nextInt(freeRangeX * 2 + 1) - freeRangeX; }
+                        case 2 -> { dx = -innerHalfX; dz = random.nextInt(freeRangeZ * 2 + 1) - freeRangeZ; }
+                        default -> { dx = innerHalfX;  dz = random.nextInt(freeRangeZ * 2 + 1) - freeRangeZ; }
+                    }
+                    if (wall == doorSide && ((wall <= 1 && dx == 0) || (wall >= 2 && dz == 0))) {
+                        attempts++;
+                        continue;
+                    }
+                    wallCycle = (wall + 1) % 4;
+                } else {
+                    dx = random.nextInt(innerHalfX * 2 + 1) - innerHalfX;
+                    dz = random.nextInt(innerHalfZ * 2 + 1) - innerHalfZ;
+                }
                 BlockPos pos = base.offset(dx, 1, dz);
                 if (!lootPos.contains(pos)) {
-                    LootContainerType lootType = buildingType.pickLoot(random);
                     Block lootBlock = TerritoryStructureBuilder.getLootBlock(lootType);
                     if (lootBlock != null) {
                         setBlock(level, pos, lootBlock.defaultBlockState());

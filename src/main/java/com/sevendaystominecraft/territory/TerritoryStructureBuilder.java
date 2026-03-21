@@ -118,17 +118,35 @@ public class TerritoryStructureBuilder {
         if (innerHalf <= 0) return;
 
         int count = tier.getLootContainerCount();
+        int wallCycle = 0;
         for (int i = 0; i < count; i++) {
             int attempts = 0;
+            LootContainerType lootType = (random.nextFloat() < 0.6f)
+                    ? type.getPrimaryLoot()
+                    : type.getSecondaryLoot();
+
             while (attempts < 20) {
-                int dx = (innerHalf > 0) ? random.nextInt(innerHalf * 2 + 1) - innerHalf : 0;
-                int dz = (innerHalf > 0) ? random.nextInt(innerHalf * 2 + 1) - innerHalf : 0;
+                int dx, dz;
+                if (lootType.isWallFurniture() && innerHalf > 0) {
+                    int wall = (wallCycle + random.nextInt(2)) % 4;
+                    int freeRange = Math.max(1, innerHalf - 1);
+                    switch (wall) {
+                        case 0 -> { dx = innerHalf;  dz = random.nextInt(freeRange * 2 + 1) - freeRange; }
+                        case 1 -> { dx = -innerHalf; dz = random.nextInt(freeRange * 2 + 1) - freeRange; }
+                        case 2 -> { dz = innerHalf;  dx = random.nextInt(freeRange * 2 + 1) - freeRange; }
+                        default -> { dz = -innerHalf; dx = random.nextInt(freeRange * 2 + 1) - freeRange; }
+                    }
+                    if (dx == 0 && dz == -innerHalf) {
+                        attempts++;
+                        continue;
+                    }
+                    wallCycle = (wall + 1) % 4;
+                } else {
+                    dx = (innerHalf > 0) ? random.nextInt(innerHalf * 2 + 1) - innerHalf : 0;
+                    dz = (innerHalf > 0) ? random.nextInt(innerHalf * 2 + 1) - innerHalf : 0;
+                }
                 BlockPos pos = base.offset(dx, 1, dz);
                 if (!lootPos.contains(pos)) {
-                    LootContainerType lootType = (random.nextFloat() < 0.6f)
-                            ? type.getPrimaryLoot()
-                            : type.getSecondaryLoot();
-
                     net.minecraft.world.level.block.Block lootBlock = getLootBlock(lootType);
                     if (lootBlock != null) {
                         setBlock(level, pos, lootBlock.defaultBlockState());
