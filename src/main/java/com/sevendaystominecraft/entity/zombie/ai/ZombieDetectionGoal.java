@@ -159,6 +159,15 @@ public class ZombieDetectionGoal extends Goal {
             effectiveRange *= CROUCH_DETECTION_MULTIPLIER;
         }
 
+        if (player.hasData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get())) {
+            com.sevendaystominecraft.capability.SevenDaysPlayerStats stats =
+                    player.getData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get());
+            int nightstalkerRank = stats.getPerkRank("nightstalker");
+            if (nightstalkerRank > 0) {
+                effectiveRange *= Math.max(0.1, 1.0 - 0.20 * nightstalkerRank);
+            }
+        }
+
         if (distance > effectiveRange) return 0.0;
 
         float noise = NoiseManager.getCurrentNoise(player.getUUID());

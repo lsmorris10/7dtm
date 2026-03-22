@@ -45,6 +45,12 @@ public class TreatmentItem extends Item {
             return InteractionResult.PASS;
         }
 
+        int fieldMedicRank = stats.getPerkRank("field_medic");
+        if (fieldMedicRank > 0) {
+            float healAmount = 2.0f * fieldMedicRank;
+            player.heal(healAmount);
+        }
+
         ItemStack stack = player.getItemInHand(hand);
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);

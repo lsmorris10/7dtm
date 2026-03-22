@@ -20,11 +20,18 @@ public class FallDamageHandler {
         if (player.level().isClientSide()) return;
         if (!player.hasData(ModAttachments.PLAYER_STATS.get())) return;
 
-        float distance = event.getDistance();
-        if (distance < SPRAIN_MIN_BLOCKS) return;
-
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
         SurvivalConfig cfg = SurvivalConfig.INSTANCE;
+
+        int parkourRank = stats.getPerkRank("parkour");
+        if (parkourRank > 0) {
+            float reduction = Math.min(0.25f * parkourRank, 0.95f);
+            float reducedDistance = Math.max(0f, event.getDistance() * (1.0f - reduction));
+            event.setDistance(reducedDistance);
+        }
+
+        float distance = event.getDistance();
+        if (distance < SPRAIN_MIN_BLOCKS) return;
 
         if (distance >= FRACTURE_MIN_BLOCKS) {
             stats.removeDebuff(SevenDaysPlayerStats.DEBUFF_SPRAIN);

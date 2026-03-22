@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.item.weapon;
 
+import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
 import com.sevendaystominecraft.stealth.NoiseEventHandler;
 import net.minecraft.core.component.DataComponents;
@@ -217,6 +219,18 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
         float currentInaccuracy = isADS ? inaccuracy * ADS_INACCURACY_MULTIPLIER : inaccuracy;
 
+        if (!isADS && player.getDeltaMovement().horizontalDistanceSqr() > 0.01) {
+            float movementPenalty = currentInaccuracy * 0.5f;
+            if (player.hasData(ModAttachments.PLAYER_STATS.get())) {
+                SevenDaysPlayerStats perkStats = player.getData(ModAttachments.PLAYER_STATS.get());
+                int runGunRank = perkStats.getPerkRank("run_and_gun");
+                if (runGunRank > 0) {
+                    movementPenalty *= (1.0f - 0.20f * runGunRank);
+                }
+            }
+            currentInaccuracy += movementPenalty;
+        }
+
         if (level instanceof ServerLevel sl) {
             BulletEntity bullet = new BulletEntity(level, player, bulletDamage, bulletGravity, bulletMaxLife);
             Vec3 look = player.getLookAngle();
@@ -263,13 +277,25 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         }
     }
 
+    private int getEffectiveReloadTicks(Player player) {
+        int baseTicks = reloadTicks;
+        if (weaponType == WeaponType.PISTOL_9MM && player.hasData(ModAttachments.PLAYER_STATS.get())) {
+            SevenDaysPlayerStats perkStats = player.getData(ModAttachments.PLAYER_STATS.get());
+            int gunslingerRank = perkStats.getPerkRank("gunslinger");
+            if (gunslingerRank > 0) {
+                baseTicks = Math.max(1, (int) (baseTicks * (1.0f - 0.05f * gunslingerRank)));
+            }
+        }
+        return baseTicks;
+    }
+
     private void startReload(Level level, Player player, InteractionHand hand, ItemStack held) {
         Item ammoItem = ammoSupplier.get();
         if (!hasAmmoInInventory(player, ammoItem)) {
             return;
         }
         setReloading(held, true);
-        setReloadTicksLeft(held, reloadTicks);
+        setReloadTicksLeft(held, getEffectiveReloadTicks(player));
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 1.0f, 0.8f);
         triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".reload");

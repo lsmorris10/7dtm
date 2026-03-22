@@ -26,6 +26,16 @@ public class LevelManager {
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
         stats.addXp(amount);
 
+        int charismaRank = stats.getPerkRank("charismatic_nature");
+        if (charismaRank > 0 && player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            double shareRange = 10.0 + (10.0 * charismaRank);
+            int sharedXp = Math.max(1, (int) (amount * 0.10f * charismaRank));
+            for (ServerPlayer nearby : serverLevel.getPlayers(
+                    p -> p != player && p.distanceTo(player) <= shareRange)) {
+                awardXpDirect(nearby, sharedXp);
+            }
+        }
+
         int xpNeeded = xpToNextLevel(stats.getLevel());
         while (stats.getXp() >= xpNeeded) {
             stats.setXp(stats.getXp() - xpNeeded);
@@ -40,6 +50,26 @@ public class LevelManager {
             } else {
                 SevenDaysToMinecraft.LOGGER.info("[BZHS] {} reached level {} — earned 1 perk point",
                         player.getName().getString(), newLevel);
+            }
+
+            xpNeeded = xpToNextLevel(stats.getLevel());
+        }
+    }
+
+    private static void awardXpDirect(ServerPlayer player, int amount) {
+        if (amount <= 0) return;
+        SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+        stats.addXp(amount);
+
+        int xpNeeded = xpToNextLevel(stats.getLevel());
+        while (stats.getXp() >= xpNeeded) {
+            stats.setXp(stats.getXp() - xpNeeded);
+            int newLevel = stats.getLevel() + 1;
+            stats.setLevel(newLevel);
+            stats.addPerkPoints(1);
+
+            if (newLevel % 10 == 0) {
+                stats.addAttributePoints(1);
             }
 
             xpNeeded = xpToNextLevel(stats.getLevel());

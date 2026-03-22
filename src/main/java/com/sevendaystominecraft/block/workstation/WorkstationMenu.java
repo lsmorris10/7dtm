@@ -23,6 +23,7 @@ public class WorkstationMenu extends AbstractContainerMenu {
     public WorkstationMenu(int containerId, Inventory playerInv, WorkstationBlockEntity blockEntity) {
         super(ModMenuTypes.WORKSTATION_MENU.get(), containerId);
         this.blockEntity = blockEntity;
+        blockEntity.setLastCrafter(playerInv.player);
 
         this.data = new ContainerData() {
             private final int[] clientCache = new int[4];

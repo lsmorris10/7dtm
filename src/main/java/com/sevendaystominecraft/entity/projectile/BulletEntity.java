@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.entity.projectile;
 
+import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.entity.ModEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -104,7 +107,26 @@ public class BulletEntity extends ThrowableItemProjectile {
         super.onHitEntity(result);
         if (result.getEntity() instanceof LivingEntity living && level() instanceof ServerLevel sl) {
             LivingEntity owner = getOwner() instanceof LivingEntity le ? le : null;
-            living.hurtServer(sl, damageSources().mobProjectile(this, owner), bulletDamage);
+
+            float damage = bulletDamage;
+
+            double hitY = result.getLocation().y;
+            double entityY = living.getY();
+            double entityHeight = living.getBbHeight();
+            boolean isHeadshot = entityHeight > 0 && hitY >= entityY + entityHeight * 0.75;
+
+            if (isHeadshot) {
+                float headshotMultiplier = 2.5f;
+                if (owner instanceof Player player && player.hasData(ModAttachments.PLAYER_STATS.get())) {
+                    SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+                    if (stats.getPerkRank("eagle_eye") > 0) {
+                        headshotMultiplier = 4.0f;
+                    }
+                }
+                damage *= headshotMultiplier;
+            }
+
+            living.hurtServer(sl, damageSources().mobProjectile(this, owner), damage);
         }
     }
 

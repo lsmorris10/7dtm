@@ -150,9 +150,25 @@ public class QuestActionHandler {
 
         quest.markCompleted();
 
-        LevelManager.awardXp(player, def.getRewardXp());
-
+        int rewardXp = def.getRewardXp();
         int tokens = def.getRewardTokens();
+
+        int boldExplorerRank = stats.getPerkRank("bold_explorer");
+        if (boldExplorerRank > 0) {
+            float xpBonus = 1.0f + (0.10f * boldExplorerRank);
+            rewardXp = Math.round(rewardXp * xpBonus);
+            float tokenBonus = 1.0f + (0.10f * boldExplorerRank);
+            tokens = Math.round(tokens * tokenBonus);
+        }
+
+        int treasureHunterRank = stats.getPerkRank("treasure_hunter");
+        if (treasureHunterRank > 0 && def.getType() == QuestType.BURIED_TREASURE) {
+            float lootBonus = 1.0f + (0.15f * treasureHunterRank);
+            tokens = Math.round(tokens * lootBonus);
+        }
+
+        LevelManager.awardXp(player, rewardXp);
+
         if (tokens > 0) {
             ItemStack tokenStack = new ItemStack(ModItems.DUKE_TOKEN.get(), tokens);
             if (!player.getInventory().add(tokenStack)) {

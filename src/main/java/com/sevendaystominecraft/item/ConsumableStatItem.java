@@ -70,12 +70,24 @@ public class ConsumableStatItem extends Item {
         }
 
         if (regenTicks > 0 && player instanceof ServerPlayer) {
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenTicks, 0));
+            int effectiveRegenTicks = regenTicks;
+            int fieldMedicRank = stats.getPerkRank("field_medic");
+            if (fieldMedicRank > 0) {
+                effectiveRegenTicks = (int) (regenTicks * (1.0f + 0.25f * fieldMedicRank));
+            }
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, effectiveRegenTicks, 0));
         }
 
-        if (poisonChance > 0f && level.random.nextFloat() < poisonChance) {
-            player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 0));
-            player.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+        if (poisonChance > 0f) {
+            float effectivePoisonChance = poisonChance;
+            int ironGutRank = stats.getPerkRank("iron_gut");
+            if (ironGutRank > 0) {
+                effectivePoisonChance *= (1.0f - 0.33f * ironGutRank);
+            }
+            if (effectivePoisonChance > 0f && level.random.nextFloat() < effectivePoisonChance) {
+                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 0));
+                player.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+            }
         }
 
         ItemStack stack = player.getItemInHand(hand);

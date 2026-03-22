@@ -25,6 +25,7 @@ public class WorkstationBlockEntity extends BlockEntity {
     private int burnTimeTotal;
     private int craftProgress;
     private int craftTimeTotal;
+    private java.util.UUID lastCrafterId;
 
     public WorkstationBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WORKSTATION_BE.get(), pos, state);
@@ -78,6 +79,14 @@ public class WorkstationBlockEntity extends BlockEntity {
     public boolean stillValid(Player player) {
         return player.distanceToSqr(worldPosition.getX() + 0.5,
                 worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64.0;
+    }
+
+    public void setLastCrafter(Player player) {
+        this.lastCrafterId = player != null ? player.getUUID() : null;
+    }
+
+    public java.util.UUID getLastCrafterId() {
+        return lastCrafterId;
     }
 
     public int getBurnTime() { return burnTime; }
@@ -217,7 +226,14 @@ public class WorkstationBlockEntity extends BlockEntity {
 
     private void processRecipe(WorkstationRecipe recipe) {
         recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
-        addToOutput(recipe.output().copy());
+        ItemStack output = recipe.output().copy();
+
+        if (level instanceof net.minecraft.server.level.ServerLevel sl) {
+            applyPerkQualityBonus(sl, output);
+            applyCraftingPerkBonuses(sl, output);
+        }
+
+        addToOutput(output);
 
         if ((workstationType == WorkstationType.CAMPFIRE || workstationType == WorkstationType.GRILL)
                 && level instanceof net.minecraft.server.level.ServerLevel serverLevel
@@ -225,6 +241,74 @@ public class WorkstationBlockEntity extends BlockEntity {
             for (net.minecraft.server.level.ServerPlayer player : serverLevel.getPlayers(
                     p -> p.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) < 64)) {
                 com.sevendaystominecraft.smell.SmellTracker.markRecentlyCookedFor(player);
+            }
+        }
+    }
+
+    private net.minecraft.server.level.ServerPlayer resolveCrafter(net.minecraft.server.level.ServerLevel serverLevel) {
+        if (lastCrafterId != null) {
+            net.minecraft.server.level.ServerPlayer crafter = serverLevel.getServer().getPlayerList().getPlayer(lastCrafterId);
+            if (crafter != null && crafter.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) < 256) {
+                return crafter;
+            }
+        }
+        for (net.minecraft.server.level.ServerPlayer p : serverLevel.getPlayers(
+                pl -> pl.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) < 64)) {
+            return p;
+        }
+        return null;
+    }
+
+    private void applyPerkQualityBonus(net.minecraft.server.level.ServerLevel serverLevel, ItemStack output) {
+        if (output.getMaxDamage() <= 0) return;
+
+        net.minecraft.server.level.ServerPlayer crafter = resolveCrafter(serverLevel);
+        if (crafter == null) return;
+        if (!crafter.hasData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get())) return;
+
+        com.sevendaystominecraft.capability.SevenDaysPlayerStats stats =
+                crafter.getData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get());
+
+        int engRank = stats.getPerkRank("advanced_engineering");
+        int mastermindRank = stats.getPerkRank("mastermind");
+
+        int qualityLevel = 1;
+        if (engRank >= 5) qualityLevel = 4;
+        else if (engRank >= 3) qualityLevel = 3;
+        else if (engRank >= 1) qualityLevel = 2;
+
+        if (mastermindRank > 0 && serverLevel.getRandom().nextFloat() < 0.20f) {
+            qualityLevel = Math.min(6, qualityLevel + 1);
+        }
+
+        if (qualityLevel > 1) {
+            CompoundTag tag = output.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                    net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            tag.putInt("QualityTier", qualityLevel);
+            output.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                    net.minecraft.world.item.component.CustomData.of(tag));
+        }
+    }
+
+    private void applyCraftingPerkBonuses(net.minecraft.server.level.ServerLevel serverLevel, ItemStack output) {
+        net.minecraft.server.level.ServerPlayer crafter = resolveCrafter(serverLevel);
+        if (crafter == null) return;
+        if (!crafter.hasData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get())) return;
+
+        com.sevendaystominecraft.capability.SevenDaysPlayerStats stats =
+                crafter.getData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get());
+
+        if (workstationType == WorkstationType.CAMPFIRE || workstationType == WorkstationType.GRILL) {
+            int cookRank = stats.getPerkRank("campfire_cook");
+            if (cookRank > 0 && serverLevel.getRandom().nextFloat() < 0.15f * cookRank) {
+                output.grow(1);
+            }
+        }
+
+        if (workstationType == WorkstationType.CHEMISTRY_STATION) {
+            int physicianRank = stats.getPerkRank("physician");
+            if (physicianRank > 0 && serverLevel.getRandom().nextFloat() < 0.15f * physicianRank) {
+                output.grow(1);
             }
         }
     }
