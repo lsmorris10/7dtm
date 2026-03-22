@@ -195,12 +195,15 @@ public class AdminCommand {
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(AdminCommand::heatmapGetPlayer)))
                 .then(Commands.literal("set")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .then(Commands.argument("value", FloatArgumentType.floatArg(0, 100))
+                                        .executes(AdminCommand::heatmapSetPlayer)))
                         .then(Commands.argument("value", FloatArgumentType.floatArg(0, 100))
-                                .executes(AdminCommand::heatmapSet)
-                                .then(Commands.argument("player", EntityArgument.player())
-                                        .executes(AdminCommand::heatmapSetPlayer))))
+                                .executes(AdminCommand::heatmapSet)))
                 .then(Commands.literal("reset")
-                        .executes(AdminCommand::heatmapReset));
+                        .executes(AdminCommand::heatmapResetSelf)
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(AdminCommand::heatmapResetPlayer)));
     }
 
     private static int heatmapGet(CommandContext<CommandSourceStack> ctx) {
@@ -253,32 +256,47 @@ public class AdminCommand {
         return 1;
     }
 
-    private static int heatmapReset(CommandContext<CommandSourceStack> ctx) {
-        ServerLevel level = ctx.getSource().getLevel();
+    private static int heatmapResetSelf(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
+        if (player == null) return sendPlayerRequired(ctx);
+        return resetHeatForPlayer(ctx, player);
+    }
+
+    private static int heatmapResetPlayer(CommandContext<CommandSourceStack> ctx) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+        return resetHeatForPlayer(ctx, player);
+    }
+
+    private static int resetHeatForPlayer(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
         HeatmapData data = HeatmapData.getOrCreate(level);
-        int count = data.getAllChunkSources().size();
-        data.getAllChunkSources().clear();
+        ChunkPos chunkPos = new ChunkPos(player.blockPosition());
+        data.getAllChunkSources().remove(ChunkPos.asLong(chunkPos.x, chunkPos.z));
         data.setDirty();
-        HeatmapSpawner.clearCooldowns();
         ctx.getSource().sendSuccess(() -> Component.literal(
-                PREFIX + SUCCESS_COLOR + "Heatmap reset. Cleared " + count + " heated chunks."), true);
+                PREFIX + SUCCESS_COLOR + "Reset heat at " + player.getName().getString() +
+                        "'s chunk (" + chunkPos.x + "," + chunkPos.z + ")."), true);
         return 1;
     }
 
     private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> buildDebuffCommand() {
         return Commands.literal("debuff")
                 .then(Commands.literal("add")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .then(Commands.argument("debuff_id", StringArgumentType.word())
+                                        .suggests(SUGGEST_DEBUFFS)
+                                        .executes(ctx -> debuffAdd(ctx, EntityArgument.getPlayer(ctx, "player")))))
                         .then(Commands.argument("debuff_id", StringArgumentType.word())
                                 .suggests(SUGGEST_DEBUFFS)
-                                .executes(ctx -> debuffAdd(ctx, null))
-                                .then(Commands.argument("player", EntityArgument.player())
-                                        .executes(ctx -> debuffAdd(ctx, EntityArgument.getPlayer(ctx, "player"))))))
+                                .executes(ctx -> debuffAdd(ctx, null))))
                 .then(Commands.literal("remove")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .then(Commands.argument("debuff_id", StringArgumentType.word())
+                                        .suggests(SUGGEST_DEBUFFS)
+                                        .executes(ctx -> debuffRemove(ctx, EntityArgument.getPlayer(ctx, "player")))))
                         .then(Commands.argument("debuff_id", StringArgumentType.word())
                                 .suggests(SUGGEST_DEBUFFS)
-                                .executes(ctx -> debuffRemove(ctx, null))
-                                .then(Commands.argument("player", EntityArgument.player())
-                                        .executes(ctx -> debuffRemove(ctx, EntityArgument.getPlayer(ctx, "player"))))))
+                                .executes(ctx -> debuffRemove(ctx, null))))
                 .then(Commands.literal("clear")
                         .executes(ctx -> debuffClear(ctx, null))
                         .then(Commands.argument("player", EntityArgument.player())
@@ -338,12 +356,15 @@ public class AdminCommand {
     private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> buildStatsCommand() {
         return Commands.literal("stats")
                 .then(Commands.literal("set")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .then(Commands.argument("stat", StringArgumentType.word())
+                                        .suggests(SUGGEST_STATS)
+                                        .then(Commands.argument("value", FloatArgumentType.floatArg())
+                                                .executes(ctx -> statsSet(ctx, EntityArgument.getPlayer(ctx, "player"))))))
                         .then(Commands.argument("stat", StringArgumentType.word())
                                 .suggests(SUGGEST_STATS)
                                 .then(Commands.argument("value", FloatArgumentType.floatArg())
-                                        .executes(ctx -> statsSet(ctx, null))
-                                        .then(Commands.argument("player", EntityArgument.player())
-                                                .executes(ctx -> statsSet(ctx, EntityArgument.getPlayer(ctx, "player")))))));
+                                        .executes(ctx -> statsSet(ctx, null)))));
     }
 
     private static int statsSet(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
@@ -514,40 +535,38 @@ public class AdminCommand {
     }
 
     private static int lootRefill(CommandContext<CommandSourceStack> ctx) {
-        ServerPlayer player = ctx.getSource().getPlayer();
-        if (player == null) return sendPlayerRequired(ctx);
-
-        ServerLevel level = player.serverLevel();
-        int refilled = resetLootContainers(level, player.blockPosition(), false);
+        ServerLevel level = ctx.getSource().getLevel();
+        int refilled = resetLootContainers(level, false);
         ctx.getSource().sendSuccess(() -> Component.literal(
                 PREFIX + SUCCESS_COLOR + "Refilled " + refilled + " loot containers in loaded chunks."), true);
         return 1;
     }
 
     private static int lootReset(CommandContext<CommandSourceStack> ctx) {
-        ServerPlayer player = ctx.getSource().getPlayer();
-        if (player == null) return sendPlayerRequired(ctx);
-
-        ServerLevel level = player.serverLevel();
-        int reset = resetLootContainers(level, player.blockPosition(), true);
+        ServerLevel level = ctx.getSource().getLevel();
+        int reset = resetLootContainers(level, true);
         ctx.getSource().sendSuccess(() -> Component.literal(
                 PREFIX + SUCCESS_COLOR + "Reset " + reset + " loot containers (timers cleared)."), true);
         return 1;
     }
 
-    private static int resetLootContainers(ServerLevel level, BlockPos center, boolean resetTimers) {
+    private static int resetLootContainers(ServerLevel level, boolean resetTimers) {
         int count = 0;
-        int chunkRadius = 8;
-        ChunkPos centerChunk = new ChunkPos(center);
-
-        for (int cx = centerChunk.x - chunkRadius; cx <= centerChunk.x + chunkRadius; cx++) {
-            for (int cz = centerChunk.z - chunkRadius; cz <= centerChunk.z + chunkRadius; cz++) {
-                if (!level.hasChunk(cx, cz)) continue;
-                LevelChunk chunk = level.getChunk(cx, cz);
-                for (BlockEntity be : chunk.getBlockEntities().values()) {
-                    if (be instanceof LootContainerBlockEntity lootBE) {
-                        lootBE.resetForAdmin(resetTimers);
-                        count++;
+        Set<Long> processedChunks = new HashSet<>();
+        int viewDist = level.getServer().getPlayerList().getViewDistance();
+        for (ServerPlayer player : level.players()) {
+            ChunkPos playerChunk = new ChunkPos(player.blockPosition());
+            for (int cx = playerChunk.x - viewDist; cx <= playerChunk.x + viewDist; cx++) {
+                for (int cz = playerChunk.z - viewDist; cz <= playerChunk.z + viewDist; cz++) {
+                    long key = ChunkPos.asLong(cx, cz);
+                    if (!processedChunks.add(key)) continue;
+                    if (!level.hasChunk(cx, cz)) continue;
+                    LevelChunk chunk = level.getChunk(cx, cz);
+                    for (BlockEntity be : chunk.getBlockEntities().values()) {
+                        if (be instanceof LootContainerBlockEntity lootBE) {
+                            lootBE.resetForAdmin(resetTimers);
+                            count++;
+                        }
                     }
                 }
             }
