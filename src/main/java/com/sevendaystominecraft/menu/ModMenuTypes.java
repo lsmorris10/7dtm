@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.menu;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.farming.DewCollectorMenu;
 import com.sevendaystominecraft.block.loot.LootContainerMenu;
 import com.sevendaystominecraft.block.workstation.WorkstationMenu;
 import com.sevendaystominecraft.trader.TraderMenu;
@@ -28,4 +29,8 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<TraderMenu>> TRADER_MENU =
             MENU_TYPES.register("trader", () ->
                     IMenuTypeExtension.create(TraderMenu::fromNetwork));
+
+    public static final Supplier<MenuType<DewCollectorMenu>> DEW_COLLECTOR_MENU =
+            MENU_TYPES.register("dew_collector", () ->
+                    IMenuTypeExtension.create(DewCollectorMenu::fromNetwork));
 }

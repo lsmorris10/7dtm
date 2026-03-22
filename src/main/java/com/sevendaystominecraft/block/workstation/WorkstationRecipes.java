@@ -34,6 +34,13 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.RABBIT, 1)), new ItemStack(ModItems.CHARRED_MEAT.get()), 100));
         recipes.add(recipe(List.of(ing(ModItems.GOLDENROD.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.GOLDENROD_TEA.get()), 200));
         recipes.add(recipe(List.of(ing(ModItems.CHRYSANTHEMUM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.RED_TEA.get()), 200));
+        recipes.add(recipe(List.of(ing(ModItems.CORN.get(), 1)), new ItemStack(ModItems.CORN_ON_THE_COB.get()), 200));
+        recipes.add(recipe(List.of(ing(ModItems.POTATO_CROP_ITEM.get(), 1)), new ItemStack(ModItems.BAKED_POTATO_MEAL.get()), 200));
+        recipes.add(recipe(List.of(ing(ModItems.BLUEBERRY.get(), 3), ing(Items.WHEAT, 2)), new ItemStack(ModItems.BLUEBERRY_PIE.get()), 300));
+        recipes.add(recipe(List.of(ing(ModItems.CORN.get(), 1), ing(ModItems.POTATO_CROP_ITEM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.VEGETABLE_STEW.get()), 400));
+        recipes.add(recipe(List.of(ing(Items.BEEF, 1), ing(ModItems.POTATO_CROP_ITEM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.MEAT_STEW.get()), 400));
+        recipes.add(recipe(List.of(ing(ModItems.COFFEE_BEANS.get(), 2), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.COFFEE.get()), 200));
+        recipes.add(recipe(List.of(ing(ModItems.MURKY_WATER.get(), 1)), new ItemStack(ModItems.BOILED_WATER.get()), 200));
         RECIPES.put(WorkstationType.CAMPFIRE, recipes);
     }
 
@@ -47,6 +54,15 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.SALMON, 1)), new ItemStack(Items.COOKED_SALMON), 150));
         recipes.add(recipe(List.of(ing(Items.POTATO, 1)), new ItemStack(Items.BAKED_POTATO), 150));
         recipes.add(recipe(List.of(ing(Items.RABBIT, 1)), new ItemStack(Items.COOKED_RABBIT), 150));
+        recipes.add(recipe(List.of(ing(ModItems.CORN.get(), 1)), new ItemStack(ModItems.CORN_ON_THE_COB.get()), 150));
+        recipes.add(recipe(List.of(ing(ModItems.POTATO_CROP_ITEM.get(), 1)), new ItemStack(ModItems.BAKED_POTATO_MEAL.get()), 150));
+        recipes.add(recipe(List.of(ing(ModItems.BLUEBERRY.get(), 3), ing(Items.WHEAT, 2)), new ItemStack(ModItems.BLUEBERRY_PIE.get()), 200));
+        recipes.add(recipe(List.of(ing(ModItems.CORN.get(), 1), ing(ModItems.POTATO_CROP_ITEM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.VEGETABLE_STEW.get()), 300));
+        recipes.add(recipe(List.of(ing(Items.BEEF, 1), ing(ModItems.POTATO_CROP_ITEM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.MEAT_STEW.get()), 300));
+        recipes.add(recipe(List.of(ing(ModItems.COFFEE_BEANS.get(), 2), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.COFFEE.get()), 150));
+        recipes.add(recipe(List.of(ing(Items.BEEF, 1), ing(ModItems.CORN.get(), 1), ing(ModItems.POTATO_CROP_ITEM.get(), 1)), new ItemStack(ModItems.HOBO_STEW.get()), 400));
+        recipes.add(recipe(List.of(ing(ModItems.POTATO_CROP_ITEM.get(), 2), ing(ModItems.CORN.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.SHAM_CHOWDER.get()), 300));
+        recipes.add(recipe(List.of(ing(ModItems.MURKY_WATER.get(), 1)), new ItemStack(ModItems.BOILED_WATER.get()), 150));
         RECIPES.put(WorkstationType.GRILL, recipes);
     }
 
@@ -80,6 +96,8 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 5), ing(Items.STICK, 2)), new ItemStack(ModItems.IRON_SLEDGEHAMMER.get(), 1), 0));
         recipes.add(recipe(List.of(ing(Items.PAPER, 2), ing(Items.STRING, 1)), new ItemStack(ModItems.BANDAGE.get(), 2), 0));
         recipes.add(recipe(List.of(ing(Items.STICK, 2), ing(Items.STRING, 1)), new ItemStack(ModItems.SPLINT.get(), 1), 0));
+        recipes.add(recipe(List.of(ing(Items.GLASS, 4), ing(ModItems.FORGED_IRON.get(), 2), ing(ModItems.DUCT_TAPE.get(), 1)),
+                new ItemStack(com.sevendaystominecraft.block.ModBlocks.DEW_COLLECTOR_BLOCK.get().asItem()), 0));
         RECIPES.put(WorkstationType.WORKBENCH, recipes);
     }
 

@@ -198,9 +198,7 @@ public class LootContainerBlockEntity extends BlockEntity {
                     Items.BREAD, Items.APPLE, Items.PAPER, Items.GLASS_BOTTLE);
             case MAILBOX -> pickRandomVanilla(random,
                     Items.PAPER, Items.MAP, Items.BOOK);
-            case FARM_CRATE -> pickRandomVanilla(random,
-                    Items.WHEAT_SEEDS, Items.WHEAT, Items.CARROT, Items.POTATO,
-                    Items.BEETROOT_SEEDS, Items.PUMPKIN_SEEDS, Items.MELON_SEEDS);
+            case FARM_CRATE -> pickFarmCrate(random);
         };
     }
 
@@ -248,6 +246,21 @@ public class LootContainerBlockEntity extends BlockEntity {
         }
 
         return new ItemStack(pool[random.nextInt(pool.length)].get(), 1);
+    }
+
+    private static ItemStack pickFarmCrate(Random random) {
+        Item[] pool = new Item[]{
+                Items.WHEAT_SEEDS, Items.WHEAT, Items.CARROT, Items.POTATO,
+                Items.BEETROOT_SEEDS, Items.PUMPKIN_SEEDS, Items.MELON_SEEDS,
+                ModItems.CORN_SEED.get(), ModItems.POTATO_SEED.get(),
+                ModItems.BLUEBERRY_SEED.get(), ModItems.GOLDENROD_SEED.get(),
+                ModItems.ALOE_SEED.get(), ModItems.COFFEE_SEED.get(),
+                ModItems.CORN.get(), ModItems.POTATO_CROP_ITEM.get(),
+                ModItems.BLUEBERRY.get(), ModItems.GOLDENROD.get(),
+                ModItems.ALOE.get(), ModItems.COFFEE_BEANS.get()
+        };
+        Item chosen = pool[random.nextInt(pool.length)];
+        return new ItemStack(chosen, 1 + random.nextInt(3));
     }
 
     @Override

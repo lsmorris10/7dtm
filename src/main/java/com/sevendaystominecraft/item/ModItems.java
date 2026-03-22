@@ -18,6 +18,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import com.sevendaystominecraft.block.ModBlocks;
 
 import com.sevendaystominecraft.item.armor.ArmorTier;
 import com.sevendaystominecraft.item.armor.ModArmorMaterials;
@@ -250,4 +251,92 @@ public class ModItems {
     public static final Supplier<Item> WRENCH = ITEMS.register("wrench",
             () -> new SwordItem(WRENCH_MATERIAL, 3.0f, -2.4f,
                     new Item.Properties().setId(key("wrench"))));
+
+    public static final Supplier<Item> MURKY_WATER = ITEMS.register("murky_water",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("murky_water")).stacksTo(64),
+                    0f, 15f, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, new String[]{}, 0));
+
+    public static final Supplier<Item> CORN = ITEMS.register("corn",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("corn")).stacksTo(64),
+                    5f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
+
+    public static final Supplier<Item> POTATO_CROP_ITEM = ITEMS.register("potato_crop_item",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("potato_crop_item")).stacksTo(64),
+                    4f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
+
+    public static final Supplier<Item> BLUEBERRY = ITEMS.register("blueberry",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("blueberry")).stacksTo(64),
+                    3f, 2f, new String[]{}, new String[]{}, 0));
+
+    public static final Supplier<Item> ALOE = ITEMS.register("aloe",
+            () -> new Item(new Item.Properties().setId(key("aloe")).stacksTo(64)));
+
+    public static final Supplier<Item> COFFEE_BEANS = ITEMS.register("coffee_beans",
+            () -> new Item(new Item.Properties().setId(key("coffee_beans")).stacksTo(64)));
+
+    public static final Supplier<Item> CORN_SEED = ITEMS.register("corn_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("corn_seed")).stacksTo(64),
+                    () -> ModBlocks.CORN_CROP.get()));
+
+    public static final Supplier<Item> POTATO_SEED = ITEMS.register("potato_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("potato_seed")).stacksTo(64),
+                    () -> ModBlocks.POTATO_CROP.get()));
+
+    public static final Supplier<Item> BLUEBERRY_SEED = ITEMS.register("blueberry_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("blueberry_seed")).stacksTo(64),
+                    () -> ModBlocks.BLUEBERRY_CROP.get()));
+
+    public static final Supplier<Item> GOLDENROD_SEED = ITEMS.register("goldenrod_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("goldenrod_seed")).stacksTo(64),
+                    () -> ModBlocks.GOLDENROD_CROP.get()));
+
+    public static final Supplier<Item> ALOE_SEED = ITEMS.register("aloe_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("aloe_seed")).stacksTo(64),
+                    () -> ModBlocks.ALOE_CROP.get()));
+
+    public static final Supplier<Item> COFFEE_SEED = ITEMS.register("coffee_seed",
+            () -> new SeedItem(new Item.Properties().setId(key("coffee_seed")).stacksTo(64),
+                    () -> ModBlocks.COFFEE_CROP.get()));
+
+    public static final Supplier<Item> CORN_ON_THE_COB = ITEMS.register("corn_on_the_cob",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("corn_on_the_cob")).stacksTo(64),
+                    15f, 0f, new String[]{}, new String[]{}, 0));
+
+    public static final Supplier<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("blueberry_pie")).stacksTo(64),
+                    20f, 5f, new String[]{}, new String[]{}, 600));
+
+    public static final Supplier<Item> VEGETABLE_STEW = ITEMS.register("vegetable_stew",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("vegetable_stew")).stacksTo(64),
+                    24f, 10f, new String[]{}, new String[]{}, 0));
+
+    public static final Supplier<Item> MEAT_STEW = ITEMS.register("meat_stew",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("meat_stew")).stacksTo(64),
+                    30f, 10f, new String[]{}, new String[]{}, 600));
+
+    public static final Supplier<Item> COFFEE = ITEMS.register("coffee",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("coffee")).stacksTo(64),
+                    2f, 15f, new String[]{}, new String[]{}, 0) {
+                @Override
+                public net.minecraft.world.InteractionResult use(net.minecraft.world.level.Level level, net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
+                    net.minecraft.world.InteractionResult result = super.use(level, player, hand);
+                    if (!level.isClientSide && result == net.minecraft.world.InteractionResult.CONSUME) {
+                        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                                net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 2400, 0));
+                    }
+                    return result;
+                }
+            });
+
+    public static final Supplier<Item> HOBO_STEW = ITEMS.register("hobo_stew",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("hobo_stew")).stacksTo(64),
+                    35f, 15f, new String[]{}, new String[]{}, 1200));
+
+    public static final Supplier<Item> SHAM_CHOWDER = ITEMS.register("sham_chowder",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("sham_chowder")).stacksTo(64),
+                    18f, 20f, new String[]{}, new String[]{}, 400));
+
+    public static final Supplier<Item> BAKED_POTATO_MEAL = ITEMS.register("baked_potato_meal",
+            () -> new ConsumableStatItem(new Item.Properties().setId(key("baked_potato_meal")).stacksTo(64),
+                    16f, 0f, new String[]{}, new String[]{}, 0));
 }

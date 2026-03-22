@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.farming.DewCollectorScreen;
 import com.sevendaystominecraft.block.loot.LootContainerScreen;
 import com.sevendaystominecraft.block.workstation.WorkstationScreen;
 import com.sevendaystominecraft.menu.ModMenuTypes;
@@ -14,6 +15,7 @@ public class ModScreens {
         event.register(ModMenuTypes.WORKSTATION_MENU.get(), WorkstationScreen::new);
         event.register(ModMenuTypes.LOOT_CONTAINER_MENU.get(), LootContainerScreen::new);
         event.register(ModMenuTypes.TRADER_MENU.get(), TraderScreen::new);
-        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered workstation, loot container, and trader screens");
+        event.register(ModMenuTypes.DEW_COLLECTOR_MENU.get(), DewCollectorScreen::new);
+        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered workstation, loot container, trader, and dew collector screens");
     }
 }

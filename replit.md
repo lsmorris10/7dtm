@@ -68,6 +68,14 @@ src/main/java/com/sevendaystominecraft/
 │   │   ├── BladeTrapBlock.java       — AoE damage trap (6 dmg), hits entities within 1 block every 20 ticks
 │   │   ├── ElectricFencePostBlock.java — Contact damage (5 dmg) + stun (slowness V for 2s) on entity touch
 │   │   └── LandClaimBlock.java       — 41-block protection radius preventing zombie spawns, one per player
+│   ├── farming/
+│   │   ├── CropBlock.java          — Base crop block with 4 growth stages (AGE 0-3), randomTick growth, harvest with Green Thumb perk integration
+│   │   ├── FarmPlotBlock.java      — Tilled soil block that crops must be planted on (doesn't revert)
+│   │   ├── DewCollectorBlock.java  — BaseEntityBlock for passive water generation
+│   │   ├── DewCollectorBlockEntity.java — Block entity generating Murky Water every 6000 ticks with sky access
+│   │   ├── DewCollectorMenu.java   — Container menu for Dew Collector (4 output slots)
+│   │   ├── DewCollectorScreen.java — Client-side GUI screen for Dew Collector
+│   │   └── FarmPlotInteractionHandler.java — Event handler: hoe + dirt/grass → Farm Plot conversion
 │   └── loot/
 │       ├── LootContainerType.java  — Enum: Trash Pile, Cardboard Box, Gun Safe, Munitions Box, etc.
 │       ├── LootContainerBlock.java — BaseEntityBlock for loot containers
@@ -134,10 +142,11 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor, repair hammer)
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor, seeds, crops, cooked food, repair hammer)
 │   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Armor, Loot Containers, Building, Magazines
 │   ├── TreatmentItem.java          — Single-use right-click consumable that removes specific debuffs
 │   ├── ConsumableStatItem.java     — Consumable item that modifies food/water stats, applies/cures debuffs, grants regen
+│   ├── SeedItem.java               — Right-click-on-farm-plot plantable seed item
 │   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
 │   ├── armor/
 │   │   ├── ArmorTier.java          — Enum: LIGHT (Padded), MEDIUM (Scrap Iron), HEAVY (Military) with movement/stealth modifiers

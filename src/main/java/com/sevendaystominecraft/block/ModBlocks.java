@@ -7,12 +7,16 @@ import com.sevendaystominecraft.block.building.IronSpikesBlock;
 import com.sevendaystominecraft.block.building.LandClaimBlock;
 import com.sevendaystominecraft.block.building.UpgradeableBlock;
 import com.sevendaystominecraft.block.building.WoodSpikesBlock;
+import com.sevendaystominecraft.block.farming.CropBlock;
+import com.sevendaystominecraft.block.farming.DewCollectorBlock;
+import com.sevendaystominecraft.block.farming.FarmPlotBlock;
 import com.sevendaystominecraft.block.loot.LootContainerBlock;
 import com.sevendaystominecraft.block.loot.LootContainerType;
 import com.sevendaystominecraft.block.loot.VendingMachineBlock;
 import com.sevendaystominecraft.block.vehicle.VehicleWreckageBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationType;
+import com.sevendaystominecraft.item.ModItems;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -235,6 +239,58 @@ public class ModBlocks {
                     .strength(50.0f, 1200.0f)
                     .sound(SoundType.METAL)
                     .lightLevel(state -> 7)));
+
+    public static final Supplier<Block> FARM_PLOT_BLOCK = registerWithItem("farm_plot",
+            () -> new FarmPlotBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("farm_plot"))
+                    .strength(0.6f)
+                    .sound(SoundType.GRAVEL)
+                    .mapColor(net.minecraft.world.level.material.MapColor.DIRT)));
+
+    private static BlockBehaviour.Properties cropProps(String name) {
+        return BlockBehaviour.Properties.of()
+                .setId(blockKey(name))
+                .noCollission()
+                .randomTicks()
+                .strength(0f)
+                .sound(SoundType.CROP)
+                .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY);
+    }
+
+    public static final Supplier<Block> CORN_CROP = registerBlock("corn_crop",
+            () -> new CropBlock(cropProps("corn_crop"),
+                    () -> ModItems.CORN_SEED.get(), () -> ModItems.CORN.get(), 1, 3));
+
+    public static final Supplier<Block> POTATO_CROP = registerBlock("potato_crop",
+            () -> new CropBlock(cropProps("potato_crop"),
+                    () -> ModItems.POTATO_SEED.get(), () -> ModItems.POTATO_CROP_ITEM.get(), 1, 3));
+
+    public static final Supplier<Block> BLUEBERRY_CROP = registerBlock("blueberry_crop",
+            () -> new CropBlock(cropProps("blueberry_crop"),
+                    () -> ModItems.BLUEBERRY_SEED.get(), () -> ModItems.BLUEBERRY.get(), 2, 4));
+
+    public static final Supplier<Block> GOLDENROD_CROP = registerBlock("goldenrod_crop",
+            () -> new CropBlock(cropProps("goldenrod_crop"),
+                    () -> ModItems.GOLDENROD_SEED.get(), () -> ModItems.GOLDENROD.get(), 1, 2));
+
+    public static final Supplier<Block> ALOE_CROP = registerBlock("aloe_crop",
+            () -> new CropBlock(cropProps("aloe_crop"),
+                    () -> ModItems.ALOE_SEED.get(), () -> ModItems.ALOE.get(), 1, 2));
+
+    public static final Supplier<Block> COFFEE_CROP = registerBlock("coffee_crop",
+            () -> new CropBlock(cropProps("coffee_crop"),
+                    () -> ModItems.COFFEE_SEED.get(), () -> ModItems.COFFEE_BEANS.get(), 1, 3));
+
+    public static final Supplier<Block> DEW_COLLECTOR_BLOCK = registerWithItem("dew_collector",
+            () -> new DewCollectorBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("dew_collector"))
+                    .strength(2.0f)
+                    .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
+
+    private static Supplier<Block> registerBlock(String name, Supplier<Block> blockSupplier) {
+        return BLOCKS.register(name, blockSupplier);
+    }
 
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);

@@ -68,6 +68,26 @@ public class ModCreativeTabs {
                         output.accept(ModItems.CHARRED_MEAT.get());
                         output.accept(ModItems.GOLDENROD_TEA.get());
                         output.accept(ModItems.RED_TEA.get());
+                        output.accept(ModItems.MURKY_WATER.get());
+                        output.accept(ModItems.CORN.get());
+                        output.accept(ModItems.POTATO_CROP_ITEM.get());
+                        output.accept(ModItems.BLUEBERRY.get());
+                        output.accept(ModItems.ALOE.get());
+                        output.accept(ModItems.COFFEE_BEANS.get());
+                        output.accept(ModItems.CORN_SEED.get());
+                        output.accept(ModItems.POTATO_SEED.get());
+                        output.accept(ModItems.BLUEBERRY_SEED.get());
+                        output.accept(ModItems.GOLDENROD_SEED.get());
+                        output.accept(ModItems.ALOE_SEED.get());
+                        output.accept(ModItems.COFFEE_SEED.get());
+                        output.accept(ModItems.CORN_ON_THE_COB.get());
+                        output.accept(ModItems.BLUEBERRY_PIE.get());
+                        output.accept(ModItems.VEGETABLE_STEW.get());
+                        output.accept(ModItems.MEAT_STEW.get());
+                        output.accept(ModItems.COFFEE.get());
+                        output.accept(ModItems.HOBO_STEW.get());
+                        output.accept(ModItems.SHAM_CHOWDER.get());
+                        output.accept(ModItems.BAKED_POTATO_MEAL.get());
                     })
                     .build());
 
@@ -82,6 +102,8 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.CEMENT_MIXER_BLOCK.get());
                         output.accept(ModBlocks.CHEMISTRY_STATION_BLOCK.get());
                         output.accept(ModBlocks.ADVANCED_WORKBENCH_BLOCK.get());
+                        output.accept(ModBlocks.FARM_PLOT_BLOCK.get());
+                        output.accept(ModBlocks.DEW_COLLECTOR_BLOCK.get());
                     })
                     .build());
 

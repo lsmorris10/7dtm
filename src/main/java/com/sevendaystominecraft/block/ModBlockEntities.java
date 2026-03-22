@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.block;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.farming.DewCollectorBlockEntity;
 import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
 import com.sevendaystominecraft.block.workstation.WorkstationBlockEntity;
 
@@ -42,5 +43,11 @@ public class ModBlockEntities {
                             ModBlocks.VENDING_MACHINE_BLOCK.get(),
                             ModBlocks.MAILBOX_BLOCK.get(),
                             ModBlocks.FARM_CRATE_BLOCK.get()
+                    ));
+
+    public static final Supplier<BlockEntityType<DewCollectorBlockEntity>> DEW_COLLECTOR_BE =
+            BLOCK_ENTITY_TYPES.register("dew_collector", () ->
+                    new BlockEntityType<>(DewCollectorBlockEntity::new,
+                            ModBlocks.DEW_COLLECTOR_BLOCK.get()
                     ));
 }
