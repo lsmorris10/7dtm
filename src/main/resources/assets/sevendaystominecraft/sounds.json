@@ -47,6 +47,12 @@
     ],
     "subtitle": "subtitles.sevendaystominecraft.block_break_zombie"
   },
+  "zombie_sniff": {
+    "sounds": [
+      "sevendaystominecraft:zombie_sniff"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_sniff"
+  },
   "music_exploration_day": {
     "category": "music",
     "sounds": [

@@ -25,6 +25,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> BLOOD_MOON_SIREN = register("blood_moon_siren");
     public static final Supplier<SoundEvent> WORKSTATION_AMBIENT = register("workstation_ambient");
     public static final Supplier<SoundEvent> BLOCK_BREAK_ZOMBIE = register("block_break_zombie");
+    public static final Supplier<SoundEvent> ZOMBIE_SNIFF = register("zombie_sniff");
 
     public static final Supplier<SoundEvent> MUSIC_EXPLORATION_DAY = register("music_exploration_day");
     public static final Supplier<SoundEvent> MUSIC_EXPLORATION_NIGHT = register("music_exploration_night");
