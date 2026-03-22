@@ -236,4 +236,18 @@ public class ModItems {
     public static final Supplier<Item> MILITARY_BOOTS = ITEMS.register("military_boots",
             () -> new TieredArmorItem(ModArmorMaterials.MILITARY, ArmorType.BOOTS,
                     new Item.Properties().setId(key("military_boots")).stacksTo(1), ArmorTier.HEAVY));
+
+    public static final ToolMaterial REPAIR_HAMMER_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_IRON_TOOL, 500, 2.0f, 0.0f, 10, ItemTags.IRON_ORES);
+
+    public static final Supplier<Item> REPAIR_HAMMER = ITEMS.register("repair_hammer",
+            () -> new SwordItem(REPAIR_HAMMER_MATERIAL, 2.0f, -2.4f,
+                    new Item.Properties().setId(key("repair_hammer"))));
+
+    public static final ToolMaterial WRENCH_MATERIAL = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_IRON_TOOL, 500, 2.0f, 0.0f, 10, ItemTags.IRON_ORES);
+
+    public static final Supplier<Item> WRENCH = ITEMS.register("wrench",
+            () -> new SwordItem(WRENCH_MATERIAL, 3.0f, -2.4f,
+                    new Item.Properties().setId(key("wrench"))));
 }

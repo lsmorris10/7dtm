@@ -149,6 +149,15 @@
   "block.sevendaystominecraft.vehicle_roof": "Vehicle Roof Panel",
   "block.sevendaystominecraft.camper_body": "Camper Body Panel",
   "block.sevendaystominecraft.truck_bed": "Truck Bed",
+  "item.sevendaystominecraft.military_boots": "Military Boots",
+  "block.sevendaystominecraft.upgradeable_frame": "Wood Frame",
+  "block.sevendaystominecraft.wood_spikes": "Wood Spikes",
+  "block.sevendaystominecraft.iron_spikes": "Iron Spikes",
+  "block.sevendaystominecraft.blade_trap": "Blade Trap",
+  "block.sevendaystominecraft.electric_fence_post": "Electric Fence Post",
+  "block.sevendaystominecraft.land_claim_block": "Land Claim Block",
+  "item.sevendaystominecraft.repair_hammer": "Repair Hammer",
+  "creativetab.sevendaystominecraft.building": "BZHS Building",
   "creativetab.sevendaystominecraft.armor": "BZHS Armor",
   "item.sevendaystominecraft.padded_helmet": "Padded Helmet",
   "item.sevendaystominecraft.padded_chestplate": "Padded Chestplate",
@@ -161,5 +170,5 @@
   "item.sevendaystominecraft.military_helmet": "Military Helmet",
   "item.sevendaystominecraft.military_chestplate": "Military Chestplate",
   "item.sevendaystominecraft.military_leggings": "Military Leggings",
-  "item.sevendaystominecraft.military_boots": "Military Boots"
+  "item.sevendaystominecraft.wrench": "Wrench"
 }

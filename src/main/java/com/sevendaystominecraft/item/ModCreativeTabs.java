@@ -137,6 +137,22 @@ public class ModCreativeTabs {
                     })
                     .build());
 
+    public static final Supplier<CreativeModeTab> BUILDING_TAB = CREATIVE_TABS.register("building",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("creativetab.sevendaystominecraft.building"))
+                    .icon(() -> new ItemStack(ModBlocks.UPGRADEABLE_FRAME.get()))
+                    .displayItems((params, output) -> {
+                        output.accept(ModBlocks.UPGRADEABLE_FRAME.get());
+                        output.accept(ModBlocks.WOOD_SPIKES.get());
+                        output.accept(ModBlocks.IRON_SPIKES.get());
+                        output.accept(ModBlocks.BLADE_TRAP.get());
+                        output.accept(ModBlocks.ELECTRIC_FENCE_POST.get());
+                        output.accept(ModBlocks.LAND_CLAIM_BLOCK.get());
+                        output.accept(ModItems.REPAIR_HAMMER.get());
+                        output.accept(ModItems.WRENCH.get());
+                    })
+                    .build());
+
     public static final Supplier<CreativeModeTab> MAGAZINES_TAB = CREATIVE_TABS.register("magazines",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("creativetab.sevendaystominecraft.magazines"))

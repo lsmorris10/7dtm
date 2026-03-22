@@ -172,6 +172,8 @@ public class HeatmapSpawner {
                 : findSpawnPosition(level, player.blockPosition());
         if (spawnPos == null) return;
 
+        if (com.sevendaystominecraft.block.building.LandClaimBlock.isWithinAnyClaimRadius(level, spawnPos)) return;
+
         BaseSevenDaysZombie zombie = typeSupplier.get().create(level, EntitySpawnReason.EVENT);
         if (zombie == null) return;
 

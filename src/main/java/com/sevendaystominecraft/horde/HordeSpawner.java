@@ -78,6 +78,8 @@ public class HordeSpawner {
                 BlockPos spawnPos = findSpawnPosition(level, player.blockPosition());
                 if (spawnPos == null) continue;
 
+                if (com.sevendaystominecraft.block.building.LandClaimBlock.isWithinAnyClaimRadius(level, spawnPos)) continue;
+
                 BaseSevenDaysZombie zombie = createVariantZombie(level, comp);
                 if (zombie != null) {
                     zombie.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,

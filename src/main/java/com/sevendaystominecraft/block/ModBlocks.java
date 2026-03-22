@@ -1,6 +1,12 @@
 package com.sevendaystominecraft.block;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.building.BladeTrapBlock;
+import com.sevendaystominecraft.block.building.ElectricFencePostBlock;
+import com.sevendaystominecraft.block.building.IronSpikesBlock;
+import com.sevendaystominecraft.block.building.LandClaimBlock;
+import com.sevendaystominecraft.block.building.UpgradeableBlock;
+import com.sevendaystominecraft.block.building.WoodSpikesBlock;
 import com.sevendaystominecraft.block.loot.LootContainerBlock;
 import com.sevendaystominecraft.block.loot.LootContainerType;
 import com.sevendaystominecraft.block.loot.VendingMachineBlock;
@@ -185,6 +191,50 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY)
                     .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> UPGRADEABLE_FRAME = registerWithItem("upgradeable_frame",
+            () -> new UpgradeableBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("upgradeable_frame"))
+                    .strength(2.0f, 2.0f)
+                    .sound(SoundType.WOOD)));
+
+    public static final Supplier<Block> WOOD_SPIKES = registerWithItem("wood_spikes",
+            () -> new WoodSpikesBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("wood_spikes"))
+                    .strength(1.0f)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()));
+
+    public static final Supplier<Block> IRON_SPIKES = registerWithItem("iron_spikes",
+            () -> new IronSpikesBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("iron_spikes"))
+                    .strength(2.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> BLADE_TRAP = registerWithItem("blade_trap",
+            () -> new BladeTrapBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("blade_trap"))
+                    .strength(3.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> ELECTRIC_FENCE_POST = registerWithItem("electric_fence_post",
+            () -> new ElectricFencePostBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("electric_fence_post"))
+                    .strength(2.5f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> LAND_CLAIM_BLOCK = registerWithItem("land_claim_block",
+            () -> new LandClaimBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("land_claim_block"))
+                    .strength(50.0f, 1200.0f)
+                    .sound(SoundType.METAL)
+                    .lightLevel(state -> 7)));
 
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);

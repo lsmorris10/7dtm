@@ -48,7 +48,7 @@ src/main/java/com/sevendaystominecraft/
 │       ├── PremadeWorldListWidget.java  — Scrollable list widget for premade world selection
 │       └── CreateWorldScreenHandler.java — ScreenEvent listener injecting World Type toggle
 ├── block/
-│   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations, loot containers, vehicle wreckage, terrain: ash_block, asphalt_block, cracked_asphalt)
+│   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations, loot containers, vehicle wreckage, terrain, building/traps/land claim)
 │   ├── ModBlockEntities.java       — Block entity type registration
 │   ├── vehicle/
 │   │   └── VehicleWreckageBlock.java — Decorative vehicle blocks (burnt car, broken truck, wrecked camper) that drop scrap materials
@@ -61,6 +61,13 @@ src/main/java/com/sevendaystominecraft/
 │   │   ├── VanillaCampfireHandler.java — Event handler: intercepts right-click on vanilla campfire to open workstation GUI
 │   │   ├── CampfireWorkstationSavedData.java — SavedData storing per-position campfire workstation inventory/fuel/progress
 │   │   └── CampfireDataBlockEntity.java — Adapter bridging CampfireData to WorkstationBlockEntity for menu compatibility
+│   ├── building/
+│   │   ├── UpgradeableBlock.java     — 6-tier upgradeable block (Wood Frame→Reinforced Wood→Cobblestone→Concrete→Reinforced Concrete→Steel) with right-click upgrade via repair hammer
+│   │   ├── WoodSpikesBlock.java      — Contact damage trap (4 dmg), 10 durability, degrades on hit
+│   │   ├── IronSpikesBlock.java      — Contact damage trap (8 dmg), 20 durability, degrades on hit
+│   │   ├── BladeTrapBlock.java       — AoE damage trap (6 dmg), hits entities within 1 block every 20 ticks
+│   │   ├── ElectricFencePostBlock.java — Contact damage (5 dmg) + stun (slowness V for 2s) on entity touch
+│   │   └── LandClaimBlock.java       — 41-block protection radius preventing zombie spawns, one per player
 │   └── loot/
 │       ├── LootContainerType.java  — Enum: Trash Pile, Cardboard Box, Gun Safe, Munitions Box, etc.
 │       ├── LootContainerBlock.java — BaseEntityBlock for loot containers
@@ -127,8 +134,8 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor)
-│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Armor, Loot Containers, Magazines
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor, repair hammer)
+│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Armor, Loot Containers, Building, Magazines
 │   ├── TreatmentItem.java          — Single-use right-click consumable that removes specific debuffs
 │   ├── ConsumableStatItem.java     — Consumable item that modifies food/water stats, applies/cures debuffs, grants regen
 │   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers

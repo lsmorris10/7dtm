@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.entity.zombie.ai;
 
+import com.sevendaystominecraft.block.ModBlocks;
+import com.sevendaystominecraft.block.building.UpgradeableBlock;
 import com.sevendaystominecraft.config.ZombieConfig;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -126,6 +128,13 @@ public final class BlockHPRegistry {
 
     public static float getBlockHP(BlockState state) {
         Block block = state.getBlock();
+
+        if (block instanceof UpgradeableBlock) {
+            int tier = state.getValue(UpgradeableBlock.TIER);
+            float mult = ZombieConfig.INSTANCE.blockHPMultiplier.get().floatValue();
+            return UpgradeableBlock.getHPForTier(tier) * mult;
+        }
+
         Float hp = BLOCK_HP_MAP.get(block);
         if (hp != null) {
             if (hp < 0) return -1;
