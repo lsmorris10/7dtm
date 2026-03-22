@@ -101,6 +101,26 @@ public class ModCreativeTabs {
                     })
                     .build());
 
+    public static final Supplier<CreativeModeTab> ARMOR_TAB = CREATIVE_TABS.register("armor",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("creativetab.sevendaystominecraft.armor"))
+                    .icon(() -> new ItemStack(ModItems.MILITARY_CHESTPLATE.get()))
+                    .displayItems((params, output) -> {
+                        output.accept(ModItems.PADDED_HELMET.get());
+                        output.accept(ModItems.PADDED_CHESTPLATE.get());
+                        output.accept(ModItems.PADDED_LEGGINGS.get());
+                        output.accept(ModItems.PADDED_BOOTS.get());
+                        output.accept(ModItems.SCRAP_IRON_HELMET.get());
+                        output.accept(ModItems.SCRAP_IRON_CHESTPLATE.get());
+                        output.accept(ModItems.SCRAP_IRON_LEGGINGS.get());
+                        output.accept(ModItems.SCRAP_IRON_BOOTS.get());
+                        output.accept(ModItems.MILITARY_HELMET.get());
+                        output.accept(ModItems.MILITARY_CHESTPLATE.get());
+                        output.accept(ModItems.MILITARY_LEGGINGS.get());
+                        output.accept(ModItems.MILITARY_BOOTS.get());
+                    })
+                    .build());
+
     public static final Supplier<CreativeModeTab> LOOT_CONTAINERS_TAB = CREATIVE_TABS.register("loot_containers",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("creativetab.sevendaystominecraft.loot_containers"))

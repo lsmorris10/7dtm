@@ -4,6 +4,7 @@ import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.config.SurvivalConfig;
+import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler;
 import com.sevendaystominecraft.network.SyncPlayerStatsPayload;
 import com.sevendaystominecraft.perk.Attribute;
 import com.sevendaystominecraft.worldgen.BiomeProperties;
@@ -126,9 +127,11 @@ public class PlayerStatsHandler {
             }
         } else if (!stats.isStaminaExhausted() && isPlayerMoving(player)) {
             float regenRate = (float) (cfg.staminaRegenWalking.get() / 20.0);
+            regenRate *= ArmorSetBonusHandler.getStaminaRegenMultiplier(player);
             applyStaminaRegen(stats, cfg, regenRate);
         } else if (!player.isSprinting()) {
             float regenRate = (float) (cfg.staminaRegenRest.get() / 20.0);
+            regenRate *= ArmorSetBonusHandler.getStaminaRegenMultiplier(player);
             applyStaminaRegen(stats, cfg, regenRate);
         }
 

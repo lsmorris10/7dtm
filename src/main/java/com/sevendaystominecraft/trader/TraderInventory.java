@@ -68,8 +68,8 @@ public class TraderInventory {
         offers.add(new TraderOffer(new ItemStack(Items.IRON_PICKAXE), 150, 30, 3));
         offers.add(new TraderOffer(new ItemStack(Items.BOW), 80, 15, 3));
         offers.add(new TraderOffer(new ItemStack(Items.ARROW, 16), 25, 2, 10));
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_CHESTPLATE), 60, 12, 3));
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_BOOTS), 40, 8, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_CHESTPLATE.get()), 60, 12, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_BOOTS.get()), 40, 8, 3));
         offers.add(new TraderOffer(new ItemStack(ModItems.FORGED_IRON.get(), 8), 60, 10, 8));
         offers.add(new TraderOffer(new ItemStack(ModItems.NAIL.get(), 16), 40, 5, 8));
     }
@@ -116,16 +116,16 @@ public class TraderInventory {
     }
 
     private static void addHughStock(List<TraderOffer> offers) {
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_HELMET), 40, 8, 3));
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_CHESTPLATE), 60, 12, 3));
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_LEGGINGS), 50, 10, 3));
-        offers.add(new TraderOffer(new ItemStack(Items.LEATHER_BOOTS), 40, 8, 3));
-        offers.add(new TraderOffer(new ItemStack(Items.IRON_HELMET), 120, 25, 2));
-        offers.add(new TraderOffer(new ItemStack(Items.IRON_CHESTPLATE), 200, 40, 2));
-        offers.add(new TraderOffer(new ItemStack(Items.IRON_LEGGINGS), 170, 35, 2));
-        offers.add(new TraderOffer(new ItemStack(Items.IRON_BOOTS), 120, 25, 2));
-        offers.add(new TraderOffer(new ItemStack(Items.DIAMOND_CHESTPLATE), 600, 120, 1));
-        offers.add(new TraderOffer(new ItemStack(Items.DIAMOND_HELMET), 400, 80, 1));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_HELMET.get()), 40, 8, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_CHESTPLATE.get()), 60, 12, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_LEGGINGS.get()), 50, 10, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.PADDED_BOOTS.get()), 40, 8, 3));
+        offers.add(new TraderOffer(new ItemStack(ModItems.SCRAP_IRON_HELMET.get()), 120, 25, 2));
+        offers.add(new TraderOffer(new ItemStack(ModItems.SCRAP_IRON_CHESTPLATE.get()), 200, 40, 2));
+        offers.add(new TraderOffer(new ItemStack(ModItems.SCRAP_IRON_LEGGINGS.get()), 170, 35, 2));
+        offers.add(new TraderOffer(new ItemStack(ModItems.SCRAP_IRON_BOOTS.get()), 120, 25, 2));
+        offers.add(new TraderOffer(new ItemStack(ModItems.MILITARY_CHESTPLATE.get()), 600, 120, 1));
+        offers.add(new TraderOffer(new ItemStack(ModItems.MILITARY_HELMET.get()), 400, 80, 1));
         offers.add(new TraderOffer(new ItemStack(ModItems.POLYMER.get(), 8), 150, 25, 5));
         offers.add(new TraderOffer(new ItemStack(ModItems.GAS_CAN.get(), 2), 200, 35, 3));
     }
@@ -155,9 +155,9 @@ public class TraderInventory {
     }
 
     private static void addHughSecretStash(List<TraderOffer> stash) {
-        stash.add(new TraderOffer(new ItemStack(Items.DIAMOND_CHESTPLATE), 600, 120, 1));
-        stash.add(new TraderOffer(new ItemStack(Items.DIAMOND_LEGGINGS), 500, 100, 1));
-        stash.add(new TraderOffer(new ItemStack(Items.DIAMOND_BOOTS), 400, 80, 1));
+        stash.add(new TraderOffer(new ItemStack(ModItems.MILITARY_CHESTPLATE.get()), 600, 120, 1));
+        stash.add(new TraderOffer(new ItemStack(ModItems.MILITARY_LEGGINGS.get()), 500, 100, 1));
+        stash.add(new TraderOffer(new ItemStack(ModItems.MILITARY_BOOTS.get()), 400, 80, 1));
     }
 
     public static int getBuyPrice(int basePrice, int betterBarterRank, float difficultyMult) {
@@ -201,6 +201,18 @@ public class TraderInventory {
         if (stack.getItem() == ModItems.FORGED_IRON.get()) return 5;
         if (stack.getItem() == ModItems.FORGED_STEEL.get()) return 15;
         if (stack.getItem() == ModItems.POLYMER.get()) return 10;
+        if (stack.getItem() == ModItems.PADDED_HELMET.get()) return 8;
+        if (stack.getItem() == ModItems.PADDED_CHESTPLATE.get()) return 12;
+        if (stack.getItem() == ModItems.PADDED_LEGGINGS.get()) return 10;
+        if (stack.getItem() == ModItems.PADDED_BOOTS.get()) return 8;
+        if (stack.getItem() == ModItems.SCRAP_IRON_HELMET.get()) return 25;
+        if (stack.getItem() == ModItems.SCRAP_IRON_CHESTPLATE.get()) return 40;
+        if (stack.getItem() == ModItems.SCRAP_IRON_LEGGINGS.get()) return 35;
+        if (stack.getItem() == ModItems.SCRAP_IRON_BOOTS.get()) return 25;
+        if (stack.getItem() == ModItems.MILITARY_HELMET.get()) return 80;
+        if (stack.getItem() == ModItems.MILITARY_CHESTPLATE.get()) return 120;
+        if (stack.getItem() == ModItems.MILITARY_LEGGINGS.get()) return 100;
+        if (stack.getItem() == ModItems.MILITARY_BOOTS.get()) return 80;
         return 1;
     }
 }

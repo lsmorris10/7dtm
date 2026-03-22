@@ -148,5 +148,18 @@
   "block.sevendaystominecraft.vehicle_wheel": "Flat Tire",
   "block.sevendaystominecraft.vehicle_roof": "Vehicle Roof Panel",
   "block.sevendaystominecraft.camper_body": "Camper Body Panel",
-  "block.sevendaystominecraft.truck_bed": "Truck Bed"
+  "block.sevendaystominecraft.truck_bed": "Truck Bed",
+  "creativetab.sevendaystominecraft.armor": "BZHS Armor",
+  "item.sevendaystominecraft.padded_helmet": "Padded Helmet",
+  "item.sevendaystominecraft.padded_chestplate": "Padded Chestplate",
+  "item.sevendaystominecraft.padded_leggings": "Padded Leggings",
+  "item.sevendaystominecraft.padded_boots": "Padded Boots",
+  "item.sevendaystominecraft.scrap_iron_helmet": "Scrap Iron Helmet",
+  "item.sevendaystominecraft.scrap_iron_chestplate": "Scrap Iron Chestplate",
+  "item.sevendaystominecraft.scrap_iron_leggings": "Scrap Iron Leggings",
+  "item.sevendaystominecraft.scrap_iron_boots": "Scrap Iron Boots",
+  "item.sevendaystominecraft.military_helmet": "Military Helmet",
+  "item.sevendaystominecraft.military_chestplate": "Military Chestplate",
+  "item.sevendaystominecraft.military_leggings": "Military Leggings",
+  "item.sevendaystominecraft.military_boots": "Military Boots"
 }

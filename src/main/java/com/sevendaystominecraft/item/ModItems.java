@@ -12,10 +12,16 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import com.sevendaystominecraft.item.armor.ArmorTier;
+import com.sevendaystominecraft.item.armor.ModArmorMaterials;
+import com.sevendaystominecraft.item.armor.TieredArmorItem;
 
 import java.util.function.Supplier;
 
@@ -182,4 +188,52 @@ public class ModItems {
     public static final Supplier<Item> RED_TEA = ITEMS.register("red_tea",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("red_tea")).stacksTo(64),
                     2f, 20f, new String[]{}, new String[]{}, 1200));
+
+    public static final Supplier<Item> PADDED_HELMET = ITEMS.register("padded_helmet",
+            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.HELMET,
+                    new Item.Properties().setId(key("padded_helmet")).stacksTo(1), ArmorTier.LIGHT));
+
+    public static final Supplier<Item> PADDED_CHESTPLATE = ITEMS.register("padded_chestplate",
+            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.CHESTPLATE,
+                    new Item.Properties().setId(key("padded_chestplate")).stacksTo(1), ArmorTier.LIGHT));
+
+    public static final Supplier<Item> PADDED_LEGGINGS = ITEMS.register("padded_leggings",
+            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.LEGGINGS,
+                    new Item.Properties().setId(key("padded_leggings")).stacksTo(1), ArmorTier.LIGHT));
+
+    public static final Supplier<Item> PADDED_BOOTS = ITEMS.register("padded_boots",
+            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.BOOTS,
+                    new Item.Properties().setId(key("padded_boots")).stacksTo(1), ArmorTier.LIGHT));
+
+    public static final Supplier<Item> SCRAP_IRON_HELMET = ITEMS.register("scrap_iron_helmet",
+            () -> new TieredArmorItem(ModArmorMaterials.SCRAP_IRON, ArmorType.HELMET,
+                    new Item.Properties().setId(key("scrap_iron_helmet")).stacksTo(1), ArmorTier.MEDIUM));
+
+    public static final Supplier<Item> SCRAP_IRON_CHESTPLATE = ITEMS.register("scrap_iron_chestplate",
+            () -> new TieredArmorItem(ModArmorMaterials.SCRAP_IRON, ArmorType.CHESTPLATE,
+                    new Item.Properties().setId(key("scrap_iron_chestplate")).stacksTo(1), ArmorTier.MEDIUM));
+
+    public static final Supplier<Item> SCRAP_IRON_LEGGINGS = ITEMS.register("scrap_iron_leggings",
+            () -> new TieredArmorItem(ModArmorMaterials.SCRAP_IRON, ArmorType.LEGGINGS,
+                    new Item.Properties().setId(key("scrap_iron_leggings")).stacksTo(1), ArmorTier.MEDIUM));
+
+    public static final Supplier<Item> SCRAP_IRON_BOOTS = ITEMS.register("scrap_iron_boots",
+            () -> new TieredArmorItem(ModArmorMaterials.SCRAP_IRON, ArmorType.BOOTS,
+                    new Item.Properties().setId(key("scrap_iron_boots")).stacksTo(1), ArmorTier.MEDIUM));
+
+    public static final Supplier<Item> MILITARY_HELMET = ITEMS.register("military_helmet",
+            () -> new TieredArmorItem(ModArmorMaterials.MILITARY, ArmorType.HELMET,
+                    new Item.Properties().setId(key("military_helmet")).stacksTo(1), ArmorTier.HEAVY));
+
+    public static final Supplier<Item> MILITARY_CHESTPLATE = ITEMS.register("military_chestplate",
+            () -> new TieredArmorItem(ModArmorMaterials.MILITARY, ArmorType.CHESTPLATE,
+                    new Item.Properties().setId(key("military_chestplate")).stacksTo(1), ArmorTier.HEAVY));
+
+    public static final Supplier<Item> MILITARY_LEGGINGS = ITEMS.register("military_leggings",
+            () -> new TieredArmorItem(ModArmorMaterials.MILITARY, ArmorType.LEGGINGS,
+                    new Item.Properties().setId(key("military_leggings")).stacksTo(1), ArmorTier.HEAVY));
+
+    public static final Supplier<Item> MILITARY_BOOTS = ITEMS.register("military_boots",
+            () -> new TieredArmorItem(ModArmorMaterials.MILITARY, ArmorType.BOOTS,
+                    new Item.Properties().setId(key("military_boots")).stacksTo(1), ArmorTier.HEAVY));
 }

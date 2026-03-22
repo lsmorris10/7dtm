@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.stealth;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -26,12 +27,14 @@ public class NoiseEventHandler {
 
         Vec3 pos = player.position();
 
+        float noiseMult = ArmorSetBonusHandler.getNoiseMultiplier(player);
+
         if (player.isSprinting()) {
-            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_SPRINTING);
+            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_SPRINTING * noiseMult);
         } else if (player.isCrouching()) {
-            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_CROUCHING);
+            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_CROUCHING * noiseMult);
         } else if (player.getDeltaMovement().horizontalDistanceSqr() > 0.003) {
-            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_WALKING);
+            NoiseManager.addNoise(player.getUUID(), pos, NoiseManager.NOISE_WALKING * noiseMult);
         }
     }
 

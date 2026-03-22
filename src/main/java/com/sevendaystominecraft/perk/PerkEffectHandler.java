@@ -5,6 +5,7 @@ import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.PlayerStatsHandler;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
+import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,6 +30,11 @@ public class PerkEffectHandler {
         float dmgReduction = PlayerStatsHandler.getDamageReductionMultiplier(stats);
         if (dmgReduction < 1.0f) {
             event.setNewDamage(event.getNewDamage() * dmgReduction);
+        }
+
+        float armorSetReduction = ArmorSetBonusHandler.getDamageReductionMultiplier(player);
+        if (armorSetReduction < 1.0f) {
+            event.setNewDamage(event.getNewDamage() * armorSetReduction);
         }
     }
 

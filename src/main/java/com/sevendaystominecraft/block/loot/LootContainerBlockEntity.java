@@ -180,7 +180,7 @@ public class LootContainerBlockEntity extends BlockEntity {
                     ModItems.MECHANICAL_PARTS, ModItems.FORGED_IRON, ModItems.FORGED_STEEL, ModItems.SURVIVORS_COIN);
             case MUNITIONS_BOX -> pickRandom(random, lootStage,
                     ModItems.IRON_SCRAP, ModItems.LEAD, ModItems.NITRATE, ModItems.MECHANICAL_PARTS, ModItems.FORGED_STEEL);
-            case SUPPLY_CRATE -> pickRandom(random, lootStage,
+            case SUPPLY_CRATE -> pickRandomWithArmor(random, lootStage,
                     ModItems.FORGED_IRON, ModItems.FORGED_STEEL, ModItems.MECHANICAL_PARTS,
                     ModItems.ELECTRICAL_PARTS, ModItems.POLYMER, ModItems.SURVIVORS_COIN);
             case KITCHEN_CABINET -> pickRandomVanilla(random,
@@ -214,6 +214,40 @@ public class LootContainerBlockEntity extends BlockEntity {
     private static ItemStack pickRandomVanilla(Random random, Item... items) {
         Item chosen = items[random.nextInt(items.length)];
         return new ItemStack(chosen, 1 + random.nextInt(3));
+    }
+
+    @SafeVarargs
+    private static ItemStack pickRandomWithArmor(Random random, int lootStage, Supplier<Item>... baseItems) {
+        if (random.nextFloat() < 0.25f) {
+            return pickArmorForLootStage(random, lootStage);
+        }
+        return pickRandom(random, lootStage, baseItems);
+    }
+
+    private static ItemStack pickArmorForLootStage(Random random, int lootStage) {
+        Supplier<Item>[] lightArmor = new Supplier[]{
+                ModItems.PADDED_HELMET, ModItems.PADDED_CHESTPLATE,
+                ModItems.PADDED_LEGGINGS, ModItems.PADDED_BOOTS
+        };
+        Supplier<Item>[] mediumArmor = new Supplier[]{
+                ModItems.SCRAP_IRON_HELMET, ModItems.SCRAP_IRON_CHESTPLATE,
+                ModItems.SCRAP_IRON_LEGGINGS, ModItems.SCRAP_IRON_BOOTS
+        };
+        Supplier<Item>[] heavyArmor = new Supplier[]{
+                ModItems.MILITARY_HELMET, ModItems.MILITARY_CHESTPLATE,
+                ModItems.MILITARY_LEGGINGS, ModItems.MILITARY_BOOTS
+        };
+
+        Supplier<Item>[] pool;
+        if (lootStage >= 50) {
+            pool = random.nextBoolean() ? heavyArmor : mediumArmor;
+        } else if (lootStage >= 20) {
+            pool = random.nextBoolean() ? mediumArmor : lightArmor;
+        } else {
+            pool = lightArmor;
+        }
+
+        return new ItemStack(pool[random.nextInt(pool.length)].get(), 1);
     }
 
     @Override

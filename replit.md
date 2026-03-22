@@ -127,11 +127,16 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items)
-│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Loot Containers, Magazines
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor)
+│   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Armor, Loot Containers, Magazines
 │   ├── TreatmentItem.java          — Single-use right-click consumable that removes specific debuffs
 │   ├── ConsumableStatItem.java     — Consumable item that modifies food/water stats, applies/cures debuffs, grants regen
 │   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
+│   ├── armor/
+│   │   ├── ArmorTier.java          — Enum: LIGHT (Padded), MEDIUM (Scrap Iron), HEAVY (Military) with movement/stealth modifiers
+│   │   ├── ModArmorMaterials.java  — ArmorMaterial definitions (PADDED, SCRAP_IRON, MILITARY) with protection/durability/toughness
+│   │   ├── TieredArmorItem.java    — Custom ArmorItem subclass tracking ArmorTier with tooltips
+│   │   └── ArmorSetBonusHandler.java — Tick handler: movement penalties, set bonuses (Light=silent, Medium=+20% stamina regen, Heavy=+25% DR), perk integration
 │   └── weapon/
 │       └── RangedWeaponItem.java   — Right-click-to-fire ranged weapon (ammo consumption, cooldown, durability)
 ├── magazine/
