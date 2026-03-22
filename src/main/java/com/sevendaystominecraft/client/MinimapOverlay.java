@@ -151,38 +151,28 @@ public class MinimapOverlay {
             }
 
             boolean cleared = entry.label().endsWith("[Cleared]");
-            int color = cleared ? COLOR_CLEARED : getTierColor(entry.tier());
+            int color = getTierColor(entry.tier());
 
             graphics.fill(dotX - halfDot, dotY - halfDot,
                     dotX + halfDot, dotY + halfDot, color);
 
-            String labelName = entry.label();
-            if (cleared) {
-                labelName = labelName.replace(" [Cleared]", "");
-            }
-            String starsPart = "";
-            String namePart = labelName;
-            int starIdx = labelName.indexOf('\u2605');
-            if (starIdx >= 0) {
-                namePart = labelName.substring(0, starIdx).trim();
-                starsPart = labelName.substring(starIdx);
-            }
-            String shortName = namePart.split(" ")[0];
-            if (shortName.isEmpty()) {
-                shortName = namePart;
-            }
-            if (cleared) {
-                shortName = shortName + "\u2713";
-            }
-            String abbrevLabel = shortName + (starsPart.isEmpty() ? "" : " " + starsPart);
+            boolean iconFits = isInsideRoundedRect((dotX + 3) - mapX, (dotY + 3) - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
+                               isInsideRoundedRect((dotX - 2) - mapX, (dotY - 2) - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1);
 
-            int textWidth = mc.font.width(abbrevLabel);
-            int textX = dotX - textWidth / 2;
-            int textY = dotY + halfDot + 1;
-
-            if (isInsideRoundedRect(textX - mapX, textY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
-                isInsideRoundedRect(textX + textWidth - mapX, textY + mc.font.lineHeight - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
-                graphics.drawString(mc.font, abbrevLabel, textX, textY, color, true);
+            if (iconFits) {
+                if (cleared) {
+                    graphics.fill(dotX - 2, dotY + 1, dotX - 1, dotY + 2, color);
+                    graphics.fill(dotX - 1, dotY + 2, dotX, dotY + 3, color);
+                    graphics.fill(dotX, dotY + 1, dotX + 1, dotY + 2, color);
+                    graphics.fill(dotX + 1, dotY, dotX + 2, dotY + 1, color);
+                    graphics.fill(dotX + 2, dotY - 1, dotX + 3, dotY, color);
+                } else {
+                    graphics.fill(dotX - 2, dotY + 2, dotX + 3, dotY + 3, color);
+                    graphics.fill(dotX - 1, dotY + 1, dotX + 2, dotY + 2, color);
+                    graphics.fill(dotX, dotY - 1, dotX + 1, dotY + 1, color);
+                    graphics.fill(dotX - 1, dotY, dotX + 2, dotY + 1, color);
+                    graphics.fill(dotX, dotY - 2, dotX + 1, dotY - 1, color);
+                }
             }
         }
     }
@@ -221,14 +211,17 @@ public class MinimapOverlay {
             graphics.fill(dotX - halfDot + 1, dotY - 1, dotX + halfDot - 1, dotY + 2, COLOR_TRADER);
             graphics.fill(dotX - 1, dotY - halfDot + 1, dotX + 2, dotY + halfDot - 1, COLOR_TRADER);
 
-            String label = "T " + entry.name();
-            int textWidth = mc.font.width(label);
-            int textX = dotX - textWidth / 2;
-            int textY = dotY + halfDot + 1;
-
-            if (isInsideRoundedRect(textX - mapX, textY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
-                isInsideRoundedRect(textX + textWidth - mapX, textY + mc.font.lineHeight - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
-                graphics.drawString(mc.font, label, textX, textY, COLOR_TRADER, true);
+            int coinY = dotY + halfDot + 2;
+            int coinBottom = coinY + 5;
+            if (isInsideRoundedRect((dotX - 2) - mapX, coinY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
+                isInsideRoundedRect((dotX + 3) - mapX, coinBottom - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                graphics.fill(dotX - 1, coinY, dotX + 2, coinY + 1, COLOR_TRADER);
+                graphics.fill(dotX - 2, coinY + 1, dotX + 3, coinY + 2, COLOR_TRADER);
+                graphics.fill(dotX - 2, coinY + 2, dotX + 3, coinY + 3, COLOR_TRADER);
+                graphics.fill(dotX, coinY + 1, dotX + 1, coinY + 3, 0xFF008888);
+                graphics.fill(dotX - 1, coinY + 3, dotX + 2, coinY + 4, COLOR_TRADER);
+                graphics.fill(dotX - 2, coinY + 3, dotX + 3, coinY + 4, COLOR_TRADER);
+                graphics.fill(dotX - 1, coinY + 4, dotX + 2, coinY + 5, COLOR_TRADER);
             }
         }
     }
@@ -258,12 +251,13 @@ public class MinimapOverlay {
         graphics.fill(dotX - halfDot, dotY - halfDot + 1, dotX + halfDot, dotY + halfDot - 1, COLOR_QUEST);
         graphics.fill(dotX - halfDot + 1, dotY - halfDot, dotX + halfDot - 1, dotY + halfDot, COLOR_QUEST);
 
-        String label = "Q";
-        int textWidth = mc.font.width(label);
-        int textX = dotX - textWidth / 2;
-        int textY = dotY + halfDot + 1;
-        if (isInsideRoundedRect(textX - mapX, textY - mapY, MAP_SIZE, MAP_SIZE, 9)) {
-            graphics.drawString(mc.font, label, textX, textY, COLOR_QUEST, true);
+        int exX = dotX;
+        int exY = dotY + halfDot + 2;
+        int exBottom = exY + 6;
+        if (isInsideRoundedRect(exX - mapX, exY - mapY, MAP_SIZE, MAP_SIZE, 9) &&
+            isInsideRoundedRect((exX + 1) - mapX, exBottom - mapY, MAP_SIZE, MAP_SIZE, 9)) {
+            graphics.fill(exX, exY, exX + 1, exY + 4, COLOR_QUEST);
+            graphics.fill(exX, exY + 5, exX + 1, exY + 6, COLOR_QUEST);
         }
     }
 
@@ -299,13 +293,6 @@ public class MinimapOverlay {
                 isInsideRoundedRect(dotScreenX + halfDot - mapX, dotScreenY + halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
                 graphics.fill(dotScreenX - halfDot, dotScreenY - halfDot,
                         dotScreenX + halfDot, dotScreenY + halfDot, dotColor);
-
-                int nameWidth = mc.font.width(entry.name());
-                int nameX = dotScreenX - nameWidth / 2;
-                int nameY = dotScreenY - halfDot - 9;
-                if (nameY >= mapY) {
-                    graphics.drawString(mc.font, entry.name(), nameX, nameY, dotColor, true);
-                }
             }
 
             colorIndex++;
