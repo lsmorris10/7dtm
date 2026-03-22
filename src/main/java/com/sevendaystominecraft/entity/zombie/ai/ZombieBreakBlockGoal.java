@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.entity.zombie.ai;
 
+import com.sevendaystominecraft.block.structural.StructuralIntegrityManager;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
 import com.sevendaystominecraft.sound.ModSounds;
@@ -195,7 +196,10 @@ public class ZombieBreakBlockGoal extends Goal {
             serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
             ModSounds.playAtBlock(ModSounds.BLOCK_BREAK_ZOMBIE, serverLevel, targetBlockPos,
                     SoundSource.HOSTILE, 1.0f, 1.0f);
+            BlockPos destroyedPos = targetBlockPos.immutable();
             serverLevel.destroyBlock(targetBlockPos, true, zombie);
+
+            StructuralIntegrityManager.onBlockBroken(serverLevel, destroyedPos);
 
             pathEvaluator.invalidateCache();
 

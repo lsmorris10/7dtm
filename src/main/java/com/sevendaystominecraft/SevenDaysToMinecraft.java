@@ -13,6 +13,8 @@ import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.config.TerritoryConfig;
 import com.sevendaystominecraft.config.QuestConfig;
 import com.sevendaystominecraft.config.TraderConfig;
+import com.sevendaystominecraft.block.structural.StructuralIntegrityRegistry;
+import com.sevendaystominecraft.config.StructuralIntegrityConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.client.ADSHandler;
 import com.sevendaystominecraft.client.CompassOverlay;
@@ -69,6 +71,7 @@ public class SevenDaysToMinecraft {
         modContainer.registerConfig(ModConfig.Type.SERVER, TerritoryConfig.SPEC, "territory.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, TraderConfig.SPEC, "trader.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, QuestConfig.SPEC, "quest.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, StructuralIntegrityConfig.SPEC, "structural_integrity.toml");
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
@@ -116,6 +119,7 @@ public class SevenDaysToMinecraft {
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("BZHS Common Setup — Initializing shared systems...");
+        event.enqueueWork(StructuralIntegrityRegistry::registerModBlocks);
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
