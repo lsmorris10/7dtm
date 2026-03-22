@@ -1,64 +1,103 @@
 # Texture Audit Report
 
 **Generated**: March 17, 2026
+**Updated**: March 22, 2026
 **Method**: Files under 200 bytes classified as placeholder (auto-generated colored squares). Files 200+ bytes classified as real pixel art.
+
+**Note**: 9x9 pixel status icons (hearts, armor, food, water) contain real pixel art with outlines and shading but naturally compress under 200 bytes due to the small canvas size. These 16 icons are counted as placeholder by the byte-size method but are functional pixel art — not auto-generated colored squares.
 
 ## Summary
 
 | Category | Total | Real | Placeholder | % Complete |
 |----------|-------|------|-------------|------------|
-| Item textures | 224 | 2 | 222 | 0.9% |
-| Block textures | 75 | 30 | 45 | 40.0% |
-| GUI textures | 89 | 7 | 82 | 7.9% |
-| **Total** | **388** | **39** | **349** | **10.1%** |
+| Item textures | 247 | 44 | 203 | 17.8% |
+| Block textures | 95 | 48 | 47 | 50.5% |
+| GUI textures | 89 | 34 | 55 | 38.2% |
+| Effect/debuff textures | 13 | 13 | 0 | 100.0% |
+| **Total** | **444** | **139** | **305** | **31.3%** |
+
+### Changes Since Last Audit (March 22, 2026)
+- **+41 new real item textures this update**: 12 melee weapons, 15 ranged weapons (ak47 was already real before this update), 14 ammo types
+- **+4 new real block textures this update**: campfire_station, cement_mixer, chemistry_station, forge_station (other new block textures added by separate work)
+- **+27 new real GUI textures this update**: 4 HUD panel backgrounds, 5 stat icons, 6 bar textures, 6 quality tier icons, 5 attribute icons, 1 heart icon (heart_half at exactly 200 bytes)
+- **+16 hand-drawn 9x9 icons this update**: hearts (4), armor (3), food (5), water (5) — real pixel art but under 200-byte threshold due to small canvas size
+- **+13 new real debuff/effect icons this update**: bleeding, burn, concussion, dysentery, electrocuted, fracture, hyperthermia, hypothermia, infection_1, infection_2, radiation, sprain, stunned
+- **Minimap frame**: rendered procedurally in `MinimapOverlay.java` (no texture file needed)
+- **Blood moon overlay**: rendered procedurally in `BloodMoonSkyRenderer.java` (no texture file needed)
 
 ---
 
-## Real Textures (39 total — no action needed)
+## Real Textures (139 total — no action needed)
 
-### Item (2)
-- `sniper_rifle.png` (214 bytes)
-- `large_storage_rack.png` (216 bytes)
+### Item (44)
 
-### Block (30)
-- `ash_block.png`, `asphalt.png`, `cobblestone_custom.png`, `concrete_block.png`, `concrete_sidewalk.png`
-- `corrugated_iron.png`, `commercial_metal.png`, `dirt_road.png`, `drywall.png`, `farm_plot.png`
-- `gravel_custom.png`, `grill.png`, `lead_ore.png`, `nitrate_ore.png`, `oil_shale_ore.png`
-- `rebar_concrete.png`, `reinforced_concrete.png`, `reinforced_wood.png`, `sand_custom.png`
-- `snow_layer_custom.png`, `solar_panel.png`, `steel_block.png`, `steel_plate.png`
-- `wood_block.png`, `wood_frame.png`
-- `advanced_workbench.png`, `animal_trough.png`, `chicken_coop.png`, `forge.png`, `workbench.png`
-
-### GUI (7)
-- `compass_strip.png`
-- `frost_overlay.png`
-- `vignette_bleeding.png`, `vignette_burn.png`, `vignette_electrocuted.png`, `vignette_infection.png`, `vignette_radiation.png`
-
----
-
-## Placeholder Textures Needing Replacement (349 total)
-
-### Item Textures — Weapons (57)
-
-#### Melee
+#### Weapons — Melee (12)
 - `baseball_bat.png`, `fists.png`, `hunting_knife.png`, `iron_spear.png`
 - `machete.png`, `nailgun.png`, `sledgehammer.png`, `steel_knuckles.png`
 - `stone_axe.png`, `stun_baton.png`, `wooden_club.png`, `wrench.png`
 
-#### Ranged
+#### Weapons — Ranged (16)
 - `ak47.png`, `blunderbuss.png`, `compound_bow.png`, `compound_crossbow.png`
 - `hunting_rifle.png`, `m60.png`, `pipe_pistol.png`, `pipe_rifle.png`
 - `pipe_shotgun.png`, `pistol.png`, `primitive_bow.png`, `rocket_launcher.png`
-- `shotgun.png`, `smg.png`, `wooden_bow.png`
-- `repair_hammer.png`
+- `shotgun.png`, `smg.png`, `wooden_bow.png`, `repair_hammer.png`
 
-#### Ammo
+#### Ammo (14)
 - `44_magnum_round.png`, `762mm_round.png`, `9mm_round.png`
 - `ap_ammo.png`, `arrow.png`, `blunderbuss_ammo.png`, `bolt.png`
-- `explosive_arrow.png`, `fire_arrow.png`, `burning_shaft.png`
+- `burning_shaft.png`, `explosive_arrow.png`, `fire_arrow.png`
 - `hp_ammo.png`, `junk_turret_dart.png`, `rocket_ammo.png`, `shotgun_shell.png`
 
-#### Weapon Mods
+#### Other (2)
+- `sniper_rifle.png`, `large_storage_rack.png`
+
+### Block (48)
+- `advanced_workbench.png`, `animal_trough.png`, `ash_block.png`, `asphalt.png`
+- `broken_truck.png`, `burnt_car.png`, `camper_body.png`, `campfire_station.png`
+- `cement_mixer.png`, `chemistry_station.png`, `chicken_coop.png`, `cobblestone_custom.png`
+- `commercial_metal.png`, `concrete_block.png`, `concrete_sidewalk.png`, `corrugated_iron.png`
+- `dirt_road.png`, `drywall.png`, `farm_crate.png`, `farm_plot.png`
+- `forge.png`, `forge_station.png`, `gravel_custom.png`, `grill.png`
+- `lead_ore.png`, `nitrate_ore.png`, `oil_shale_ore.png`
+- `rebar_concrete.png`, `reinforced_concrete.png`, `reinforced_wood.png`
+- `sand_custom.png`, `snow_layer_custom.png`, `solar_panel.png`
+- `steel_block.png`, `steel_plate.png`, `tool_crate.png`
+- `truck_bed.png`, `vehicle_body.png`, `vehicle_body_charred.png`
+- `vehicle_roof.png`, `vehicle_wheel.png`, `vehicle_window.png`
+- `vending_machine_front_lower.png`, `vending_machine_front_upper.png`
+- `wood_block.png`, `wood_frame.png`, `workbench.png`, `wrecked_camper.png`
+
+### GUI (34)
+- `ammo_counter_bg.png`, `compass_strip.png`, `day_counter_bg.png`
+- `food_icon.png`, `frost_overlay.png`, `fuel_icon.png`
+- `health_bar_bg.png`, `health_bar_fill.png`, `heart_half.png`, `heat_indicator.png`
+- `horde_timer_bg.png`
+- `quality_excellent.png`, `quality_good.png`, `quality_great.png`
+- `quality_legendary.png`, `quality_poor.png`, `quality_superior.png`
+- `stamina_bar_bg.png`, `stamina_bar_fill.png`
+- `temperature_icon.png`, `vehicle_hud_bg.png`
+- `vignette_bleeding.png`, `vignette_burn.png`, `vignette_electrocuted.png`
+- `vignette_infection.png`, `vignette_radiation.png`
+- `water_icon.png`, `xp_bar_bg.png`, `xp_bar_fill.png`
+- `attribute_agility.png`, `attribute_fortitude.png`, `attribute_intellect.png`
+- `attribute_perception.png`, `attribute_strength.png`
+
+### Effect/Debuff (13)
+- `bleeding.png`, `burn.png`, `concussion.png`, `dysentery.png`
+- `electrocuted.png`, `fracture.png`, `hyperthermia.png`, `hypothermia.png`
+- `infection_1.png`, `infection_2.png`, `radiation.png`, `sprain.png`, `stunned.png`
+
+### GUI — Real Art Under 200 Bytes (16, not counted in "Real" column)
+- `heart_full.png`, `heart_empty.png`, `heart_low.png`
+- `armor_full.png`, `armor_half.png`, `armor_empty.png`
+- `food_full.png`, `food_half.png`, `food_empty.png`, `food_low.png`, `food_half_low.png`
+- `water_full.png`, `water_half.png`, `water_empty.png`, `water_low.png`, `water_half_low.png`
+
+---
+
+## Placeholder Textures Needing Replacement (305 total)
+
+### Item Textures — Weapon Mods (15)
 - `barrel_extender.png`, `bullet_casing.png`, `bullet_tip.png`
 - `drum_magazine.png`, `ergonomic_grip.png`, `extended_magazine.png`
 - `flashlight_mod.png`, `laser_sight.png`, `magazine.png`
@@ -120,11 +159,11 @@
 - `junk_turret.png`, `repair_kit.png`, `schematic.png`, `storage_rack.png`
 - `turret_mount.png`, `wire_tool.png`
 
-### Block Textures (45)
+### Block Textures (47)
 
 #### Workstations & Containers
-- `bookshelf_container.png`, `campfire_station.png`, `cardboard_box.png`, `cement_mixer.png`
-- `chemistry_station.png`, `desk.png`, `filing_cabinet.png`, `forge_station.png`
+- `bookshelf_container.png`, `cardboard_box.png`
+- `desk.png`, `filing_cabinet.png`
 - `gun_safe.png`, `kitchen_cabinet.png`, `medicine_cabinet.png`, `munitions_box.png`
 - `refrigerator.png`, `supply_crate.png`, `trash_pile.png`
 
@@ -143,27 +182,7 @@
 #### Decorative
 - `brick.png`, `campfire.png`, `car_wreck.png`
 
-### GUI Textures (82)
-
-#### HUD Elements
-- `ammo_counter_bg.png`, `day_counter_bg.png`, `horde_timer_bg.png`, `vehicle_hud_bg.png`
-- `fuel_icon.png`, `food_icon.png`, `water_icon.png`, `temperature_icon.png`, `heat_indicator.png`
-- `health_bar_bg.png`, `health_bar_fill.png`, `stamina_bar_bg.png`, `stamina_bar_fill.png`
-- `xp_bar_bg.png`, `xp_bar_fill.png`
-
-#### Heart/Armor/Food/Water Icons
-- `heart_empty.png`, `heart_full.png`, `heart_half.png`, `heart_low.png`
-- `armor_empty.png`, `armor_full.png`, `armor_half.png`
-- `food_empty.png`, `food_full.png`, `food_half.png`, `food_low.png`, `food_half_low.png`
-- `water_empty.png`, `water_full.png`, `water_half.png`, `water_low.png`, `water_half_low.png`
-
-#### Quality Tier Icons
-- `quality_poor.png`, `quality_good.png`, `quality_great.png`
-- `quality_excellent.png`, `quality_superior.png`, `quality_legendary.png`
-
-#### Attribute Icons
-- `attribute_agility.png`, `attribute_fortitude.png`, `attribute_intellect.png`
-- `attribute_perception.png`, `attribute_strength.png`
+### GUI Textures (55)
 
 #### Perk Icons (39)
 - `advanced_engineering.png`, `archery.png`, `better_barter.png`, `bold_explorer.png`
@@ -177,20 +196,26 @@
 - `run_and_gun.png`, `shadow_strike.png`, `skull_crusher.png`, `spear_master.png`
 - `treasure_hunter.png`, `unstoppable_force.png`, `well_insulated.png`
 
+#### Status Icons Under 200 Bytes (16)
+- `heart_full.png`, `heart_empty.png`, `heart_low.png`
+- `armor_full.png`, `armor_half.png`, `armor_empty.png`
+- `food_full.png`, `food_half.png`, `food_empty.png`, `food_low.png`, `food_half_low.png`
+- `water_full.png`, `water_half.png`, `water_empty.png`, `water_low.png`, `water_half_low.png`
+
 ---
 
 ## Priority Recommendations
 
 ### High Priority (visible in normal gameplay)
-1. **Heart/armor/food/water icons** (15 files) — shown constantly on HUD
+1. ~~**Heart/armor/food/water icons**~~ ✅ Done (16 icons with pixel art)
 2. **Core material items** (iron_ingot, forged_iron, duct_tape, etc.) — seen in inventory
-3. **Weapon items** (pistol, ak47, baseball_bat, sledgehammer) — held in hand
-4. **Workstation blocks** (campfire_station, forge_station, etc.) — placed in world
+3. ~~**Weapon items**~~ ✅ Done (28 weapons with pixel art)
+4. ~~**Workstation blocks**~~ ✅ Done (4 workstation blocks replaced)
 
 ### Medium Priority
 5. **Food items** (canned goods, cooked meat, drinks) — common inventory items
 6. **Medical items** (bandage, first_aid_kit, antibiotics) — survival essentials
-7. **Ammo types** — visible in inventory during combat
+7. ~~**Ammo types**~~ ✅ Done (14 ammo textures with pixel art)
 8. **Armor pieces** — equipped items
 
 ### Low Priority (future content / rarely seen)
