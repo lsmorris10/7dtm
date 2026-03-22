@@ -21,6 +21,7 @@ import com.sevendaystominecraft.client.ADSHandler;
 import com.sevendaystominecraft.client.CompassOverlay;
 import com.sevendaystominecraft.client.DebuffOverlayRenderer;
 import com.sevendaystominecraft.client.InventoryMapButton;
+import com.sevendaystominecraft.client.gui.InventoryScreenReplacer;
 import com.sevendaystominecraft.client.MinimapOverlay;
 import com.sevendaystominecraft.client.QuestHudOverlay;
 import com.sevendaystominecraft.client.ModEntityRenderers;
@@ -109,6 +110,7 @@ public class SevenDaysToMinecraft {
             NeoForge.EVENT_BUS.addListener(ModKeyBindings::onClientTick);
             NeoForge.EVENT_BUS.addListener(TerritoryAnnouncement::onClientTick);
             NeoForge.EVENT_BUS.addListener(InventoryMapButton::onScreenInit);
+            NeoForge.EVENT_BUS.addListener(InventoryScreenReplacer::onScreenOpening);
             NeoForge.EVENT_BUS.addListener(WeaponInputHandler::onClickInput);
             NeoForge.EVENT_BUS.addListener(WeaponInputHandler::onClientTick);
             NeoForge.EVENT_BUS.addListener(ADSHandler::onPlayerTick);

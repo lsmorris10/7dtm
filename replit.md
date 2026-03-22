@@ -29,6 +29,9 @@ src/main/java/com/sevendaystominecraft/
 │   ├── WaterBottleConversionHandler.java — Converts vanilla water bottles to Murky Water Bottle on inventory tick
 │   └── SevenDaysPlayerStats.java   — Player stats implementation (Food, Water, Stamina, etc.)
 ├── client/
+│   ├── gui/
+│   │   ├── BzhsInventoryScreen.java    — Custom inventory screen replacing vanilla (stats/perks/debuffs/armor set bonus)
+│   │   └── InventoryScreenReplacer.java — ScreenEvent.Opening handler to intercept vanilla inventory
 │   ├── StatsHudOverlay.java        — HUD overlay for player stats + blood moon indicator
 │   ├── CompassOverlay.java         — 360° compass strip at top-center with cardinal/intercardinal markers + heat indicator + territory markers
 │   ├── MinimapOverlay.java         — Top-right minimap with terrain colors, player dot, nearby player dots
