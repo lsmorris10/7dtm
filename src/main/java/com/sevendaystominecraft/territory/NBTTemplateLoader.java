@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -76,14 +76,32 @@ public class NBTTemplateLoader {
             if (templateOpt.isEmpty()) return null;
 
             StructureTemplate template = templateOpt.get();
+            var size = template.getSize();
 
-            int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, origin.getX(), origin.getZ());
-            BlockPos placePos = new BlockPos(origin.getX(), surfaceY, origin.getZ());
+            int centerX = origin.getX() + size.getX() / 2;
+            int centerZ = origin.getZ() + size.getZ() / 2;
+            int halfX = size.getX() / 2;
+            int halfZ = size.getZ() / 2;
+
+            int slopeVariance = TerrainValidator.getSlopeVariance(level, centerX, centerZ, halfX, halfZ);
+            if (slopeVariance > TerrainValidator.MAX_SLOPE_VARIANCE) return null;
+
+            int surfaceY = TerrainValidator.findSolidGroundY(level, centerX, centerZ);
+            if (TerrainValidator.isInRavine(level, centerX, centerZ, surfaceY)) return null;
+            if (TerrainValidator.isInLocalDepression(level, centerX, centerZ, surfaceY)) return null;
+
+            int minY = TerrainValidator.getMinSurfaceY(level, centerX, centerZ, halfX, halfZ);
+            if (minY <= 0) minY = surfaceY;
+
+            BlockPos placePos = new BlockPos(origin.getX(), minY, origin.getZ());
+            BlockPos templateCenter = new BlockPos(centerX, minY, centerZ);
+
+            TerrainValidator.clearVegetation(level, templateCenter, halfX, halfZ, size.getY() + 5);
 
             StructurePlaceSettings settings = new StructurePlaceSettings();
             template.placeInWorld(level, placePos, placePos, settings, random, Block.UPDATE_CLIENTS);
 
-            var size = template.getSize();
+            TerrainValidator.fillFoundationColumns(level, templateCenter, halfX, halfZ, Blocks.STONE, false);
             List<BlockPos> zombieSpawns = new ArrayList<>();
             List<BlockPos> lootPositions = new ArrayList<>();
             List<LootContainerType> lootTypes = new ArrayList<>();

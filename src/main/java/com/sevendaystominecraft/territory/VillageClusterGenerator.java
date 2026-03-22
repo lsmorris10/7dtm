@@ -12,7 +12,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class VillageClusterGenerator {
         List<VillageBuildingType> types = new ArrayList<>();
         List<BlockPos> placedCenters = new ArrayList<>();
 
-        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, center.getX(), center.getZ());
+        int surfaceY = TerrainValidator.findSolidGroundY(level, center.getX(), center.getZ());
         BlockPos villageCenter = new BlockPos(center.getX(), surfaceY, center.getZ());
 
         boolean hasTrader = false;
@@ -86,9 +85,11 @@ public class VillageClusterGenerator {
                 }
             }
 
+            int buildingHalf = buildingType.getMaxSize() / 2;
+
             BlockPos buildingPos = null;
             for (int retry = 0; retry < 3; retry++) {
-                buildingPos = findBuildingPosition(level, villageCenter, placedCenters, random, slotIndex + retry);
+                buildingPos = findBuildingPosition(level, villageCenter, placedCenters, random, slotIndex + retry, buildingHalf);
                 if (buildingPos != null) break;
             }
             slotIndex++;
@@ -143,7 +144,7 @@ public class VillageClusterGenerator {
     }
 
     private static BlockPos findBuildingPosition(ServerLevel level, BlockPos center,
-                                                  List<BlockPos> placed, RandomSource random, int index) {
+                                                  List<BlockPos> placed, RandomSource random, int index, int buildingHalf) {
         int gridSize = (int) Math.ceil(Math.sqrt(MAX_BUILDINGS));
         int row = index / gridSize;
         int col = index % gridSize;
@@ -153,7 +154,7 @@ public class VillageClusterGenerator {
 
         int x = center.getX() + offsetX;
         int z = center.getZ() + offsetZ;
-        int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
+        int y = TerrainValidator.findSolidGroundY(level, x, z);
 
         if (y <= 0) return null;
 
@@ -162,9 +163,14 @@ public class VillageClusterGenerator {
         BlockState surfaceBlock = level.getBlockState(candidate.below());
         if (surfaceBlock.liquid() || level.getBlockState(candidate).liquid()) return null;
 
+        int slopeVariance = TerrainValidator.getSlopeVariance(level, x, z, buildingHalf, buildingHalf);
+        if (slopeVariance > TerrainValidator.MAX_SLOPE_VARIANCE) return null;
+
+        if (TerrainValidator.isInLocalDepression(level, x, z, y)) return null;
+
         for (int cx = -4; cx <= 4; cx += 4) {
             for (int cz = -4; cz <= 4; cz += 4) {
-                int checkY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x + cx, z + cz);
+                int checkY = TerrainValidator.findSolidGroundY(level, x + cx, z + cz);
                 BlockPos checkPos = new BlockPos(x + cx, checkY, z + cz);
                 if (level.getBlockState(checkPos).liquid() || level.getBlockState(checkPos.below()).liquid()) {
                     return null;
@@ -192,14 +198,16 @@ public class VillageClusterGenerator {
         for (int i = 0; i <= steps; i++) {
             int x = from.getX() + dx * i / steps;
             int z = from.getZ() + dz * i / steps;
-            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
+            int y = TerrainValidator.findSolidGroundY(level, x, z);
 
             for (int px = -PATH_BLOCK_RADIUS; px <= PATH_BLOCK_RADIUS; px++) {
                 for (int pz = -PATH_BLOCK_RADIUS; pz <= PATH_BLOCK_RADIUS; pz++) {
-                    BlockPos pathPos = new BlockPos(x + px, y - 1, z + pz);
+                    int pathY = TerrainValidator.findSolidGroundY(level, x + px, z + pz);
+                    BlockPos pathPos = new BlockPos(x + px, pathY - 1, z + pz);
                     if (level.isLoaded(pathPos)) {
                         BlockState current = level.getBlockState(pathPos.above());
-                        if (current.isAir() || current.getBlock() == Blocks.SHORT_GRASS || current.getBlock() == Blocks.TALL_GRASS) {
+                        if (current.isAir() || current.getBlock() == Blocks.SHORT_GRASS || current.getBlock() == Blocks.TALL_GRASS
+                                || TerrainValidator.isVegetation(current.getBlock())) {
                             setBlock(level, pathPos, Blocks.GRAVEL.defaultBlockState());
                             setBlock(level, pathPos.above(), Blocks.AIR.defaultBlockState());
                         }
@@ -219,10 +227,13 @@ public class VillageClusterGenerator {
             int offsetZ = random.nextInt(60) - 30;
             int x = center.getX() + offsetX;
             int z = center.getZ() + offsetZ;
-            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
+            int y = TerrainValidator.findSolidGroundY(level, x, z);
             BlockPos propPos = new BlockPos(x, y, z);
 
             if (!level.isLoaded(propPos)) continue;
+
+            BlockState belowState = level.getBlockState(propPos.below());
+            if (!TerrainValidator.isSolidTerrainBlock(belowState.getBlock())) continue;
 
             float roll = random.nextFloat();
             if (roll < 0.25f) {
@@ -272,6 +283,14 @@ public class VillageClusterGenerator {
     private static void placeVehicleWreckage(ServerLevel level, BlockPos pos, RandomSource random) {
         Direction facing = Direction.Plane.HORIZONTAL.getRandomDirection(random);
         int vehicleType = random.nextInt(3);
+        int footprintSize = switch (vehicleType) {
+            case 0 -> 1;
+            case 1 -> 2;
+            case 2 -> 2;
+            default -> 1;
+        };
+        int variance = TerrainValidator.getSlopeVariance(level, pos.getX(), pos.getZ(), footprintSize, footprintSize);
+        if (variance > 2) return;
         switch (vehicleType) {
             case 0 -> placeBurntCar(level, pos, facing);
             case 1 -> placeBrokenTruck(level, pos, facing);

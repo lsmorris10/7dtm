@@ -9,7 +9,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,11 @@ public class TerritoryStructureBuilder {
         int size = tier.getMinSize() + random.nextInt(tier.getMaxSize() - tier.getMinSize() + 1);
         int halfSize = size / 2;
 
-        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, origin.getX(), origin.getZ());
-        BlockPos base = new BlockPos(origin.getX(), surfaceY, origin.getZ());
+        int minY = TerrainValidator.getMinSurfaceY(level, origin.getX(), origin.getZ(), halfSize, halfSize);
+        if (minY <= 0) {
+            minY = TerrainValidator.findSolidGroundY(level, origin.getX(), origin.getZ());
+        }
+        BlockPos base = new BlockPos(origin.getX(), minY, origin.getZ());
 
         Block wallBlock = getWallBlock(type, tier);
         Block floorBlock = getFloorBlock(type);
@@ -50,7 +52,8 @@ public class TerritoryStructureBuilder {
         List<BlockPos> lootPos = new ArrayList<>();
         List<LootContainerType> lootTypes = new ArrayList<>();
 
-        buildFloor(level, base, halfSize, floorBlock);
+        TerrainValidator.clearVegetation(level, base, halfSize, halfSize, wallHeight + 5);
+        TerrainValidator.fillFoundationColumns(level, base, halfSize, halfSize, floorBlock);
         buildWalls(level, base, halfSize, wallHeight, wallBlock);
         buildRoof(level, base, halfSize, wallHeight, roofBlock);
 
@@ -61,15 +64,6 @@ public class TerritoryStructureBuilder {
         return new BuildResult(labelPos, zombieSpawnPos, lootPos, lootTypes);
     }
 
-    private static void buildFloor(ServerLevel level, BlockPos base, int halfSize, Block floorBlock) {
-        for (int dx = -halfSize; dx <= halfSize; dx++) {
-            for (int dz = -halfSize; dz <= halfSize; dz++) {
-                BlockPos floorPos = base.offset(dx, 0, dz);
-                setBlock(level, floorPos, floorBlock.defaultBlockState());
-                setBlock(level, floorPos.below(), Blocks.STONE.defaultBlockState());
-            }
-        }
-    }
 
     private static void buildWalls(ServerLevel level, BlockPos base, int halfSize, int wallHeight, Block wallBlock) {
         for (int dy = 1; dy <= wallHeight; dy++) {

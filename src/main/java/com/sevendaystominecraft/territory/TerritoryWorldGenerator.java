@@ -60,8 +60,10 @@ public class TerritoryWorldGenerator {
         TerritoryTier tier = TerritoryTier.roll(serverLevel.random, biomeMin, maxTier);
         TerritoryType type = TerritoryType.random(serverLevel.random);
 
-        int surfaceY = serverLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockX, blockZ);
+        int surfaceY = TerrainValidator.findSolidGroundY(serverLevel, blockX, blockZ);
         if (surfaceY <= 0) return;
+
+        if (TerrainValidator.isInRavine(serverLevel, blockX, blockZ, surfaceY)) return;
 
         BlockPos origin = new BlockPos(blockX, surfaceY, blockZ);
         if (serverLevel.getBlockState(origin).liquid() || serverLevel.getBlockState(origin.below()).liquid()) return;

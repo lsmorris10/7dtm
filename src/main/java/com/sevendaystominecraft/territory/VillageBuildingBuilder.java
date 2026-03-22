@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +45,11 @@ public class VillageBuildingBuilder {
         int halfX = sizeX / 2;
         int halfZ = sizeZ / 2;
 
-        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, origin.getX(), origin.getZ());
-        BlockPos base = new BlockPos(origin.getX(), surfaceY, origin.getZ());
+        int minY = TerrainValidator.getMinSurfaceY(level, origin.getX(), origin.getZ(), halfX, halfZ);
+        if (minY <= 0) {
+            minY = TerrainValidator.findSolidGroundY(level, origin.getX(), origin.getZ());
+        }
+        BlockPos base = new BlockPos(origin.getX(), minY, origin.getZ());
 
         Block wallBlock = buildingType.getWallBlock();
         Block floorBlock = buildingType.getFloorBlock();
@@ -61,8 +63,9 @@ public class VillageBuildingBuilder {
 
         boolean willHaveSecondFloor = sizeX >= 9 && sizeZ >= 9 && (buildingType == VillageBuildingType.RESIDENTIAL || random.nextFloat() < 0.3f);
         int clearHeight = willHaveSecondFloor ? wallHeight * 2 + 10 : wallHeight + 5;
+        TerrainValidator.clearVegetation(level, base, halfX, halfZ, clearHeight);
         clearInterior(level, base, halfX, halfZ, clearHeight);
-        buildFoundation(level, base, halfX, halfZ, floorBlock);
+        TerrainValidator.fillFoundationColumns(level, base, halfX, halfZ, floorBlock);
         buildWalls(level, base, halfX, halfZ, wallHeight, wallBlock, frameBlock);
         placeWindows(level, base, halfX, halfZ, wallHeight, random);
         int doorSide = placeDoor(level, base, halfX, halfZ, buildingType, random);
@@ -103,16 +106,6 @@ public class VillageBuildingBuilder {
         }
     }
 
-    private static void buildFoundation(ServerLevel level, BlockPos base, int halfX, int halfZ, Block floorBlock) {
-        for (int dx = -halfX; dx <= halfX; dx++) {
-            for (int dz = -halfZ; dz <= halfZ; dz++) {
-                BlockPos floorPos = base.offset(dx, 0, dz);
-                setBlock(level, floorPos, floorBlock.defaultBlockState());
-                setBlock(level, floorPos.below(), Blocks.STONE.defaultBlockState());
-                setBlock(level, floorPos.below(2), Blocks.COBBLESTONE.defaultBlockState());
-            }
-        }
-    }
 
     private static void buildWalls(ServerLevel level, BlockPos base, int halfX, int halfZ,
                                     int wallHeight, Block wallBlock, Block frameBlock) {
