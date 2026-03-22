@@ -13,7 +13,9 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 public class ZombieBreakBlockGoal extends Goal {
 
@@ -36,8 +38,15 @@ public class ZombieBreakBlockGoal extends Goal {
 
     private static final double ABANDON_DISTANCE_SQ = 16.0 * 16.0;
 
+    private final BlockBreakPathEvaluator pathEvaluator;
+    private List<BlockPos> breakPath;
+    private int breakPathIndex;
+
     public ZombieBreakBlockGoal(BaseSevenDaysZombie zombie) {
         this.zombie = zombie;
+        this.pathEvaluator = new BlockBreakPathEvaluator(zombie);
+        this.breakPath = new ArrayList<>();
+        this.breakPathIndex = 0;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -51,9 +60,20 @@ public class ZombieBreakBlockGoal extends Goal {
         if (target == null || !target.isAlive()) return false;
 
         if (zombie.getNavigation().isDone() || isPathBlocked() || isStuck()) {
+            List<BlockPos> smartPath = pathEvaluator.findBreakPath(
+                    zombie.blockPosition(), target.blockPosition());
+            if (!smartPath.isEmpty()) {
+                breakPath = new ArrayList<>(smartPath);
+                breakPathIndex = 0;
+                targetBlockPos = breakPath.get(0);
+                return true;
+            }
+
             BlockPos obstruction = findObstructingBlock();
             if (obstruction != null) {
                 targetBlockPos = obstruction;
+                breakPath = new ArrayList<>();
+                breakPathIndex = 0;
                 return true;
             }
         }
@@ -79,7 +99,11 @@ public class ZombieBreakBlockGoal extends Goal {
         if (targetBlockPos == null) return false;
 
         BlockState state = zombie.level().getBlockState(targetBlockPos);
-        if (state.isAir() || !BlockHPRegistry.isBreakable(state)) return false;
+        if (state.isAir() || !BlockHPRegistry.isBreakable(state)) {
+            if (!advanceBreakPath()) {
+                return false;
+            }
+        }
 
         LivingEntity currentTarget = zombie.getTarget();
         if (currentTarget != null && currentTarget.isAlive()) {
@@ -115,6 +139,8 @@ public class ZombieBreakBlockGoal extends Goal {
             if (distToTargetSq > ABANDON_DISTANCE_SQ) {
                 serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
                 targetBlockPos = null;
+                breakPath.clear();
+                breakPathIndex = 0;
                 return;
             }
         }
@@ -147,7 +173,12 @@ public class ZombieBreakBlockGoal extends Goal {
             ModSounds.playAtBlock(ModSounds.BLOCK_BREAK_ZOMBIE, serverLevel, targetBlockPos,
                     SoundSource.HOSTILE, 1.0f, 1.0f);
             serverLevel.destroyBlock(targetBlockPos, true, zombie);
-            targetBlockPos = null;
+
+            pathEvaluator.invalidateCache();
+
+            if (!advanceBreakPath()) {
+                targetBlockPos = null;
+            }
         }
 
         ticksSinceLastCheck++;
@@ -155,7 +186,9 @@ public class ZombieBreakBlockGoal extends Goal {
             ticksSinceLastCheck = 0;
             BlockState current = zombie.level().getBlockState(targetBlockPos);
             if (current.isAir()) {
-                targetBlockPos = null;
+                if (!advanceBreakPath()) {
+                    targetBlockPos = null;
+                }
             }
         }
     }
@@ -171,6 +204,27 @@ public class ZombieBreakBlockGoal extends Goal {
         ticksSinceTargetSeen = 0;
         lastStuckCheckPos = null;
         stuckTicks = 0;
+        breakPath.clear();
+        breakPathIndex = 0;
+    }
+
+    private boolean advanceBreakPath() {
+        breakPathIndex++;
+        while (breakPathIndex < breakPath.size()) {
+            BlockPos nextPos = breakPath.get(breakPathIndex);
+            BlockState nextState = zombie.level().getBlockState(nextPos);
+            if (!nextState.isAir() && BlockHPRegistry.isBreakable(nextState)) {
+                targetBlockPos = nextPos;
+                blockDamageAccumulated = 0;
+                blockMaxHP = BlockHPRegistry.getBlockHP(nextState);
+                if (zombie.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, 0);
+                }
+                return true;
+            }
+            breakPathIndex++;
+        }
+        return false;
     }
 
     private boolean isPathBlocked() {
