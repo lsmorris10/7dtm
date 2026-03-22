@@ -49,6 +49,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
     private final double bulletGravity;
     private final int bulletMaxLife;
     private final boolean fullAuto;
+    private final boolean unlimitedAmmo;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -71,7 +72,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                int magazineCapacity, int reloadTicks, WeaponType weaponType,
                                Supplier<SoundEvent> fireSoundSupplier) {
         this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
-                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, 0.01, 60, false);
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, 0.01, 60, false, false);
     }
 
     public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
@@ -80,7 +81,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                Supplier<SoundEvent> fireSoundSupplier,
                                double bulletGravity, int bulletMaxLife) {
         this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
-                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, bulletGravity, bulletMaxLife, false);
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, bulletGravity, bulletMaxLife, false, false);
     }
 
     public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
@@ -88,6 +89,15 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                int magazineCapacity, int reloadTicks, WeaponType weaponType,
                                Supplier<SoundEvent> fireSoundSupplier,
                                double bulletGravity, int bulletMaxLife, boolean fullAuto) {
+        this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, bulletGravity, bulletMaxLife, fullAuto, false);
+    }
+
+    public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
+                               float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier,
+                               int magazineCapacity, int reloadTicks, WeaponType weaponType,
+                               Supplier<SoundEvent> fireSoundSupplier,
+                               double bulletGravity, int bulletMaxLife, boolean fullAuto, boolean unlimitedAmmo) {
         super(properties);
         this.bulletDamage = bulletDamage;
         this.cooldownTicks = cooldownTicks;
@@ -101,6 +111,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         this.bulletGravity = bulletGravity;
         this.bulletMaxLife = bulletMaxLife;
         this.fullAuto = fullAuto;
+        this.unlimitedAmmo = unlimitedAmmo;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
@@ -176,26 +187,32 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
             return;
         }
 
-        if (isReloading(held)) {
-            return;
-        }
-
-        int currentAmmo = getCurrentAmmo(held);
-
-        if (currentAmmo < 0) {
-            currentAmmo = magazineCapacity;
-            setCurrentAmmo(held, currentAmmo);
-        }
-
-        if (currentAmmo == 0) {
-            if (!level.isClientSide()) {
-                startReload(level, player, hand, held);
+        if (unlimitedAmmo) {
+            if (held.isDamageableItem() && held.getDamageValue() >= held.getMaxDamage()) {
+                return;
             }
-            return;
-        }
+        } else {
+            if (isReloading(held)) {
+                return;
+            }
 
-        if (!player.isCreative()) {
-            setCurrentAmmo(held, currentAmmo - 1);
+            int currentAmmo = getCurrentAmmo(held);
+
+            if (currentAmmo < 0) {
+                currentAmmo = magazineCapacity;
+                setCurrentAmmo(held, currentAmmo);
+            }
+
+            if (currentAmmo == 0) {
+                if (!level.isClientSide()) {
+                    startReload(level, player, hand, held);
+                }
+                return;
+            }
+
+            if (!player.isCreative()) {
+                setCurrentAmmo(held, currentAmmo - 1);
+            }
         }
 
         float currentInaccuracy = isADS ? inaccuracy * ADS_INACCURACY_MULTIPLIER : inaccuracy;
@@ -219,7 +236,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         if (!level.isClientSide()) {
             triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".fire");
 
-            if (getCurrentAmmo(held) == 0 && weaponType == WeaponType.AK47) {
+            if (!unlimitedAmmo && getCurrentAmmo(held) == 0 && weaponType == WeaponType.AK47) {
                 triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".rack");
             }
         }
@@ -232,6 +249,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, level, entity, slot, selected);
+        if (unlimitedAmmo) return;
         if (!level.isClientSide() && entity instanceof Player player && isReloading(stack)) {
             int ticksLeft = getReloadTicksLeft(stack);
             if (ticksLeft <= 0) {
@@ -349,5 +367,9 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
     public boolean isFullAuto() {
         return fullAuto;
+    }
+
+    public boolean isUnlimitedAmmo() {
+        return unlimitedAmmo;
     }
 }

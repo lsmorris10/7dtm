@@ -70,7 +70,7 @@ public class WeaponInputHandler {
             return;
         }
 
-        if (GeoRangedWeaponItem.getCurrentAmmo(held) == 0) {
+        if (!weapon.isUnlimitedAmmo() && GeoRangedWeaponItem.getCurrentAmmo(held) == 0) {
             attackHeld = false;
             return;
         }
