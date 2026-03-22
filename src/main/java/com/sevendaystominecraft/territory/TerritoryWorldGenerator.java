@@ -58,7 +58,8 @@ public class TerritoryWorldGenerator {
         int maxTier = Math.min(distanceMaxTier, biomeMax);
 
         TerritoryTier tier = TerritoryTier.roll(serverLevel.random, biomeMin, maxTier);
-        TerritoryType type = TerritoryType.random(serverLevel.random);
+
+        TerritoryType type = TerritoryType.randomNonTrader(serverLevel.random);
 
         int surfaceY = TerrainValidator.findSolidGroundY(serverLevel, blockX, blockZ);
         if (surfaceY <= 0) return;

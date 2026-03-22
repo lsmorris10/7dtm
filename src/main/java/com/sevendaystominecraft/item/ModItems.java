@@ -65,6 +65,9 @@ public class ModItems {
     public static final Supplier<Item> SURVIVORS_COIN = ITEMS.register("survivors_coin",
             () -> new Item(new Item.Properties().setId(key("survivors_coin")).stacksTo(50000)));
 
+    public static final Supplier<Item> DUKE_TOKEN = ITEMS.register("duke_token",
+            () -> new Item(new Item.Properties().setId(key("duke_token")).stacksTo(50000)));
+
     public static final Supplier<Item> CONCRETE_MIX = ITEMS.register("concrete_mix",
             () -> new Item(new Item.Properties().setId(key("concrete_mix")).stacksTo(64)));
 

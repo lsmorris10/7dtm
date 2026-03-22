@@ -7,8 +7,10 @@ import com.sevendaystominecraft.client.BloodMoonClientState;
 import com.sevendaystominecraft.client.ChunkHeatClientState;
 import com.sevendaystominecraft.client.NearbyPlayersClientState;
 import com.sevendaystominecraft.client.TerritoryClientState;
+import com.sevendaystominecraft.client.TraderClientState;
 import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.perk.Attribute;
+import com.sevendaystominecraft.trader.TraderMenu;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -59,10 +61,22 @@ public class ModNetworking {
                 ModNetworking::handleTerritorySync
         );
 
+        registrar.playToClient(
+                SyncTraderPayload.TYPE,
+                SyncTraderPayload.STREAM_CODEC,
+                ModNetworking::handleTraderSync
+        );
+
         registrar.playToServer(
                 FireWeaponPayload.TYPE,
                 FireWeaponPayload.STREAM_CODEC,
                 ModNetworking::handleFireWeapon
+        );
+
+        registrar.playToServer(
+                TraderActionPayload.TYPE,
+                TraderActionPayload.STREAM_CODEC,
+                ModNetworking::handleTraderAction
         );
 
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
@@ -112,6 +126,28 @@ public class ModNetworking {
     private static void handleTerritorySync(SyncTerritoryPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             TerritoryClientState.update(payload.territories());
+        });
+    }
+
+    private static void handleTraderSync(SyncTraderPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            TraderClientState.update(payload.traders());
+        });
+    }
+
+    private static void handleTraderAction(TraderActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player.containerMenu instanceof TraderMenu traderMenu)) return;
+            if (traderMenu.getTraderId() != payload.traderId()) return;
+            if (!traderMenu.stillValid(player)) return;
+
+            if (payload.isBuy()) {
+                traderMenu.tryBuy(player, payload.actionIndex());
+            } else {
+                traderMenu.trySellSlots(player);
+            }
         });
     }
 

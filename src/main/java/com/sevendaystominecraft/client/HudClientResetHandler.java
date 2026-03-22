@@ -17,6 +17,7 @@ public class HudClientResetHandler {
         MusicManager.reset();
         TerritoryAnnouncement.reset();
         StatsHudOverlay.resetAreaState();
+        TraderClientState.reset();
     }
 
     @SubscribeEvent
@@ -29,6 +30,7 @@ public class HudClientResetHandler {
         MusicManager.reset();
         TerritoryAnnouncement.reset();
         StatsHudOverlay.resetAreaState();
+        TraderClientState.reset();
     }
 
     @SubscribeEvent

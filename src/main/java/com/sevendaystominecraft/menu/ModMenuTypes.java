@@ -3,6 +3,7 @@ package com.sevendaystominecraft.menu;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.loot.LootContainerMenu;
 import com.sevendaystominecraft.block.workstation.WorkstationMenu;
+import com.sevendaystominecraft.trader.TraderMenu;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
@@ -23,4 +24,8 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<LootContainerMenu>> LOOT_CONTAINER_MENU =
             MENU_TYPES.register("loot_container", () ->
                     IMenuTypeExtension.create(LootContainerMenu::fromNetwork));
+
+    public static final Supplier<MenuType<TraderMenu>> TRADER_MENU =
+            MENU_TYPES.register("trader", () ->
+                    IMenuTypeExtension.create(TraderMenu::fromNetwork));
 }

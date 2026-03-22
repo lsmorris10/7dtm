@@ -6,6 +6,7 @@ import com.sevendaystominecraft.entity.projectile.BulletEntity;
 import com.sevendaystominecraft.entity.projectile.GrenadeEntity;
 import com.sevendaystominecraft.entity.zombie.*;
 import com.sevendaystominecraft.territory.TerritoryLabelEntity;
+import com.sevendaystominecraft.trader.TraderEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -145,6 +146,12 @@ public class ModEntities {
                             .sized(0.5f, 0.5f).clientTrackingRange(12).updateInterval(20)
                             .build(key("territory_label")));
 
+    public static final Supplier<EntityType<TraderEntity>> TRADER =
+            ENTITY_TYPES.register("trader", () ->
+                    EntityType.Builder.<TraderEntity>of(TraderEntity::new, MobCategory.MISC)
+                            .sized(0.6f, 1.95f).clientTrackingRange(10)
+                            .build(key("trader")));
+
     public static class AttributeRegistration {
         public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
             event.put(WALKER.get(), BaseSevenDaysZombie.createBaseZombieAttributes().build());
@@ -165,6 +172,7 @@ public class ModEntities {
             event.put(CHARGED.get(), ChargedZombie.createAttributes().build());
             event.put(INFERNAL.get(), InfernalZombie.createAttributes().build());
             event.put(BEHEMOTH.get(), BehemothZombie.createAttributes().build());
+            event.put(TRADER.get(), TraderEntity.createAttributes().build());
         }
     }
 }

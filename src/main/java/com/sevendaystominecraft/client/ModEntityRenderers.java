@@ -35,5 +35,6 @@ public class ModEntityRenderers {
         event.registerEntityRenderer(ModEntities.BULLET.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.GRENADE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.TERRITORY_LABEL.get(), ctx -> new TerritoryLabelRenderer(ctx));
+        event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new TraderRenderer(ctx));
     }
 }

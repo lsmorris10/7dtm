@@ -39,7 +39,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
 │   ├── MusicManager.java           — Context-aware music system (Day/Night/Combat/BloodMoon priority)
-│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label
+│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label + trader
 │   ├── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
 │   ├── TerritoryLabelRenderer.java — Entity renderer for territory floating label (uses EntityRenderState)
 │   └── premade/
@@ -144,7 +144,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── LootStageCalculator.java    — Loot stage formula: floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)
 │   └── LootStageHandler.java       — Periodic loot stage sync to client
 ├── menu/
-│   └── ModMenuTypes.java           — Menu type registration for workstations and loot containers
+│   └── ModMenuTypes.java           — Menu type registration for workstations, loot containers, and trader
 ├── heatmap/
 │   ├── HeatSource.java             — Individual heat source with amount, decay rate, radius
 │   ├── HeatmapData.java            — SavedData storing per-chunk heat sources, persisted via NBT
@@ -176,6 +176,8 @@ src/main/java/com/sevendaystominecraft/
     ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64)
     ├── SyncChunkHeatPayload.java   — Server→client current chunk heat value
     ├── SyncTerritoryPayload.java   — Server→client territory entries (id, pos, tier, label)
+    ├── SyncTraderPayload.java      — Server→client trader entries (id, pos, tier, name)
+    ├── TraderActionPayload.java    — Client→server trader buy/sell action packets
     └── NearbyPlayersBroadcaster.java — Server tick handler broadcasting nearby players + heat every 20 ticks
 ```
 
@@ -288,6 +290,25 @@ src/main/java/com/sevendaystominecraft/
 - **Vehicle wreckage blocks**: 3 decorative blocks (Burnt Car, Broken Truck, Wrecked Camper) that drop scrap iron, mechanical parts, and fuel when broken
 - **New loot container types**: TOOL_CRATE (tools/iron/mechanical parts), FUEL_CACHE (fuel/water), VENDING_MACHINE (misc), MAILBOX (junk), FARM_CRATE (seeds/food)
 - **Biome-based difficulty**: Village tier capped by both distance from spawn AND biome lootTierMax from BiomeProperties (Forest=3, Desert/Snow=5, Wasteland=6)
+
+#### Trader NPC System — DONE
+- **TraderEntity**: Invulnerable, non-despawning PathfinderMob NPC with random name from pool (Joel, Rekt, Jen, Hugh, Bob), LookAtPlayerGoal, right-click opens shop GUI
+- **DukeToken**: Currency item (Duke's Casino Tokens) for buying/selling at traders, stacksTo(50000)
+- **TraderConfig** (`trader.toml`): guaranteeRadius (150), minChunkSpacing (25), spawnChanceDenominator (30), protectionRadius (30), restockIntervalDays (3), syncRangeBlocks (512), tier distance thresholds
+- **TraderSpawnHandler**: Dedicated chunk-load handler (completely independent from TerritoryWorldGenerator) using TraderConfig spacing/chance values; guaranteed near-spawn trader within guaranteeRadius; creates full TRADER_OUTPOST territory + trader entity; `randomNonTrader()` in TerritoryType prevents TRADER_OUTPOST from appearing via regular territory RNG
+- **TraderData** (SavedData): Persists trader locations, names, tiers across restarts; spatial lookup; protection zone check
+- **TraderRecord**: Per-trader data (id, origin, name, tier, lastRestockDay)
+- **TraderInventory**: Tiered item pools with per-offer maxStock quantities (Tier 1: basic tools/food/ammo, Tier 2: iron gear/medical/better ammo, Tier 3+: diamond gear/military/rare materials); sell value table for common items
+- **TraderMenu**: AbstractContainerMenu with buy/sell actions; 4 sell input slots for place-and-sell workflow; server-side stock tracking via ContainerData (live sync to client); proximity enforcement (10-block radius entity check)
+- **TraderScreen**: Buy tab shows items with price, live stock count (or "SOLD OUT"), scrollable; Sell tab has 4 input slots + sell button + value preview
+- **SyncTraderPayload**: Server→client trader position sync (id, pos, tier, name) following SyncTerritoryPayload pattern
+- **TraderClientState**: Thread-safe client-side trader position storage
+- **TraderBroadcaster**: @EventBusSubscriber 60-tick broadcast of nearby traders to each player; 1200-tick restock check comparing game day against lastRestockDay per trader
+- **TraderProtectionHandler**: Suppresses monster spawns (EntityJoinLevelEvent) and player block breaking (BlockEvent.BreakEvent) within configurable radius
+- **ZombieBreakBlockGoal integration**: Zombie AI block destruction also checks `TraderData.isInProtectionZone()` before destroying blocks, preventing zombie block-breaking in trader zones
+- **Map markers**: Cyan "T" markers on compass, cyan diamond icon primitives on minimap/big map (filled diamond shape rendered via `graphics.fill()`) with trader name labels
+- **TraderRenderer**: HumanoidModel-based renderer using Steve texture
+- **TraderActionPayload**: Client→server buy/sell packets with traderId validation
 
 ## Known Bugs / Issues
 1. **Sprint bug (FIXED)**: Added `LocalPlayerSprintMixin` targeting `LocalPlayer.aiStep()` (client-side mixin in `sevendaystominecraft.mixins.json` "client" array). Cancels sprinting client-side when stamina exhausted, fracture, electrocuted, or stunned — prevents rubber-banding.

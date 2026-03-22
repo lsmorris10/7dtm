@@ -36,4 +36,13 @@ public enum TerritoryType {
         TerritoryType[] values = values();
         return values[random.nextInt(values.length)];
     }
+
+    public static TerritoryType randomNonTrader(net.minecraft.util.RandomSource random) {
+        TerritoryType[] values = values();
+        TerritoryType result;
+        do {
+            result = values[random.nextInt(values.length)];
+        } while (result == TRADER_OUTPOST);
+        return result;
+    }
 }
