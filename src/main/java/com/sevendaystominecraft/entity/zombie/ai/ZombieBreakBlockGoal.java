@@ -6,12 +6,14 @@ import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
 import com.sevendaystominecraft.sound.ModSounds;
 import com.sevendaystominecraft.trader.TraderData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,7 +25,6 @@ public class ZombieBreakBlockGoal extends Goal {
 
     private final BaseSevenDaysZombie zombie;
     private BlockPos targetBlockPos;
-    private float blockDamageAccumulated;
     private float blockMaxHP;
     private int breakProgressId;
     private int ticksSinceLastCheck;
@@ -44,12 +45,19 @@ public class ZombieBreakBlockGoal extends Goal {
     private List<BlockPos> breakPath;
     private int breakPathIndex;
 
+    private static final int CLEANUP_INTERVAL = 100;
+    private int cleanupCounter;
+
     public ZombieBreakBlockGoal(BaseSevenDaysZombie zombie) {
         this.zombie = zombie;
         this.pathEvaluator = new BlockBreakPathEvaluator(zombie);
         this.breakPath = new ArrayList<>();
         this.breakPathIndex = 0;
         this.setFlags(EnumSet.of(Flag.MOVE));
+    }
+
+    private ResourceKey<Level> dimension() {
+        return zombie.level().dimension();
     }
 
     @Override
@@ -84,7 +92,6 @@ public class ZombieBreakBlockGoal extends Goal {
 
     @Override
     public void start() {
-        blockDamageAccumulated = 0;
         BlockState state = zombie.level().getBlockState(targetBlockPos);
         blockMaxHP = BlockHPRegistry.getBlockHP(state);
         breakProgressId = zombie.getId();
@@ -93,6 +100,7 @@ public class ZombieBreakBlockGoal extends Goal {
         ticksSinceTargetSeen = 0;
         lastStuckCheckPos = zombie.position();
         stuckTicks = 0;
+        cleanupCounter = 0;
     }
 
     @Override
@@ -115,7 +123,8 @@ public class ZombieBreakBlockGoal extends Goal {
         }
 
         if (lastKnownTarget != null && lastKnownTarget.isAlive()) {
-            if (blockDamageAccumulated > 0) {
+            float sharedDamage = BlockDamageTracker.getInstance().getDamage(dimension(), targetBlockPos);
+            if (sharedDamage > 0) {
                 return true;
             }
             return ticksSinceTargetSeen < TARGET_MEMORY_TICKS;
@@ -136,9 +145,12 @@ public class ZombieBreakBlockGoal extends Goal {
             ticksSinceTargetSeen = 0;
         }
 
+        ResourceKey<Level> dim = dimension();
+
         if (lastKnownTarget != null && lastKnownTarget.isAlive()) {
             double distToTargetSq = zombie.distanceToSqr(lastKnownTarget);
             if (distToTargetSq > ABANDON_DISTANCE_SQ) {
+                BlockDamageTracker.getInstance().removeContributor(dim, targetBlockPos, zombie.getUUID());
                 serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
                 targetBlockPos = null;
                 breakPath.clear();
@@ -162,22 +174,26 @@ public class ZombieBreakBlockGoal extends Goal {
         float speedMult = ZombieConfig.INSTANCE.blockBreakSpeedMultiplier.get().floatValue();
         float damagePerTick = (attackDamage * speedMult) / 20.0f;
 
-        blockDamageAccumulated += damagePerTick;
+        BlockDamageTracker tracker = BlockDamageTracker.getInstance();
+        long gameTick = serverLevel.getGameTime();
+        float totalDamage = tracker.addDamage(dim, targetBlockPos, zombie.getUUID(), damagePerTick, gameTick);
 
         if (blockMaxHP > 0) {
-            int progress = (int) ((blockDamageAccumulated / blockMaxHP) * 10.0f);
+            int progress = (int) ((totalDamage / blockMaxHP) * 10.0f);
             progress = Math.min(progress, 9);
             serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, progress);
         }
 
-        if (blockDamageAccumulated >= blockMaxHP) {
+        if (totalDamage >= blockMaxHP) {
             int protectionRadius = TraderConfig.INSTANCE.protectionRadius.get();
             TraderData traderData = TraderData.getOrCreate(serverLevel);
             if (traderData.isInProtectionZone(targetBlockPos, protectionRadius)) {
                 serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
+                tracker.removeBlock(dim, targetBlockPos);
                 targetBlockPos = null;
                 return;
             }
+            tracker.removeBlock(dim, targetBlockPos);
             serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
             ModSounds.playAtBlock(ModSounds.BLOCK_BREAK_ZOMBIE, serverLevel, targetBlockPos,
                     SoundSource.HOSTILE, 1.0f, 1.0f);
@@ -195,20 +211,29 @@ public class ZombieBreakBlockGoal extends Goal {
             ticksSinceLastCheck = 0;
             BlockState current = zombie.level().getBlockState(targetBlockPos);
             if (current.isAir()) {
+                tracker.removeBlock(dim, targetBlockPos);
                 if (!advanceBreakPath()) {
                     targetBlockPos = null;
                 }
             }
         }
+
+        cleanupCounter++;
+        if (cleanupCounter >= CLEANUP_INTERVAL) {
+            cleanupCounter = 0;
+            tracker.cleanupIdleEntries(gameTick);
+        }
     }
 
     @Override
     public void stop() {
-        if (targetBlockPos != null && zombie.level() instanceof ServerLevel serverLevel) {
-            serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
+        if (targetBlockPos != null) {
+            BlockDamageTracker.getInstance().removeContributor(dimension(), targetBlockPos, zombie.getUUID());
+            if (zombie.level() instanceof ServerLevel serverLevel) {
+                serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
+            }
         }
         targetBlockPos = null;
-        blockDamageAccumulated = 0;
         lastKnownTarget = null;
         ticksSinceTargetSeen = 0;
         lastStuckCheckPos = null;
@@ -224,7 +249,6 @@ public class ZombieBreakBlockGoal extends Goal {
             BlockState nextState = zombie.level().getBlockState(nextPos);
             if (!nextState.isAir() && BlockHPRegistry.isBreakable(nextState)) {
                 targetBlockPos = nextPos;
-                blockDamageAccumulated = 0;
                 blockMaxHP = BlockHPRegistry.getBlockHP(nextState);
                 if (zombie.level() instanceof ServerLevel serverLevel) {
                     serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, 0);
