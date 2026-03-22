@@ -502,12 +502,37 @@ public class VillageBuildingBuilder {
                 if (!lootPos.contains(pos)) {
                     Block lootBlock = TerritoryStructureBuilder.getLootBlock(lootType);
                     if (lootBlock != null) {
-                        setBlock(level, pos, lootBlock.defaultBlockState());
-                        if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
-                            be.setTerritoryTier(tier.getTier());
+                        if (lootType == LootContainerType.VENDING_MACHINE) {
+                            BlockPos abovePos = pos.above();
+                            if (abovePos.getY() < level.getMaxY()
+                                    && abovePos.getY() - base.getY() < wallHeight
+                                    && level.getBlockState(abovePos).canBeReplaced()
+                                    && !lootPos.contains(abovePos)) {
+                                BlockState lowerState = lootBlock.defaultBlockState()
+                                        .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
+                                                DoubleBlockHalf.LOWER);
+                                BlockState upperState = lowerState
+                                        .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
+                                                DoubleBlockHalf.UPPER);
+                                setBlock(level, pos, lowerState);
+                                setBlock(level, abovePos, upperState);
+                                if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
+                                    be.setTerritoryTier(tier.getTier());
+                                }
+                                lootPos.add(pos);
+                                lootTypes.add(lootType);
+                            } else {
+                                attempts++;
+                                continue;
+                            }
+                        } else {
+                            setBlock(level, pos, lootBlock.defaultBlockState());
+                            if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
+                                be.setTerritoryTier(tier.getTier());
+                            }
+                            lootPos.add(pos);
+                            lootTypes.add(lootType);
                         }
-                        lootPos.add(pos);
-                        lootTypes.add(lootType);
                     }
                     break;
                 }
