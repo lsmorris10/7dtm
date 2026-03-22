@@ -36,8 +36,7 @@ public class TerritoryAnnouncementOverlay {
 
         String name = TerritoryAnnouncement.getTerritoryName();
         int tier = TerritoryAnnouncement.getTerritoryTier();
-        String stars = "★".repeat(Math.max(1, tier));
-        String displayText = name + " " + stars;
+        String displayText = name;
         int color = getTierColor(tier);
 
         int screenWidth = mc.getWindow().getGuiScaledWidth();

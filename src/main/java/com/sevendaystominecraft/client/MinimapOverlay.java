@@ -148,17 +148,25 @@ public class MinimapOverlay {
             graphics.fill(dotX - halfDot, dotY - halfDot,
                     dotX + halfDot, dotY + halfDot, color);
 
-            String stars = "\u2605".repeat(entry.tier());
             String labelName = entry.label();
             if (cleared) {
                 labelName = labelName.replace(" [Cleared]", "");
             }
-            String[] parts = labelName.split(" ");
-            String shortName = parts.length > 0 ? parts[0] : labelName;
+            String starsPart = "";
+            String namePart = labelName;
+            int starIdx = labelName.indexOf('\u2605');
+            if (starIdx >= 0) {
+                namePart = labelName.substring(0, starIdx).trim();
+                starsPart = labelName.substring(starIdx);
+            }
+            String shortName = namePart.split(" ")[0];
+            if (shortName.isEmpty()) {
+                shortName = namePart;
+            }
             if (cleared) {
                 shortName = shortName + "\u2713";
             }
-            String abbrevLabel = stars + " " + shortName;
+            String abbrevLabel = shortName + (starsPart.isEmpty() ? "" : " " + starsPart);
 
             int textWidth = mc.font.width(abbrevLabel);
             int textX = dotX - textWidth / 2;
