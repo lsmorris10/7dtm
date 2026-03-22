@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.block.workstation;
 
+import com.sevendaystominecraft.capability.WaterBottleConversionHandler;
 import com.sevendaystominecraft.item.ModItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,7 +30,7 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.COD, 1)), new ItemStack(Items.COOKED_COD), 200));
         recipes.add(recipe(List.of(ing(Items.SALMON, 1)), new ItemStack(Items.COOKED_SALMON), 200));
         recipes.add(recipe(List.of(ing(Items.POTATO, 1)), new ItemStack(Items.BAKED_POTATO), 200));
-        recipes.add(recipe(List.of(ing(ModItems.MURKY_WATER.get(), 1), ing(Items.GLASS_BOTTLE, 1)), new ItemStack(ModItems.BOILED_WATER.get()), 200));
+        recipes.add(recipe(List.of(new WorkstationRecipe.Ingredient(Items.POTION, 1, WaterBottleConversionHandler::isVanillaWaterBottle)), new ItemStack(ModItems.BOILED_WATER.get()), 200));
         recipes.add(recipe(List.of(ing(Items.RABBIT, 1)), new ItemStack(ModItems.CHARRED_MEAT.get()), 100));
         recipes.add(recipe(List.of(ing(ModItems.GOLDENROD.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.GOLDENROD_TEA.get()), 200));
         recipes.add(recipe(List.of(ing(ModItems.CHRYSANTHEMUM.get(), 1), ing(ModItems.BOILED_WATER.get(), 1)), new ItemStack(ModItems.RED_TEA.get()), 200));
@@ -114,9 +115,9 @@ public final class WorkstationRecipes {
     }
 
     public static WorkstationRecipe findMatch(WorkstationType type,
-                                               java.util.function.Function<net.minecraft.world.item.Item, Integer> itemCounter) {
+                                               java.util.function.Function<WorkstationRecipe.Ingredient, Integer> ingredientCounter) {
         for (WorkstationRecipe recipe : getRecipes(type)) {
-            if (recipe.matches(itemCounter)) return recipe;
+            if (recipe.matches(ingredientCounter)) return recipe;
         }
         return null;
     }

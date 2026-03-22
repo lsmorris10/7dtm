@@ -96,7 +96,7 @@
 - `duct_tape.png`, `duke_coin.png`, `dukes_casino_token.png`, `electrical_parts.png`
 - `empty_can.png`, `ethanol_can.png`, `feather.png`, `fertilizer.png`
 - `forged_iron.png`, `forged_steel.png`, `gas_can.png`, `glass_jar.png`
-- `glass_jar_boiled_water.png`, `glass_jar_murky_water.png`, `gunpowder.png`
+- `glass_jar_boiled_water.png`, `gunpowder.png`
 - `iron_ingot.png`, `iron_scrap.png`, `lead.png`, `lead_ingot.png`, `leather.png`
 - `mechanical_parts.png`, `nails.png`, `nitrate.png`, `oil_shale.png`
 - `plant_fiber.png`, `polymer.png`, `rebar_frame.png`, `sand.png`

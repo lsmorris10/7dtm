@@ -158,10 +158,6 @@ public class ModItems {
             () -> new GrenadeItem(
                     new Item.Properties().setId(key("grenade")).stacksTo(16)));
 
-    public static final Supplier<Item> MURKY_WATER = ITEMS.register("murky_water",
-            () -> new ConsumableStatItem(new Item.Properties().setId(key("murky_water")).stacksTo(64),
-                    0f, 10f, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, new String[]{}, 0));
-
     public static final Supplier<Item> BOILED_WATER = ITEMS.register("boiled_water",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("boiled_water")).stacksTo(64),
                     0f, 20f, new String[]{}, new String[]{}, 0));

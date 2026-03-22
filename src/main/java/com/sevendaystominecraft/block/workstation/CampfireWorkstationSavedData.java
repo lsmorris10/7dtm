@@ -8,12 +8,13 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -180,16 +181,24 @@ public class CampfireWorkstationSavedData extends SavedData {
         }
 
         private WorkstationRecipe findMatchingRecipe() {
-            Map<Item, Integer> inputCounts = new HashMap<>();
+            List<ItemStack> inputStacks = new ArrayList<>();
             for (int i = 0; i < TYPE.getInputSlots() && i < items.size(); i++) {
                 ItemStack stack = items.get(i);
                 if (!stack.isEmpty()) {
-                    inputCounts.merge(stack.getItem(), stack.getCount(), Integer::sum);
+                    inputStacks.add(stack);
                 }
             }
-            if (inputCounts.isEmpty()) return null;
+            if (inputStacks.isEmpty()) return null;
 
-            WorkstationRecipe recipe = WorkstationRecipes.findMatch(TYPE, item -> inputCounts.getOrDefault(item, 0));
+            WorkstationRecipe recipe = WorkstationRecipes.findMatch(TYPE, ing -> {
+                int total = 0;
+                for (ItemStack stack : inputStacks) {
+                    if (ing.testStack(stack)) {
+                        total += stack.getCount();
+                    }
+                }
+                return total;
+            });
             if (recipe == null) return null;
 
             if (!canFitOutput(recipe.output())) return null;
@@ -211,15 +220,15 @@ public class CampfireWorkstationSavedData extends SavedData {
         }
 
         private void processRecipe(WorkstationRecipe recipe) {
-            recipe.consumeInputs((item, count) -> consumeFromInputSlots(item, count));
+            recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
             addToOutput(recipe.output().copy());
         }
 
-        private void consumeFromInputSlots(Item item, int count) {
+        private void consumeFromInputSlots(WorkstationRecipe.Ingredient ing, int count) {
             int remaining = count;
             for (int i = 0; i < TYPE.getInputSlots() && i < items.size() && remaining > 0; i++) {
                 ItemStack stack = items.get(i);
-                if (stack.is(item)) {
+                if (ing.testStack(stack)) {
                     int take = Math.min(remaining, stack.getCount());
                     stack.shrink(take);
                     remaining -= take;

@@ -8,15 +8,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorkstationBlockEntity extends BlockEntity {
 
@@ -170,10 +169,10 @@ public class WorkstationBlockEntity extends BlockEntity {
     }
 
     private WorkstationRecipe findMatchingRecipe() {
-        Map<Item, Integer> inputCounts = countInputItems();
-        if (inputCounts.isEmpty()) return null;
+        List<ItemStack> inputStacks = collectInputStacks();
+        if (inputStacks.isEmpty()) return null;
 
-        WorkstationRecipe recipe = WorkstationRecipes.findMatch(workstationType, item -> inputCounts.getOrDefault(item, 0));
+        WorkstationRecipe recipe = WorkstationRecipes.findMatch(workstationType, ing -> countMatchingStacks(inputStacks, ing));
         if (recipe == null) return null;
 
         if (!canFitOutput(recipe.output())) return null;
@@ -181,15 +180,25 @@ public class WorkstationBlockEntity extends BlockEntity {
         return recipe;
     }
 
-    private Map<Item, Integer> countInputItems() {
-        Map<Item, Integer> counts = new HashMap<>();
+    private List<ItemStack> collectInputStacks() {
+        List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < workstationType.getInputSlots() && i < items.size(); i++) {
             ItemStack stack = items.get(i);
             if (!stack.isEmpty()) {
-                counts.merge(stack.getItem(), stack.getCount(), Integer::sum);
+                stacks.add(stack);
             }
         }
-        return counts;
+        return stacks;
+    }
+
+    private static int countMatchingStacks(List<ItemStack> stacks, WorkstationRecipe.Ingredient ing) {
+        int total = 0;
+        for (ItemStack stack : stacks) {
+            if (ing.testStack(stack)) {
+                total += stack.getCount();
+            }
+        }
+        return total;
     }
 
     private boolean canFitOutput(ItemStack output) {
@@ -207,15 +216,15 @@ public class WorkstationBlockEntity extends BlockEntity {
     }
 
     private void processRecipe(WorkstationRecipe recipe) {
-        recipe.consumeInputs((item, count) -> consumeFromInputSlots(item, count));
+        recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
         addToOutput(recipe.output().copy());
     }
 
-    private void consumeFromInputSlots(Item item, int count) {
+    private void consumeFromInputSlots(WorkstationRecipe.Ingredient ing, int count) {
         int remaining = count;
         for (int i = 0; i < workstationType.getInputSlots() && i < items.size() && remaining > 0; i++) {
             ItemStack stack = items.get(i);
-            if (stack.is(item)) {
+            if (ing.testStack(stack)) {
                 int take = Math.min(remaining, stack.getCount());
                 stack.shrink(take);
                 remaining -= take;

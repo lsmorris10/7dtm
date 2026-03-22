@@ -306,7 +306,7 @@ public class PlayerStatsHandler {
             changed = true;
         }
 
-        boolean isDrink = stack.is(Items.POTION)
+        boolean isDrink = (stack.is(Items.POTION) && !WaterBottleConversionHandler.isVanillaWaterBottle(stack))
                 || stack.is(Items.MILK_BUCKET)
                 || stack.is(Items.MUSHROOM_STEW)
                 || stack.is(Items.BEETROOT_SOUP)

@@ -60,7 +60,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.NAIL.get());
                         output.accept(ModItems.SPRING.get());
                         output.accept(ModItems.CEMENT.get());
-                        output.accept(ModItems.MURKY_WATER.get());
+                        output.accept(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.POTION, net.minecraft.world.item.alchemy.Potions.WATER));
                         output.accept(ModItems.BOILED_WATER.get());
                         output.accept(ModItems.GOLDENROD.get());
                         output.accept(ModItems.CHRYSANTHEMUM.get());
