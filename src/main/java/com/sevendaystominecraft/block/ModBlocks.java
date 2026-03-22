@@ -69,6 +69,13 @@ public class ModBlocks {
                 .requiresCorrectToolForDrops();
     }
 
+    private static BlockBehaviour.Properties vehicleWreckageProps(String name) {
+        return BlockBehaviour.Properties.of()
+                .setId(blockKey(name))
+                .strength(2.5f)
+                .sound(SoundType.METAL);
+    }
+
     public static final Supplier<Block> GRILL_BLOCK = registerWithItem("grill",
             () -> new WorkstationBlock(metalWorkstationProps("grill"), WorkstationType.GRILL));
 
@@ -127,34 +134,34 @@ public class ModBlocks {
             () -> new LootContainerBlock(containerProps("farm_crate"), LootContainerType.FARM_CRATE));
 
     public static final Supplier<Block> BURNT_CAR_BLOCK = registerWithItem("burnt_car",
-            () -> new VehicleWreckageBlock(metalContainerProps("burnt_car")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("burnt_car")));
 
     public static final Supplier<Block> BROKEN_TRUCK_BLOCK = registerWithItem("broken_truck",
-            () -> new VehicleWreckageBlock(metalContainerProps("broken_truck")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("broken_truck")));
 
     public static final Supplier<Block> WRECKED_CAMPER_BLOCK = registerWithItem("wrecked_camper",
-            () -> new VehicleWreckageBlock(metalContainerProps("wrecked_camper")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("wrecked_camper")));
 
     public static final Supplier<Block> VEHICLE_BODY_BLOCK = registerWithItem("vehicle_body",
-            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_body")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("vehicle_body")));
 
     public static final Supplier<Block> VEHICLE_BODY_CHARRED_BLOCK = registerWithItem("vehicle_body_charred",
-            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_body_charred")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("vehicle_body_charred")));
 
     public static final Supplier<Block> VEHICLE_WINDOW_BLOCK = registerWithItem("vehicle_window",
-            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_window")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("vehicle_window")));
 
     public static final Supplier<Block> VEHICLE_WHEEL_BLOCK = registerWithItem("vehicle_wheel",
-            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_wheel")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("vehicle_wheel")));
 
     public static final Supplier<Block> VEHICLE_ROOF_BLOCK = registerWithItem("vehicle_roof",
-            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_roof")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("vehicle_roof")));
 
     public static final Supplier<Block> CAMPER_BODY_BLOCK = registerWithItem("camper_body",
-            () -> new VehicleWreckageBlock(metalContainerProps("camper_body")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("camper_body")));
 
     public static final Supplier<Block> TRUCK_BED_BLOCK = registerWithItem("truck_bed",
-            () -> new VehicleWreckageBlock(metalContainerProps("truck_bed")));
+            () -> new VehicleWreckageBlock(vehicleWreckageProps("truck_bed")));
 
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);
