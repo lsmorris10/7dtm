@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,11 +25,11 @@ import java.util.function.Consumer;
 public class GrenadeItem extends Item implements GeoItem {
 
     private static final RawAnimation ANIM_IDLE = RawAnimation.begin().thenLoop("animation.grenade.idle");
-    private static final RawAnimation ANIM_PIN_PULL = RawAnimation.begin().thenPlay("animation.grenade.pin_pull");
-    private static final RawAnimation ANIM_THROW = RawAnimation.begin().thenPlay("animation.grenade.throw");
+    private static final RawAnimation ANIM_PIN_PULL_AND_THROW = RawAnimation.begin()
+            .thenPlay("animation.grenade.pin_pull")
+            .thenPlay("animation.grenade.throw");
 
-    private static final int USE_DURATION = 72000;
-    private static final int PIN_PULL_TICKS = 20;
+    private static final float THROW_SPEED = 1.0f;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -68,8 +67,7 @@ public class GrenadeItem extends Item implements GeoItem {
             }
             state.setAndContinue(ANIM_IDLE);
             return PlayState.CONTINUE;
-        }).triggerableAnim("animation.grenade.pin_pull", ANIM_PIN_PULL)
-          .triggerableAnim("animation.grenade.throw", ANIM_THROW));
+        }).triggerableAnim("animation.grenade.pin_pull_and_throw", ANIM_PIN_PULL_AND_THROW));
     }
 
     @Override
@@ -78,13 +76,8 @@ public class GrenadeItem extends Item implements GeoItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return USE_DURATION;
-    }
-
-    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.BOW;
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -93,40 +86,24 @@ public class GrenadeItem extends Item implements GeoItem {
         if (player.getCooldowns().isOnCooldown(held)) {
             return InteractionResult.FAIL;
         }
-        player.startUsingItem(hand);
+
         if (!level.isClientSide()) {
-            triggerAnim(player, GeoItem.getId(held), "grenade_controller", "animation.grenade.pin_pull");
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 1.0f, 1.5f);
-        }
-        return InteractionResult.CONSUME;
-    }
 
-    @Override
-    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeCharged) {
-        if (!(entity instanceof Player player)) return false;
-
-        int ticksUsed = USE_DURATION - timeCharged;
-        if (ticksUsed < PIN_PULL_TICKS) {
-            return false;
-        }
-
-        if (!level.isClientSide()) {
-            triggerAnim(player, GeoItem.getId(stack), "grenade_controller", "animation.grenade.throw");
+            triggerAnim(player, GeoItem.getId(held), "grenade_controller", "animation.grenade.pin_pull_and_throw");
 
             GrenadeEntity grenade = new GrenadeEntity(level, player);
             grenade.setPos(player.getX(), player.getEyeY() - 0.1, player.getZ());
-            float chargeRatio = Math.min(1.0f, ticksUsed / (float)(PIN_PULL_TICKS + 20));
-            float throwSpeed = 0.5f + chargeRatio * 1.0f;
-            grenade.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, throwSpeed, 0.5f);
+            grenade.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, THROW_SPEED, 0.5f);
             level.addFreshEntity(grenade);
 
             if (!player.isCreative()) {
-                stack.shrink(1);
+                held.shrink(1);
             }
         }
 
-        player.getCooldowns().addCooldown(stack, 20);
-        return true;
+        player.getCooldowns().addCooldown(held, 20);
+        return InteractionResult.SUCCESS;
     }
 }
