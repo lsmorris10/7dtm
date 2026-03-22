@@ -135,6 +135,27 @@ public class ModBlocks {
     public static final Supplier<Block> WRECKED_CAMPER_BLOCK = registerWithItem("wrecked_camper",
             () -> new VehicleWreckageBlock(metalContainerProps("wrecked_camper")));
 
+    public static final Supplier<Block> VEHICLE_BODY_BLOCK = registerWithItem("vehicle_body",
+            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_body")));
+
+    public static final Supplier<Block> VEHICLE_BODY_CHARRED_BLOCK = registerWithItem("vehicle_body_charred",
+            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_body_charred")));
+
+    public static final Supplier<Block> VEHICLE_WINDOW_BLOCK = registerWithItem("vehicle_window",
+            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_window")));
+
+    public static final Supplier<Block> VEHICLE_WHEEL_BLOCK = registerWithItem("vehicle_wheel",
+            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_wheel")));
+
+    public static final Supplier<Block> VEHICLE_ROOF_BLOCK = registerWithItem("vehicle_roof",
+            () -> new VehicleWreckageBlock(metalContainerProps("vehicle_roof")));
+
+    public static final Supplier<Block> CAMPER_BODY_BLOCK = registerWithItem("camper_body",
+            () -> new VehicleWreckageBlock(metalContainerProps("camper_body")));
+
+    public static final Supplier<Block> TRUCK_BED_BLOCK = registerWithItem("truck_bed",
+            () -> new VehicleWreckageBlock(metalContainerProps("truck_bed")));
+
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);
         BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(),

@@ -4,7 +4,9 @@ import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
 import com.sevendaystominecraft.block.loot.LootContainerType;
+import com.sevendaystominecraft.block.vehicle.VehicleWreckageBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
@@ -268,19 +270,109 @@ public class VillageClusterGenerator {
     }
 
     private static void placeVehicleWreckage(ServerLevel level, BlockPos pos, RandomSource random) {
-        Block[] vehicles = {
-                ModBlocks.BURNT_CAR_BLOCK.get(),
-                ModBlocks.BROKEN_TRUCK_BLOCK.get(),
-                ModBlocks.WRECKED_CAMPER_BLOCK.get()
-        };
-        Block vehicle = vehicles[random.nextInt(vehicles.length)];
-
-        setBlock(level, pos, vehicle.defaultBlockState());
-        if (random.nextFloat() < 0.5f) {
-            setBlock(level, pos.east(), vehicle.defaultBlockState());
+        Direction facing = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+        int vehicleType = random.nextInt(3);
+        switch (vehicleType) {
+            case 0 -> placeBurntCar(level, pos, facing);
+            case 1 -> placeBrokenTruck(level, pos, facing);
+            case 2 -> placeWreckedCamper(level, pos, facing);
         }
-        if (random.nextFloat() < 0.3f) {
-            setBlock(level, pos.north(), vehicle.defaultBlockState());
+    }
+
+    private static void placeVehicleBlock(ServerLevel level, BlockPos origin,
+                                           int right, int up, int forward,
+                                           Direction facing, Block block) {
+        Direction rightDir = facing.getClockWise();
+        BlockPos target = origin.relative(rightDir, right)
+                .above(up)
+                .relative(facing, forward);
+        if (level.isLoaded(target) && level.getBlockState(target).canBeReplaced()) {
+            BlockState state = block.defaultBlockState()
+                    .setValue(VehicleWreckageBlock.FACING, facing);
+            level.setBlock(target, state, Block.UPDATE_CLIENTS);
+        }
+    }
+
+    private static void placeBurntCar(ServerLevel level, BlockPos pos, Direction facing) {
+        Block body = ModBlocks.VEHICLE_BODY_CHARRED_BLOCK.get();
+        Block wheel = ModBlocks.VEHICLE_WHEEL_BLOCK.get();
+        Block window = ModBlocks.VEHICLE_WINDOW_BLOCK.get();
+        Block roof = ModBlocks.VEHICLE_ROOF_BLOCK.get();
+        Block core = ModBlocks.BURNT_CAR_BLOCK.get();
+
+        for (int z = 0; z < 2; z++) {
+            placeVehicleBlock(level, pos, 0, 0, z, facing, wheel);
+            placeVehicleBlock(level, pos, 1, 0, z, facing, body);
+            placeVehicleBlock(level, pos, 2, 0, z, facing, wheel);
+        }
+        placeVehicleBlock(level, pos, 0, 1, 0, facing, window);
+        placeVehicleBlock(level, pos, 1, 1, 0, facing, core);
+        placeVehicleBlock(level, pos, 2, 1, 0, facing, window);
+        placeVehicleBlock(level, pos, 0, 1, 1, facing, body);
+        placeVehicleBlock(level, pos, 1, 1, 1, facing, roof);
+        placeVehicleBlock(level, pos, 2, 1, 1, facing, body);
+    }
+
+    private static void placeBrokenTruck(ServerLevel level, BlockPos pos, Direction facing) {
+        Block body = ModBlocks.VEHICLE_BODY_BLOCK.get();
+        Block wheel = ModBlocks.VEHICLE_WHEEL_BLOCK.get();
+        Block window = ModBlocks.VEHICLE_WINDOW_BLOCK.get();
+        Block roof = ModBlocks.VEHICLE_ROOF_BLOCK.get();
+        Block bed = ModBlocks.TRUCK_BED_BLOCK.get();
+        Block core = ModBlocks.BROKEN_TRUCK_BLOCK.get();
+
+        placeVehicleBlock(level, pos, 0, 0, 0, facing, wheel);
+        placeVehicleBlock(level, pos, 1, 0, 0, facing, core);
+        placeVehicleBlock(level, pos, 2, 0, 0, facing, wheel);
+        placeVehicleBlock(level, pos, 0, 0, 1, facing, wheel);
+        placeVehicleBlock(level, pos, 1, 0, 1, facing, bed);
+        placeVehicleBlock(level, pos, 2, 0, 1, facing, bed);
+        placeVehicleBlock(level, pos, 3, 0, 1, facing, wheel);
+
+        placeVehicleBlock(level, pos, 0, 1, 0, facing, body);
+        placeVehicleBlock(level, pos, 1, 1, 0, facing, window);
+        placeVehicleBlock(level, pos, 2, 1, 0, facing, body);
+        placeVehicleBlock(level, pos, 1, 1, 1, facing, bed);
+        placeVehicleBlock(level, pos, 2, 1, 1, facing, bed);
+
+        placeVehicleBlock(level, pos, 0, 2, 0, facing, roof);
+        placeVehicleBlock(level, pos, 1, 2, 0, facing, roof);
+        placeVehicleBlock(level, pos, 2, 2, 0, facing, roof);
+    }
+
+    private static void placeWreckedCamper(ServerLevel level, BlockPos pos, Direction facing) {
+        Block body = ModBlocks.CAMPER_BODY_BLOCK.get();
+        Block wheel = ModBlocks.VEHICLE_WHEEL_BLOCK.get();
+        Block window = ModBlocks.VEHICLE_WINDOW_BLOCK.get();
+        Block roof = ModBlocks.VEHICLE_ROOF_BLOCK.get();
+        Block core = ModBlocks.WRECKED_CAMPER_BLOCK.get();
+        Block vbody = ModBlocks.VEHICLE_BODY_BLOCK.get();
+
+        for (int z = 0; z < 3; z++) {
+            placeVehicleBlock(level, pos, 0, 0, z, facing, wheel);
+            placeVehicleBlock(level, pos, 4, 0, z, facing, wheel);
+            for (int x = 1; x <= 3; x++) {
+                Block fill = (z == 1 && x == 2) ? core : body;
+                placeVehicleBlock(level, pos, x, 0, z, facing, fill);
+            }
+        }
+
+        for (int z = 0; z < 3; z++) {
+            placeVehicleBlock(level, pos, 0, 1, z, facing, vbody);
+            placeVehicleBlock(level, pos, 4, 1, z, facing, vbody);
+            for (int x = 1; x <= 3; x++) {
+                if (z == 0 || z == 2) {
+                    placeVehicleBlock(level, pos, x, 1, z, facing, window);
+                } else {
+                    placeVehicleBlock(level, pos, x, 1, z, facing, body);
+                }
+            }
+        }
+
+        for (int z = 0; z < 3; z++) {
+            for (int x = 0; x < 5; x++) {
+                placeVehicleBlock(level, pos, x, 2, z, facing, roof);
+            }
         }
     }
 

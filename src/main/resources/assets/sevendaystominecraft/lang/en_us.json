@@ -140,5 +140,12 @@
   "block.sevendaystominecraft.farm_crate": "Farm Crate",
   "block.sevendaystominecraft.burnt_car": "Burnt Car",
   "block.sevendaystominecraft.broken_truck": "Broken Truck",
-  "block.sevendaystominecraft.wrecked_camper": "Wrecked Camper"
+  "block.sevendaystominecraft.wrecked_camper": "Wrecked Camper",
+  "block.sevendaystominecraft.vehicle_body": "Vehicle Body Panel",
+  "block.sevendaystominecraft.vehicle_body_charred": "Charred Body Panel",
+  "block.sevendaystominecraft.vehicle_window": "Broken Vehicle Window",
+  "block.sevendaystominecraft.vehicle_wheel": "Flat Tire",
+  "block.sevendaystominecraft.vehicle_roof": "Vehicle Roof Panel",
+  "block.sevendaystominecraft.camper_body": "Camper Body Panel",
+  "block.sevendaystominecraft.truck_bed": "Truck Bed"
 }

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sevendaystominecraft:block/broken_truck"
+    },
+    "facing=south": {
+      "model": "sevendaystominecraft:block/broken_truck",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sevendaystominecraft:block/broken_truck",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "sevendaystominecraft:block/broken_truck",
+      "y": 90
+    }
+  }
+}

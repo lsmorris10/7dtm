@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sevendaystominecraft:block/vehicle_body_charred"
+    },
+    "facing=south": {
+      "model": "sevendaystominecraft:block/vehicle_body_charred",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sevendaystominecraft:block/vehicle_body_charred",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "sevendaystominecraft:block/vehicle_body_charred",
+      "y": 90
+    }
+  }
+}

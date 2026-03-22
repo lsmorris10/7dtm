@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sevendaystominecraft:block/wrecked_camper"
+    },
+    "facing=south": {
+      "model": "sevendaystominecraft:block/wrecked_camper",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sevendaystominecraft:block/wrecked_camper",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "sevendaystominecraft:block/wrecked_camper",
+      "y": 90
+    }
+  }
+}
