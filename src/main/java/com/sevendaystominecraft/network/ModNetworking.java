@@ -6,12 +6,15 @@ import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.client.BloodMoonClientState;
 import com.sevendaystominecraft.client.ChunkHeatClientState;
 import com.sevendaystominecraft.client.NearbyPlayersClientState;
+import com.sevendaystominecraft.client.QuestClientState;
 import com.sevendaystominecraft.client.TerritoryClientState;
 import com.sevendaystominecraft.client.TraderClientState;
 import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.perk.Attribute;
+import com.sevendaystominecraft.quest.QuestActionHandler;
 import com.sevendaystominecraft.trader.TraderMenu;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -77,6 +80,24 @@ public class ModNetworking {
                 TraderActionPayload.TYPE,
                 TraderActionPayload.STREAM_CODEC,
                 ModNetworking::handleTraderAction
+        );
+
+        registrar.playToClient(
+                SyncQuestPayload.TYPE,
+                SyncQuestPayload.STREAM_CODEC,
+                ModNetworking::handleQuestSync
+        );
+
+        registrar.playToClient(
+                SyncTraderQuestsPayload.TYPE,
+                SyncTraderQuestsPayload.STREAM_CODEC,
+                ModNetworking::handleTraderQuestsSync
+        );
+
+        registrar.playToServer(
+                QuestActionPayload.TYPE,
+                QuestActionPayload.STREAM_CODEC,
+                ModNetworking::handleQuestAction
         );
 
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
@@ -148,6 +169,27 @@ public class ModNetworking {
             } else {
                 traderMenu.trySellSlots(player);
             }
+        });
+    }
+
+    private static void handleQuestSync(SyncQuestPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            QuestClientState.updateActiveQuests(payload.quests(), payload.trackedQuestId());
+        });
+    }
+
+    private static void handleTraderQuestsSync(SyncTraderQuestsPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            QuestClientState.updateTraderQuests(payload.traderId(), payload.quests());
+        });
+    }
+
+    private static void handleQuestAction(QuestActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+            QuestActionHandler.handleAction(serverPlayer, payload);
         });
     }
 

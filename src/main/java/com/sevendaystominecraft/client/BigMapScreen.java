@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEntry;
+import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
 import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import com.sevendaystominecraft.network.SyncTraderPayload.TraderEntry;
 
@@ -29,6 +30,7 @@ public class BigMapScreen extends Screen {
     private static final int COLOR_HARD   = 0xFFFF4444;
     private static final int COLOR_CLEARED = 0xFF888888;
     private static final int COLOR_TRADER = 0xFF00CCCC;
+    private static final int COLOR_QUEST = 0xFFFFFF00;
 
     private int[] terrainCache = null;
     private int cachedPlayerX = Integer.MIN_VALUE;
@@ -102,6 +104,7 @@ public class BigMapScreen extends Screen {
 
         renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
+        renderQuestMarkers(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
 
         renderPlayerMarker(graphics, centerX, centerY, player.getYRot());
 
@@ -235,6 +238,43 @@ public class BigMapScreen extends Screen {
                 graphics.fill(labelX - 1, labelY - 1, labelX + labelWidth + 1, labelY + mc.font.lineHeight + 1, 0x88000000);
                 graphics.drawString(mc.font, nameLabel, labelX, labelY, COLOR_TRADER, true);
             }
+        }
+    }
+
+    private void renderQuestMarkers(GuiGraphics graphics, Minecraft mc, Player player,
+                                      int centerX, int centerY, int mapX, int mapY,
+                                      int mapDisplaySize, float scale) {
+        QuestEntry quest = QuestClientState.getTrackedQuest();
+        if (quest == null || !quest.hasLocation() || "COMPLETED".equals(quest.stateName())) return;
+
+        int iconSize = 6;
+
+        double dx = quest.locX() - player.getX();
+        double dz = quest.locZ() - player.getZ();
+
+        int screenX = centerX + (int) (dx * scale);
+        int screenY = centerY + (int) (dz * scale);
+
+        if (screenX - iconSize < mapX || screenX + iconSize > mapX + mapDisplaySize ||
+            screenY - iconSize < mapY || screenY + iconSize > mapY + mapDisplaySize) {
+            return;
+        }
+
+        graphics.fill(screenX - iconSize / 2, screenY - iconSize / 2,
+                screenX + iconSize / 2, screenY + iconSize / 2, COLOR_QUEST);
+
+        String label = "Q " + quest.questName();
+        if (mc.font.width(label) > 80) {
+            label = mc.font.plainSubstrByWidth(label, 77) + "...";
+        }
+        int labelWidth = mc.font.width(label);
+        int labelX = screenX - labelWidth / 2;
+        int labelY = screenY + iconSize / 2 + 2;
+
+        if (labelX >= mapX && labelX + labelWidth <= mapX + mapDisplaySize &&
+            labelY + mc.font.lineHeight <= mapY + mapDisplaySize) {
+            graphics.fill(labelX - 1, labelY - 1, labelX + labelWidth + 1, labelY + mc.font.lineHeight + 1, 0x88000000);
+            graphics.drawString(mc.font, label, labelX, labelY, COLOR_QUEST, true);
         }
     }
 

@@ -358,6 +358,7 @@ public class PlayerStatsHandler {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
             sendStatsToClient(serverPlayer, stats);
+            com.sevendaystominecraft.quest.QuestSyncHelper.syncQuests(serverPlayer);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
         }
     }

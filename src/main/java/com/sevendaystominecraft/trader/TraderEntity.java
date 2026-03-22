@@ -1,6 +1,8 @@
 package com.sevendaystominecraft.trader;
 
 import com.sevendaystominecraft.item.ModItems;
+import com.sevendaystominecraft.quest.QuestActionHandler;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -117,6 +119,9 @@ public class TraderEntity extends PathfinderMob {
                     buf.writeInt(s);
                 }
             });
+
+            QuestActionHandler.syncTraderQuests(serverPlayer, traderId);
+
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.SUCCESS;

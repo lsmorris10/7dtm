@@ -18,6 +18,7 @@ public class HudClientResetHandler {
         TerritoryAnnouncement.reset();
         StatsHudOverlay.resetAreaState();
         TraderClientState.reset();
+        QuestClientState.reset();
     }
 
     @SubscribeEvent
@@ -31,6 +32,7 @@ public class HudClientResetHandler {
         TerritoryAnnouncement.reset();
         StatsHudOverlay.resetAreaState();
         TraderClientState.reset();
+        QuestClientState.reset();
     }
 
     @SubscribeEvent

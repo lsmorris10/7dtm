@@ -1,6 +1,10 @@
 package com.sevendaystominecraft.trader;
 
+import com.sevendaystominecraft.client.QuestClientState;
 import com.sevendaystominecraft.item.ModItems;
+import com.sevendaystominecraft.network.QuestActionPayload;
+import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
+import com.sevendaystominecraft.network.SyncTraderQuestsPayload.TraderQuestEntry;
 import com.sevendaystominecraft.network.TraderActionPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,10 +30,15 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
     private static final int GRAY = 0xFFAAAAAA;
     private static final int DARK_GRAY = 0xFF666666;
     private static final int RED = 0xFFFF4444;
+    private static final int QUEST_COLOR = 0xFFFFCC00;
+    private static final int READY_COLOR = 0xFF00FFAA;
 
-    private boolean buyTab = true;
+    private enum Tab { BUY, SELL, QUESTS }
+    private Tab currentTab = Tab.BUY;
     private int scrollOffset = 0;
+    private int questScrollOffset = 0;
     private static final int VISIBLE_ROWS = 5;
+    private static final int VISIBLE_QUEST_ROWS = 4;
 
     private Button sellButton;
 
@@ -44,14 +53,19 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
     protected void init() {
         super.init();
         addRenderableWidget(Button.builder(Component.literal("Buy"), b -> {
-            buyTab = true;
+            currentTab = Tab.BUY;
             scrollOffset = 0;
-        }).bounds(leftPos + 8, topPos + 5, 40, 14).build());
+        }).bounds(leftPos + 8, topPos + 5, 36, 14).build());
 
         addRenderableWidget(Button.builder(Component.literal("Sell"), b -> {
-            buyTab = false;
+            currentTab = Tab.SELL;
             scrollOffset = 0;
-        }).bounds(leftPos + 52, topPos + 5, 40, 14).build());
+        }).bounds(leftPos + 48, topPos + 5, 36, 14).build());
+
+        addRenderableWidget(Button.builder(Component.literal("Quests"), b -> {
+            currentTab = Tab.QUESTS;
+            questScrollOffset = 0;
+        }).bounds(leftPos + 88, topPos + 5, 46, 14).build());
 
         sellButton = Button.builder(Component.literal("Sell Items"), b -> {
             PacketDistributor.sendToServer(new TraderActionPayload(menu.getTraderId(), 0, false));
@@ -68,12 +82,12 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
         String tokenText = "Tokens: " + tokenCount;
         graphics.drawString(font, tokenText, leftPos + imageWidth - font.width(tokenText) - 8, topPos + 8, CYAN, true);
 
-        sellButton.visible = !buyTab;
+        sellButton.visible = currentTab == Tab.SELL;
 
-        if (buyTab) {
-            renderBuyTab(graphics, mouseX, mouseY);
-        } else {
-            renderSellTab(graphics, mouseX, mouseY);
+        switch (currentTab) {
+            case BUY -> renderBuyTab(graphics, mouseX, mouseY);
+            case SELL -> renderSellTab(graphics, mouseX, mouseY);
+            case QUESTS -> renderQuestsTab(graphics, mouseX, mouseY);
         }
 
         int playerInvY = topPos + 139;
@@ -151,9 +165,104 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
         graphics.drawString(font, valueText, leftPos + 8, topPos + 97, valueColor, false);
     }
 
+    private void renderQuestsTab(GuiGraphics graphics, int mouseX, int mouseY) {
+        int startY = topPos + 24;
+
+        List<QuestEntry> activeQuests = QuestClientState.getActiveQuests();
+        if (!activeQuests.isEmpty()) {
+            graphics.drawString(font, "Active Quests:", leftPos + 8, startY, QUEST_COLOR, false);
+            startY += 12;
+
+            for (QuestEntry quest : activeQuests) {
+                if (startY > topPos + 120) break;
+
+                boolean readyToTurnIn = "READY_TO_TURN_IN".equals(quest.stateName());
+                boolean isThisTrader = quest.traderId() == menu.getTraderId();
+
+                boolean isTracked = quest.questId().equals(QuestClientState.getTrackedQuestId());
+                graphics.fill(leftPos + 6, startY, leftPos + 170, startY + 20, isTracked ? 0xFF444422 : 0xFF333333);
+
+                String name = quest.questName();
+                if (font.width(name) > 100) {
+                    name = font.plainSubstrByWidth(name, 97) + "...";
+                }
+                graphics.drawString(font, name, leftPos + 8, startY + 2, QUEST_COLOR, false);
+
+                if (readyToTurnIn && isThisTrader) {
+                    String turnIn = "[Turn In]";
+                    int turnInX = leftPos + 170 - font.width(turnIn) - 2;
+                    boolean hovered = mouseX >= turnInX && mouseX <= leftPos + 170 &&
+                                      mouseY >= startY && mouseY <= startY + 20;
+                    graphics.drawString(font, turnIn, turnInX, startY + 2, hovered ? WHITE : READY_COLOR, false);
+                }
+
+                String progress = quest.progress() + "/" + quest.targetCount();
+                if (readyToTurnIn) progress = "COMPLETE";
+                graphics.drawString(font, progress, leftPos + 8, startY + 11, readyToTurnIn ? READY_COLOR : GRAY, false);
+
+                String trackLabel = isTracked ? "[*]" : "[Track]";
+                int trackX = leftPos + 80;
+                boolean trackHovered = mouseX >= trackX && mouseX <= trackX + font.width(trackLabel) &&
+                                       mouseY >= startY && mouseY <= startY + 20;
+                graphics.drawString(font, trackLabel, trackX, startY + 11, trackHovered ? WHITE : CYAN, false);
+
+                String abandon = "[X]";
+                int abandonX = leftPos + 170 - font.width(abandon) - 2;
+                if (readyToTurnIn && isThisTrader) {
+                    abandonX -= font.width("[Turn In]") + 4;
+                }
+                boolean abandonHovered = mouseX >= abandonX && mouseX <= abandonX + font.width(abandon) &&
+                                         mouseY >= startY && mouseY <= startY + 20;
+                graphics.drawString(font, abandon, abandonX, startY + 11, abandonHovered ? WHITE : RED, false);
+
+                startY += 22;
+            }
+
+            startY += 4;
+        }
+
+        List<TraderQuestEntry> traderQuests = QuestClientState.getTraderQuests();
+        if (QuestClientState.getCurrentTraderId() == menu.getTraderId() && !traderQuests.isEmpty()) {
+            graphics.drawString(font, "Available Quests:", leftPos + 8, startY, CYAN, false);
+            startY += 12;
+
+            for (int i = questScrollOffset; i < traderQuests.size() && startY <= topPos + 120; i++) {
+                TraderQuestEntry quest = traderQuests.get(i);
+
+                boolean hovered = mouseX >= leftPos + 6 && mouseX <= leftPos + 170 &&
+                                  mouseY >= startY && mouseY <= startY + 26;
+
+                graphics.fill(leftPos + 6, startY, leftPos + 170, startY + 26, hovered ? 0xFF3A3A3A : 0xFF333333);
+
+                String name = quest.questName();
+                if (font.width(name) > 120) {
+                    name = font.plainSubstrByWidth(name, 117) + "...";
+                }
+                graphics.drawString(font, name, leftPos + 8, startY + 2, WHITE, false);
+
+                String desc = quest.objectiveDescription();
+                if (font.width(desc) > 130) {
+                    desc = font.plainSubstrByWidth(desc, 127) + "...";
+                }
+                graphics.drawString(font, desc, leftPos + 8, startY + 11, GRAY, false);
+
+                String reward = quest.rewardXp() + "xp " + quest.rewardTokens() + "t";
+                int rewardX = leftPos + 170 - font.width(reward) - 2;
+                graphics.drawString(font, reward, rewardX, startY + 17, BUY_COLOR, false);
+
+                String accept = "[Accept]";
+                graphics.drawString(font, accept, leftPos + 8, startY + 17, hovered ? WHITE : CYAN, false);
+
+                startY += 28;
+            }
+        } else if (traderQuests.isEmpty()) {
+            graphics.drawString(font, "No quests available.", leftPos + 8, startY, DARK_GRAY, false);
+        }
+    }
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (buyTab) {
+        if (currentTab == Tab.BUY) {
             List<TraderInventory.TraderOffer> offers = menu.getOffers();
             int startY = topPos + 24;
             for (int i = 0; i < VISIBLE_ROWS && (i + scrollOffset) < offers.size(); i++) {
@@ -165,15 +274,94 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
                     return true;
                 }
             }
+        } else if (currentTab == Tab.QUESTS) {
+            return handleQuestClick(mouseX, mouseY);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    private boolean handleQuestClick(double mouseX, double mouseY) {
+        int startY = topPos + 24;
+
+        List<QuestEntry> activeQuests = QuestClientState.getActiveQuests();
+        if (!activeQuests.isEmpty()) {
+            startY += 12;
+
+            for (QuestEntry quest : activeQuests) {
+                if (startY > topPos + 120) break;
+
+                boolean readyToTurnIn = "READY_TO_TURN_IN".equals(quest.stateName());
+                boolean isThisTrader = quest.traderId() == menu.getTraderId();
+
+                if (readyToTurnIn && isThisTrader) {
+                    String turnIn = "[Turn In]";
+                    int turnInX = leftPos + 170 - font.width(turnIn) - 2;
+                    if (mouseX >= turnInX && mouseX <= leftPos + 170 &&
+                        mouseY >= startY && mouseY <= startY + 20) {
+                        PacketDistributor.sendToServer(new QuestActionPayload(
+                                menu.getTraderId(), quest.questId(), QuestActionPayload.ACTION_TURN_IN));
+                        return true;
+                    }
+                }
+
+                String trackLabel = quest.questId().equals(QuestClientState.getTrackedQuestId()) ? "[*]" : "[Track]";
+                int trackX = leftPos + 80;
+                if (mouseX >= trackX && mouseX <= trackX + font.width(trackLabel) &&
+                    mouseY >= startY && mouseY <= startY + 20) {
+                    PacketDistributor.sendToServer(new QuestActionPayload(
+                            menu.getTraderId(), quest.questId(), QuestActionPayload.ACTION_TRACK));
+                    return true;
+                }
+
+                String abandon = "[X]";
+                int abandonX = leftPos + 170 - font.width(abandon) - 2;
+                if (readyToTurnIn && isThisTrader) {
+                    abandonX -= font.width("[Turn In]") + 4;
+                }
+                if (mouseX >= abandonX && mouseX <= abandonX + font.width(abandon) &&
+                    mouseY >= startY && mouseY <= startY + 20) {
+                    PacketDistributor.sendToServer(new QuestActionPayload(
+                            menu.getTraderId(), quest.questId(), QuestActionPayload.ACTION_ABANDON));
+                    return true;
+                }
+
+                startY += 22;
+            }
+
+            startY += 4;
+        }
+
+        List<TraderQuestEntry> traderQuests = QuestClientState.getTraderQuests();
+        if (QuestClientState.getCurrentTraderId() == menu.getTraderId() && !traderQuests.isEmpty()) {
+            startY += 12;
+
+            for (int i = questScrollOffset; i < traderQuests.size() && startY <= topPos + 120; i++) {
+                TraderQuestEntry quest = traderQuests.get(i);
+
+                if (mouseX >= leftPos + 6 && mouseX <= leftPos + 170 &&
+                    mouseY >= startY && mouseY <= startY + 26) {
+                    PacketDistributor.sendToServer(new QuestActionPayload(
+                            menu.getTraderId(), quest.questId(), QuestActionPayload.ACTION_ACCEPT));
+                    return true;
+                }
+
+                startY += 28;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (buyTab) {
+        if (currentTab == Tab.BUY) {
             int maxScroll = Math.max(0, menu.getOffers().size() - VISIBLE_ROWS);
             scrollOffset = Math.max(0, Math.min(maxScroll, scrollOffset - (int) scrollY));
+            return true;
+        } else if (currentTab == Tab.QUESTS) {
+            List<TraderQuestEntry> traderQuests = QuestClientState.getTraderQuests();
+            int maxScroll = Math.max(0, traderQuests.size() - VISIBLE_QUEST_ROWS);
+            questScrollOffset = Math.max(0, Math.min(maxScroll, questScrollOffset - (int) scrollY));
             return true;
         }
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);

@@ -11,12 +11,14 @@ import com.sevendaystominecraft.config.HordeConfig;
 import com.sevendaystominecraft.config.LootConfig;
 import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.config.TerritoryConfig;
+import com.sevendaystominecraft.config.QuestConfig;
 import com.sevendaystominecraft.config.TraderConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.client.ADSHandler;
 import com.sevendaystominecraft.client.CompassOverlay;
 import com.sevendaystominecraft.client.InventoryMapButton;
 import com.sevendaystominecraft.client.MinimapOverlay;
+import com.sevendaystominecraft.client.QuestHudOverlay;
 import com.sevendaystominecraft.client.ModEntityRenderers;
 import com.sevendaystominecraft.client.ModKeyBindings;
 import com.sevendaystominecraft.client.ModScreens;
@@ -66,6 +68,7 @@ public class SevenDaysToMinecraft {
         modContainer.registerConfig(ModConfig.Type.SERVER, LootConfig.SPEC, "loot.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, TerritoryConfig.SPEC, "territory.toml");
         modContainer.registerConfig(ModConfig.Type.SERVER, TraderConfig.SPEC, "trader.toml");
+        modContainer.registerConfig(ModConfig.Type.SERVER, QuestConfig.SPEC, "quest.toml");
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
@@ -91,6 +94,7 @@ public class SevenDaysToMinecraft {
             modEventBus.addListener(StatsHudOverlay::onRegisterGuiLayers);
             modEventBus.addListener(MinimapOverlay::onRegisterGuiLayers);
             modEventBus.addListener(TerritoryAnnouncementOverlay::onRegisterGuiLayers);
+            modEventBus.addListener(QuestHudOverlay::onRegisterGuiLayers);
             modEventBus.addListener(ModKeyBindings::onRegisterKeyMappings);
             NeoForge.EVENT_BUS.addListener(StatsHudOverlay::onRenderGuiLayerPre);
             NeoForge.EVENT_BUS.addListener(ModKeyBindings::onClientTick);

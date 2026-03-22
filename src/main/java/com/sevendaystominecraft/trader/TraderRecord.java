@@ -1,10 +1,15 @@
 package com.sevendaystominecraft.trader;
 
+import com.sevendaystominecraft.quest.QuestDefinition;
+import com.sevendaystominecraft.quest.QuestGenerator;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +23,8 @@ public class TraderRecord {
     private long lastRestockDay;
     private final Map<Integer, Integer> stock = new HashMap<>();
     private boolean stockInitialized = false;
+    private final List<QuestDefinition> availableQuests = new ArrayList<>();
+    private long lastQuestRefreshDay = -1;
 
     public TraderRecord(int id, BlockPos origin, String name, int tier) {
         this.id = id;
@@ -61,6 +68,21 @@ public class TraderRecord {
         }
     }
 
+    public List<QuestDefinition> getAvailableQuests(ServerLevel level) {
+        if (availableQuests.isEmpty() || lastQuestRefreshDay != lastRestockDay) {
+            refreshQuests(level);
+            lastQuestRefreshDay = lastRestockDay;
+        }
+        return availableQuests;
+    }
+
+    private void refreshQuests(ServerLevel level) {
+        availableQuests.clear();
+        availableQuests.addAll(QuestGenerator.generateQuests(level, id, tier, origin));
+    }
+
+    public long getLastQuestRefreshDay() { return lastQuestRefreshDay; }
+
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putInt("id", id);
@@ -79,6 +101,15 @@ public class TraderRecord {
             stockList.add(stockEntry);
         }
         tag.put("stock", stockList);
+
+        if (!availableQuests.isEmpty()) {
+            ListTag questList = new ListTag();
+            for (QuestDefinition def : availableQuests) {
+                questList.add(def.save());
+            }
+            tag.put("quests", questList);
+        }
+        tag.putLong("lastQuestRefreshDay", lastQuestRefreshDay);
 
         return tag;
     }
@@ -100,6 +131,14 @@ public class TraderRecord {
             }
             record.stockInitialized = true;
         }
+
+        if (tag.contains("quests")) {
+            ListTag questList = tag.getList("quests", Tag.TAG_COMPOUND);
+            for (int i = 0; i < questList.size(); i++) {
+                record.availableQuests.add(QuestDefinition.load(questList.getCompound(i)));
+            }
+        }
+        record.lastQuestRefreshDay = tag.contains("lastQuestRefreshDay") ? tag.getLong("lastQuestRefreshDay") : -1;
 
         return record;
     }

@@ -170,7 +170,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── SprintBlockMixin.java       — Sprint blocked when low stamina
 │   └── CreateWorldScreenMixin.java — Intercepts Create World to handle premade world creation
 └── network/
-    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory)
+    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory + quests)
     ├── SyncPlayerStatsPayload.java — Client/server stats sync packet
     ├── BloodMoonSyncPayload.java   — Blood moon state sync packet
     ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64)
@@ -297,18 +297,37 @@ src/main/java/com/sevendaystominecraft/
 - **TraderConfig** (`trader.toml`): guaranteeRadius (150), minChunkSpacing (25), spawnChanceDenominator (30), protectionRadius (30), restockIntervalDays (3), syncRangeBlocks (512), tier distance thresholds
 - **TraderSpawnHandler**: Dedicated chunk-load handler (completely independent from TerritoryWorldGenerator) using TraderConfig spacing/chance values; guaranteed near-spawn trader within guaranteeRadius; creates full TRADER_OUTPOST territory + trader entity; `randomNonTrader()` in TerritoryType prevents TRADER_OUTPOST from appearing via regular territory RNG
 - **TraderData** (SavedData): Persists trader locations, names, tiers across restarts; spatial lookup; protection zone check
-- **TraderRecord**: Per-trader data (id, origin, name, tier, lastRestockDay)
+- **TraderRecord**: Per-trader data (id, origin, name, tier, lastRestockDay, quest generation/caching)
 - **TraderInventory**: Tiered item pools with per-offer maxStock quantities (Tier 1: basic tools/food/ammo, Tier 2: iron gear/medical/better ammo, Tier 3+: diamond gear/military/rare materials); sell value table for common items
 - **TraderMenu**: AbstractContainerMenu with buy/sell actions; 4 sell input slots for place-and-sell workflow; server-side stock tracking via ContainerData (live sync to client); proximity enforcement (10-block radius entity check)
-- **TraderScreen**: Buy tab shows items with price, live stock count (or "SOLD OUT"), scrollable; Sell tab has 4 input slots + sell button + value preview
+- **TraderScreen**: Buy tab shows items with price, live stock count (or "SOLD OUT"), scrollable; Sell tab has 4 input slots + sell button + value preview; Quests tab shows available quests from trader with accept/turn-in buttons
 - **SyncTraderPayload**: Server→client trader position sync (id, pos, tier, name) following SyncTerritoryPayload pattern
 - **TraderClientState**: Thread-safe client-side trader position storage
 - **TraderBroadcaster**: @EventBusSubscriber 60-tick broadcast of nearby traders to each player; 1200-tick restock check comparing game day against lastRestockDay per trader
 - **TraderProtectionHandler**: Suppresses monster spawns (EntityJoinLevelEvent) and player block breaking (BlockEvent.BreakEvent) within configurable radius
 - **ZombieBreakBlockGoal integration**: Zombie AI block destruction also checks `TraderData.isInProtectionZone()` before destroying blocks, preventing zombie block-breaking in trader zones
 - **Map markers**: Cyan "T" markers on compass, cyan diamond icon primitives on minimap/big map (filled diamond shape rendered via `graphics.fill()`) with trader name labels
+- **Quest markers**: Yellow "Q" markers on compass, minimap, and big map for active quest target locations
 - **TraderRenderer**: HumanoidModel-based renderer using Steve texture
 - **TraderActionPayload**: Client→server buy/sell packets with traderId validation
+
+#### Quest System (Task #157) — DONE
+- **Package**: `com.sevendaystominecraft.quest`
+- **QuestType**: 4 quest types — KILL_COUNT, CLEAR_TERRITORY, FETCH_DELIVER, BURIED_TREASURE
+- **QuestDefinition**: Quest data record (type, name, objective, targets, counts, location, rewards, traderId) with NBT serialization
+- **QuestInstance**: Active quest with state machine (ACTIVE → READY_TO_TURN_IN → COMPLETED), progress tracking, unique ID
+- **QuestGenerator**: Generates tier-appropriate quests per trader — kill targets from ZombieVariant pool, fetch items by tier, nearby uncleared territories, buried treasure within configurable range
+- **QuestConfig** (`quest.toml`): maxActiveQuests (3), xpMultiplier, tokenMultiplier, questRefreshIntervalDays (3), maxTreasureDistance (200)
+- **Quest storage**: Active quests stored in SevenDaysPlayerStats with full NBT persistence; TraderRecord caches generated quests with refresh timer
+- **Network**: SyncQuestPayload (server→client active quest sync), QuestActionPayload (client→server accept/abandon/turn-in), SyncTraderQuestsPayload (server→client available trader quests)
+- **QuestClientState**: Client-side quest state for HUD/map rendering
+- **QuestHudOverlay**: Renders active quests on left side below minimap — quest name, objective, progress bar
+- **QuestProgressHandler**: LivingDeathEvent for kill quests (supports projectile/ranged kills via owner resolution), 40-tick server tick for fetch/clear-territory progress checks, BlockEvent.BreakEvent for buried treasure (supply crate dig-up detection)
+- **QuestActionHandler**: Server-side accept/abandon/turn-in/track with proximity validation (10-block radius to trader), deterministic quest ID matching, inventory item removal for fetch quests, supply crate placement for buried treasure on accept
+- **Tracked quest**: Players select one active quest to track; only the tracked quest shows markers on compass/minimap/big map. First accepted quest auto-tracked. Track button in trader UI quests tab.
+- **Quest refresh**: Quests refresh when the trader restocks (tied to trader restock cycle, not separate timer)
+- **Quest markers**: Yellow "Q" diamond markers on compass, yellow squares on minimap/big map for tracked quest only
+- **Quest sync**: Quests + tracked quest ID synced to client on login, on progress change, and on trader interaction
 
 ## Known Bugs / Issues
 1. **Sprint bug (FIXED)**: Added `LocalPlayerSprintMixin` targeting `LocalPlayer.aiStep()` (client-side mixin in `sevendaystominecraft.mixins.json` "client" array). Cancels sprinting client-side when stamina exhausted, fracture, electrocuted, or stunned — prevents rubber-banding.
@@ -400,7 +419,7 @@ src/main/java/com/sevendaystominecraft/
 
 ## Spec / Roadmap
 The full implementation is tracked in `docs/bzhs_final_spec.md` with 19 phases.
-Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Milestone 10 (Weapons): DONE — melee + ranged weapons, ammo, crafting recipes. Milestone 11 (Skill Books/Magazines): DONE — 6 series, 36 items, mastery tracking. Milestone 15 (World Gen — Biomes): PARTIAL — 7 biome definitions with gameplay properties, integrated into temperature/loot/spawning; full world gen pipeline (city grid, POI templates, overworld biome placement) still needed. Next priorities: full world gen pipeline, custom textures/models, traders.
+Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (Debuffs): DONE — all 12 debuff types. Milestone 5 (Heatmap): DONE. Milestone 6 (Loot & Crafting): DONE — workstations, loot containers, scrapping, quality tiers. Milestone 7 (XP/Leveling/Perks): DONE — full perk registry, level-up system, commands, HUD XP bar. Milestone 8 (Blood Moon/Horde Night): DONE. Milestone 9 (HUD): DONE — compass, minimap, player tracking, stats overlay. Milestone 10 (Weapons): DONE — melee + ranged weapons, ammo, crafting recipes. Milestone 11 (Skill Books/Magazines): DONE — 6 series, 36 items, mastery tracking. Milestone 15 (World Gen — Biomes): PARTIAL — 7 biome definitions with gameplay properties, integrated into temperature/loot/spawning; full world gen pipeline (city grid, POI templates, overworld biome placement) still needed. Quest System (Task #157): DONE — 4 quest types, trader GUI, HUD overlay, map markers, NBT persistence. Next priorities: full world gen pipeline, custom textures/models.
 
 ### Biome System (Spec §2)
 - **Package**: `com.sevendaystominecraft.worldgen`

@@ -2,6 +2,7 @@ package com.sevendaystominecraft.client;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEntry;
+import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
 import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import com.sevendaystominecraft.network.SyncTraderPayload.TraderEntry;
 
@@ -39,6 +40,8 @@ public class MinimapOverlay {
     private static final int TERRITORY_DOT_SIZE = 4;
     private static final int COLOR_TRADER = 0xFF00CCCC;
     private static final int TRADER_DOT_SIZE = 5;
+    private static final int COLOR_QUEST = 0xFFFFFF00;
+    private static final int QUEST_DOT_SIZE = 5;
 
     private static int[] terrainCache = null;
     private static int cachedPlayerX = Integer.MIN_VALUE;
@@ -106,6 +109,7 @@ public class MinimapOverlay {
 
         renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
+        renderQuestMarkers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
         int halfDot = PLAYER_DOT_SIZE / 2;
         graphics.fill(centerX - halfDot, centerY - halfDot,
@@ -226,6 +230,40 @@ public class MinimapOverlay {
                 isInsideRoundedRect(textX + textWidth - mapX, textY + mc.font.lineHeight - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
                 graphics.drawString(mc.font, label, textX, textY, COLOR_TRADER, true);
             }
+        }
+    }
+
+    private static void renderQuestMarkers(GuiGraphics graphics, Minecraft mc, Player player,
+                                               int centerX, int centerY, int mapX, int mapY,
+                                               double cosYaw, double sinYaw) {
+        QuestEntry quest = QuestClientState.getTrackedQuest();
+        if (quest == null || !quest.hasLocation() || "COMPLETED".equals(quest.stateName())) return;
+
+        double dx = quest.locX() - player.getX();
+        double dz = quest.locZ() - player.getZ();
+
+        double screenDx = -(dx * cosYaw + dz * sinYaw);
+        double screenDy = dx * sinYaw - dz * cosYaw;
+
+        int dotX = centerX + (int) screenDx;
+        int dotY = centerY + (int) screenDy;
+
+        int halfDot = QUEST_DOT_SIZE / 2;
+
+        if (!isInsideRoundedRect(dotX - halfDot - mapX, dotY - halfDot - mapY, MAP_SIZE, MAP_SIZE, 9) ||
+            !isInsideRoundedRect(dotX + halfDot - mapX, dotY + halfDot - mapY, MAP_SIZE, MAP_SIZE, 9)) {
+            return;
+        }
+
+        graphics.fill(dotX - halfDot, dotY - halfDot + 1, dotX + halfDot, dotY + halfDot - 1, COLOR_QUEST);
+        graphics.fill(dotX - halfDot + 1, dotY - halfDot, dotX + halfDot - 1, dotY + halfDot, COLOR_QUEST);
+
+        String label = "Q";
+        int textWidth = mc.font.width(label);
+        int textX = dotX - textWidth / 2;
+        int textY = dotY + halfDot + 1;
+        if (isInsideRoundedRect(textX - mapX, textY - mapY, MAP_SIZE, MAP_SIZE, 9)) {
+            graphics.drawString(mc.font, label, textX, textY, COLOR_QUEST, true);
         }
     }
 

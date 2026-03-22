@@ -1,15 +1,20 @@
 package com.sevendaystominecraft.capability;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.sevendaystominecraft.magazine.MagazinePlayerData;
 import com.sevendaystominecraft.perk.Attribute;
+import com.sevendaystominecraft.quest.QuestInstance;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializable<CompoundTag> {
@@ -51,6 +56,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     private final Map<String, Integer> activePerks = new HashMap<>();
 
     private long unkillableCooldownEnd = 0;
+
+    private final List<QuestInstance> activeQuests = new ArrayList<>();
+    private String trackedQuestId = "";
+    private final Map<String, Long> consumedQuests = new HashMap<>();
 
     public SevenDaysPlayerStats() {
         for (int i = 0; i < attributeLevels.length; i++) {
@@ -197,6 +206,49 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     public MagazinePlayerData getMagazineData() { return magazineData; }
 
     // =====================================================================
+    // Quests
+    // =====================================================================
+
+    public List<QuestInstance> getActiveQuests() {
+        return activeQuests;
+    }
+
+    public QuestInstance getQuestById(String questId) {
+        for (QuestInstance quest : activeQuests) {
+            if (quest.getQuestId().equals(questId)) return quest;
+        }
+        return null;
+    }
+
+    public boolean addQuest(QuestInstance quest) {
+        activeQuests.add(quest);
+        return true;
+    }
+
+    public boolean removeQuest(String questId) {
+        return activeQuests.removeIf(q -> q.getQuestId().equals(questId));
+    }
+
+    public String getTrackedQuestId() { return trackedQuestId; }
+    public void setTrackedQuestId(String id) { this.trackedQuestId = id != null ? id : ""; }
+
+    public void markQuestConsumed(String questGenId, long restockDay) {
+        consumedQuests.put(questGenId, restockDay);
+    }
+
+    public boolean isQuestConsumed(String questGenId, long currentRestockDay) {
+        Long consumedAt = consumedQuests.get(questGenId);
+        if (consumedAt == null) return false;
+        if (consumedAt < currentRestockDay) {
+            consumedQuests.remove(questGenId);
+            return false;
+        }
+        return true;
+    }
+
+    public Map<String, Long> getConsumedQuests() { return consumedQuests; }
+
+    // =====================================================================
     // copyFrom
     // =====================================================================
 
@@ -231,6 +283,13 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
         if (other instanceof SevenDaysPlayerStats concrete) {
             this.magazineData.copyFrom(concrete.getMagazineData());
+            this.activeQuests.clear();
+            for (QuestInstance quest : concrete.getActiveQuests()) {
+                this.activeQuests.add(QuestInstance.load(quest.save()));
+            }
+            this.trackedQuestId = concrete.getTrackedQuestId();
+            this.consumedQuests.clear();
+            this.consumedQuests.putAll(concrete.getConsumedQuests());
         }
     }
 
@@ -281,6 +340,24 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         tag.putLong("UnkillableCooldown", unkillableCooldownEnd);
 
         tag.put("Magazines", magazineData.save());
+
+        if (!activeQuests.isEmpty()) {
+            ListTag questList = new ListTag();
+            for (QuestInstance quest : activeQuests) {
+                questList.add(quest.save());
+            }
+            tag.put("Quests", questList);
+        }
+        if (!trackedQuestId.isEmpty()) {
+            tag.putString("TrackedQuest", trackedQuestId);
+        }
+        if (!consumedQuests.isEmpty()) {
+            CompoundTag consumed = new CompoundTag();
+            for (Map.Entry<String, Long> entry : consumedQuests.entrySet()) {
+                consumed.putLong(entry.getKey(), entry.getValue());
+            }
+            tag.put("ConsumedQuests", consumed);
+        }
 
         return tag;
     }
@@ -339,6 +416,22 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
         if (tag.contains("Magazines")) {
             magazineData.load(tag.getCompound("Magazines"));
+        }
+
+        activeQuests.clear();
+        if (tag.contains("Quests")) {
+            ListTag questList = tag.getList("Quests", Tag.TAG_COMPOUND);
+            for (int i = 0; i < questList.size(); i++) {
+                activeQuests.add(QuestInstance.load(questList.getCompound(i)));
+            }
+        }
+        trackedQuestId = tag.contains("TrackedQuest") ? tag.getString("TrackedQuest") : "";
+        consumedQuests.clear();
+        if (tag.contains("ConsumedQuests")) {
+            CompoundTag consumed = tag.getCompound("ConsumedQuests");
+            for (String key : consumed.getAllKeys()) {
+                consumedQuests.put(key, consumed.getLong(key));
+            }
         }
     }
 
