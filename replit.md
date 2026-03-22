@@ -169,6 +169,8 @@ src/main/java/com/sevendaystominecraft/
 │       ├── SoldierZombie.java       — Armored Walker variant
 │       ├── SpiderZombie.java        — Wall climbing, jump boost
 │       ├── VultureEntity.java       — Flying dive attacks (Phantom base)
+│       ├── ZombieBirdEntity.java    — Fast swarming flyer, rapid dive attacks with short cooldowns
+│       ├── ZombieParrotEntity.java  — Erratic hovering flyer, swoops + generates heat via shrieks
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
@@ -202,7 +204,6 @@ src/main/java/com/sevendaystominecraft/
 │   ├── HeatmapManager.java         — Server tick handler for heat decay + spawner integration
 │   ├── HeatEventHandler.java       — Event hooks: block break, torch place, explosion, sprint
 │   ├── HeatmapSpawner.java         — Threshold-based zombie spawning (scouts/screamer/mini-horde/waves)
-│   ├── SkyBaseDetector.java        — Anti-sky-base: detects players elevated 10+ blocks above natural ground, adds heat to attract zombies + warning message at 20+ blocks
 │   └── HeatmapCommand.java         — /bzhs heat debug command + /bzhs heat_clear admin command
 ├── horde/
 │   ├── BloodMoonTracker.java       — SavedData for day tracking & blood moon phase state

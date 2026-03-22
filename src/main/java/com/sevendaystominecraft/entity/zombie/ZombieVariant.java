@@ -11,6 +11,8 @@ public enum ZombieVariant {
     SCREAMER(16.0, 1.9, 1.5, 250, 7),
     ZOMBIE_DOG(16.0, 6.8, 3.5, 200, 3),
     VULTURE(12.0, 4.5, 4.0, 200, 7),
+    ZOMBIE_BIRD(8.0, 3.0, 4.5, 150, 1),
+    ZOMBIE_PARROT(10.0, 3.5, 5.0, 175, 3),
     DEMOLISHER(160.0, 11.3, 1.0, 800, 21),
     MUTATED_CHUCK(50.0, 6.8, 1.3, 350, 14),
     ZOMBIE_BEAR(120.0, 13.1, 2.0, 500, 14),

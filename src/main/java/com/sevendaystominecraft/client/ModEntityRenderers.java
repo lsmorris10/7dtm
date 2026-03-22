@@ -33,6 +33,8 @@ public class ModEntityRenderers {
         event.registerEntityRenderer(ModEntities.BEHEMOTH.get(), ctx -> new ScaledZombieRenderer(ctx, 2.0f, NAME_TAG_EXTRA_HEIGHT));
         event.registerEntityRenderer(ModEntities.ZOMBIE_DOG.get(), ctx -> new ScaledZombieRenderer(ctx, 0.5f, NAME_TAG_EXTRA_HEIGHT));
         event.registerEntityRenderer(ModEntities.VULTURE.get(), ctx -> new ScaledZombieRenderer(ctx, 0.4f, NAME_TAG_EXTRA_HEIGHT));
+        event.registerEntityRenderer(ModEntities.ZOMBIE_BIRD.get(), ctx -> new ScaledZombieRenderer(ctx, 0.3f, NAME_TAG_EXTRA_HEIGHT));
+        event.registerEntityRenderer(ModEntities.ZOMBIE_PARROT.get(), ctx -> new ScaledZombieRenderer(ctx, 0.35f, NAME_TAG_EXTRA_HEIGHT));
         event.registerEntityRenderer(ModEntities.ZOMBIE_BEAR.get(), ctx -> new ScaledZombieRenderer(ctx, 1.5f, NAME_TAG_EXTRA_HEIGHT));
 
         event.registerEntityRenderer(ModEntities.ACID_BALL.get(), ThrownItemRenderer::new);

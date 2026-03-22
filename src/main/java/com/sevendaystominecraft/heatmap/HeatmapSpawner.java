@@ -131,7 +131,8 @@ public class HeatmapSpawner {
                         ModEntities.CRAWLER,
                         ModEntities.FERAL_WIGHT,
                         ModEntities.SPIDER_ZOMBIE,
-                        ModEntities.BLOATED_WALKER
+                        ModEntities.BLOATED_WALKER,
+                        ModEntities.ZOMBIE_BIRD
                 };
 
         for (int i = 0; i < count; i++) {
@@ -154,7 +155,9 @@ public class HeatmapSpawner {
                         ModEntities.FERAL_WIGHT,
                         ModEntities.SPIDER_ZOMBIE,
                         ModEntities.BLOATED_WALKER,
-                        ModEntities.COP
+                        ModEntities.COP,
+                        ModEntities.ZOMBIE_BIRD,
+                        ModEntities.ZOMBIE_PARROT
                 };
 
         for (int i = 0; i < count; i++) {

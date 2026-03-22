@@ -70,6 +70,10 @@ public class AdminCommand {
         ZOMBIE_TYPES.put("zombie_dog", ModEntities.ZOMBIE_DOG::get);
         ZOMBIE_TYPES.put("dog", ModEntities.ZOMBIE_DOG::get);
         ZOMBIE_TYPES.put("vulture", ModEntities.VULTURE::get);
+        ZOMBIE_TYPES.put("bird", ModEntities.ZOMBIE_BIRD::get);
+        ZOMBIE_TYPES.put("zombie_bird", ModEntities.ZOMBIE_BIRD::get);
+        ZOMBIE_TYPES.put("parrot", ModEntities.ZOMBIE_PARROT::get);
+        ZOMBIE_TYPES.put("zombie_parrot", ModEntities.ZOMBIE_PARROT::get);
         ZOMBIE_TYPES.put("demolisher", ModEntities.DEMOLISHER::get);
         ZOMBIE_TYPES.put("mutated_chuck", ModEntities.MUTATED_CHUCK::get);
         ZOMBIE_TYPES.put("zombie_bear", ModEntities.ZOMBIE_BEAR::get);

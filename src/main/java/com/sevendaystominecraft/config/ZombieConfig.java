@@ -67,6 +67,14 @@ public class ZombieConfig {
     public final ModConfigSpec.DoubleValue vultureDamage;
     public final ModConfigSpec.DoubleValue vultureSpeed;
 
+    public final ModConfigSpec.DoubleValue zombieBirdHP;
+    public final ModConfigSpec.DoubleValue zombieBirdDamage;
+    public final ModConfigSpec.DoubleValue zombieBirdSpeed;
+
+    public final ModConfigSpec.DoubleValue zombieParrotHP;
+    public final ModConfigSpec.DoubleValue zombieParrotDamage;
+    public final ModConfigSpec.DoubleValue zombieParrotSpeed;
+
     public final ModConfigSpec.DoubleValue demolisherHP;
     public final ModConfigSpec.DoubleValue demolisherDamage;
     public final ModConfigSpec.DoubleValue demolisherSpeed;
@@ -237,6 +245,18 @@ public class ZombieConfig {
         vultureHP = builder.defineInRange("hp", 12.0, 1.0, 1000.0);
         vultureDamage = builder.defineInRange("damage", 4.5, 0.1, 100.0);
         vultureSpeed = builder.defineInRange("speed", 4.0, 0.1, 8.0);
+        builder.pop();
+
+        builder.push("zombie_bird");
+        zombieBirdHP = builder.defineInRange("hp", 8.0, 1.0, 1000.0);
+        zombieBirdDamage = builder.defineInRange("damage", 3.0, 0.1, 100.0);
+        zombieBirdSpeed = builder.defineInRange("speed", 4.5, 0.1, 8.0);
+        builder.pop();
+
+        builder.push("zombie_parrot");
+        zombieParrotHP = builder.defineInRange("hp", 10.0, 1.0, 1000.0);
+        zombieParrotDamage = builder.defineInRange("damage", 3.5, 0.1, 100.0);
+        zombieParrotSpeed = builder.defineInRange("speed", 5.0, 0.1, 8.0);
         builder.pop();
 
         builder.push("demolisher");

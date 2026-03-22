@@ -82,6 +82,16 @@ public class ModEntities {
                     EntityType.Builder.<VultureEntity>of(VultureEntity::new, MobCategory.MONSTER)
                             .sized(0.9f, 0.5f).clientTrackingRange(10).build(key("vulture")));
 
+    public static final Supplier<EntityType<ZombieBirdEntity>> ZOMBIE_BIRD =
+            ENTITY_TYPES.register("zombie_bird", () ->
+                    EntityType.Builder.<ZombieBirdEntity>of(ZombieBirdEntity::new, MobCategory.MONSTER)
+                            .sized(0.5f, 0.4f).clientTrackingRange(10).build(key("zombie_bird")));
+
+    public static final Supplier<EntityType<ZombieParrotEntity>> ZOMBIE_PARROT =
+            ENTITY_TYPES.register("zombie_parrot", () ->
+                    EntityType.Builder.<ZombieParrotEntity>of(ZombieParrotEntity::new, MobCategory.MONSTER)
+                            .sized(0.5f, 0.9f).clientTrackingRange(10).build(key("zombie_parrot")));
+
     public static final Supplier<EntityType<DemolisherZombie>> DEMOLISHER =
             ENTITY_TYPES.register("demolisher", () ->
                     EntityType.Builder.<DemolisherZombie>of(DemolisherZombie::new, MobCategory.MONSTER)
@@ -164,6 +174,8 @@ public class ModEntities {
             event.put(SCREAMER.get(), ScreamerZombie.createAttributes().build());
             event.put(ZOMBIE_DOG.get(), ZombieDogEntity.createAttributes().build());
             event.put(VULTURE.get(), VultureEntity.createAttributes().build());
+            event.put(ZOMBIE_BIRD.get(), ZombieBirdEntity.createAttributes().build());
+            event.put(ZOMBIE_PARROT.get(), ZombieParrotEntity.createAttributes().build());
             event.put(DEMOLISHER.get(), DemolisherZombie.createAttributes().build());
             event.put(MUTATED_CHUCK.get(), MutatedChuckZombie.createAttributes().build());
             event.put(ZOMBIE_BEAR.get(), ZombieBearEntity.createAttributes().build());
