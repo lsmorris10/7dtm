@@ -88,6 +88,9 @@ public class PerkRegistry {
         register(new PerkDefinition("heavy_armor", "Heavy Armor", Attribute.FORTITUDE,
                 5, new int[]{1, 2, 4, 6, 8},
                 "-15% heavy armor movement penalty per rank", false));
+        register(new PerkDefinition("medium_armor", "Medium Armor", Attribute.FORTITUDE,
+                5, new int[]{1, 2, 4, 6, 8},
+                "+5% medium armor stamina regen bonus per rank", false));
         register(new PerkDefinition("well_insulated", "Well Insulated", Attribute.FORTITUDE,
                 3, new int[]{3, 5, 7},
                 "+-10F comfort zone expansion per rank", false));

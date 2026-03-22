@@ -7,10 +7,10 @@ import com.sevendaystominecraft.item.QualityTier;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = SevenDaysToMinecraft.MOD_ID)
@@ -35,6 +36,8 @@ public class ArmorSetBonusHandler {
             EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
     };
 
+    private static final String MIXED_SET_WARNING_KEY = "sevendtm_mixed_set_warned";
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -47,6 +50,7 @@ public class ArmorSetBonusHandler {
         applyMovementModifier(player, speedMod);
         applyLightArmorPerkProtection(serverPlayer, counts);
         applyQualityArmorBonus(serverPlayer);
+        checkMixedSetWarning(serverPlayer, counts);
     }
 
     public static ArmorCounts computeArmorCounts(Player player) {
@@ -208,6 +212,53 @@ public class ArmorSetBonusHandler {
         ));
     }
 
+    @SubscribeEvent
+    public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        EquipmentSlot slot = event.getSlot();
+        if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.CHEST
+                && slot != EquipmentSlot.LEGS && slot != EquipmentSlot.FEET) return;
+
+        ItemStack from = event.getFrom();
+        ItemStack to = event.getTo();
+
+        if (from.isEmpty()) return;
+        if (!(from.getItem() instanceof TieredArmorItem)) return;
+        if (!to.isEmpty()) return;
+
+        if (from.getMaxDamage() > 0 && from.getDamageValue() >= from.getMaxDamage()) {
+            String itemName = from.getHoverName().getString();
+            player.sendSystemMessage(Component.literal(
+                    "§c§l[ARMOR SHATTERED] §r§c" + itemName + " has broken! It provides no protection."));
+        }
+    }
+
+    private static void checkMixedSetWarning(ServerPlayer player, ArmorCounts counts) {
+        int totalArmor = counts.light + counts.medium + counts.heavy;
+        if (totalArmor < 2) {
+            player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, false);
+            return;
+        }
+
+        int tiersWorn = 0;
+        if (counts.light > 0) tiersWorn++;
+        if (counts.medium > 0) tiersWorn++;
+        if (counts.heavy > 0) tiersWorn++;
+
+        boolean hasBonusActive = counts.light >= 2 || counts.medium >= 2 || counts.heavy >= 2;
+
+        if (tiersWorn > 1 && !hasBonusActive) {
+            if (!player.getPersistentData().getBoolean(MIXED_SET_WARNING_KEY)) {
+                player.sendSystemMessage(Component.literal(
+                        "§e[ARMOR] §7Mixed armor set — no set bonus active. Wear 2+ pieces of one tier for a bonus."));
+                player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, true);
+            }
+        } else {
+            player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, false);
+        }
+    }
+
     private static int getBaseDefense(TieredArmorItem tiered) {
         return switch (tiered.getArmorTier()) {
             case LIGHT -> ModArmorMaterials.PADDED.defense().getOrDefault(tiered.getArmorType(), 0);
@@ -231,8 +282,12 @@ public class ArmorSetBonusHandler {
         ArmorCounts counts = computeArmorCounts(player);
         if (counts.light <= 0) return 1.0f;
 
-        if (counts.light == 4) {
+        if (counts.light >= 4) {
             return 0.0f;
+        }
+
+        if (counts.light >= 2) {
+            return 0.5f;
         }
 
         float reductionPerPiece = ArmorTier.LIGHT.getStealthReductionPerPiece();
@@ -248,16 +303,32 @@ public class ArmorSetBonusHandler {
 
     public static float getStaminaRegenMultiplier(Player player) {
         ArmorCounts counts = computeArmorCounts(player);
-        if (counts.medium == 4) {
-            return 1.20f;
+
+        float bonus = 0.0f;
+        if (counts.medium >= 4) {
+            bonus = 0.20f;
+        } else if (counts.medium >= 2) {
+            bonus = 0.10f;
         }
-        return 1.0f;
+
+        if (bonus > 0.0f) {
+            SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+            int mediumArmorRank = stats.getPerkRank("medium_armor");
+            if (mediumArmorRank > 0) {
+                bonus += 0.05f * mediumArmorRank;
+            }
+        }
+
+        return 1.0f + bonus;
     }
 
     public static float getDamageReductionMultiplier(Player player) {
         ArmorCounts counts = computeArmorCounts(player);
-        if (counts.heavy == 4) {
+        if (counts.heavy >= 4) {
             return 0.75f;
+        }
+        if (counts.heavy >= 2) {
+            return 0.88f;
         }
         return 1.0f;
     }

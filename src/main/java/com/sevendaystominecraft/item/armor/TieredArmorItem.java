@@ -73,10 +73,19 @@ public class TieredArmorItem extends ArmorItem {
             tooltipComponents.add(Component.literal("§c-15% movement speed"));
         }
 
-        tooltipComponents.add(Component.literal("§dSet Bonus (4pc): " + getSetBonusDescription()));
+        tooltipComponents.add(Component.literal("§9Set Bonus (2pc): " + getPartialSetBonusDescription()));
+        tooltipComponents.add(Component.literal("§dSet Bonus (4pc): " + getFullSetBonusDescription()));
     }
 
-    private String getSetBonusDescription() {
+    private String getPartialSetBonusDescription() {
+        return switch (armorTier) {
+            case LIGHT -> "50% Noise Reduction";
+            case MEDIUM -> "+10% Stamina Regen";
+            case HEAVY -> "12% Damage Reduction";
+        };
+    }
+
+    private String getFullSetBonusDescription() {
         return switch (armorTier) {
             case LIGHT -> "Silent Movement";
             case MEDIUM -> "+20% Stamina Regen";

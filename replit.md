@@ -158,7 +158,7 @@ src/main/java/com/sevendaystominecraft/
 │   │   ├── ArmorTier.java          — Enum: LIGHT (Padded), MEDIUM (Scrap Iron), HEAVY (Military) with movement/stealth modifiers
 │   │   ├── ModArmorMaterials.java  — ArmorMaterial definitions (PADDED, SCRAP_IRON, MILITARY) with protection/durability/toughness
 │   │   ├── TieredArmorItem.java    — Custom ArmorItem subclass tracking ArmorTier with tooltips
-│   │   └── ArmorSetBonusHandler.java — Tick handler: movement penalties, set bonuses (Light=silent, Medium=+20% stamina regen, Heavy=+25% DR), perk integration
+│   │   └── ArmorSetBonusHandler.java — Tick handler: movement penalties, 2pc partial & 4pc full set bonuses (Light=50%/100% noise reduction, Medium=10%/20% stamina regen, Heavy=12%/25% DR), medium_armor perk integration, armor shattered notification, mixed-set warning
 │   └── weapon/
 │       └── RangedWeaponItem.java   — Right-click-to-fire ranged weapon (ammo consumption, cooldown, durability)
 ├── magazine/
