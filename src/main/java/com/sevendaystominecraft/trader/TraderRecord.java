@@ -36,9 +36,13 @@ public class TraderRecord {
     }
 
     private void initializeStock() {
-        List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTier(tier);
+        List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTrader(name);
         for (int i = 0; i < offers.size(); i++) {
             stock.put(i, offers.get(i).maxStock());
+        }
+        List<TraderInventory.TraderOffer> secretStash = TraderInventory.getSecretStash(name);
+        for (int i = 0; i < secretStash.size(); i++) {
+            stock.put(offers.size() + i, secretStash.get(i).maxStock());
         }
         stockInitialized = true;
     }
@@ -62,9 +66,13 @@ public class TraderRecord {
     }
 
     public void restock() {
-        List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTier(tier);
+        List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTrader(name);
         for (int i = 0; i < offers.size(); i++) {
             stock.put(i, offers.get(i).maxStock());
+        }
+        List<TraderInventory.TraderOffer> secretStash = TraderInventory.getSecretStash(name);
+        for (int i = 0; i < secretStash.size(); i++) {
+            stock.put(offers.size() + i, secretStash.get(i).maxStock());
         }
     }
 
@@ -130,6 +138,15 @@ public class TraderRecord {
                 record.stock.put(stockEntry.getInt("idx"), stockEntry.getInt("qty"));
             }
             record.stockInitialized = true;
+
+            List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTrader(name);
+            List<TraderInventory.TraderOffer> secretStash = TraderInventory.getSecretStash(name);
+            for (int i = 0; i < offers.size(); i++) {
+                record.stock.putIfAbsent(i, offers.get(i).maxStock());
+            }
+            for (int i = 0; i < secretStash.size(); i++) {
+                record.stock.putIfAbsent(offers.size() + i, secretStash.get(i).maxStock());
+            }
         }
 
         if (tag.contains("quests")) {

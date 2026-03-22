@@ -40,6 +40,10 @@ public class VillageBuildingBuilder {
 
     public static BuildingResult build(ServerLevel level, BlockPos origin, VillageBuildingType buildingType,
                                         TerritoryTier tier, RandomSource random) {
+        if (buildingType == VillageBuildingType.TRADER_OUTPOST) {
+            return buildTraderCompound(level, origin, tier, random);
+        }
+
         int sizeX = buildingType.getMinSize() + random.nextInt(Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1));
         int sizeZ = buildingType.getMinSize() + random.nextInt(Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1));
         int halfX = sizeX / 2;
@@ -94,6 +98,94 @@ public class VillageBuildingBuilder {
         }
 
         return new BuildingResult(base, zombieSpawnPos, lootPos, lootTypes, sizeX, sizeZ);
+    }
+
+    private static BuildingResult buildTraderCompound(ServerLevel level, BlockPos origin,
+                                                       TerritoryTier tier, RandomSource random) {
+        int fenceMin = -8;
+        int fenceMax = 7;
+        int clearHalf = 8;
+        int buildingHalf = 4;
+        int wallHeight = 5;
+
+        int minY = TerrainValidator.getMinSurfaceY(level, origin.getX(), origin.getZ(), clearHalf, clearHalf);
+        if (minY <= 0) {
+            minY = TerrainValidator.findSolidGroundY(level, origin.getX(), origin.getZ());
+        }
+        BlockPos base = new BlockPos(origin.getX(), minY, origin.getZ());
+
+        List<BlockPos> zombieSpawnPos = new ArrayList<>();
+        List<BlockPos> lootPos = new ArrayList<>();
+        List<LootContainerType> lootTypes = new ArrayList<>();
+
+        TerrainValidator.clearVegetation(level, base, clearHalf, clearHalf, wallHeight + 8);
+        clearInterior(level, base, clearHalf, clearHalf, wallHeight + 8);
+
+        for (int dx = fenceMin; dx <= fenceMax; dx++) {
+            for (int dz = fenceMin; dz <= fenceMax; dz++) {
+                setBlock(level, base.offset(dx, 0, dz), Blocks.GRAVEL.defaultBlockState());
+            }
+        }
+
+        for (int dx = fenceMin; dx <= fenceMax; dx++) {
+            setBlock(level, base.offset(dx, 1, fenceMin), Blocks.OAK_FENCE.defaultBlockState());
+            setBlock(level, base.offset(dx, 1, fenceMax), Blocks.OAK_FENCE.defaultBlockState());
+        }
+        for (int dz = fenceMin + 1; dz < fenceMax; dz++) {
+            setBlock(level, base.offset(fenceMin, 1, dz), Blocks.OAK_FENCE.defaultBlockState());
+            setBlock(level, base.offset(fenceMax, 1, dz), Blocks.OAK_FENCE.defaultBlockState());
+        }
+
+        setBlock(level, base.offset(0, 1, fenceMin), Blocks.OAK_FENCE_GATE.defaultBlockState());
+        setBlock(level, base.offset(-1, 1, fenceMin), Blocks.OAK_FENCE_GATE.defaultBlockState());
+
+        int[] cornerXs = {fenceMin, fenceMax};
+        int[] cornerZs = {fenceMin, fenceMax};
+        for (int cx : cornerXs) {
+            for (int cz : cornerZs) {
+                setBlock(level, base.offset(cx, 1, cz), Blocks.DARK_OAK_LOG.defaultBlockState());
+                setBlock(level, base.offset(cx, 2, cz), Blocks.DARK_OAK_LOG.defaultBlockState());
+                setBlock(level, base.offset(cx, 3, cz), Blocks.LANTERN.defaultBlockState());
+            }
+        }
+
+        Block wallBlock = Blocks.DARK_OAK_PLANKS;
+        Block floorBlock = Blocks.DARK_OAK_PLANKS;
+        Block roofBlock = Blocks.DARK_OAK_SLAB;
+        Block frameBlock = Blocks.DARK_OAK_LOG;
+
+        TerrainValidator.fillFoundationColumns(level, base, buildingHalf, buildingHalf, floorBlock);
+        buildWalls(level, base, buildingHalf, buildingHalf, wallHeight, wallBlock, frameBlock);
+        placeWindows(level, base, buildingHalf, buildingHalf, wallHeight, random);
+        buildPeakedRoof(level, base, buildingHalf, buildingHalf, wallHeight, roofBlock);
+
+        BlockPos doorBase = base.offset(0, 1, -buildingHalf);
+        Direction facing = Direction.SOUTH;
+        Block doorBlock = Blocks.DARK_OAK_DOOR;
+        BlockState lowerDoor = doorBlock.defaultBlockState()
+                .setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER)
+                .setValue(DoorBlock.FACING, facing);
+        BlockState upperDoor = doorBlock.defaultBlockState()
+                .setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER)
+                .setValue(DoorBlock.FACING, facing);
+        setBlock(level, doorBase, lowerDoor);
+        setBlock(level, doorBase.above(), upperDoor);
+
+        setBlock(level, base.offset(0, 1, -buildingHalf - 1), Blocks.GRAVEL.defaultBlockState());
+
+        for (int dx = -buildingHalf + 2; dx <= buildingHalf - 2; dx += 2) {
+            setBlock(level, base.offset(dx, 1, buildingHalf - 1), Blocks.CRAFTING_TABLE.defaultBlockState());
+        }
+
+        setBlock(level, base.offset(-buildingHalf + 1, 1, -buildingHalf + 1), Blocks.LANTERN.defaultBlockState());
+        setBlock(level, base.offset(buildingHalf - 1, 1, -buildingHalf + 1), Blocks.LANTERN.defaultBlockState());
+        setBlock(level, base.offset(-buildingHalf + 1, 1, buildingHalf - 1), Blocks.LANTERN.defaultBlockState());
+        setBlock(level, base.offset(buildingHalf - 1, 1, buildingHalf - 1), Blocks.LANTERN.defaultBlockState());
+
+        placeLoot(level, base, buildingHalf, buildingHalf, wallHeight, tier,
+                VillageBuildingType.TRADER_OUTPOST, lootPos, lootTypes, random, 0);
+
+        return new BuildingResult(base, zombieSpawnPos, lootPos, lootTypes, 16, 16);
     }
 
     private static void clearInterior(ServerLevel level, BlockPos base, int halfX, int halfZ, int height) {

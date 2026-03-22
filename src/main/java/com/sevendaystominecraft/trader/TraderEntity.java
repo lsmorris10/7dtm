@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.trader;
 
+import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.quest.QuestActionHandler;
 
@@ -31,12 +33,18 @@ public class TraderEntity extends PathfinderMob {
             "Trader Joel", "Trader Rekt", "Trader Jen", "Trader Hugh", "Trader Bob"
     };
 
+    private static final long TRADER_OPEN_TICK = 0;
+    private static final long TRADER_CLOSE_TICK = 16000;
+
     private static final EntityDataAccessor<String> TRADER_NAME =
             SynchedEntityData.defineId(TraderEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> TRADER_TIER =
             SynchedEntityData.defineId(TraderEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> TRADER_CLOSED =
+            SynchedEntityData.defineId(TraderEntity.class, EntityDataSerializers.BOOLEAN);
 
     private int traderId = -1;
+    private boolean lastClosedState = false;
 
     public TraderEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -49,6 +57,7 @@ public class TraderEntity extends PathfinderMob {
         super.defineSynchedData(builder);
         builder.define(TRADER_NAME, "Trader");
         builder.define(TRADER_TIER, 1);
+        builder.define(TRADER_CLOSED, false);
     }
 
     @Override
@@ -94,26 +103,74 @@ public class TraderEntity extends PathfinderMob {
         return TRADER_NAMES[random.nextInt(TRADER_NAMES.length)];
     }
 
+    public boolean isTraderOpen() {
+        long timeOfDay = level().getDayTime() % 24000;
+        return timeOfDay >= TRADER_OPEN_TICK && timeOfDay < TRADER_CLOSE_TICK;
+    }
+
+    public boolean isClosed() {
+        return this.entityData.get(TRADER_CLOSED);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!level().isClientSide()) {
+            boolean closed = !isTraderOpen();
+            if (closed != lastClosedState) {
+                lastClosedState = closed;
+                this.entityData.set(TRADER_CLOSED, closed);
+                String baseName = getTraderName();
+                if (closed) {
+                    this.setCustomName(Component.literal("\u00a7c[CLOSED] " + baseName));
+                } else {
+                    this.setCustomName(Component.literal(baseName));
+                }
+            }
+        }
+    }
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            if (!isTraderOpen()) {
+                serverPlayer.displayClientMessage(
+                        Component.literal("\u00a7c" + getTraderName() + " is closed. Come back between 06:00 and 22:00."),
+                        true);
+                return InteractionResult.FAIL;
+            }
+
             int tier = getTraderTier();
+            String name = getTraderName();
             ServerLevel serverLevel = (ServerLevel) level();
             TraderData data = TraderData.getOrCreate(serverLevel);
             TraderRecord record = data.getTraderById(traderId);
-            List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTier(tier);
 
-            int[] stockArray = new int[offers.size()];
+            SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
+            int barterRank = stats.getPerkRank("better_barter");
+
+            List<TraderInventory.TraderOffer> offers = TraderInventory.getOffersForTrader(name);
+            List<TraderInventory.TraderOffer> secretStash = barterRank >= 5
+                    ? TraderInventory.getSecretStash(name) : List.of();
+            int totalOffers = offers.size() + secretStash.size();
+
+            int[] stockArray = new int[totalOffers];
             for (int i = 0; i < offers.size(); i++) {
                 stockArray[i] = record != null ? record.getStock(i) : offers.get(i).maxStock();
             }
+            for (int i = 0; i < secretStash.size(); i++) {
+                int idx = offers.size() + i;
+                stockArray[idx] = record != null ? record.getStock(idx) : secretStash.get(i).maxStock();
+            }
 
             serverPlayer.openMenu(new SimpleMenuProvider(
-                    (containerId, playerInv, p) -> new TraderMenu(containerId, playerInv, tier, traderId, stockArray),
-                    Component.literal(getTraderName())
+                    (containerId, playerInv, p) -> new TraderMenu(containerId, playerInv, tier, traderId, name, stockArray, barterRank),
+                    Component.literal(name)
             ), buf -> {
                 buf.writeInt(tier);
                 buf.writeInt(traderId);
+                buf.writeUtf(name);
+                buf.writeInt(barterRank);
                 buf.writeInt(stockArray.length);
                 for (int s : stockArray) {
                     buf.writeInt(s);

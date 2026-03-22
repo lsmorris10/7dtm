@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.trader;
 
+import com.sevendaystominecraft.capability.ModAttachments;
+import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 
@@ -21,23 +23,31 @@ public class TraderMenu extends AbstractContainerMenu {
 
     private final int traderTier;
     private final int traderId;
+    private final String traderName;
     private final List<TraderInventory.TraderOffer> offers;
+    private final List<TraderInventory.TraderOffer> secretStash;
     private final Player owner;
     private final SimpleContainer sellContainer;
     private final ContainerData stockData;
+    private final int betterBarterRank;
 
     public static final int SELL_SLOT_COUNT = 4;
 
-    public TraderMenu(int containerId, Inventory playerInv, int traderTier, int traderId, int[] initialStock) {
+    public TraderMenu(int containerId, Inventory playerInv, int traderTier, int traderId,
+                      String traderName, int[] initialStock, int betterBarterRank) {
         super(ModMenuTypes.TRADER_MENU.get(), containerId);
         this.traderTier = traderTier;
         this.traderId = traderId;
-        this.offers = TraderInventory.getOffersForTier(traderTier);
+        this.traderName = traderName;
+        this.offers = TraderInventory.getOffersForTrader(traderName);
+        this.secretStash = betterBarterRank >= 5 ? TraderInventory.getSecretStash(traderName) : List.of();
         this.owner = playerInv.player;
         this.sellContainer = new SimpleContainer(SELL_SLOT_COUNT);
+        this.betterBarterRank = betterBarterRank;
 
-        this.stockData = new SimpleContainerData(offers.size());
-        for (int i = 0; i < offers.size() && i < initialStock.length; i++) {
+        int totalOffers = offers.size() + secretStash.size();
+        this.stockData = new SimpleContainerData(totalOffers);
+        for (int i = 0; i < totalOffers && i < initialStock.length; i++) {
             stockData.set(i, initialStock[i]);
         }
         addDataSlots(stockData);
@@ -64,33 +74,65 @@ public class TraderMenu extends AbstractContainerMenu {
     public static TraderMenu fromNetwork(int containerId, Inventory playerInv, RegistryFriendlyByteBuf buf) {
         int tier = buf.readInt();
         int traderId = buf.readInt();
+        String traderName = buf.readUtf();
+        int barterRank = buf.readInt();
         int stockCount = buf.readInt();
         int[] stock = new int[stockCount];
         for (int i = 0; i < stockCount; i++) {
             stock[i] = buf.readInt();
         }
-        return new TraderMenu(containerId, playerInv, tier, traderId, stock);
+        return new TraderMenu(containerId, playerInv, tier, traderId, traderName, stock, barterRank);
     }
 
     public int getTraderTier() { return traderTier; }
     public int getTraderId() { return traderId; }
+    public String getTraderName() { return traderName; }
     public List<TraderInventory.TraderOffer> getOffers() { return offers; }
+    public List<TraderInventory.TraderOffer> getSecretStash() { return secretStash; }
+    public int getBetterBarterRank() { return betterBarterRank; }
+
+    public int getAdjustedBuyPrice(TraderInventory.TraderOffer offer) {
+        return TraderInventory.getBuyPrice(offer.buyPrice(), betterBarterRank, 1.0f);
+    }
 
     public int getStock(int offerIndex) {
         if (offerIndex < 0 || offerIndex >= stockData.getCount()) return 0;
         return stockData.get(offerIndex);
     }
 
+    private boolean isTraderOpen(Player player) {
+        long timeOfDay = player.level().getDayTime() % 24000;
+        return timeOfDay >= 0 && timeOfDay < 16000;
+    }
+
     public boolean tryBuy(Player player, int offerIndex) {
-        if (offerIndex < 0 || offerIndex >= offers.size()) return false;
-        TraderInventory.TraderOffer offer = offers.get(offerIndex);
+        if (player.level() instanceof ServerLevel && !isTraderOpen(player)) return false;
+
+        boolean isSecretStash = offerIndex >= offers.size();
+        List<TraderInventory.TraderOffer> targetList;
+        int listIndex;
+
+        if (isSecretStash) {
+            if (secretStash.isEmpty()) return false;
+            listIndex = offerIndex - offers.size();
+            if (listIndex < 0 || listIndex >= secretStash.size()) return false;
+            targetList = secretStash;
+        } else {
+            if (offerIndex < 0 || offerIndex >= offers.size()) return false;
+            listIndex = offerIndex;
+            targetList = offers;
+        }
+
+        TraderInventory.TraderOffer offer = targetList.get(listIndex);
 
         if (player.level() instanceof ServerLevel serverLevel) {
             TraderData data = TraderData.getOrCreate(serverLevel);
             TraderRecord record = data.getTraderById(traderId);
             if (record != null && record.getStock(offerIndex) <= 0) return false;
 
-            int tokensNeeded = offer.buyPrice();
+            SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+            int rank = stats.getPerkRank("better_barter");
+            int tokensNeeded = TraderInventory.getBuyPrice(offer.buyPrice(), rank, 1.0f);
             int tokensHeld = countTokens(player);
             if (tokensHeld < tokensNeeded) return false;
 
@@ -110,11 +152,19 @@ public class TraderMenu extends AbstractContainerMenu {
     }
 
     public boolean trySellSlots(Player player) {
+        if (player.level() instanceof ServerLevel && !isTraderOpen(player)) return false;
+
+        int barterRank = 0;
+        if (player.level() instanceof ServerLevel) {
+            SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+            barterRank = stats.getPerkRank("better_barter");
+        }
+
         int totalValue = 0;
         for (int i = 0; i < SELL_SLOT_COUNT; i++) {
             ItemStack stack = sellContainer.getItem(i);
             if (stack.isEmpty()) continue;
-            int valuePerItem = TraderInventory.getSellValue(stack);
+            int valuePerItem = TraderInventory.getSellValue(stack, barterRank);
             totalValue += valuePerItem * stack.getCount();
         }
         if (totalValue <= 0) return false;
@@ -132,7 +182,7 @@ public class TraderMenu extends AbstractContainerMenu {
         for (int i = 0; i < SELL_SLOT_COUNT; i++) {
             ItemStack stack = sellContainer.getItem(i);
             if (stack.isEmpty()) continue;
-            int valuePerItem = TraderInventory.getSellValue(stack);
+            int valuePerItem = TraderInventory.getSellValue(stack, betterBarterRank);
             totalValue += valuePerItem * stack.getCount();
         }
         return totalValue;

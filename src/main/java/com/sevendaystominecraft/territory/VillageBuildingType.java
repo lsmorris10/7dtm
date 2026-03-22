@@ -44,7 +44,7 @@ public enum VillageBuildingType {
 
     TRADER_OUTPOST("Trader Outpost", 3,
             new LootContainerType[]{LootContainerType.SUPPLY_CRATE, LootContainerType.VENDING_MACHINE},
-            0, 0, 9, 13, 5,
+            0, 0, 16, 16, 5,
             Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_SLAB, Blocks.DARK_OAK_LOG);
 
     private final String displayName;

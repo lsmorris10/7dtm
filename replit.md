@@ -281,7 +281,7 @@ src/main/java/com/sevendaystominecraft/
 - **SyncTerritoryPayload**: Network packet with list of `TerritoryEntry` records (id, pos, tier, label string) using manual ByteBuf codec
 
 #### Village Overhaul (7DTD-style Settlements) — DONE
-- **VillageBuildingType**: 8 building types (Residential, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost) with weighted random selection, per-type wall/floor/roof/frame materials, loot pools, zombie counts
+- **VillageBuildingType**: 8 building types (Residential, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost) with weighted random selection, per-type wall/floor/roof/frame materials, loot pools, zombie counts. Trader Outpost is fixed 16x16 with custom compound generation (fenced perimeter, central building, lanterns)
 - **VillageBuildingBuilder**: Improved procedural building generation with windows (glass panes), doors, peaked roofs, interior room dividers, porches, material variety per building type
 - **VillageClusterGenerator**: Generates 4-12 building clusters connected by gravel paths; scatters exterior props (trash piles, mailboxes, vending machines, vehicle wreckage) between buildings
 - **NBTTemplateLoader**: Checks `data/bzhs/structures/village/` for `.nbt` files matching building types (e.g., `residential_1.nbt`); falls back to procedural if no template exists; supports up to 10 variants per type
@@ -292,15 +292,15 @@ src/main/java/com/sevendaystominecraft/
 - **Biome-based difficulty**: Village tier capped by both distance from spawn AND biome lootTierMax from BiomeProperties (Forest=3, Desert/Snow=5, Wasteland=6)
 
 #### Trader NPC System — DONE
-- **TraderEntity**: Invulnerable, non-despawning PathfinderMob NPC with random name from pool (Joel, Rekt, Jen, Hugh, Bob), LookAtPlayerGoal, right-click opens shop GUI
+- **TraderEntity**: Invulnerable, non-despawning PathfinderMob NPC with random name from pool (Joel, Rekt, Jen, Hugh, Bob), LookAtPlayerGoal, right-click opens shop GUI; night closure (22:00-06:00 in-game) — refuses interaction with "Closed" message
 - **DukeToken**: Currency item (Duke's Casino Tokens) for buying/selling at traders, stacksTo(50000)
 - **TraderConfig** (`trader.toml`): guaranteeRadius (150), minChunkSpacing (25), spawnChanceDenominator (30), protectionRadius (30), restockIntervalDays (3), syncRangeBlocks (512), tier distance thresholds
 - **TraderSpawnHandler**: Dedicated chunk-load handler (completely independent from TerritoryWorldGenerator) using TraderConfig spacing/chance values; guaranteed near-spawn trader within guaranteeRadius; creates full TRADER_OUTPOST territory + trader entity; `randomNonTrader()` in TerritoryType prevents TRADER_OUTPOST from appearing via regular territory RNG
 - **TraderData** (SavedData): Persists trader locations, names, tiers across restarts; spatial lookup; protection zone check
 - **TraderRecord**: Per-trader data (id, origin, name, tier, lastRestockDay, quest generation/caching)
-- **TraderInventory**: Tiered item pools with per-offer maxStock quantities (Tier 1: basic tools/food/ammo, Tier 2: iron gear/medical/better ammo, Tier 3+: diamond gear/military/rare materials); sell value table for common items
-- **TraderMenu**: AbstractContainerMenu with buy/sell actions; 4 sell input slots for place-and-sell workflow; server-side stock tracking via ContainerData (live sync to client); proximity enforcement (10-block radius entity check)
-- **TraderScreen**: Buy tab shows items with price, live stock count (or "SOLD OUT"), scrollable; Sell tab has 4 input slots + sell button + value preview; Quests tab shows available quests from trader with accept/turn-in buttons
+- **TraderInventory**: Per-trader specialty stock — Joel (general goods), Rekt (weapons/military), Jen (medicine/books), Bob (tools/building materials), Hugh (armor/survival gear). Common stock shared across all. Secret Stash per-trader (unlocked at Better Barter rank 5). Price formula: `finalPrice = basePrice × (1 + (6 - betterBarterRank) × 0.1) × difficultyMult`. Sell values scale with Better Barter perk (+5% per rank). Backward-compat `getOffersForTier()` maps tiers to trader names.
+- **TraderMenu**: AbstractContainerMenu with buy/sell actions; 4 sell input slots for place-and-sell workflow; server-side stock tracking via ContainerData (live sync to client); proximity enforcement (10-block radius entity check); Better Barter perk integration for pricing; Secret Stash section (rank 5); open-hours enforcement (server rejects buy/sell during night 22:00-06:00)
+- **TraderScreen**: Buy tab shows items with adjusted prices per Better Barter rank, live stock count (or "SOLD OUT"), scrollable; Sell tab has 4 input slots + sell button + value preview; Quests tab shows available quests from trader with accept/turn-in buttons; Secret Stash tab (only visible at Better Barter rank 5) with purple-themed UI
 - **SyncTraderPayload**: Server→client trader position sync (id, pos, tier, name) following SyncTerritoryPayload pattern
 - **TraderClientState**: Thread-safe client-side trader position storage
 - **TraderBroadcaster**: @EventBusSubscriber 60-tick broadcast of nearby traders to each player; 1200-tick restock check comparing game day against lastRestockDay per trader

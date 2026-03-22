@@ -32,8 +32,9 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
     private static final int RED = 0xFFFF4444;
     private static final int QUEST_COLOR = 0xFFFFCC00;
     private static final int READY_COLOR = 0xFF00FFAA;
+    private static final int SECRET_COLOR = 0xFFDD44FF;
 
-    private enum Tab { BUY, SELL, QUESTS }
+    private enum Tab { BUY, SELL, QUESTS, SECRET_STASH }
     private Tab currentTab = Tab.BUY;
     private int scrollOffset = 0;
     private int questScrollOffset = 0;
@@ -67,6 +68,13 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
             questScrollOffset = 0;
         }).bounds(leftPos + 88, topPos + 5, 46, 14).build());
 
+        if (!menu.getSecretStash().isEmpty()) {
+            addRenderableWidget(Button.builder(Component.literal("Stash"), b -> {
+                currentTab = Tab.SECRET_STASH;
+                scrollOffset = 0;
+            }).bounds(leftPos + 138, topPos + 5, 34, 14).build());
+        }
+
         sellButton = Button.builder(Component.literal("Sell Items"), b -> {
             PacketDistributor.sendToServer(new TraderActionPayload(menu.getTraderId(), 0, false));
         }).bounds(leftPos + 80, topPos + 108, 60, 16).build();
@@ -88,6 +96,7 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
             case BUY -> renderBuyTab(graphics, mouseX, mouseY);
             case SELL -> renderSellTab(graphics, mouseX, mouseY);
             case QUESTS -> renderQuestsTab(graphics, mouseX, mouseY);
+            case SECRET_STASH -> renderSecretStashTab(graphics, mouseX, mouseY);
         }
 
         int playerInvY = topPos + 139;
@@ -130,9 +139,10 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
             }
             graphics.drawString(font, itemName, leftPos + 28, rowY + 2, WHITE, false);
 
+            int adjustedPrice = menu.getAdjustedBuyPrice(offer);
             int stock = menu.getStock(offerIdx);
-            String priceText = offer.buyPrice() + " tokens";
-            int tokenColor = countPlayerTokens() >= offer.buyPrice() && stock > 0 ? BUY_COLOR : RED;
+            String priceText = adjustedPrice + " tokens";
+            int tokenColor = countPlayerTokens() >= adjustedPrice && stock > 0 ? BUY_COLOR : RED;
             graphics.drawString(font, priceText, leftPos + 28, rowY + 11, tokenColor, false);
 
             String stockText = stock > 0 ? "x" + stock : "SOLD OUT";
@@ -145,6 +155,45 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
             String scrollInfo = (scrollOffset + 1) + "-" + Math.min(scrollOffset + VISIBLE_ROWS, offers.size()) + " / " + offers.size();
             graphics.drawString(font, scrollInfo, leftPos + imageWidth / 2 - font.width(scrollInfo) / 2,
                     startY + VISIBLE_ROWS * 22 + 2, DARK_GRAY, false);
+        }
+    }
+
+    private void renderSecretStashTab(GuiGraphics graphics, int mouseX, int mouseY) {
+        List<TraderInventory.TraderOffer> stash = menu.getSecretStash();
+        int startY = topPos + 24;
+
+        graphics.drawString(font, "Secret Stash", leftPos + 8, startY - 10, SECRET_COLOR, true);
+
+        for (int i = 0; i < VISIBLE_ROWS && (i + scrollOffset) < stash.size(); i++) {
+            int stashIdx = i + scrollOffset;
+            TraderInventory.TraderOffer offer = stash.get(stashIdx);
+            int globalIdx = menu.getOffers().size() + stashIdx;
+
+            int rowY = startY + i * 22;
+            boolean hovered = mouseX >= leftPos + 6 && mouseX <= leftPos + 170 &&
+                              mouseY >= rowY && mouseY <= rowY + 20;
+
+            graphics.fill(leftPos + 6, rowY, leftPos + 170, rowY + 20, hovered ? 0xFF4A2A4A : 0xFF3A2A3A);
+
+            graphics.renderItem(offer.item(), leftPos + 8, rowY + 2);
+            graphics.renderItemDecorations(font, offer.item(), leftPos + 8, rowY + 2);
+
+            String itemName = offer.item().getHoverName().getString();
+            if (font.width(itemName) > 90) {
+                itemName = font.plainSubstrByWidth(itemName, 87) + "...";
+            }
+            graphics.drawString(font, itemName, leftPos + 28, rowY + 2, WHITE, false);
+
+            int adjustedPrice = menu.getAdjustedBuyPrice(offer);
+            int stock = menu.getStock(globalIdx);
+            String priceText = adjustedPrice + " tokens";
+            int tokenColor = countPlayerTokens() >= adjustedPrice && stock > 0 ? SECRET_COLOR : RED;
+            graphics.drawString(font, priceText, leftPos + 28, rowY + 11, tokenColor, false);
+
+            String stockText = stock > 0 ? "x" + stock : "SOLD OUT";
+            int stockColor = stock > 0 ? GRAY : RED;
+            int stockX = leftPos + 170 - font.width(stockText) - 2;
+            graphics.drawString(font, stockText, stockX, rowY + 6, stockColor, false);
         }
     }
 
@@ -274,6 +323,18 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
                     return true;
                 }
             }
+        } else if (currentTab == Tab.SECRET_STASH) {
+            List<TraderInventory.TraderOffer> stash = menu.getSecretStash();
+            int startY = topPos + 24;
+            for (int i = 0; i < VISIBLE_ROWS && (i + scrollOffset) < stash.size(); i++) {
+                int globalIdx = menu.getOffers().size() + i + scrollOffset;
+                int rowY = startY + i * 22;
+                if (mouseX >= leftPos + 6 && mouseX <= leftPos + 170 &&
+                    mouseY >= rowY && mouseY <= rowY + 20) {
+                    PacketDistributor.sendToServer(new TraderActionPayload(menu.getTraderId(), globalIdx, true));
+                    return true;
+                }
+            }
         } else if (currentTab == Tab.QUESTS) {
             return handleQuestClick(mouseX, mouseY);
         }
@@ -356,6 +417,10 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (currentTab == Tab.BUY) {
             int maxScroll = Math.max(0, menu.getOffers().size() - VISIBLE_ROWS);
+            scrollOffset = Math.max(0, Math.min(maxScroll, scrollOffset - (int) scrollY));
+            return true;
+        } else if (currentTab == Tab.SECRET_STASH) {
+            int maxScroll = Math.max(0, menu.getSecretStash().size() - VISIBLE_ROWS);
             scrollOffset = Math.max(0, Math.min(maxScroll, scrollOffset - (int) scrollY));
             return true;
         } else if (currentTab == Tab.QUESTS) {
