@@ -22,10 +22,6 @@ args = "Build Mod"
 task = "workflow.run"
 args = "Preview Site"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Texture Tool"
-
 [[workflows.workflow]]
 name = "Build Mod"
 author = "agent"
@@ -48,18 +44,6 @@ outputType = "webview"
 task = "shell.exec"
 args = "python3 scripts/preview_server.py"
 waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Texture Tool"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd texture-tool && npm install && npm run dev"
-waitForPort = 3000
 
 [postMerge]
 path = "scripts/post-merge.sh"
