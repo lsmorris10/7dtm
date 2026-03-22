@@ -113,6 +113,7 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.GLASS_BOTTLE, 1), ing(ModItems.NITRATE.get(), 1)), new ItemStack(ModItems.PAINKILLER.get(), 1), 200));
         recipes.add(recipe(List.of(ing(Items.VINE, 2), ing(Items.GLASS_BOTTLE, 1)), new ItemStack(ModItems.ALOE_CREAM.get(), 1), 200));
         recipes.add(recipe(List.of(ing(ModItems.BANDAGE.get(), 1), ing(ModItems.ANTIBIOTICS.get(), 1)), new ItemStack(ModItems.FIRST_AID_KIT.get(), 1), 300));
+        recipes.add(recipe(List.of(ing(ModItems.NITRATE.get(), 2), ing(Items.ROTTEN_FLESH, 3)), new ItemStack(ModItems.FERTILIZER.get(), 2), 200));
         RECIPES.put(WorkstationType.CHEMISTRY_STATION, recipes);
     }
 

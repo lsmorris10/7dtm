@@ -2,6 +2,7 @@ package com.sevendaystominecraft.block.farming;
 
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
+import com.sevendaystominecraft.item.ModItems;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -84,7 +85,13 @@ public class CropBlock extends Block {
 
         int lightLevel = level.getMaxLocalRawBrightness(pos.above());
         if (lightLevel >= 9) {
-            if (random.nextInt(5) == 0) {
+            int threshold = 1;
+            BlockState belowState = level.getBlockState(pos.below());
+            if (belowState.getBlock() instanceof FarmPlotBlock farmPlot && farmPlot.isHydrated(belowState)) {
+                threshold = 2;
+            }
+
+            if (random.nextInt(5) < threshold) {
                 level.setBlock(pos, state.setValue(AGE, age + 1), 2);
             }
         }
@@ -99,6 +106,16 @@ public class CropBlock extends Block {
 
         harvestCrop(level, pos, state, player);
         return InteractionResult.SUCCESS;
+    }
+
+    public boolean tryApplyFertilizer(Level level, BlockPos pos, BlockState state, Player player) {
+        if (level.isClientSide) return false;
+
+        int age = state.getValue(AGE);
+        if (age >= MAX_AGE) return false;
+
+        level.setBlock(pos, state.setValue(AGE, age + 1), 2);
+        return true;
     }
 
     private void harvestCrop(Level level, BlockPos pos, BlockState state, Player player) {

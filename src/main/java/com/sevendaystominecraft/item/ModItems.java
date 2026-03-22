@@ -339,4 +339,7 @@ public class ModItems {
     public static final Supplier<Item> BAKED_POTATO_MEAL = ITEMS.register("baked_potato_meal",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("baked_potato_meal")).stacksTo(64),
                     16f, 0f, new String[]{}, new String[]{}, 0));
+
+    public static final Supplier<Item> FERTILIZER = ITEMS.register("fertilizer",
+            () -> new Item(new Item.Properties().setId(key("fertilizer")).stacksTo(64)));
 }
