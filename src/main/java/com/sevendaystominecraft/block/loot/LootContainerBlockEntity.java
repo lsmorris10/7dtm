@@ -63,6 +63,14 @@ public class LootContainerBlockEntity extends BlockEntity {
         return territoryTier;
     }
 
+    public void resetForAdmin(boolean clearTimer) {
+        this.hasBeenLooted = false;
+        if (clearTimer) {
+            this.lastLootedGameTime = -1;
+        }
+        setChanged();
+    }
+
     public NonNullList<ItemStack> getItems() {
         return items;
     }
