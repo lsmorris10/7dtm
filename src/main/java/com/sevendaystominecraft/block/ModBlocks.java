@@ -163,6 +163,29 @@ public class ModBlocks {
     public static final Supplier<Block> TRUCK_BED_BLOCK = registerWithItem("truck_bed",
             () -> new VehicleWreckageBlock(vehicleWreckageProps("truck_bed")));
 
+    public static final Supplier<Block> ASH_BLOCK = registerWithItem("ash_block",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockKey("ash_block"))
+                    .strength(0.5f)
+                    .sound(SoundType.SAND)
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY)));
+
+    public static final Supplier<Block> ASPHALT_BLOCK = registerWithItem("asphalt_block",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockKey("asphalt_block"))
+                    .strength(1.5f, 6.0f)
+                    .sound(SoundType.STONE)
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_BLACK)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> CRACKED_ASPHALT_BLOCK = registerWithItem("cracked_asphalt",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockKey("cracked_asphalt"))
+                    .strength(1.2f, 4.0f)
+                    .sound(SoundType.STONE)
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY)
+                    .requiresCorrectToolForDrops()));
+
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);
         BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(),

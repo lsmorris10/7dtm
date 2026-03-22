@@ -1,0 +1,56 @@
+{
+  "temperature": 1.0,
+  "downfall": 0.2,
+  "has_precipitation": false,
+  "effects": {
+    "sky_color": 6842472,
+    "fog_color": 8026746,
+    "water_color": 4020182,
+    "water_fog_color": 329011,
+    "grass_color": 6316128,
+    "foliage_color": 5526612,
+    "particle": {
+      "options": {
+        "type": "minecraft:white_ash"
+      },
+      "probability": 0.05
+    },
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    }
+  },
+  "spawners": {
+    "monster": [
+      { "type": "minecraft:zombie", "weight": 70, "minCount": 2, "maxCount": 4 },
+      { "type": "minecraft:skeleton", "weight": 50, "minCount": 1, "maxCount": 3 },
+      { "type": "minecraft:spider", "weight": 40, "minCount": 1, "maxCount": 3 }
+    ],
+    "creature": [],
+    "ambient": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": ["minecraft:cave", "minecraft:cave_extra_underground", "minecraft:canyon"]
+  },
+  "features": [
+    [],
+    ["minecraft:lake_lava_underground", "minecraft:lake_lava_surface"],
+    [],
+    [],
+    [],
+    [],
+    [],
+    ["minecraft:ore_dirt", "minecraft:ore_gravel", "minecraft:ore_granite_upper", "minecraft:ore_granite_lower", "minecraft:ore_diorite_upper", "minecraft:ore_diorite_lower", "minecraft:ore_andesite_upper", "minecraft:ore_andesite_lower"],
+    ["minecraft:ore_coal_upper", "minecraft:ore_coal_lower", "minecraft:ore_iron_upper", "minecraft:ore_iron_middle", "minecraft:ore_iron_small", "minecraft:ore_gold", "minecraft:ore_gold_lower", "minecraft:ore_copper", "minecraft:ore_diamond", "minecraft:ore_diamond_large", "minecraft:ore_lapis", "minecraft:ore_lapis_buried"],
+    ["minecraft:spring_water", "minecraft:spring_lava"],
+    ["minecraft:patch_dead_bush"],
+    []
+  ]
+}

@@ -48,7 +48,7 @@ src/main/java/com/sevendaystominecraft/
 │       ├── PremadeWorldListWidget.java  — Scrollable list widget for premade world selection
 │       └── CreateWorldScreenHandler.java — ScreenEvent listener injecting World Type toggle
 ├── block/
-│   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations + loot containers + vehicle wreckage)
+│   ├── ModBlocks.java              — DeferredRegister for all custom blocks (workstations, loot containers, vehicle wreckage, terrain: ash_block, asphalt_block, cracked_asphalt)
 │   ├── ModBlockEntities.java       — Block entity type registration
 │   ├── vehicle/
 │   │   └── VehicleWreckageBlock.java — Decorative vehicle blocks (burnt car, broken truck, wrecked camper) that drop scrap materials
@@ -428,7 +428,9 @@ Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (D
 - **BiomeStats.ambientTemperature(dayFraction)**: Calculates ambient temp from biome range + time-of-day modulation
 - **Integration**: `PlayerStatsHandler.estimateAmbientTemperature()` now uses BiomeProperties; `LootStageCalculator.getBiomeBonus()` uses BiomeProperties; `TerritoryZombieSpawner.populate()` scales spawn count by biome density multiplier
 - **Data files**: 7 biome JSONs in `data/sevendaystominecraft/worldgen/biome/` with appropriate temperature, precipitation, sky/fog/water/grass colors, carvers, and vegetation features
-- **Not yet implemented**: Overworld biome source replacement (biomes exist as data but don't yet generate in-world); city/road grid; POI template system; wasteland weather events
+- **Overworld biome placement**: BZHS Apocalypse world preset places all 7 biomes via multi-noise source; custom noise settings with biome-specific surface rules; world preset tagged for world creation screen
+- **Surface rules**: Snow block (Tundra), sand/sandstone (Desert), coarse dirt (Burned Forest), terracotta+gravel (Wasteland), podzol (Pine Forest), grass (Forest/Plains)
+- **Not yet implemented**: City/road grid; POI template system; wasteland weather events
 
 ### Magazine / Skill Book System
 - **Package**: `com.sevendaystominecraft.magazine`
