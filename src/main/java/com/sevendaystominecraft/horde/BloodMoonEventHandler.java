@@ -161,6 +161,7 @@ public class BloodMoonEventHandler {
 
             tracker.setPhase(BloodMoonTracker.Phase.POST);
             broadcastMessage(level, Component.literal("§e§l[BZHS] §fThe horde thins... dawn approaches."));
+            syncBloodMoonState(level, true, 0, HordeConfig.INSTANCE.waveCount.get(), currentDay);
             SevenDaysToMinecraft.LOGGER.info("[BZHS] Horde spawning ended, entering post phase on day {}", currentDay);
             return;
         }
