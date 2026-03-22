@@ -304,12 +304,12 @@
         <div class="header-icon">&#x2694;</div>
         <h1>BZHS Development History</h1>
       </div>
-      <p>Brutal Zombie Horde Survival — March 12–22, 2026 — 115 tasks, 11 days of development</p>
+      <p>Brutal Zombie Horde Survival — March 12–22, 2026 — 167 tasks, 11 days of development</p>
     </div>
 
     <div class="top-stats">
-      <div class="stat-card"><div class="val" style="color:#22c55e">112</div><div class="lbl">Tasks Merged</div></div>
-      <div class="stat-card"><div class="val" style="color:#f97316">18/39</div><div class="lbl">Milestones Touched</div></div>
+      <div class="stat-card"><div class="val" style="color:#22c55e">164</div><div class="lbl">Tasks Merged</div></div>
+      <div class="stat-card"><div class="val" style="color:#f97316">22/39</div><div class="lbl">Milestones Touched</div></div>
       <div class="stat-card"><div class="val" style="color:#8b5cf6">11</div><div class="lbl">Dev Days</div></div>
       <div class="stat-card"><div class="val" style="color:#06b6d4">11</div><div class="lbl">Categories</div></div>
     </div>
@@ -474,11 +474,71 @@
       {id:110,title:"Custom biome system (7 biomes, temperature, density, loot bonuses)",category:"survival",status:"merged"},
       {id:111,title:"Trademark name sweep (zombie names, perk IDs, currency)",category:"docs",status:"merged"}
     ],
+    "March 18": [
+      {id:112,title:"Rename perk icon textures to match new IDs",category:"loot",status:"merged"},
+      {id:113,title:"Fix registry crash from leftover biome data",category:"survival",status:"merged"},
+      {id:114,title:"Fix non-directional sounds (stereo to mono)",category:"survival",status:"merged"}
+    ],
+    "March 19": [
+      {id:115,title:"Fix HUD hotbar spacing",category:"hud",status:"merged"},
+      {id:116,title:"Fix crawler zombie model to render horizontally",category:"zombies",status:"merged"},
+      {id:117,title:"Remove duplicate Leather & Iron armor textures",category:"loot",status:"merged"},
+      {id:118,title:"Prevent territory spawns in oceans/water biomes",category:"zombies",status:"merged"},
+      {id:119,title:"Fix Texture Tool startup",category:"loot",status:"merged"},
+      {id:120,title:"Fix toggle sprint stamina bypass",category:"survival",status:"merged"},
+      {id:121,title:"Unify HUD bars (health, hunger, hydration) top-left",category:"hud",status:"merged"},
+      {id:122,title:"Fix exploitable structure blocks (Iron/Quartz)",category:"survival",status:"merged"},
+      {id:123,title:"Rebalance zombie stats to vanilla 20 HP scale",category:"zombies",status:"merged"}
+    ],
+    "March 20": [
+      {id:124,title:"Overhaul debuffs to match 7 Days to Die",category:"debuffs",status:"merged"},
+      {id:125,title:"World type selection (Generated vs Premade)",category:"survival",status:"merged"},
+      {id:126,title:"Spawn protection and distance-based difficulty",category:"survival",status:"merged"},
+      {id:127,title:"Update docs, landing page & dev dashboard",category:"docs",status:"merged"},
+      {id:128,title:"Rebuild mod and deploy JAR for download",category:"landing",status:"merged"},
+      {id:129,title:"Village overhaul — 7DTD-style settlements",category:"survival",status:"merged"},
+      {id:130,title:"Merge campfire into vanilla block with recipes",category:"loot",status:"merged"},
+      {id:131,title:"Water bottle consolidation — use vanilla bottles",category:"loot",status:"merged"},
+      {id:132,title:"Fix AK-47 3D model rendering",category:"loot",status:"merged"},
+      {id:133,title:"Update docs with renamed zombie names",category:"docs",status:"merged"}
+    ],
+    "March 21": [
+      {id:134,title:"Two-block-tall textured vending machine",category:"loot",status:"merged"},
+      {id:135,title:"Wall-only placement for vending machines/cabinets",category:"loot",status:"merged"},
+      {id:136,title:"Big map screen with M key and inventory tab",category:"hud",status:"merged"},
+      {id:137,title:"Fix AK-47 texture & gun controls",category:"loot",status:"merged"},
+      {id:138,title:"Rebuild mod and deploy JAR for download",category:"landing",status:"merged"},
+      {id:139,title:"Territory labels on map and minimap",category:"hud",status:"merged"},
+      {id:140,title:"Remove 'Difficulty:' label text from HUD",category:"hud",status:"merged"},
+      {id:141,title:"Territory entry announcement animation",category:"hud",status:"merged"},
+      {id:142,title:"AK-47 bullet speed and range boost",category:"loot",status:"merged"},
+      {id:143,title:"Fix AK-47 and Pistol 9mm 3D model rendering",category:"loot",status:"merged"}
+    ],
     "March 22": [
-      {id:112,title:"Smart A* pathfinding with block-break cost for zombies",category:"zombies",status:"merged"},
-      {id:113,title:"Stealth and detection system (Unaware → Suspicious → Alert)",category:"zombies",status:"merged"},
-      {id:114,title:"Coordinated block bashing (3+ zombies stack damage)",category:"zombies",status:"merged"},
-      {id:115,title:"Rebuild JAR after zombie AI improvements",category:"landing",status:"merged"}
+      {id:144,title:"Smart A* pathfinding with block-break cost",category:"zombies",status:"merged"},
+      {id:145,title:"Stealth and detection system (Unaware → Suspicious → Alert)",category:"zombies",status:"merged"},
+      {id:146,title:"Coordinated block bashing (3+ zombies stack damage)",category:"zombies",status:"merged"},
+      {id:147,title:"Blood Moon atmosphere effects (red fog, camera shake)",category:"daycycle",status:"merged"},
+      {id:148,title:"Smell tracking system (config-gated 3.0 preview)",category:"zombies",status:"merged"},
+      {id:149,title:"Rebuild JAR after zombie AI improvements",category:"landing",status:"merged"},
+      {id:150,title:"Complete Trader NPC system",category:"survival",status:"merged"},
+      {id:151,title:"Quest system implementation",category:"survival",status:"merged"},
+      {id:152,title:"Fix map arrow facing direction",category:"hud",status:"merged"},
+      {id:153,title:"Fix tool crate missing texture",category:"loot",status:"merged"},
+      {id:154,title:"Fix map labels & territory entry announcement",category:"hud",status:"merged"},
+      {id:155,title:"Fix missing mailbox, fuel_cache, farm_crate assets",category:"loot",status:"merged"},
+      {id:156,title:"Fix AK47, Pistol, and Grenade textures",category:"loot",status:"merged"},
+      {id:157,title:"Fix structure placement in ravines/slopes/treetops",category:"survival",status:"merged"},
+      {id:158,title:"Grenade instant pin-pull and throw",category:"loot",status:"merged"},
+      {id:159,title:"Fix double stars on territory labels",category:"hud",status:"merged"},
+      {id:160,title:"AK47 model overhaul and full-auto fire",category:"loot",status:"merged"},
+      {id:161,title:"Fix grenade explosion damage (spherical falloff)",category:"loot",status:"merged"},
+      {id:162,title:"Vanilla water bottle rework",category:"loot",status:"merged"},
+      {id:163,title:"Fix vehicle wreckage drops",category:"loot",status:"merged"},
+      {id:164,title:"AK47 unlimited ammo with durability break",category:"loot",status:"merged"},
+      {id:165,title:"Overworld biome placement with custom surface blocks",category:"survival",status:"merged"},
+      {id:166,title:"Trader NPCs and economy (specialty stock, Better Barter)",category:"survival",status:"merged"},
+      {id:167,title:"Priority texture replacement (weapons, ammo, HUD)",category:"loot",status:"merged"}
     ]
   };
 
@@ -497,18 +557,18 @@
     {id:12,title:"XP/Level + Perk system",phase:2,status:"done",complexity:4},
     {id:13,title:"Melee + ranged weapons",phase:2,status:"done",complexity:3},
     {id:14,title:"Armor system + clothing",phase:2,status:"not-started",complexity:3},
-    {id:15,title:"World gen (biomes + city/POI)",phase:2,status:"partial",complexity:5},
+    {id:15,title:"World gen (biomes + city/POI)",phase:2,status:"done",complexity:5},
     {id:16,title:"All zombie variants",phase:2,status:"done",complexity:4},
     {id:17,title:"Building + block upgrades + traps",phase:2,status:"not-started",complexity:3},
-    {id:18,title:"Loot tables + containers",phase:2,status:"partial",complexity:3},
-    {id:19,title:"Traders + quests",phase:2,status:"not-started",complexity:4},
+    {id:18,title:"Loot tables + containers",phase:2,status:"done",complexity:3},
+    {id:19,title:"Traders + quests",phase:2,status:"done",complexity:4},
     {id:20,title:"Vehicles + vehicle mods",phase:2,status:"not-started",complexity:5},
     {id:21,title:"Electricity system",phase:2,status:"not-started",complexity:4},
     {id:22,title:"Farming + cooking + Dew Collector",phase:2,status:"not-started",complexity:2},
     {id:23,title:"Skill book / magazine system",phase:2,status:"done",complexity:2},
     {id:24,title:"Stealth system",phase:2,status:"done",complexity:3},
     {id:25,title:"Inventory UI overhaul",phase:2,status:"not-started",complexity:4},
-    {id:26,title:"Map system",phase:2,status:"not-started",complexity:3},
+    {id:26,title:"Map system",phase:2,status:"done",complexity:3},
     {id:27,title:"Multiplayer sync + balancing",phase:3,status:"not-started",complexity:4},
     {id:28,title:"Performance optimization",phase:3,status:"not-started",complexity:5},
     {id:29,title:"Audio overhaul",phase:3,status:"partial",complexity:2},
@@ -519,7 +579,7 @@
     {id:34,title:"Environmental sprint VFX",phase:3,status:"not-started",complexity:2},
     {id:35,title:"Third-person body language",phase:3,status:"not-started",complexity:2},
     {id:36,title:"Debuff vignette + temp overlays",phase:3,status:"not-started",complexity:3},
-    {id:37,title:"Blood Moon atmosphere + camera",phase:3,status:"not-started",complexity:3},
+    {id:37,title:"Blood Moon atmosphere + camera",phase:3,status:"done",complexity:3},
     {id:38,title:"Zombie variant glow VFX",phase:3,status:"not-started",complexity:3},
     {id:39,title:"Vehicle camera bob/sway",phase:3,status:"not-started",complexity:2}
   ];
@@ -674,7 +734,7 @@
     html += '<div class="stat-card"><div class="val" style="color:#3b82f6">' + total + '</div><div class="lbl">Total Tasks</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#22c55e">' + merged + '</div><div class="lbl">Merged</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#ef4444">' + cancelled + '</div><div class="lbl">Cancelled</div></div>';
-    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">6</div><div class="lbl">Dev Days</div></div>';
+    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">11</div><div class="lbl">Dev Days</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#f97316">' + msTouched + '/39</div><div class="lbl">Milestones Done</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#06b6d4">' + Object.keys(catsUsed).length + '</div><div class="lbl">Categories</div></div>';
     html += '</div>';
