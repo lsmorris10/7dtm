@@ -95,13 +95,18 @@ src/main/java/com/sevendaystominecraft/
 │   ├── NBTTemplateLoader.java      — NBT structure template system (loads .nbt from data/bzhs/structures/village/)
 │   ├── SleeperZombieManager.java   — Dormant zombie spawn + awakening system
 │   └── VillagerSuppressionHandler.java — Cancels vanilla villager spawns
+├── stealth/
+│   ├── NoiseManager.java           — Per-player noise event tracking with 5s linear decay
+│   └── NoiseEventHandler.java      — @EventBusSubscriber for movement/block break noise + gunshot hook
 ├── entity/
 │   ├── ModEntities.java            — DeferredRegister for all custom entity types + attribute events
 │   └── zombie/
-│       ├── BaseSevenDaysZombie.java — Base zombie entity with variant stats, modifiers, night speed bonus, radiated regen, behavior tree goals
+│       ├── BaseSevenDaysZombie.java — Base zombie entity with variant stats, modifiers, night speed bonus, radiated regen, detection state, behavior tree goals
+│       ├── DetectionState.java      — Enum: UNAWARE(0), SUSPICIOUS(1), ALERT(2)
 │       ├── ZombieVariant.java       — Enum of all 18 zombie variants with base stats
 │       ├── ai/
 │       │   ├── BlockHPRegistry.java       — Block HP lookup table for zombie block breaking (wood=10, stone=30, cobblestone=50, iron=200, obsidian=500)
+│       │   ├── ZombieDetectionGoal.java   — Goal: stealth detection with noise/light/distance formula (priority 1)
 │       │   ├── ZombieBreakBlockGoal.java  — Goal: zombies break obstructing blocks to reach targets (priority 3)
 │       │   ├── ZombieHordePathGoal.java   — Goal: Blood Moon horde pathing toward nearest player (priority 4)
 │       │   └── ZombieInvestigateGoal.java — Goal: investigate high-heat chunks when idle (priority 5)
@@ -215,7 +220,9 @@ src/main/java/com/sevendaystominecraft/
   - Night speed bonus: +50% movement speed during nighttime (configurable)
   - Radiated regen: 2 HP/sec healing tick (configurable)
   - XP reward includes modifier bonus
-  - **Behavior tree goals** (registered at priorities 3-5, inherited by all 16 subclasses):
+  - **Detection state**: Synced entity data (UNAWARE/SUSPICIOUS/ALERT) with NBT persistence, particle indicators (WITCH for ?, ANGRY_VILLAGER for !)
+  - **Behavior tree goals** (registered at priorities 1-5, inherited by all 16 subclasses):
+    - `ZombieDetectionGoal` (P1): Stealth detection system — scans nearby players every second using formula `detectionChance = (noise × lightFactor) / distance²`; crouching halves noise; Feral Wights get 1.6x multiplier; SUSPICIOUS state lasts 3 seconds before escalating or reverting
     - `ZombieBreakBlockGoal` (P3): Breaks obstructing blocks to reach targets, with block HP system, vanilla break animation, mobGriefing gamerule respect
     - `ZombieHordePathGoal` (P4): During Blood Moon, horde zombies path toward nearest player (64 blocks, 128 on day 21+)
     - `ZombieInvestigateGoal` (P5): When idle, investigates high-heat chunks from heatmap system, wanders locally then re-queries
@@ -225,6 +232,19 @@ src/main/java/com/sevendaystominecraft/
   - Special mechanics per spec §3.2: explosions, projectiles, chain lightning, fire trails, wall climbing, healing aura, screamer spawning, flying dive attacks, ground pound AoE
 - **ZombieConfig** (`zombies.toml`): Per-variant HP/damage/speed overrides, all special mechanic tuning values, modifier multipliers
 - **ModEntities**: Registration with `EntityAttributeCreationEvent` for all 18 types
+
+#### Stealth & Detection System — DONE
+- **DetectionState**: Enum with UNAWARE(0), SUSPICIOUS(1), ALERT(2) and synced entity data in BaseSevenDaysZombie
+- **NoiseManager**: Per-player noise event tracking with 5-second linear decay; noise values: Gunshot=80, Sprint=15, Walk=5, Crouch=1, Block Break=10
+- **NoiseEventHandler**: `@EventBusSubscriber` hooks for player movement (every 10 ticks), block break events, and gunshot (called from GeoRangedWeaponItem)
+- **ZombieDetectionGoal**: Priority 1 goal scanning every 20 ticks; detection formula: `(noise × lightFactor) / distance²`
+  - Light factor: 1.5 (above 10), 1.0 (5-10), 0.5 (below 5)
+  - Crouch reduces noise by 50%
+  - Feral Wights: 25-block detection range (vs 15 normal), 1.6x detection multiplier
+  - Suspicious threshold: detectionChance ≥ 0.1; Alert threshold: ≥ 1.0
+  - Suspicious state: zombie looks toward noise source for 60 ticks (3 seconds), then re-evaluates and either alerts (≥1.0) or returns to unaware
+- **Visual indicators**: Server-side particles every 10 ticks — WITCH particles for SUSPICIOUS, ANGRY_VILLAGER for ALERT
+- **Files**: `stealth/NoiseManager.java`, `stealth/NoiseEventHandler.java`, `entity/zombie/DetectionState.java`, `entity/zombie/ai/ZombieDetectionGoal.java`
 
 #### Heatmap System (Spec §1.3) — DONE
 - **HeatmapData**: Per-chunk SavedData storing heat sources with individual decay rates, persisted to NBT

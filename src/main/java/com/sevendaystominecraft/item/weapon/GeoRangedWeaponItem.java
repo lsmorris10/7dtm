@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.item.weapon;
 
 import com.sevendaystominecraft.entity.projectile.BulletEntity;
+import com.sevendaystominecraft.stealth.NoiseEventHandler;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -210,6 +211,8 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         SoundEvent fireSound = fireSoundSupplier != null ? fireSoundSupplier.get() : SoundEvents.CROSSBOW_SHOOT;
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
                 fireSound, SoundSource.PLAYERS, 1.5f, 1.2f);
+
+        NoiseEventHandler.onGunshot(player);
 
         player.getCooldowns().addCooldown(held, cooldownTicks);
 

@@ -3,11 +3,16 @@ package com.sevendaystominecraft.entity.zombie;
 import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieBreakBlockGoal;
+import com.sevendaystominecraft.entity.zombie.ai.ZombieDetectionGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieHordePathGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieInvestigateGoal;
 import com.sevendaystominecraft.sound.ModSounds;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
@@ -25,6 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class BaseSevenDaysZombie extends Zombie {
 
+    private static final EntityDataAccessor<Integer> DATA_DETECTION_STATE =
+            SynchedEntityData.defineId(BaseSevenDaysZombie.class, EntityDataSerializers.INT);
+
     protected final ZombieVariant variant;
     protected ZombieVariant modifier;
     protected boolean isHordeMob;
@@ -39,8 +47,23 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_DETECTION_STATE, DetectionState.UNAWARE.getId());
+    }
+
+    public DetectionState getDetectionState() {
+        return DetectionState.fromId(entityData.get(DATA_DETECTION_STATE));
+    }
+
+    public void setDetectionState(DetectionState state) {
+        entityData.set(DATA_DETECTION_STATE, state.getId());
+    }
+
+    @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(1, new ZombieDetectionGoal(this));
         goalSelector.addGoal(3, new ZombieBreakBlockGoal(this));
         goalSelector.addGoal(4, new ZombieHordePathGoal(this));
         goalSelector.addGoal(5, new ZombieInvestigateGoal(this));
@@ -92,10 +115,36 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     @Override
+    public void setTarget(@Nullable net.minecraft.world.entity.LivingEntity target) {
+        if (!level().isClientSide() && target != null && getDetectionState() != DetectionState.ALERT) {
+            return;
+        }
+        super.setTarget(target);
+    }
+
+    public void forceAlertTarget(net.minecraft.world.entity.LivingEntity target) {
+        setDetectionState(DetectionState.ALERT);
+        super.setTarget(target);
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        boolean result = super.hurtServer(level, source, amount);
+        if (result && source.getEntity() instanceof net.minecraft.world.entity.LivingEntity attacker) {
+            forceAlertTarget(attacker);
+        }
+        return result;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if (!statsApplied && !level().isClientSide()) {
             applyAllStats();
+        }
+
+        if (!level().isClientSide() && getDetectionState() != DetectionState.ALERT && getTarget() != null) {
+            super.setTarget(null);
         }
 
         if (!level().isClientSide() && modifier == ZombieVariant.RADIATED && tickCount % 20 == 0) {
@@ -116,6 +165,19 @@ public class BaseSevenDaysZombie extends Zombie {
                 applyNameTag();
             }
         }
+
+        if (!level().isClientSide() && level() instanceof ServerLevel serverLevel && tickCount % 10 == 0) {
+            DetectionState state = getDetectionState();
+            if (state == DetectionState.SUSPICIOUS) {
+                serverLevel.sendParticles(ParticleTypes.WITCH,
+                        getX(), getY() + getBbHeight() + 0.5, getZ(),
+                        3, 0.1, 0.1, 0.1, 0.01);
+            } else if (state == DetectionState.ALERT) {
+                serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER,
+                        getX(), getY() + getBbHeight() + 0.5, getZ(),
+                        3, 0.1, 0.1, 0.1, 0.0);
+            }
+        }
     }
 
     private void applyAllStats() {
@@ -134,6 +196,7 @@ public class BaseSevenDaysZombie extends Zombie {
         if (modifier != null) {
             tag.putString("7dtm_modifier", modifier.name());
         }
+        tag.putInt("7dtm_detection", getDetectionState().getId());
     }
 
     @Override
@@ -144,6 +207,9 @@ public class BaseSevenDaysZombie extends Zombie {
             try {
                 modifier = ZombieVariant.valueOf(tag.getString("7dtm_modifier"));
             } catch (IllegalArgumentException ignored) {}
+        }
+        if (tag.contains("7dtm_detection")) {
+            setDetectionState(DetectionState.fromId(tag.getInt("7dtm_detection")));
         }
         applyNameTag();
         statsApplied = false;
