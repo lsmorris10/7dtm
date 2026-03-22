@@ -98,6 +98,12 @@ public final class WorkstationRecipes {
         recipes.add(recipe(List.of(ing(Items.STICK, 2), ing(Items.STRING, 1)), new ItemStack(ModItems.SPLINT.get(), 1), 0));
         recipes.add(recipe(List.of(ing(Items.GLASS, 4), ing(ModItems.FORGED_IRON.get(), 2), ing(ModItems.DUCT_TAPE.get(), 1)),
                 new ItemStack(com.sevendaystominecraft.block.ModBlocks.DEW_COLLECTOR_BLOCK.get().asItem()), 0));
+        recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 5), ing(ModItems.MECHANICAL_PARTS.get(), 3), ing(ModItems.ELECTRICAL_PARTS.get(), 2)),
+                new ItemStack(com.sevendaystominecraft.block.ModBlocks.GENERATOR_BANK_BLOCK.get().asItem()), 0));
+        recipes.add(recipe(List.of(ing(ModItems.FORGED_IRON.get(), 3), ing(ModItems.ELECTRICAL_PARTS.get(), 4), ing(ModItems.DUCT_TAPE.get(), 2)),
+                new ItemStack(com.sevendaystominecraft.block.ModBlocks.BATTERY_BANK_BLOCK.get().asItem()), 0));
+        recipes.add(recipe(List.of(ing(Items.GLASS, 4), ing(ModItems.ELECTRICAL_PARTS.get(), 3), ing(ModItems.FORGED_IRON.get(), 2)),
+                new ItemStack(com.sevendaystominecraft.block.ModBlocks.SOLAR_PANEL_BLOCK.get().asItem()), 0));
         RECIPES.put(WorkstationType.WORKBENCH, recipes);
     }
 

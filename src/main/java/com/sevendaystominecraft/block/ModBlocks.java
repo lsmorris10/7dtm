@@ -13,6 +13,9 @@ import com.sevendaystominecraft.block.farming.FarmPlotBlock;
 import com.sevendaystominecraft.block.loot.LootContainerBlock;
 import com.sevendaystominecraft.block.loot.LootContainerType;
 import com.sevendaystominecraft.block.loot.VendingMachineBlock;
+import com.sevendaystominecraft.block.power.BatteryBankBlock;
+import com.sevendaystominecraft.block.power.GeneratorBankBlock;
+import com.sevendaystominecraft.block.power.SolarPanelBlock;
 import com.sevendaystominecraft.block.vehicle.VehicleWreckageBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationBlock;
 import com.sevendaystominecraft.block.workstation.WorkstationType;
@@ -286,6 +289,28 @@ public class ModBlocks {
                     .setId(blockKey("dew_collector"))
                     .strength(2.0f)
                     .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> GENERATOR_BANK_BLOCK = registerWithItem("generator_bank",
+            () -> new GeneratorBankBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("generator_bank"))
+                    .strength(5.0f)
+                    .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> BATTERY_BANK_BLOCK = registerWithItem("battery_bank",
+            () -> new BatteryBankBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("battery_bank"))
+                    .strength(5.0f)
+                    .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> SOLAR_PANEL_BLOCK = registerWithItem("solar_panel",
+            () -> new SolarPanelBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("solar_panel"))
+                    .strength(2.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
     private static Supplier<Block> registerBlock(String name, Supplier<Block> blockSupplier) {

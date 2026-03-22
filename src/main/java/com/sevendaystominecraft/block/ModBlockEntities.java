@@ -3,6 +3,9 @@ package com.sevendaystominecraft.block;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.farming.DewCollectorBlockEntity;
 import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
+import com.sevendaystominecraft.block.power.BatteryBankBlockEntity;
+import com.sevendaystominecraft.block.power.GeneratorBankBlockEntity;
+import com.sevendaystominecraft.block.power.SolarPanelBlockEntity;
 import com.sevendaystominecraft.block.workstation.WorkstationBlockEntity;
 
 import net.minecraft.core.registries.Registries;
@@ -49,5 +52,23 @@ public class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register("dew_collector", () ->
                     new BlockEntityType<>(DewCollectorBlockEntity::new,
                             ModBlocks.DEW_COLLECTOR_BLOCK.get()
+                    ));
+
+    public static final Supplier<BlockEntityType<GeneratorBankBlockEntity>> GENERATOR_BANK_BE =
+            BLOCK_ENTITY_TYPES.register("generator_bank", () ->
+                    new BlockEntityType<>(GeneratorBankBlockEntity::new,
+                            ModBlocks.GENERATOR_BANK_BLOCK.get()
+                    ));
+
+    public static final Supplier<BlockEntityType<BatteryBankBlockEntity>> BATTERY_BANK_BE =
+            BLOCK_ENTITY_TYPES.register("battery_bank", () ->
+                    new BlockEntityType<>(BatteryBankBlockEntity::new,
+                            ModBlocks.BATTERY_BANK_BLOCK.get()
+                    ));
+
+    public static final Supplier<BlockEntityType<SolarPanelBlockEntity>> SOLAR_PANEL_BE =
+            BLOCK_ENTITY_TYPES.register("solar_panel", () ->
+                    new BlockEntityType<>(SolarPanelBlockEntity::new,
+                            ModBlocks.SOLAR_PANEL_BLOCK.get()
                     ));
 }

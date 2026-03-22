@@ -82,9 +82,26 @@ src/main/java/com/sevendaystominecraft/
 │   │   ├── UpgradeableBlock.java     — 6-tier upgradeable block (Wood Frame→Reinforced Wood→Cobblestone→Concrete→Reinforced Concrete→Steel) with right-click upgrade via repair hammer
 │   │   ├── WoodSpikesBlock.java      — Contact damage trap (4 dmg), 10 durability, degrades on hit
 │   │   ├── IronSpikesBlock.java      — Contact damage trap (8 dmg), 20 durability, degrades on hit
-│   │   ├── BladeTrapBlock.java       — AoE damage trap (6 dmg), hits entities within 1 block every 20 ticks
-│   │   ├── ElectricFencePostBlock.java — Contact damage (5 dmg) + stun (slowness V for 2s) on entity touch
+│   │   ├── BladeTrapBlock.java       — AoE damage trap (6 dmg), only when powered; POWERED blockstate property
+│   │   ├── ElectricFencePostBlock.java — Contact damage (5 dmg) + stun only when powered; POWERED blockstate property
 │   │   └── LandClaimBlock.java       — 41-block protection radius preventing zombie spawns, one per player
+│   ├── power/
+│   │   ├── PowerGridManager.java     — SavedData tracking wire connections between power sources and devices
+│   │   ├── PowerSourceBlockEntity.java — Interface for blocks that produce power
+│   │   ├── PoweredDeviceBlock.java   — Marker interface for blocks that consume power
+│   │   ├── GeneratorBankBlock.java   — BaseEntityBlock for generator (fuel-powered)
+│   │   ├── GeneratorBankBlockEntity.java — Block entity: Gas Can fuel slot, 6000 tick burn time, 100W output
+│   │   ├── BatteryBankBlock.java     — BaseEntityBlock for battery (energy storage, also a PoweredDevice)
+│   │   ├── BatteryBankBlockEntity.java — Block entity: 1000 EU max, charges from connected sources, discharges to devices
+│   │   ├── SolarPanelBlock.java      — BaseEntityBlock for solar panel (daytime power, no fuel)
+│   │   ├── SolarPanelBlockEntity.java — Block entity: 30W output during daytime with sky visibility
+│   │   ├── GeneratorMenu.java        — Container menu for Generator GUI (fuel slot + power display)
+│   │   ├── GeneratorScreen.java      — Client-side GUI for Generator (fuel bar, power output, status)
+│   │   ├── BatteryMenu.java          — Container menu for Battery GUI (charge level display)
+│   │   ├── BatteryScreen.java        — Client-side GUI for Battery (charge bar, percentage)
+│   │   ├── PowerSlotContainer.java   — Container adapter for Generator fuel slot
+│   │   ├── WireConnectionHandler.java — Event handler: Electrical Parts right-click to link source→device
+│   │   └── PowerWireRenderer.java    — Server-side particle spawning for wire visualization
 │   ├── farming/
 │   │   ├── CropBlock.java          — Base crop block with 4 growth stages (AGE 0-3), randomTick growth, harvest with Green Thumb perk integration
 │   │   ├── FarmPlotBlock.java      — Tilled soil block that crops must be planted on (doesn't revert)

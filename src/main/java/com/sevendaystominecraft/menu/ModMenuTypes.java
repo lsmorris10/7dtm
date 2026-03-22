@@ -3,6 +3,8 @@ package com.sevendaystominecraft.menu;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.farming.DewCollectorMenu;
 import com.sevendaystominecraft.block.loot.LootContainerMenu;
+import com.sevendaystominecraft.block.power.BatteryMenu;
+import com.sevendaystominecraft.block.power.GeneratorMenu;
 import com.sevendaystominecraft.block.workstation.WorkstationMenu;
 import com.sevendaystominecraft.trader.TraderMenu;
 
@@ -33,4 +35,12 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<DewCollectorMenu>> DEW_COLLECTOR_MENU =
             MENU_TYPES.register("dew_collector", () ->
                     IMenuTypeExtension.create(DewCollectorMenu::fromNetwork));
+
+    public static final Supplier<MenuType<GeneratorMenu>> GENERATOR_MENU =
+            MENU_TYPES.register("generator", () ->
+                    IMenuTypeExtension.create(GeneratorMenu::fromNetwork));
+
+    public static final Supplier<MenuType<BatteryMenu>> BATTERY_MENU =
+            MENU_TYPES.register("battery", () ->
+                    IMenuTypeExtension.create(BatteryMenu::fromNetwork));
 }

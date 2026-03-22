@@ -169,6 +169,9 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.IRON_SPIKES.get());
                         output.accept(ModBlocks.BLADE_TRAP.get());
                         output.accept(ModBlocks.ELECTRIC_FENCE_POST.get());
+                        output.accept(ModBlocks.GENERATOR_BANK_BLOCK.get());
+                        output.accept(ModBlocks.BATTERY_BANK_BLOCK.get());
+                        output.accept(ModBlocks.SOLAR_PANEL_BLOCK.get());
                         output.accept(ModBlocks.LAND_CLAIM_BLOCK.get());
                         output.accept(ModItems.REPAIR_HAMMER.get());
                         output.accept(ModItems.WRENCH.get());

@@ -217,5 +217,8 @@
   "item.sevendaystominecraft.coffee": "Coffee",
   "item.sevendaystominecraft.hobo_stew": "Hobo Stew",
   "item.sevendaystominecraft.sham_chowder": "Sham Chowder",
-  "item.sevendaystominecraft.baked_potato_meal": "Baked Potato"
+  "item.sevendaystominecraft.baked_potato_meal": "Baked Potato",
+  "block.sevendaystominecraft.generator_bank": "Generator Bank",
+  "block.sevendaystominecraft.battery_bank": "Battery Bank",
+  "block.sevendaystominecraft.solar_panel": "Solar Panel"
 }
