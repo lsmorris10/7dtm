@@ -123,8 +123,8 @@ public class BigMapScreen extends Screen {
 
         double radians = Math.toRadians(yaw);
         int arrowLen = 8;
-        int arrowEndX = cx + (int) (Math.sin(radians) * arrowLen);
-        int arrowEndY = cy - (int) (Math.cos(radians) * arrowLen);
+        int arrowEndX = cx - (int) (Math.sin(radians) * arrowLen);
+        int arrowEndY = cy + (int) (Math.cos(radians) * arrowLen);
 
         drawLine(graphics, cx, cy, arrowEndX, arrowEndY, PLAYER_DOT_COLOR);
     }
