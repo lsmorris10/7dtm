@@ -23,6 +23,8 @@ public class TraderConfig {
     public final ModConfigSpec.IntValue syncRangeBlocks;
     public final ModConfigSpec.IntValue tier1MaxDistance;
     public final ModConfigSpec.IntValue tier2MaxDistance;
+    public final ModConfigSpec.IntValue maxElevation;
+    public final ModConfigSpec.IntValue maxSlopeVariance;
 
     TraderConfig(ModConfigSpec.Builder builder) {
 
@@ -36,13 +38,13 @@ public class TraderConfig {
 
         minChunkSpacing = builder
                 .comment("Minimum chunk distance between any two trader outposts.",
-                         "25 chunks = roughly 400 blocks apart.")
-                .defineInRange("minChunkSpacing", 25, 10, 64);
+                         "55 chunks = roughly 880 blocks apart.")
+                .defineInRange("minChunkSpacing", 55, 10, 128);
 
         spawnChanceDenominator = builder
                 .comment("1-in-N chance per new chunk to attempt placing a trader outpost.",
-                         "Lower = more traders. Default 30.")
-                .defineInRange("spawnChanceDenominator", 30, 5, 200);
+                         "Lower = more traders. Default 200.")
+                .defineInRange("spawnChanceDenominator", 200, 5, 1000);
 
         protectionRadius = builder
                 .comment("Radius in blocks around each trader where zombie spawns and block breaking are suppressed.",
@@ -68,6 +70,16 @@ public class TraderConfig {
                 .comment("Traders within this distance from spawn stock Tier 2 items.",
                          "Beyond this distance, traders stock Tier 3+ items. Default 800.")
                 .defineInRange("tier2MaxDistance", 800, 200, 5000);
+
+        maxElevation = builder
+                .comment("Maximum surface Y elevation at which a trader outpost can spawn.",
+                         "Prevents traders from appearing on mountain peaks. Default 100.")
+                .defineInRange("maxElevation", 100, 50, 256);
+
+        maxSlopeVariance = builder
+                .comment("Maximum allowed slope variance (difference between highest and lowest",
+                         "sample points) for a trader outpost location. Default 6.")
+                .defineInRange("maxSlopeVariance", 6, 2, 20);
 
         builder.pop();
     }

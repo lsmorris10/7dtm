@@ -6,6 +6,7 @@ import com.sevendaystominecraft.entity.ModEntities;
 import com.sevendaystominecraft.territory.TerritoryData;
 import com.sevendaystominecraft.territory.TerritoryTier;
 import com.sevendaystominecraft.territory.TerritoryType;
+import com.sevendaystominecraft.territory.TerrainValidator;
 import com.sevendaystominecraft.territory.VillageClusterGenerator;
 import com.sevendaystominecraft.territory.SleeperZombieManager;
 import com.sevendaystominecraft.territory.TerritoryRecord;
@@ -69,9 +70,18 @@ public class TraderSpawnHandler {
         tryPlaceTraderOutpost(serverLevel, blockX, blockZ);
     }
 
+    private static final int SLOPE_CHECK_HALF = 8;
+
     private static boolean tryPlaceTraderOutpost(ServerLevel serverLevel, int blockX, int blockZ) {
         int surfaceY = serverLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockX, blockZ);
         if (surfaceY <= 0) return false;
+
+        int maxElevation = TraderConfig.INSTANCE.maxElevation.get();
+        if (surfaceY > maxElevation) return false;
+
+        int slopeVariance = TerrainValidator.getSlopeVariance(serverLevel, blockX, blockZ, SLOPE_CHECK_HALF, SLOPE_CHECK_HALF);
+        int maxSlope = TraderConfig.INSTANCE.maxSlopeVariance.get();
+        if (slopeVariance > maxSlope) return false;
 
         BlockPos origin = new BlockPos(blockX, surfaceY, blockZ);
         if (serverLevel.getBlockState(origin).liquid() || serverLevel.getBlockState(origin.below()).liquid()) {
@@ -83,9 +93,9 @@ public class TraderSpawnHandler {
         TerritoryTier tier = TerritoryTier.fromNumber(1);
         TerritoryType type = TerritoryType.TRADER_OUTPOST;
 
+        VillageClusterGenerator.VillageResult villageResult;
         try {
-            VillageClusterGenerator.VillageResult villageResult =
-                    VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random);
+            villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random);
 
             if (villageResult == null) return false;
 
@@ -100,7 +110,11 @@ public class TraderSpawnHandler {
             return false;
         }
 
-        spawnTraderEntity(serverLevel, origin);
+        BlockPos traderPos = origin;
+        if (villageResult.buildingCenters != null && !villageResult.buildingCenters.isEmpty()) {
+            traderPos = villageResult.buildingCenters.get(0);
+        }
+        spawnTraderEntity(serverLevel, traderPos);
         return true;
     }
 
