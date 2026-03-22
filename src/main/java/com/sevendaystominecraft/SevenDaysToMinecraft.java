@@ -18,6 +18,7 @@ import com.sevendaystominecraft.config.StructuralIntegrityConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.client.ADSHandler;
 import com.sevendaystominecraft.client.CompassOverlay;
+import com.sevendaystominecraft.client.DebuffOverlayRenderer;
 import com.sevendaystominecraft.client.InventoryMapButton;
 import com.sevendaystominecraft.client.MinimapOverlay;
 import com.sevendaystominecraft.client.QuestHudOverlay;
@@ -98,6 +99,7 @@ public class SevenDaysToMinecraft {
             modEventBus.addListener(MinimapOverlay::onRegisterGuiLayers);
             modEventBus.addListener(TerritoryAnnouncementOverlay::onRegisterGuiLayers);
             modEventBus.addListener(QuestHudOverlay::onRegisterGuiLayers);
+            modEventBus.addListener(DebuffOverlayRenderer::onRegisterGuiLayers);
             modEventBus.addListener(ModKeyBindings::onRegisterKeyMappings);
             NeoForge.EVENT_BUS.addListener(StatsHudOverlay::onRenderGuiLayerPre);
             NeoForge.EVENT_BUS.addListener(ModKeyBindings::onClientTick);

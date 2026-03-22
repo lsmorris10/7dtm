@@ -120,6 +120,8 @@ public class SurvivalConfig {
     public final ModConfigSpec.IntValue hypothermiaHpDrainInterval;
 
     public final ModConfigSpec.DoubleValue hyperthermiaStaminaRegenMult;
+    public final ModConfigSpec.DoubleValue hyperthermiaHpDrain;
+    public final ModConfigSpec.IntValue hyperthermiaHpDrainInterval;
 
     // ── Temperature ─────────────────────────────────────────────────────
 
@@ -302,6 +304,12 @@ public class SurvivalConfig {
         hyperthermiaStaminaRegenMult = builder
                 .comment("Hyperthermia stamina regen multiplier (0.5 = 50% reduction)")
                 .defineInRange("hyperthermiaStaminaRegenMult", 0.5, 0.0, 1.0);
+        hyperthermiaHpDrain = builder
+                .comment("Hyperthermia HP drain per interval (0.1)")
+                .defineInRange("hyperthermiaHpDrain", 0.1, 0.0, 10.0);
+        hyperthermiaHpDrainInterval = builder
+                .comment("Hyperthermia HP drain interval in ticks (40 = every 2 sec)")
+                .defineInRange("hyperthermiaHpDrainInterval", 40, 1, 1200);
 
         builder.pop();
 

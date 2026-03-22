@@ -548,6 +548,14 @@ public class PlayerStatsHandler {
             }
         }
 
+        if (stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_HYPERTHERMIA)) {
+            int interval = cfg.hyperthermiaHpDrainInterval.get();
+            if (player.tickCount % interval == 0) {
+                player.hurtServer(serverLevel, player.damageSources().magic(),
+                        cfg.hyperthermiaHpDrain.get().floatValue());
+            }
+        }
+
         boolean frozen = stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_ELECTROCUTED)
                 || stats.hasDebuff(SevenDaysPlayerStats.DEBUFF_STUNNED);
         applyDebuffModifier(player, FREEZE_SLOWDOWN_ID, frozen, -1.0f);

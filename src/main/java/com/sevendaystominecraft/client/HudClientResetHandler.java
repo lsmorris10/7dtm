@@ -19,6 +19,7 @@ public class HudClientResetHandler {
         StatsHudOverlay.resetAreaState();
         TraderClientState.reset();
         QuestClientState.reset();
+        DebuffOverlayRenderer.reset();
     }
 
     @SubscribeEvent
@@ -33,11 +34,13 @@ public class HudClientResetHandler {
         StatsHudOverlay.resetAreaState();
         TraderClientState.reset();
         QuestClientState.reset();
+        DebuffOverlayRenderer.reset();
     }
 
     @SubscribeEvent
     public static void onPlayerClone(ClientPlayerNetworkEvent.Clone event) {
         TerritoryAnnouncement.reset();
         StatsHudOverlay.resetAreaState();
+        DebuffOverlayRenderer.reset();
     }
 }
