@@ -45,8 +45,9 @@ public class VillageClusterGenerator {
     }
 
     private static final int MIN_BUILDINGS = 4;
-    private static final int MAX_BUILDINGS = 12;
-    private static final int BUILDING_SPACING = 18;
+    private static final int MAX_BUILDINGS = 7;
+    private static final int BUILDING_SPACING = 26;
+    private static final int BUILDING_GAP = 4;
     private static final int PATH_BLOCK_RADIUS = 1;
 
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random) {
@@ -60,6 +61,7 @@ public class VillageClusterGenerator {
         List<LootContainerType> allLootTypes = new ArrayList<>();
         List<VillageBuildingType> types = new ArrayList<>();
         List<BlockPos> placedCenters = new ArrayList<>();
+        List<int[]> placedFootprints = new ArrayList<>();
 
         int surfaceY = TerrainValidator.findSolidGroundY(level, center.getX(), center.getZ());
         BlockPos villageCenter = new BlockPos(center.getX(), surfaceY, center.getZ());
@@ -85,11 +87,15 @@ public class VillageClusterGenerator {
                 }
             }
 
-            int buildingHalf = buildingType.getMaxSize() / 2;
+            int sizeRange = Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1);
+            int sizeX = buildingType.getMinSize() + random.nextInt(sizeRange);
+            int sizeZ = buildingType.getMinSize() + random.nextInt(sizeRange);
+            int halfX = sizeX / 2;
+            int halfZ = sizeZ / 2;
 
             BlockPos buildingPos = null;
             for (int retry = 0; retry < 3; retry++) {
-                buildingPos = findBuildingPosition(level, villageCenter, placedCenters, random, slotIndex + retry, buildingHalf);
+                buildingPos = findBuildingPosition(level, villageCenter, placedCenters, placedFootprints, random, slotIndex + retry, halfX, halfZ);
                 if (buildingPos != null) break;
             }
             slotIndex++;
@@ -102,10 +108,10 @@ public class VillageClusterGenerator {
             if (NBTTemplateLoader.hasTemplate(buildingType)) {
                 result = NBTTemplateLoader.placeTemplate(level, buildingPos, buildingType, tier, random);
                 if (result == null) {
-                    result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random);
+                    result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random, sizeX, sizeZ);
                 }
             } else {
-                result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random);
+                result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random, sizeX, sizeZ);
             }
 
             if (result != null) {
@@ -120,6 +126,7 @@ public class VillageClusterGenerator {
                 allLootTypes.addAll(result.lootTypes);
                 types.add(buildingType);
                 placedCenters.add(buildingPos);
+                placedFootprints.add(new int[]{halfX, halfZ});
 
                 if (placedCenters.size() > 1) {
                     BlockPos prevCenter = placedCenters.get(placedCenters.size() - 2);
@@ -144,13 +151,14 @@ public class VillageClusterGenerator {
     }
 
     private static BlockPos findBuildingPosition(ServerLevel level, BlockPos center,
-                                                  List<BlockPos> placed, RandomSource random, int index, int buildingHalf) {
+                                                  List<BlockPos> placed, List<int[]> placedFootprints,
+                                                  RandomSource random, int index, int halfX, int halfZ) {
         int gridSize = (int) Math.ceil(Math.sqrt(MAX_BUILDINGS));
         int row = index / gridSize;
         int col = index % gridSize;
 
-        int offsetX = (col - gridSize / 2) * BUILDING_SPACING + random.nextInt(5) - 2;
-        int offsetZ = (row - gridSize / 2) * BUILDING_SPACING + random.nextInt(5) - 2;
+        int offsetX = (col - gridSize / 2) * BUILDING_SPACING + random.nextInt(7) - 3;
+        int offsetZ = (row - gridSize / 2) * BUILDING_SPACING + random.nextInt(7) - 3;
 
         int x = center.getX() + offsetX;
         int z = center.getZ() + offsetZ;
@@ -163,7 +171,7 @@ public class VillageClusterGenerator {
         BlockState surfaceBlock = level.getBlockState(candidate.below());
         if (surfaceBlock.liquid() || level.getBlockState(candidate).liquid()) return null;
 
-        int slopeVariance = TerrainValidator.getSlopeVariance(level, x, z, buildingHalf, buildingHalf);
+        int slopeVariance = TerrainValidator.getSlopeVariance(level, x, z, halfX, halfZ);
         if (slopeVariance > TerrainValidator.MAX_SLOPE_VARIANCE) return null;
 
         if (TerrainValidator.isInLocalDepression(level, x, z, y)) return null;
@@ -178,12 +186,14 @@ public class VillageClusterGenerator {
             }
         }
 
-        for (BlockPos existing : placed) {
-            double dist = Math.sqrt(
-                    Math.pow(candidate.getX() - existing.getX(), 2) +
-                    Math.pow(candidate.getZ() - existing.getZ(), 2)
-            );
-            if (dist < BUILDING_SPACING * 0.6) return null;
+        for (int i = 0; i < placed.size(); i++) {
+            BlockPos existing = placed.get(i);
+            int[] existingFoot = placedFootprints.get(i);
+            int distX = Math.abs(candidate.getX() - existing.getX());
+            int distZ = Math.abs(candidate.getZ() - existing.getZ());
+            int minDistX = halfX + existingFoot[0] + BUILDING_GAP;
+            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP;
+            if (distX < minDistX && distZ < minDistZ) return null;
         }
 
         return candidate;

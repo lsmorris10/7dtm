@@ -12,7 +12,7 @@ public class TerrainValidator {
 
     private static final int RAVINE_CHECK_RADIUS = 18;
     private static final int RAVINE_DEPTH_THRESHOLD = 8;
-    public static final int MAX_SLOPE_VARIANCE = 6;
+    public static final int MAX_SLOPE_VARIANCE = 4;
     private static final int DEPRESSION_CHECK_RADIUS = 20;
     private static final int DEPRESSION_DEPTH_THRESHOLD = 6;
 
@@ -195,7 +195,8 @@ public class TerrainValidator {
                     level.setBlock(floorPos, floorBlock.defaultBlockState(), Block.UPDATE_CLIENTS);
                 }
 
-                for (int depth = 1; ; depth++) {
+                int maxFoundationDepth = 4;
+                for (int depth = 1; depth <= maxFoundationDepth; depth++) {
                     BlockPos below = floorPos.below(depth);
                     if (!level.isLoaded(below) || below.getY() <= level.getMinY()) break;
                     BlockState existing = level.getBlockState(below);

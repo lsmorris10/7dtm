@@ -25,12 +25,12 @@ public enum VillageBuildingType {
     PASS_N_GAS("Pass-n-Gas", 8,
             new LootContainerType[]{LootContainerType.FUEL_CACHE, LootContainerType.VENDING_MACHINE, LootContainerType.TRASH_PILE},
             2, 4, 8, 11, 4,
-            Blocks.WHITE_CONCRETE, Blocks.STONE, Blocks.WHITE_CONCRETE, Blocks.WHITE_CONCRETE),
+            Blocks.LIGHT_GRAY_CONCRETE, Blocks.STONE, Blocks.STONE_SLAB, Blocks.IRON_BARS),
 
     POP_N_PILLS("Pop-n-Pills", 8,
             new LootContainerType[]{LootContainerType.MEDICINE_CABINET, LootContainerType.MEDICINE_CABINET, LootContainerType.CARDBOARD_BOX},
             2, 4, 8, 11, 4,
-            Blocks.WHITE_CONCRETE, Blocks.SMOOTH_QUARTZ, Blocks.WHITE_CONCRETE, Blocks.WHITE_CONCRETE),
+            Blocks.WHITE_CONCRETE, Blocks.SMOOTH_QUARTZ, Blocks.STONE_BRICK_SLAB, Blocks.QUARTZ_PILLAR),
 
     FARM("Farm", 12,
             new LootContainerType[]{LootContainerType.FARM_CRATE, LootContainerType.KITCHEN_CABINET, LootContainerType.CARDBOARD_BOX},

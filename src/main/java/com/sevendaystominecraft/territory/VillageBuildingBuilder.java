@@ -46,6 +46,15 @@ public class VillageBuildingBuilder {
 
         int sizeX = buildingType.getMinSize() + random.nextInt(Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1));
         int sizeZ = buildingType.getMinSize() + random.nextInt(Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1));
+        return build(level, origin, buildingType, tier, random, sizeX, sizeZ);
+    }
+
+    public static BuildingResult build(ServerLevel level, BlockPos origin, VillageBuildingType buildingType,
+                                        TerritoryTier tier, RandomSource random, int sizeX, int sizeZ) {
+        if (buildingType == VillageBuildingType.TRADER_OUTPOST) {
+            return buildTraderCompound(level, origin, tier, random);
+        }
+
         int halfX = sizeX / 2;
         int halfZ = sizeZ / 2;
 
@@ -74,7 +83,7 @@ public class VillageBuildingBuilder {
         placeWindows(level, base, halfX, halfZ, wallHeight, random);
         int doorSide = placeDoor(level, base, halfX, halfZ, buildingType, random);
         if (!willHaveSecondFloor) {
-            buildPeakedRoof(level, base, halfX, halfZ, wallHeight, roofBlock);
+            buildPeakedRoof(level, base, halfX, halfZ, wallHeight, roofBlock, frameBlock);
         }
 
         if (sizeX >= 10 && sizeZ >= 10 && random.nextFloat() < 0.5f) {
@@ -94,7 +103,7 @@ public class VillageBuildingBuilder {
             placeWindows(level, base.above(secondFloorY), halfX, halfZ, wallHeight, random);
             collectInteriorPositions(base.above(secondFloorY), halfX, halfZ, zombieSpawnPos);
             placeLoot(level, base.above(secondFloorY), halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random, doorSide);
-            buildPeakedRoof(level, base, halfX, halfZ, secondFloorY + wallHeight, roofBlock);
+            buildPeakedRoof(level, base, halfX, halfZ, secondFloorY + wallHeight, roofBlock, frameBlock);
         }
 
         return new BuildingResult(base, zombieSpawnPos, lootPos, lootTypes, sizeX, sizeZ);
@@ -289,6 +298,11 @@ public class VillageBuildingBuilder {
 
     private static void buildPeakedRoof(ServerLevel level, BlockPos base, int halfX, int halfZ,
                                          int wallHeight, Block roofBlock) {
+        buildPeakedRoof(level, base, halfX, halfZ, wallHeight, roofBlock, null);
+    }
+
+    private static void buildPeakedRoof(ServerLevel level, BlockPos base, int halfX, int halfZ,
+                                         int wallHeight, Block roofBlock, Block frameBlock) {
         int roofY = wallHeight + 1;
         int peakHeight = Math.min(halfX, halfZ) / 2 + 1;
 
@@ -301,7 +315,10 @@ public class VillageBuildingBuilder {
                 for (int dz = -innerZ; dz <= innerZ; dz++) {
                     boolean isEdge = (dx == -innerX || dx == innerX || dz == -innerZ || dz == innerZ);
                     if (layer < peakHeight - 1 && !isEdge) continue;
-                    setBlock(level, base.offset(dx, roofY + layer, dz), roofBlock.defaultBlockState());
+                    boolean isRidge = (layer == peakHeight - 1) && frameBlock != null;
+                    boolean useFrame = isRidge && ((dx + dz) % 2 == 0);
+                    Block block = useFrame ? frameBlock : roofBlock;
+                    setBlock(level, base.offset(dx, roofY + layer, dz), block.defaultBlockState());
                 }
             }
         }
@@ -312,7 +329,9 @@ public class VillageBuildingBuilder {
         if (topInnerX >= 0 && topInnerZ >= 0) {
             for (int dx = -topInnerX; dx <= topInnerX; dx++) {
                 for (int dz = -topInnerZ; dz <= topInnerZ; dz++) {
-                    setBlock(level, base.offset(dx, topY, dz), roofBlock.defaultBlockState());
+                    boolean useFrame = frameBlock != null && ((dx + dz) % 2 == 0);
+                    Block block = useFrame ? frameBlock : roofBlock;
+                    setBlock(level, base.offset(dx, topY, dz), block.defaultBlockState());
                 }
             }
         }
