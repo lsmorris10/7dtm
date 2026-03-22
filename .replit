@@ -41,25 +41,25 @@ outputType = "console"
 name = "Preview Site"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 -m http.server 3000 --directory public"
-waitForPort = 3000
-
-[workflows.workflow.metadata]
-outputType = "console"
+args = "python3 scripts/preview_server.py"
+waitForPort = 5000
 
 [[workflows.workflow]]
 name = "Texture Tool"
 author = "agent"
 
 [workflows.workflow.metadata]
-outputType = "webview"
+outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd texture-tool && npm install && npm run dev"
-waitForPort = 5000
+waitForPort = 3000
 
 [postMerge]
 path = "scripts/post-merge.sh"
@@ -71,12 +71,4 @@ publicDir = "public"
 
 [[ports]]
 localPort = 3000
-externalPort = 3001
-
-[[ports]]
-localPort = 5000
-externalPort = 80
-
-[[ports]]
-localPort = 5001
 externalPort = 3000

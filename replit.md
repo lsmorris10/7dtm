@@ -368,6 +368,12 @@ src/main/java/com/sevendaystominecraft/
   - Output JAR: `build/libs/sevendaystominecraft-0.1.0-alpha.jar`
   - First run downloads Minecraft + NeoForge dependencies (~several minutes)
   - This is a build workflow (console output type), not a web server
+- **Preview Site**: `python3 scripts/preview_server.py` (webview, port 5000)
+  - Serves `public/` directory with no-cache headers for fresh content during development
+  - Appears as a "Website" in the Library panel
+- **Texture Tool**: `cd texture-tool && npm install && npm run dev` (console, port 3000)
+  - Vite dev server for the texture generation tool
+  - Note: Replit only allows one webview workflow (must use port 5000), so Texture Tool uses console output type. Access it via the forwarded port 3000 link.
 
 ## Environment
 - Java 21 installed via Nix (`jdk21` package)
