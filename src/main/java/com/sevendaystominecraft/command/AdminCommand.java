@@ -55,21 +55,29 @@ public class AdminCommand {
     private static final Map<String, java.util.function.Supplier<EntityType<? extends Mob>>> ZOMBIE_TYPES = new LinkedHashMap<>();
     static {
         ZOMBIE_TYPES.put("walker", ModEntities.WALKER::get);
+        ZOMBIE_TYPES.put("normal", ModEntities.WALKER::get);
         ZOMBIE_TYPES.put("crawler", ModEntities.CRAWLER::get);
         ZOMBIE_TYPES.put("frozen_lumberjack", ModEntities.FROZEN_LUMBERJACK::get);
         ZOMBIE_TYPES.put("bloated_walker", ModEntities.BLOATED_WALKER::get);
         ZOMBIE_TYPES.put("spider_zombie", ModEntities.SPIDER_ZOMBIE::get);
+        ZOMBIE_TYPES.put("spider", ModEntities.SPIDER_ZOMBIE::get);
         ZOMBIE_TYPES.put("feral_wight", ModEntities.FERAL_WIGHT::get);
+        ZOMBIE_TYPES.put("feral", ModEntities.FERAL_WIGHT::get);
+        ZOMBIE_TYPES.put("wight", ModEntities.FERAL_WIGHT::get);
         ZOMBIE_TYPES.put("cop", ModEntities.COP::get);
+        ZOMBIE_TYPES.put("spitter", ModEntities.COP::get);
         ZOMBIE_TYPES.put("screamer", ModEntities.SCREAMER::get);
         ZOMBIE_TYPES.put("zombie_dog", ModEntities.ZOMBIE_DOG::get);
+        ZOMBIE_TYPES.put("dog", ModEntities.ZOMBIE_DOG::get);
         ZOMBIE_TYPES.put("vulture", ModEntities.VULTURE::get);
         ZOMBIE_TYPES.put("demolisher", ModEntities.DEMOLISHER::get);
         ZOMBIE_TYPES.put("mutated_chuck", ModEntities.MUTATED_CHUCK::get);
         ZOMBIE_TYPES.put("zombie_bear", ModEntities.ZOMBIE_BEAR::get);
+        ZOMBIE_TYPES.put("bear", ModEntities.ZOMBIE_BEAR::get);
         ZOMBIE_TYPES.put("nurse", ModEntities.NURSE::get);
         ZOMBIE_TYPES.put("soldier", ModEntities.SOLDIER::get);
         ZOMBIE_TYPES.put("charged", ModEntities.CHARGED::get);
+        ZOMBIE_TYPES.put("irradiated", ModEntities.CHARGED::get);
         ZOMBIE_TYPES.put("infernal", ModEntities.INFERNAL::get);
         ZOMBIE_TYPES.put("behemoth", ModEntities.BEHEMOTH::get);
     }
