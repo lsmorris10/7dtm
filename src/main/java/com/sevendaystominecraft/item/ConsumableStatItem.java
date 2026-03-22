@@ -90,6 +90,25 @@ public class ConsumableStatItem extends Item {
             }
         }
 
+        if (waterRestore > 0 && foodRestore == 0) {
+            com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                    com.sevendaystominecraft.sound.ModSounds.PLAYER_DRINK, player,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
+        } else if (foodRestore > 0) {
+            com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                    com.sevendaystominecraft.sound.ModSounds.PLAYER_EAT_COOKED, player,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+
+        for (String debuff : appliedDebuffs) {
+            if (!debuff.isEmpty()) {
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.PLAYER_DEBUFF_APPLY, player,
+                        net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 0.8f);
+                break;
+            }
+        }
+
         ItemStack stack = player.getItemInHand(hand);
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);

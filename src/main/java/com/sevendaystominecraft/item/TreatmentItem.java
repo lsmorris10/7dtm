@@ -45,6 +45,10 @@ public class TreatmentItem extends Item {
             return InteractionResult.PASS;
         }
 
+        com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                com.sevendaystominecraft.sound.ModSounds.PLAYER_BANDAGE, player,
+                net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
+
         int fieldMedicRank = stats.getPerkRank("field_medic");
         if (fieldMedicRank > 0) {
             float healAmount = 2.0f * fieldMedicRank;

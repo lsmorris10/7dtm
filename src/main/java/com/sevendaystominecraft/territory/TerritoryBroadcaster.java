@@ -85,6 +85,10 @@ public class TerritoryBroadcaster {
                         player.getName().getString(), record.getId(),
                         record.getType().getDisplayName(), record.getTier().getStars());
 
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.TERRITORY_ENTER, player,
+                        net.minecraft.sounds.SoundSource.HOSTILE, 1.0f, 1.0f);
+
                 SleeperZombieManager.awakenSleepers(level, record);
                 record.setAwakened(true);
                 TerritoryData.getOrCreate(level).markDirtyRecord();
@@ -105,6 +109,12 @@ public class TerritoryBroadcaster {
                 SevenDaysToMinecraft.LOGGER.info(
                         "[BZHS Territory] Player {} entered building #{} of territory #{} — awakening sleepers",
                         player.getName().getString(), i, record.getId());
+
+                if (!anyAwakened) {
+                    com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                            com.sevendaystominecraft.sound.ModSounds.TERRITORY_ENTER, player,
+                            net.minecraft.sounds.SoundSource.HOSTILE, 1.0f, 1.0f);
+                }
 
                 SleeperZombieManager.awakenSleepersForBuilding(level, record, i);
                 record.setBuildingAwakened(i);

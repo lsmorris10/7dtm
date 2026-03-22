@@ -58,6 +58,9 @@ public class LootContainerBlock extends BaseEntityBlock {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof LootContainerBlockEntity lootBE) {
                 lootBE.tryGenerateLoot(serverPlayer);
+                com.sevendaystominecraft.sound.ModSounds.playAtBlock(
+                        com.sevendaystominecraft.sound.ModSounds.LOOT_OPEN, level, pos,
+                        net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
                 serverPlayer.openMenu(new MenuProvider() {
                     @Override
                     public Component getDisplayName() {

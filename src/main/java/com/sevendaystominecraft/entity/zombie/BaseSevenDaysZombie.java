@@ -369,8 +369,21 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     @Override
+    public boolean doHurtTarget(ServerLevel level, net.minecraft.world.entity.Entity target) {
+        ModSounds.playAtEntity(ModSounds.ZOMBIE_ATTACK, this,
+                net.minecraft.sounds.SoundSource.HOSTILE, 1.0f,
+                0.8f + this.getRandom().nextFloat() * 0.4f);
+        return super.doHurtTarget(level, target);
+    }
+
+    @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.ZOMBIE_GROAN.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.ZOMBIE_HURT.get();
     }
 
     @Override

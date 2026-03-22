@@ -353,11 +353,25 @@ public class PlayerStatsHandler {
     @SubscribeEvent
     public static void onPlayerDamageZombie(LivingDamageEvent.Pre event) {
         if (!(event.getEntity() instanceof BaseSevenDaysZombie)) return;
-        if (!(event.getSource().getEntity() instanceof Player)) return;
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
 
         float multiplier = SurvivalConfig.INSTANCE.playerDamageMultiplier.get().floatValue();
         if (multiplier != 1.0f) {
             event.setNewDamage(event.getNewDamage() * multiplier);
+        }
+
+        if (event.getSource().is(net.minecraft.world.damagesource.DamageTypes.PLAYER_ATTACK)) {
+            ItemStack held = player.getMainHandItem();
+            if (held.getItem() instanceof net.minecraft.world.item.SwordItem) {
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.MELEE_SWING, player,
+                        net.minecraft.sounds.SoundSource.PLAYERS, 0.8f,
+                        0.9f + player.getRandom().nextFloat() * 0.2f);
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.MELEE_HIT, event.getEntity(),
+                        net.minecraft.sounds.SoundSource.PLAYERS, 1.0f,
+                        0.9f + player.getRandom().nextFloat() * 0.2f);
+            }
         }
     }
 

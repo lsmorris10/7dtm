@@ -137,6 +137,10 @@ public class ZombieDetectionGoal extends Goal {
 
             if (bestChance >= 1.0) {
                 zombie.forceAlertTarget(bestTarget);
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.ZOMBIE_ALERT, zombie,
+                        net.minecraft.sounds.SoundSource.HOSTILE, 1.2f,
+                        0.8f + zombie.getRandom().nextFloat() * 0.4f);
             } else {
                 zombie.setDetectionState(DetectionState.UNAWARE);
             }

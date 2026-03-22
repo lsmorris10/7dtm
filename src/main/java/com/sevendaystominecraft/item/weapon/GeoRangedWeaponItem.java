@@ -296,8 +296,13 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         }
         setReloading(held, true);
         setReloadTicksLeft(held, getEffectiveReloadTicks(player));
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 1.0f, 0.8f);
+        if (com.sevendaystominecraft.sound.ModSounds.isAvailable(com.sevendaystominecraft.sound.ModSounds.WEAPON_RELOAD)) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    com.sevendaystominecraft.sound.ModSounds.WEAPON_RELOAD.get(), SoundSource.PLAYERS, 1.0f, 0.8f);
+        } else {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 1.0f, 0.8f);
+        }
         triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".reload");
     }
 

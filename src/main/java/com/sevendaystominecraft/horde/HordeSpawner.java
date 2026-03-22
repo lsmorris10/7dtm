@@ -68,6 +68,14 @@ public class HordeSpawner {
                 waveIndex + 1, dayNumber, totalSize, perPlayer, players.size()
         );
 
+        if (waveIndex == 0) {
+            for (ServerPlayer player : players) {
+                com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                        com.sevendaystominecraft.sound.ModSounds.ZOMBIE_HORDE_ROAR, player,
+                        net.minecraft.sounds.SoundSource.HOSTILE, 2.0f, 0.6f + level.random.nextFloat() * 0.3f);
+            }
+        }
+
         for (ServerPlayer player : players) {
             int spawned = 0;
             int attempts = 0;

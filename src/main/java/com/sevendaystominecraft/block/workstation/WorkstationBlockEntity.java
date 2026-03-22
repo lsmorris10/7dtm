@@ -231,6 +231,9 @@ public class WorkstationBlockEntity extends BlockEntity {
         if (level instanceof net.minecraft.server.level.ServerLevel sl) {
             applyPerkQualityBonus(sl, output);
             applyCraftingPerkBonuses(sl, output);
+            com.sevendaystominecraft.sound.ModSounds.playAtBlock(
+                    com.sevendaystominecraft.sound.ModSounds.CRAFT_COMPLETE, level, worldPosition,
+                    net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
         }
 
         addToOutput(output);

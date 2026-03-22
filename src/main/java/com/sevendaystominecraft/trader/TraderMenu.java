@@ -140,6 +140,9 @@ public class TraderMenu extends AbstractContainerMenu {
             if (!player.getInventory().add(result)) return false;
 
             removeTokens(player, tokensNeeded);
+            com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                    com.sevendaystominecraft.sound.ModSounds.TRADER_BUY, player,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
             if (record != null) {
                 record.decrementStock(offerIndex);
                 stockData.set(offerIndex, record.getStock(offerIndex));

@@ -150,6 +150,10 @@ public class QuestActionHandler {
 
         quest.markCompleted();
 
+        com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                com.sevendaystominecraft.sound.ModSounds.QUEST_COMPLETE, player,
+                net.minecraft.sounds.SoundSource.PLAYERS, 1.5f, 1.0f);
+
         int rewardXp = def.getRewardXp();
         int tokens = def.getRewardTokens();
 

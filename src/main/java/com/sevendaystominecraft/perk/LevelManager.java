@@ -43,6 +43,10 @@ public class LevelManager {
             stats.setLevel(newLevel);
             stats.addPerkPoints(1);
 
+            com.sevendaystominecraft.sound.ModSounds.playAtEntity(
+                    com.sevendaystominecraft.sound.ModSounds.PLAYER_LEVELUP, player,
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.5f, 1.0f);
+
             if (newLevel % 10 == 0) {
                 stats.addAttributePoints(1);
                 SevenDaysToMinecraft.LOGGER.info("[BZHS] {} reached level {} — earned 1 perk point + 1 bonus attribute point",

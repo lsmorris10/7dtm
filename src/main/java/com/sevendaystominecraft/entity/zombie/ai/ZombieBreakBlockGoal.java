@@ -174,6 +174,11 @@ public class ZombieBreakBlockGoal extends Goal {
         float speedMult = ZombieConfig.INSTANCE.blockBreakSpeedMultiplier.get().floatValue();
         float damagePerTick = (attackDamage * speedMult) / 20.0f;
 
+        if (zombie.tickCount % 20 == 0) {
+            ModSounds.playAtEntity(ModSounds.ZOMBIE_ATTACK, zombie,
+                    SoundSource.HOSTILE, 0.8f, 0.9f + zombie.getRandom().nextFloat() * 0.2f);
+        }
+
         BlockDamageTracker tracker = BlockDamageTracker.getInstance();
         long gameTick = serverLevel.getGameTime();
         float totalDamage = tracker.addDamage(dim, targetBlockPos, zombie.getUUID(), damagePerTick, gameTick);
