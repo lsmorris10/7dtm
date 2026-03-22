@@ -2,6 +2,7 @@ package com.sevendaystominecraft.capability;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.config.SurvivalConfig;
+import com.sevendaystominecraft.entity.projectile.GrenadeEntity;
 import com.sevendaystominecraft.entity.zombie.CopZombie;
 import com.sevendaystominecraft.entity.zombie.DemolisherZombie;
 
@@ -27,6 +28,11 @@ public class ExplosionHandler {
         Explosion explosion = event.getExplosion();
         Vec3 center = explosion.center();
         Entity sourceEntity = explosion.getDirectSourceEntity();
+
+        if (sourceEntity instanceof GrenadeEntity) {
+            event.getAffectedEntities().clear();
+        }
+
         boolean isZombieBlast = sourceEntity instanceof CopZombie || sourceEntity instanceof DemolisherZombie;
 
         SurvivalConfig cfg = SurvivalConfig.INSTANCE;
