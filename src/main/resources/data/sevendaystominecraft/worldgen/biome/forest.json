@@ -18,14 +18,14 @@
   },
   "spawners": {
     "monster": [
-      { "type": "minecraft:zombie", "weight": 60, "minCount": 1, "maxCount": 3 },
-      { "type": "minecraft:skeleton", "weight": 40, "minCount": 1, "maxCount": 2 },
-      { "type": "minecraft:spider", "weight": 30, "minCount": 1, "maxCount": 2 }
+      { "type": "minecraft:zombie", "weight": 60, "min_count": 1, "max_count": 3 },
+      { "type": "minecraft:skeleton", "weight": 40, "min_count": 1, "max_count": 2 },
+      { "type": "minecraft:spider", "weight": 30, "min_count": 1, "max_count": 2 }
     ],
     "creature": [
-      { "type": "minecraft:pig", "weight": 10, "minCount": 2, "maxCount": 4 },
-      { "type": "minecraft:chicken", "weight": 10, "minCount": 2, "maxCount": 4 },
-      { "type": "minecraft:wolf", "weight": 5, "minCount": 1, "maxCount": 3 }
+      { "type": "minecraft:pig", "weight": 10, "min_count": 2, "max_count": 4 },
+      { "type": "minecraft:chicken", "weight": 10, "min_count": 2, "max_count": 4 },
+      { "type": "minecraft:wolf", "weight": 5, "min_count": 1, "max_count": 3 }
     ],
     "ambient": [],
     "underground_water_creature": [],
