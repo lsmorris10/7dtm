@@ -73,11 +73,6 @@ src/main/java/com/sevendaystominecraft/
 │   │   ├── VanillaCampfireHandler.java — Event handler: intercepts right-click on vanilla campfire to open workstation GUI
 │   │   ├── CampfireWorkstationSavedData.java — SavedData storing per-position campfire workstation inventory/fuel/progress
 │   │   └── CampfireDataBlockEntity.java — Adapter bridging CampfireData to WorkstationBlockEntity for menu compatibility
-│   ├── structural/
-│   │   ├── StructuralIntegrityConfig.java — Config: enabled toggle, collapse delay ticks (structural_integrity.toml)
-│   │   ├── StructuralIntegrityRegistry.java — Maps blocks/tiers to SI materials (Wood Frame, Cobblestone, Concrete, Reinforced Concrete, Steel) with max support, weight, horizontal span
-│   │   ├── StructuralIntegrityManager.java — BFS ground-connection check, horizontal span enforcement, delayed collapse scheduling with cascade support
-│   │   └── StructuralIntegrityEventHandler.java — @EventBusSubscriber: hooks BlockEvent.BreakEvent + LevelTickEvent.Post for SI checks
 │   ├── building/
 │   │   ├── UpgradeableBlock.java     — 6-tier upgradeable block (Wood Frame→Reinforced Wood→Cobblestone→Concrete→Reinforced Concrete→Steel) with right-click upgrade via repair hammer
 │   │   ├── WoodSpikesBlock.java      — Contact damage trap (4 dmg), 10 durability, degrades on hit
@@ -207,6 +202,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── HeatmapManager.java         — Server tick handler for heat decay + spawner integration
 │   ├── HeatEventHandler.java       — Event hooks: block break, torch place, explosion, sprint
 │   ├── HeatmapSpawner.java         — Threshold-based zombie spawning (scouts/screamer/mini-horde/waves)
+│   ├── SkyBaseDetector.java        — Anti-sky-base: detects players elevated 10+ blocks above natural ground, adds heat to attract zombies + warning message at 20+ blocks
 │   └── HeatmapCommand.java         — /bzhs heat debug command + /bzhs heat_clear admin command
 ├── horde/
 │   ├── BloodMoonTracker.java       — SavedData for day tracking & blood moon phase state
