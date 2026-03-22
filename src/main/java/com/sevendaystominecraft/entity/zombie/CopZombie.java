@@ -2,6 +2,7 @@ package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.projectile.AcidBallEntity;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -51,6 +52,19 @@ public class CopZombie extends BaseSevenDaysZombie {
     public void tick() {
         super.tick();
         if (bileCooldown > 0) bileCooldown--;
+
+        if (level().isClientSide() && tickCount % 4 == 0) {
+            level().addParticle(ParticleTypes.FALLING_WATER,
+                    getX() + (random.nextFloat() - 0.5) * 0.2,
+                    getEyeY() - 0.1,
+                    getZ() + (random.nextFloat() - 0.5) * 0.2,
+                    0, -0.05, 0);
+            level().addParticle(ParticleTypes.ITEM_SLIME,
+                    getX() + (random.nextFloat() - 0.5) * 0.3,
+                    getEyeY() - 0.2,
+                    getZ() + (random.nextFloat() - 0.5) * 0.3,
+                    0, -0.03, 0);
+        }
     }
 
     @Override

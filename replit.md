@@ -39,9 +39,18 @@ src/main/java/com/sevendaystominecraft/
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
 │   ├── MusicManager.java           — Context-aware music system (Day/Night/Combat/BloodMoon priority)
-│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label + trader
+│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label + trader + particle providers
 │   ├── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
+│   ├── FeralWightRenderer.java     — Feral Wight renderer with emissive red eye layer
+│   ├── SpiderZombieRenderer.java   — Spider Zombie renderer with emissive multi-eye layer
+│   ├── DemolisherRenderer.java     — Demolisher renderer with emissive chest glow layer
+│   ├── ZombieEyeLayer.java         — RenderLayer using RenderType.eyes() for fullbright emissive overlays
 │   ├── TerritoryLabelRenderer.java — Entity renderer for territory floating label (uses EntityRenderState)
+│   ├── particle/
+│   │   ├── ModParticles.java            — Custom particle type registration (radioactive_glow, blood_drip, sonic_pulse)
+│   │   ├── RadioactiveGlowParticle.java — Green fullbright particle for irradiated zombie aura
+│   │   ├── BloodDripParticle.java       — Red gravity-affected particle for crawler blood trail
+│   │   └── SonicPulseParticle.java      — Purple expanding particle for screamer sonic rings
 │   └── premade/
 │       ├── PremadeWorldInfo.java        — Record: id, name, description, source, path
 │       ├── PremadeWorldManager.java     — Scans bundled+external premade worlds, copies to saves

@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.SevenDaysConstants;
+import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieBreakBlockGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieDetectionGoal;
@@ -180,6 +181,26 @@ public class BaseSevenDaysZombie extends Zombie {
                 serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER,
                         getX(), getY() + getBbHeight() + 0.5, getZ(),
                         3, 0.1, 0.1, 0.1, 0.0);
+            }
+        }
+
+        if (level().isClientSide() && modifier == ZombieVariant.RADIATED && tickCount % 3 == 0) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = 0.4 + random.nextDouble() * 0.3;
+            level().addParticle(ModParticles.RADIOACTIVE_GLOW.get(),
+                    getX() + Math.cos(angle) * radius,
+                    getY() + random.nextDouble() * getBbHeight(),
+                    getZ() + Math.sin(angle) * radius,
+                    (random.nextFloat() - 0.5) * 0.01, 0.02, (random.nextFloat() - 0.5) * 0.01);
+        }
+
+        if (level().isClientSide() && variant == ZombieVariant.CRAWLER && tickCount % 5 == 0) {
+            if (getDeltaMovement().horizontalDistanceSqr() > 0.001) {
+                level().addParticle(ModParticles.BLOOD_DRIP.get(),
+                        getX() + (random.nextFloat() - 0.5) * 0.4,
+                        getY() + 0.1,
+                        getZ() + (random.nextFloat() - 0.5) * 0.4,
+                        0, -0.02, 0);
             }
         }
     }

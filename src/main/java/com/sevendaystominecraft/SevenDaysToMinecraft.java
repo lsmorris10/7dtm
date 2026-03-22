@@ -39,6 +39,7 @@ import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 import com.sevendaystominecraft.magazine.ModMagazines;
 import com.sevendaystominecraft.network.ModNetworking;
+import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.sound.ModSounds;
 
 import net.neoforged.api.distmarker.Dist;
@@ -85,6 +86,7 @@ public class SevenDaysToMinecraft {
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ModSounds.SOUND_EVENTS.register(modEventBus);
+        ModParticles.PARTICLE_TYPES.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);
@@ -94,6 +96,7 @@ public class SevenDaysToMinecraft {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(ModEntityRenderers::onRegisterRenderers);
+            modEventBus.addListener(ModEntityRenderers::onRegisterParticleProviders);
             modEventBus.addListener(ModScreens::onRegisterMenuScreens);
             modEventBus.addListener(CompassOverlay::onRegisterGuiLayers);
             modEventBus.addListener(StatsHudOverlay::onRegisterGuiLayers);

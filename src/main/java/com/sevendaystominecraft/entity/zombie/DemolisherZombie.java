@@ -64,6 +64,22 @@ public class DemolisherZombie extends BaseSevenDaysZombie {
                     getRandomX(0.5), getRandomY(), getRandomZ(0.5),
                     0, 0.05, 0);
         }
+
+        if (level().isClientSide() && tickCount % 3 == 0) {
+            float sinAlpha = (float) Math.abs(Math.sin(tickCount * 0.15));
+            if (sinAlpha > 0.3f) {
+                level().addParticle(ParticleTypes.FLAME,
+                        getX() + (random.nextFloat() - 0.5) * 0.3,
+                        getY() + getBbHeight() * 0.5 + (random.nextFloat() - 0.5) * 0.2,
+                        getZ() + (random.nextFloat() - 0.5) * 0.3,
+                        0, 0.01, 0);
+                level().addParticle(ParticleTypes.SMOKE,
+                        getX() + (random.nextFloat() - 0.5) * 0.2,
+                        getY() + getBbHeight() * 0.55,
+                        getZ() + (random.nextFloat() - 0.5) * 0.2,
+                        0, 0.02, 0);
+            }
+        }
     }
 
     @Override

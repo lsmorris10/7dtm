@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -45,6 +46,17 @@ public class SpiderZombie extends BaseSevenDaysZombie {
             wallClimbTicks++;
         } else {
             wallClimbTicks = 0;
+        }
+
+        if (level().isClientSide() && tickCount % 5 == 0) {
+            DustParticleOptions redDust = new DustParticleOptions(0xFFFF1744, 0.4f);
+            for (int i = 0; i < 2; i++) {
+                level().addParticle(redDust,
+                        getX() + (random.nextFloat() - 0.5) * 0.3,
+                        getEyeY() + (random.nextFloat() - 0.5) * 0.15,
+                        getZ() + (random.nextFloat() - 0.5) * 0.3,
+                        0, 0, 0);
+            }
         }
     }
 

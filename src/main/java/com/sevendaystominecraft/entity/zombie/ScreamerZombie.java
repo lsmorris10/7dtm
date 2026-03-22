@@ -1,8 +1,13 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.ModEntities;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -10,10 +15,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -21,15 +24,25 @@ import java.util.EnumSet;
 
 public class ScreamerZombie extends BaseSevenDaysZombie {
 
+    private static final EntityDataAccessor<Boolean> DATA_SCREAMING =
+            SynchedEntityData.defineId(ScreamerZombie.class, EntityDataSerializers.BOOLEAN);
+
     private int screamCooldown = 0;
     private int totalScreams = 0;
     private boolean hasFled = false;
+    private int screamVfxTicks = 0;
     private static final int MAX_SCREAMS = 3;
     private static final int SCREAM_COOLDOWN_TICKS = 600;
     private static final int FLEE_DURATION_TICKS = 100;
 
     public ScreamerZombie(EntityType<? extends Zombie> type, Level level) {
         super(type, level, ZombieVariant.SCREAMER);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SCREAMING, false);
     }
 
     @Override
@@ -56,12 +69,42 @@ public class ScreamerZombie extends BaseSevenDaysZombie {
     public void tick() {
         super.tick();
         if (screamCooldown > 0) screamCooldown--;
+
+        if (!level().isClientSide() && entityData.get(DATA_SCREAMING)) {
+            screamVfxTicks--;
+            if (screamVfxTicks <= 0) {
+                entityData.set(DATA_SCREAMING, false);
+            }
+        }
+
+        if (level().isClientSide() && entityData.get(DATA_SCREAMING) && tickCount % 2 == 0) {
+            int ringCount = 5;
+            float radius = ((tickCount % 20) + 1) * 0.5f;
+            for (int i = 0; i < ringCount; i++) {
+                double angle = (Math.PI * 2.0 / ringCount) * i + (tickCount * 0.3);
+                double px = getX() + Math.cos(angle) * radius;
+                double pz = getZ() + Math.sin(angle) * radius;
+                level().addParticle(ModParticles.SONIC_PULSE.get(),
+                        px, getY() + getBbHeight() * 0.5, pz,
+                        Math.cos(angle) * 0.1, 0, Math.sin(angle) * 0.1);
+            }
+        }
+
+        if (level().isClientSide() && entityData.get(DATA_SCREAMING) && tickCount % 6 == 0) {
+            level().addParticle(ParticleTypes.NOTE,
+                    getX() + (random.nextFloat() - 0.5) * 0.5,
+                    getY() + getBbHeight() + 0.2,
+                    getZ() + (random.nextFloat() - 0.5) * 0.5,
+                    random.nextFloat(), 0, 0);
+        }
     }
 
     private void performScream() {
         if (level().isClientSide() || !(level() instanceof ServerLevel serverLevel)) return;
 
         playSound(SoundEvents.GHAST_SCREAM, 3.0f, 1.5f);
+        screamVfxTicks = 20;
+        entityData.set(DATA_SCREAMING, true);
 
         ZombieConfig cfg = ZombieConfig.INSTANCE;
         int spawnCount = cfg.screamerSpawnMin.get() +
