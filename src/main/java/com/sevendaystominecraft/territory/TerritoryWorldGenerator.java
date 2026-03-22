@@ -14,6 +14,13 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.tags.StructureTags;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.core.SectionPos;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
 public class TerritoryWorldGenerator {
@@ -44,6 +51,14 @@ public class TerritoryWorldGenerator {
         BlockPos candidate = new BlockPos(blockX, 64, blockZ);
 
         if (data.hasNearby(candidate, minSpacing)) return;
+
+        int vanillaExclusionRadius = TerritoryConfig.INSTANCE.vanillaStructureExclusionRadius.get();
+        if (vanillaExclusionRadius > 0 && hasNearbyVanillaStructure(serverLevel, candidate, vanillaExclusionRadius)) {
+            SevenDaysToMinecraft.LOGGER.debug(
+                    "[BZHS Village] Skipped territory at ({}, {}) — vanilla structure nearby (within {} blocks)",
+                    blockX, blockZ, vanillaExclusionRadius);
+            return;
+        }
 
         var biome = serverLevel.getBiome(candidate);
         if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER)) return;
@@ -137,6 +152,59 @@ public class TerritoryWorldGenerator {
         if (baseTemp < 1.0f) return new int[]{2, 3};
         if (baseTemp < 1.5f) return new int[]{3, 4};
         return new int[]{4, 5};
+    }
+
+    private static final net.minecraft.resources.ResourceLocation PILLAGER_OUTPOST_ID =
+            net.minecraft.resources.ResourceLocation.withDefaultNamespace("pillager_outpost");
+
+    private static boolean isExcludedStructure(
+            net.minecraft.core.Registry<Structure> registry, Structure structure) {
+        var holder = registry.wrapAsHolder(structure);
+        if (holder.is(StructureTags.VILLAGE)) return true;
+        if (holder.is(StructureTags.ON_WOODLAND_EXPLORER_MAPS)) return true;
+        if (holder.is(StructureTags.ON_OCEAN_EXPLORER_MAPS)) return true;
+        var key = registry.getKey(structure);
+        return key != null && key.equals(PILLAGER_OUTPOST_ID);
+    }
+
+    private static boolean hasNearbyVanillaStructure(ServerLevel level, BlockPos candidate, int radiusBlocks) {
+        var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        int radiusChunks = (radiusBlocks >> 4) + 1;
+        int candidateChunkX = SectionPos.blockToSectionCoord(candidate.getX());
+        int candidateChunkZ = SectionPos.blockToSectionCoord(candidate.getZ());
+        long radiusSq = (long) radiusBlocks * radiusBlocks;
+
+        for (int dx = -radiusChunks; dx <= radiusChunks; dx++) {
+            for (int dz = -radiusChunks; dz <= radiusChunks; dz++) {
+                int cx = candidateChunkX + dx;
+                int cz = candidateChunkZ + dz;
+                ChunkAccess chunk = level.getChunk(cx, cz, ChunkStatus.STRUCTURE_STARTS, false);
+                if (chunk == null) continue;
+                for (var entry : chunk.getAllStarts().entrySet()) {
+                    StructureStart start = entry.getValue();
+                    if (start == null || !start.isValid()) continue;
+                    if (!isExcludedStructure(registry, entry.getKey())) continue;
+                    var bb = start.getBoundingBox();
+                    int closestX = Math.max(bb.minX(), Math.min(candidate.getX(), bb.maxX()));
+                    int closestZ = Math.max(bb.minZ(), Math.min(candidate.getZ(), bb.maxZ()));
+                    long distSq = (long)(candidate.getX() - closestX) * (candidate.getX() - closestX) +
+                                  (long)(candidate.getZ() - closestZ) * (candidate.getZ() - closestZ);
+                    if (distSq <= radiusSq) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        var structureManager = level.structureManager();
+        StructureStart directCheck = structureManager.getStructureWithPieceAt(candidate, StructureTags.VILLAGE);
+        if (directCheck.isValid()) return true;
+        directCheck = structureManager.getStructureWithPieceAt(candidate, StructureTags.ON_WOODLAND_EXPLORER_MAPS);
+        if (directCheck.isValid()) return true;
+        directCheck = structureManager.getStructureWithPieceAt(candidate, StructureTags.ON_OCEAN_EXPLORER_MAPS);
+        if (directCheck.isValid()) return true;
+
+        return false;
     }
 
     public static boolean isInSafeZone(int blockX, int blockZ) {

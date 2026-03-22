@@ -19,6 +19,7 @@ public class TerritoryConfig {
     public final ModConfigSpec.IntValue minChunkSpacing;
     public final ModConfigSpec.IntValue syncRangeBlocks;
     public final ModConfigSpec.IntValue entryTriggerRangeBlocks;
+    public final ModConfigSpec.IntValue vanillaStructureExclusionRadius;
 
     public final ModConfigSpec.IntValue safeZoneRadius;
     public final ModConfigSpec.IntValue midRangeRadius;
@@ -53,6 +54,12 @@ public class TerritoryConfig {
                 .comment("Radius in blocks within which approaching a territory triggers zombie population.",
                          "Zombies are only spawned when a player first enters this range.")
                 .defineInRange("entryTriggerRangeBlocks", 64, 16, 256);
+
+        vanillaStructureExclusionRadius = builder
+                .comment("Radius in blocks around vanilla structures (villages, outposts, etc.)",
+                         "where BZHS territories will not generate. Set to 0 to disable.",
+                         "Default 80 prevents territory/village overlap.")
+                .defineInRange("vanillaStructureExclusionRadius", 80, 0, 256);
 
         builder.pop();
 
