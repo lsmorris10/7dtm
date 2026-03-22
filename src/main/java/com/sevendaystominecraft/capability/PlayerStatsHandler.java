@@ -237,6 +237,11 @@ public class PlayerStatsHandler {
         stats.tickDebuffs();
         applyDebuffEffects(player, stats);
 
+        // ── 6b. Smell Tracking (3.0 Preview) ────────────────────────────
+        if (com.sevendaystominecraft.config.ZombieConfig.INSTANCE.smellTrackingEnabled.get()) {
+            com.sevendaystominecraft.smell.SmellTracker.onPlayerTick(serverPlayer);
+        }
+
         // ── 7. Heatmap Noise (§1.3) ─────────────────────────────────────
         if (player.isSprinting()) {
             com.sevendaystominecraft.heatmap.HeatEventHandler.onPlayerSprint(
@@ -360,6 +365,13 @@ public class PlayerStatsHandler {
             sendStatsToClient(serverPlayer, stats);
             com.sevendaystominecraft.quest.QuestSyncHelper.syncQuests(serverPlayer);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() != null) {
+            com.sevendaystominecraft.smell.SmellTracker.removePlayer(event.getEntity().getUUID());
         }
     }
 

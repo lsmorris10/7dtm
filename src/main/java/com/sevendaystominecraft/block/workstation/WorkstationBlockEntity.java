@@ -218,6 +218,15 @@ public class WorkstationBlockEntity extends BlockEntity {
     private void processRecipe(WorkstationRecipe recipe) {
         recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
         addToOutput(recipe.output().copy());
+
+        if ((workstationType == WorkstationType.CAMPFIRE || workstationType == WorkstationType.GRILL)
+                && level instanceof net.minecraft.server.level.ServerLevel serverLevel
+                && com.sevendaystominecraft.config.ZombieConfig.INSTANCE.smellTrackingEnabled.get()) {
+            for (net.minecraft.server.level.ServerPlayer player : serverLevel.getPlayers(
+                    p -> p.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) < 64)) {
+                com.sevendaystominecraft.smell.SmellTracker.markRecentlyCookedFor(player);
+            }
+        }
     }
 
     private void consumeFromInputSlots(WorkstationRecipe.Ingredient ing, int count) {

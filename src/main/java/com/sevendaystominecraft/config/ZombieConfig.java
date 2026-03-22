@@ -119,6 +119,9 @@ public class ZombieConfig {
     public final ModConfigSpec.IntValue hordePathRangeDay21;
     public final ModConfigSpec.DoubleValue blockHPMultiplier;
 
+    public final ModConfigSpec.BooleanValue smellTrackingEnabled;
+    public final ModConfigSpec.IntValue smellRange;
+
     ZombieConfig(ModConfigSpec.Builder builder) {
         builder.comment("Brutal Zombie Horde Survival — Zombie Configuration",
                        "Per-variant HP/damage/speed overrides (spec §3.1)")
@@ -161,6 +164,12 @@ public class ZombieConfig {
         blockHPMultiplier = builder
                 .comment("Global multiplier for block HP values (higher = blocks take longer to break)")
                 .defineInRange("blockHPMultiplier", 1.0, 0.1, 10.0);
+        smellTrackingEnabled = builder
+                .comment("(3.0 Preview) Enable scent-based tracking — zombies detect players carrying raw meat, bleeding, or who recently cooked")
+                .define("smellTrackingEnabled", false);
+        smellRange = builder
+                .comment("Base smell detection range in blocks (scales with smell value)")
+                .defineInRange("smellRange", 20, 4, 128);
         builder.pop();
 
         builder.push("walker");

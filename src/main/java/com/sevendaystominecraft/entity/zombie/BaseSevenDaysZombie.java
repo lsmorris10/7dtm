@@ -6,6 +6,7 @@ import com.sevendaystominecraft.entity.zombie.ai.ZombieBreakBlockGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieDetectionGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieHordePathGoal;
 import com.sevendaystominecraft.entity.zombie.ai.ZombieInvestigateGoal;
+import com.sevendaystominecraft.entity.zombie.ai.ZombieSmellGoal;
 import com.sevendaystominecraft.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -67,6 +68,9 @@ public class BaseSevenDaysZombie extends Zombie {
         goalSelector.addGoal(3, new ZombieBreakBlockGoal(this));
         goalSelector.addGoal(4, new ZombieHordePathGoal(this));
         goalSelector.addGoal(5, new ZombieInvestigateGoal(this));
+        if (ZombieConfig.INSTANCE.smellTrackingEnabled.get()) {
+            goalSelector.addGoal(6, new ZombieSmellGoal(this));
+        }
     }
 
     @Override
