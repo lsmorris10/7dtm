@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public enum VillageBuildingType {
 
-    RESIDENTIAL("Abandoned House", 20,
+    RESIDENTIAL("Abandoned Neighborhood", 20,
             new LootContainerType[]{LootContainerType.KITCHEN_CABINET, LootContainerType.MEDICINE_CABINET, LootContainerType.BOOKSHELF},
             2, 5, 7, 10, 4,
             Blocks.OAK_PLANKS, Blocks.OAK_PLANKS, Blocks.OAK_SLAB, Blocks.OAK_LOG),

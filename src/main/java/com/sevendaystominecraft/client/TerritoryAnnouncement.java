@@ -2,9 +2,6 @@ package com.sevendaystominecraft.client;
 
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class TerritoryAnnouncement {
 
     public enum Phase { NONE, HOLD, ANIMATE, DONE }
@@ -16,15 +13,19 @@ public class TerritoryAnnouncement {
     private static int ticksInPhase = 0;
     private static String territoryName = "";
     private static int territoryTier = 1;
-    private static final Set<Integer> announcedTerritoryIds = new HashSet<>();
+    private static int currentTerritoryId = -1;
 
     public static void trigger(String name, int tier, int territoryEntityId) {
-        if (announcedTerritoryIds.contains(territoryEntityId)) return;
-        announcedTerritoryIds.add(territoryEntityId);
+        if (territoryEntityId == currentTerritoryId) return;
+        currentTerritoryId = territoryEntityId;
         territoryName = name;
         territoryTier = tier;
         phase = Phase.HOLD;
         ticksInPhase = 0;
+    }
+
+    public static void clearCurrentTerritory() {
+        currentTerritoryId = -1;
     }
 
     public static void tick() {
@@ -74,8 +75,8 @@ public class TerritoryAnnouncement {
         return ANIMATE_TICKS;
     }
 
-    public static boolean hasBeenAnnounced(int territoryEntityId) {
-        return announcedTerritoryIds.contains(territoryEntityId);
+    public static boolean isCurrentTerritory(int territoryEntityId) {
+        return territoryEntityId == currentTerritoryId;
     }
 
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -87,6 +88,6 @@ public class TerritoryAnnouncement {
         ticksInPhase = 0;
         territoryName = "";
         territoryTier = 1;
-        announcedTerritoryIds.clear();
+        currentTerritoryId = -1;
     }
 }

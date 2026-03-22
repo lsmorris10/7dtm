@@ -181,11 +181,6 @@ public class BigMapScreen extends Screen {
                 continue;
             }
 
-            int playerZoneRadius = PLAYER_DOT_SIZE + 12;
-            if (Math.abs(screenX - centerX) < playerZoneRadius + labelWidth / 2 &&
-                Math.abs(screenY - centerY) < playerZoneRadius + mc.font.lineHeight / 2) {
-                continue;
-            }
 
             graphics.fill(boxLeft, boxTop, boxRight, boxBottom, 0x88000000);
 

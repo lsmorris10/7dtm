@@ -4,7 +4,7 @@ import com.sevendaystominecraft.block.loot.LootContainerType;
 
 public enum TerritoryType {
 
-    RESIDENTIAL("Abandoned House",       LootContainerType.KITCHEN_CABINET, LootContainerType.BOOKSHELF),
+    RESIDENTIAL("Abandoned Neighborhood", LootContainerType.KITCHEN_CABINET, LootContainerType.BOOKSHELF),
     COMMERCIAL("Derelict Store",         LootContainerType.CARDBOARD_BOX, LootContainerType.SUPPLY_CRATE),
     INDUSTRIAL("Ruined Factory",         LootContainerType.SUPPLY_CRATE, LootContainerType.MUNITIONS_BOX),
     MILITARY("Military Bunker",          LootContainerType.MUNITIONS_BOX, LootContainerType.GUN_SAFE),

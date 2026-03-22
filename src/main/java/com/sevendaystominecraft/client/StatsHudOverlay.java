@@ -214,6 +214,7 @@ public class StatsHudOverlay {
                 }
             } else {
                 lastNearestTerritoryEntityId = -1;
+                TerritoryAnnouncement.clearCurrentTerritory();
             }
 
             cachedAreaText = sb.toString();
