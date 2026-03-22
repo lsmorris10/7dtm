@@ -1,6 +1,5 @@
 package com.sevendaystominecraft.entity.zombie.ai;
 
-import com.sevendaystominecraft.config.TraderConfig;
 import com.sevendaystominecraft.config.ZombieConfig;
 import com.sevendaystominecraft.entity.zombie.BaseSevenDaysZombie;
 import com.sevendaystominecraft.sound.ModSounds;
@@ -185,9 +184,8 @@ public class ZombieBreakBlockGoal extends Goal {
         }
 
         if (totalDamage >= blockMaxHP) {
-            int protectionRadius = TraderConfig.INSTANCE.protectionRadius.get();
             TraderData traderData = TraderData.getOrCreate(serverLevel);
-            if (traderData.isInProtectionZone(targetBlockPos, protectionRadius)) {
+            if (traderData.isBlockDirectlyBelowTrader(targetBlockPos)) {
                 serverLevel.destroyBlockProgress(breakProgressId, targetBlockPos, -1);
                 tracker.removeBlock(dim, targetBlockPos);
                 targetBlockPos = null;

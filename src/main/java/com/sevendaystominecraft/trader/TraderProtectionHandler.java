@@ -38,10 +38,9 @@ public class TraderProtectionHandler {
         if (!serverLevel.dimension().equals(Level.OVERWORLD)) return;
 
         BlockPos pos = event.getPos();
-        int protectionRadius = TraderConfig.INSTANCE.protectionRadius.get();
         TraderData data = TraderData.getOrCreate(serverLevel);
 
-        if (data.isInProtectionZone(pos, protectionRadius)) {
+        if (data.isBlockDirectlyBelowTrader(pos)) {
             event.setCanceled(true);
         }
     }

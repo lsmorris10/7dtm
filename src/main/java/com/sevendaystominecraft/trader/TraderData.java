@@ -93,6 +93,16 @@ public class TraderData extends SavedData {
         return false;
     }
 
+    public boolean isBlockDirectlyBelowTrader(BlockPos pos) {
+        for (TraderRecord record : tradersById.values()) {
+            BlockPos below = record.getOrigin().below();
+            if (below.equals(pos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void markDirtyRecord() {
         setDirty();
     }
