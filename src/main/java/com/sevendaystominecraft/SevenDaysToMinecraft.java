@@ -94,6 +94,7 @@ public class SevenDaysToMinecraft {
             NeoForge.EVENT_BUS.addListener(TerritoryAnnouncement::onClientTick);
             NeoForge.EVENT_BUS.addListener(InventoryMapButton::onScreenInit);
             NeoForge.EVENT_BUS.addListener(WeaponInputHandler::onClickInput);
+            NeoForge.EVENT_BUS.addListener(WeaponInputHandler::onClientTick);
             NeoForge.EVENT_BUS.addListener(ADSHandler::onPlayerTick);
             NeoForge.EVENT_BUS.addListener(ADSHandler::onComputeFov);
         }

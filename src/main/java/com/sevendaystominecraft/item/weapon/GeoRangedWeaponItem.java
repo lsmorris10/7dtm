@@ -47,6 +47,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
     private final Supplier<SoundEvent> fireSoundSupplier;
     private final double bulletGravity;
     private final int bulletMaxLife;
+    private final boolean fullAuto;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -69,7 +70,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                int magazineCapacity, int reloadTicks, WeaponType weaponType,
                                Supplier<SoundEvent> fireSoundSupplier) {
         this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
-                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, 0.01, 60);
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, 0.01, 60, false);
     }
 
     public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
@@ -77,6 +78,15 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
                                int magazineCapacity, int reloadTicks, WeaponType weaponType,
                                Supplier<SoundEvent> fireSoundSupplier,
                                double bulletGravity, int bulletMaxLife) {
+        this(properties, bulletDamage, cooldownTicks, projectileSpeed, inaccuracy, ammoSupplier,
+                magazineCapacity, reloadTicks, weaponType, fireSoundSupplier, bulletGravity, bulletMaxLife, false);
+    }
+
+    public GeoRangedWeaponItem(Properties properties, float bulletDamage, int cooldownTicks,
+                               float projectileSpeed, float inaccuracy, Supplier<Item> ammoSupplier,
+                               int magazineCapacity, int reloadTicks, WeaponType weaponType,
+                               Supplier<SoundEvent> fireSoundSupplier,
+                               double bulletGravity, int bulletMaxLife, boolean fullAuto) {
         super(properties);
         this.bulletDamage = bulletDamage;
         this.cooldownTicks = cooldownTicks;
@@ -89,6 +99,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         this.fireSoundSupplier = fireSoundSupplier;
         this.bulletGravity = bulletGravity;
         this.bulletMaxLife = bulletMaxLife;
+        this.fullAuto = fullAuto;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
@@ -331,5 +342,9 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
 
     public float getInaccuracy() {
         return inaccuracy;
+    }
+
+    public boolean isFullAuto() {
+        return fullAuto;
     }
 }

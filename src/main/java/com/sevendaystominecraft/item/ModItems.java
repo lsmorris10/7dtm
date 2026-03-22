@@ -152,7 +152,7 @@ public class ModItems {
                     12.0f, 4, 5.25f, 3.0f, () -> AMMO_762.get(),
                     30, 50, GeoRangedWeaponItem.WeaponType.AK47,
                     () -> ModSounds.GUN_FIRE_AK47.get(),
-                    0.005, 200));
+                    0.005, 200, true));
 
     public static final Supplier<Item> GRENADE = ITEMS.register("grenade",
             () -> new GrenadeItem(
