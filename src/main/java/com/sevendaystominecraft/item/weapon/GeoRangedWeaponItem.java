@@ -144,7 +144,7 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         RawAnimation reloadAnim = RawAnimation.begin().thenPlay(prefix + ".reload");
         RawAnimation rackAnim = RawAnimation.begin().thenPlay(prefix + ".rack");
 
-        controllers.add(new AnimationController<>(this, "main_controller", 2, state -> {
+        controllers.add(new AnimationController<>(this, "main_controller", 0, state -> {
             var currentRaw = state.getController().getCurrentRawAnimation();
             if (currentRaw != null && !currentRaw.getAnimationStages().isEmpty()) {
                 String animName = currentRaw.getAnimationStages().get(0).animationName();
@@ -248,10 +248,13 @@ public class GeoRangedWeaponItem extends Item implements GeoItem {
         player.getCooldowns().addCooldown(held, cooldownTicks);
 
         if (!level.isClientSide()) {
-            triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".fire");
+            long itemId = GeoItem.getId(held);
+            String fireAnimName = weaponType.animPrefix + ".fire";
+            stopTriggeredAnim(player, itemId, "main_controller", fireAnimName);
+            triggerAnim(player, itemId, "main_controller", fireAnimName);
 
             if (!unlimitedAmmo && getCurrentAmmo(held) == 0 && weaponType == WeaponType.AK47) {
-                triggerAnim(player, GeoItem.getId(held), "main_controller", weaponType.animPrefix + ".rack");
+                triggerAnim(player, itemId, "main_controller", weaponType.animPrefix + ".rack");
             }
         }
 

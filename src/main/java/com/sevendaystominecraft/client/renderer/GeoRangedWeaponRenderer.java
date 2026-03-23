@@ -66,10 +66,9 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
         switch (context) {
             case FIRST_PERSON_RIGHT_HAND:
                 if (isAk47) {
-                    scale = 0.6f;
+                    scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.4, 0.2, -0.3);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(0.3, -0.1, -0.5);
                     poseStack.mulPose(Axis.ZP.rotationDegrees(-5));
                 } else {
                     scale = 0.5f;
@@ -80,10 +79,9 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 break;
             case FIRST_PERSON_LEFT_HAND:
                 if (isAk47) {
-                    scale = 0.6f;
+                    scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(-0.4, 0.2, -0.3);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(-0.3, -0.1, -0.5);
                     poseStack.mulPose(Axis.ZP.rotationDegrees(5));
                 } else {
                     scale = 0.5f;
@@ -93,12 +91,22 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 }
                 break;
             case THIRD_PERSON_RIGHT_HAND:
+                if (isAk47) {
+                    scale = 0.6f;
+                    poseStack.scale(scale, scale, scale);
+                    poseStack.translate(0.1, 0.3, 0.1);
+                } else {
+                    scale = 0.4f;
+                    poseStack.scale(scale, scale, scale);
+                    poseStack.translate(0.0, 0.5, 0.0);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                }
+                break;
             case THIRD_PERSON_LEFT_HAND:
                 if (isAk47) {
-                    scale = 0.45f;
+                    scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.0, 0.5, -0.2);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(-0.1, 0.3, 0.1);
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
@@ -108,9 +116,9 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 break;
             case GUI:
                 if (isAk47) {
-                    scale = 0.35f;
+                    scale = 0.45f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.0, 0.8, 0.0);
+                    poseStack.translate(0.0, 0.5, 0.0);
                     poseStack.mulPose(Axis.XP.rotationDegrees(-15));
                     poseStack.mulPose(Axis.YP.rotationDegrees(135));
                 } else {
@@ -123,7 +131,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 break;
             case GROUND:
                 if (isAk47) {
-                    scale = 0.3f;
+                    scale = 0.4f;
                 } else {
                     scale = 0.35f;
                 }
@@ -132,7 +140,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 break;
             case FIXED:
                 if (isAk47) {
-                    scale = 0.35f;
+                    scale = 0.45f;
                 } else {
                     scale = 0.45f;
                 }
