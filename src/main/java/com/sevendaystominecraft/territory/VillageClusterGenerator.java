@@ -7,6 +7,7 @@ import com.sevendaystominecraft.block.loot.LootContainerType;
 import com.sevendaystominecraft.block.vehicle.VehicleWreckageBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +50,7 @@ public class VillageClusterGenerator {
     private static final int MIN_BUILDINGS = 4;
     private static final int MAX_BUILDINGS = 7;
     private static final int BUILDING_SPACING = 26;
-    private static final int BUILDING_GAP = 4;
+    private static final int BUILDING_GAP = 7;
     private static final int PATH_BLOCK_RADIUS = 1;
     private static final int ROAD_CONNECTION_DISTANCE = 40;
 
@@ -86,6 +87,16 @@ public class VillageClusterGenerator {
             int halfX = sizeX / 2;
             int halfZ = sizeZ / 2;
 
+            ResourceLocation chosenTemplate = null;
+            if (NBTTemplateLoader.hasTemplate(buildingType)) {
+                chosenTemplate = NBTTemplateLoader.chooseTemplate(buildingType, random);
+                int[] templateSize = NBTTemplateLoader.getTemplateSize(level, chosenTemplate);
+                if (templateSize != null) {
+                    halfX = templateSize[0] / 2;
+                    halfZ = templateSize[1] / 2;
+                }
+            }
+
             BlockPos buildingPos = null;
             for (int retry = 0; retry < 3; retry++) {
                 buildingPos = findBuildingPosition(level, villageCenter, placedCenters, placedFootprints, random, slotIndex + retry, halfX, halfZ);
@@ -98,8 +109,8 @@ public class VillageClusterGenerator {
             }
 
             VillageBuildingBuilder.BuildingResult result;
-            if (NBTTemplateLoader.hasTemplate(buildingType)) {
-                result = NBTTemplateLoader.placeTemplate(level, buildingPos, buildingType, tier, random);
+            if (chosenTemplate != null) {
+                result = NBTTemplateLoader.placeTemplate(level, buildingPos, buildingType, tier, random, chosenTemplate);
                 if (result == null) {
                     result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random, sizeX, sizeZ);
                 }
@@ -108,6 +119,18 @@ public class VillageClusterGenerator {
             }
 
             if (result != null) {
+                int actualHalfX = result.sizeX / 2;
+                int actualHalfZ = result.sizeZ / 2;
+
+                if (hasOverlapWithExisting(result.center, actualHalfX, actualHalfZ, placedCenters, placedFootprints)) {
+                    SevenDaysToMinecraft.LOGGER.warn("[BZHS Village] Post-placement overlap detected for {} at ({}, {}, {}), reserving footprint",
+                            buildingType.name(), result.center.getX(), result.center.getY(), result.center.getZ());
+                    placedCenters.add(result.center);
+                    placedFootprints.add(new int[]{actualHalfX, actualHalfZ});
+                    attempts++;
+                    continue;
+                }
+
                 List<BlockPos> cappedSpawns;
                 if (isTraderCompound) {
                     cappedSpawns = new ArrayList<>();
@@ -123,8 +146,8 @@ public class VillageClusterGenerator {
                 allLootPos.addAll(result.lootPositions);
                 allLootTypes.addAll(result.lootTypes);
                 types.add(buildingType);
-                placedCenters.add(buildingPos);
-                placedFootprints.add(new int[]{halfX, halfZ});
+                placedCenters.add(result.center);
+                placedFootprints.add(new int[]{actualHalfX, actualHalfZ});
             }
             attempts++;
         }
@@ -207,6 +230,20 @@ public class VillageClusterGenerator {
         }
 
         return candidate;
+    }
+
+    private static boolean hasOverlapWithExisting(BlockPos center, int halfX, int halfZ,
+                                                   List<BlockPos> placedCenters, List<int[]> placedFootprints) {
+        for (int i = 0; i < placedCenters.size(); i++) {
+            BlockPos existing = placedCenters.get(i);
+            int[] existingFoot = placedFootprints.get(i);
+            int distX = Math.abs(center.getX() - existing.getX());
+            int distZ = Math.abs(center.getZ() - existing.getZ());
+            int minDistX = halfX + existingFoot[0];
+            int minDistZ = halfZ + existingFoot[1];
+            if (distX < minDistX && distZ < minDistZ) return true;
+        }
+        return false;
     }
 
     private static void buildPath(ServerLevel level, BlockPos from, BlockPos to, Set<BlockPos> roadPositions) {

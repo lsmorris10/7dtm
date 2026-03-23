@@ -62,13 +62,42 @@ public class NBTTemplateLoader {
         return TEMPLATE_CACHE.containsKey(type) && !TEMPLATE_CACHE.get(type).isEmpty();
     }
 
+    public static ResourceLocation chooseTemplate(VillageBuildingType buildingType, RandomSource random) {
+        if (!hasTemplate(buildingType)) return null;
+        List<ResourceLocation> templates = TEMPLATE_CACHE.get(buildingType);
+        return templates.get(random.nextInt(templates.size()));
+    }
+
+    public static int[] getTemplateSize(ServerLevel level, ResourceLocation templateId) {
+        if (templateId == null) return null;
+
+        try {
+            StructureTemplateManager templateManager = level.getStructureManager();
+            Optional<StructureTemplate> templateOpt = templateManager.get(templateId);
+            if (templateOpt.isEmpty()) return null;
+
+            StructureTemplate template = templateOpt.get();
+            var size = template.getSize();
+            return new int[]{size.getX(), size.getZ()};
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static VillageBuildingBuilder.BuildingResult placeTemplate(ServerLevel level, BlockPos origin,
                                                                        VillageBuildingType buildingType,
                                                                        TerritoryTier tier, RandomSource random) {
+        return placeTemplate(level, origin, buildingType, tier, random, null);
+    }
+
+    public static VillageBuildingBuilder.BuildingResult placeTemplate(ServerLevel level, BlockPos origin,
+                                                                       VillageBuildingType buildingType,
+                                                                       TerritoryTier tier, RandomSource random,
+                                                                       ResourceLocation chosenTemplate) {
         if (!hasTemplate(buildingType)) return null;
 
-        List<ResourceLocation> templates = TEMPLATE_CACHE.get(buildingType);
-        ResourceLocation chosen = templates.get(random.nextInt(templates.size()));
+        ResourceLocation chosen = chosenTemplate != null ? chosenTemplate :
+                chooseTemplate(buildingType, random);
 
         try {
             StructureTemplateManager templateManager = level.getStructureManager();
@@ -137,7 +166,7 @@ public class NBTTemplateLoader {
                     chosen, placePos.getX(), placePos.getY(), placePos.getZ(),
                     lootPositions.size(), zombieSpawns.size());
 
-            return new VillageBuildingBuilder.BuildingResult(placePos, zombieSpawns, lootPositions, lootTypes,
+            return new VillageBuildingBuilder.BuildingResult(templateCenter, zombieSpawns, lootPositions, lootTypes,
                     size.getX(), size.getZ());
 
         } catch (Exception e) {
