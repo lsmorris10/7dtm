@@ -108,10 +108,24 @@ public class VillageClusterGenerator {
                 continue;
             }
 
+            if (hasOverlapWithExisting(buildingPos, halfX, halfZ, placedCenters, placedFootprints)) {
+                attempts++;
+                continue;
+            }
+
             VillageBuildingBuilder.BuildingResult result;
             if (chosenTemplate != null) {
-                result = NBTTemplateLoader.placeTemplate(level, buildingPos, buildingType, tier, random, chosenTemplate);
+                BlockPos templateOrigin = buildingPos.offset(-halfX, 0, -halfZ);
+                result = NBTTemplateLoader.placeTemplate(level, templateOrigin, buildingType, tier, random, chosenTemplate);
                 if (result == null) {
+                    int fallbackHalfX = sizeX / 2;
+                    int fallbackHalfZ = sizeZ / 2;
+                    if (fallbackHalfX != halfX || fallbackHalfZ != halfZ) {
+                        if (hasOverlapWithExisting(buildingPos, fallbackHalfX, fallbackHalfZ, placedCenters, placedFootprints)) {
+                            attempts++;
+                            continue;
+                        }
+                    }
                     result = VillageBuildingBuilder.build(level, buildingPos, buildingType, tier, random, sizeX, sizeZ);
                 }
             } else {
@@ -121,15 +135,6 @@ public class VillageClusterGenerator {
             if (result != null) {
                 int actualHalfX = result.sizeX / 2;
                 int actualHalfZ = result.sizeZ / 2;
-
-                if (hasOverlapWithExisting(result.center, actualHalfX, actualHalfZ, placedCenters, placedFootprints)) {
-                    SevenDaysToMinecraft.LOGGER.warn("[BZHS Village] Post-placement overlap detected for {} at ({}, {}, {}), reserving footprint",
-                            buildingType.name(), result.center.getX(), result.center.getY(), result.center.getZ());
-                    placedCenters.add(result.center);
-                    placedFootprints.add(new int[]{actualHalfX, actualHalfZ});
-                    attempts++;
-                    continue;
-                }
 
                 List<BlockPos> cappedSpawns;
                 if (isTraderCompound) {
@@ -239,8 +244,8 @@ public class VillageClusterGenerator {
             int[] existingFoot = placedFootprints.get(i);
             int distX = Math.abs(center.getX() - existing.getX());
             int distZ = Math.abs(center.getZ() - existing.getZ());
-            int minDistX = halfX + existingFoot[0];
-            int minDistZ = halfZ + existingFoot[1];
+            int minDistX = halfX + existingFoot[0] + BUILDING_GAP;
+            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP;
             if (distX < minDistX && distZ < minDistZ) return true;
         }
         return false;
