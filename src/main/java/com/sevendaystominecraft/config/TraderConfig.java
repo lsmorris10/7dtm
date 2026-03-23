@@ -25,6 +25,8 @@ public class TraderConfig {
     public final ModConfigSpec.IntValue tier2MaxDistance;
     public final ModConfigSpec.IntValue maxElevation;
     public final ModConfigSpec.IntValue maxSlopeVariance;
+    public final ModConfigSpec.IntValue maxTradersInRadius;
+    public final ModConfigSpec.IntValue maxTradersCheckRadius;
 
     TraderConfig(ModConfigSpec.Builder builder) {
 
@@ -38,13 +40,13 @@ public class TraderConfig {
 
         minChunkSpacing = builder
                 .comment("Minimum chunk distance between any two trader outposts.",
-                         "55 chunks = roughly 880 blocks apart.")
-                .defineInRange("minChunkSpacing", 55, 10, 128);
+                         "80 chunks = roughly 1280 blocks apart.")
+                .defineInRange("minChunkSpacing", 80, 10, 200);
 
         spawnChanceDenominator = builder
                 .comment("1-in-N chance per new chunk to attempt placing a trader outpost.",
-                         "Lower = more traders. Default 200.")
-                .defineInRange("spawnChanceDenominator", 200, 5, 1000);
+                         "Lower = more traders. Default 400.")
+                .defineInRange("spawnChanceDenominator", 400, 5, 2000);
 
         protectionRadius = builder
                 .comment("Radius in blocks around each trader where zombie spawns and block breaking are suppressed.",
@@ -80,6 +82,16 @@ public class TraderConfig {
                 .comment("Maximum allowed slope variance (difference between highest and lowest",
                          "sample points) for a trader outpost location. Default 6.")
                 .defineInRange("maxSlopeVariance", 6, 2, 20);
+
+        maxTradersInRadius = builder
+                .comment("Maximum number of trader outposts allowed within the check radius.",
+                         "Prevents clustering of traders in one area. Default 2.")
+                .defineInRange("maxTradersInRadius", 2, 1, 10);
+
+        maxTradersCheckRadius = builder
+                .comment("Radius in chunks to check for the max trader limit.",
+                         "100 chunks = roughly 1600 blocks. Default 100.")
+                .defineInRange("maxTradersCheckRadius", 100, 20, 500);
 
         builder.pop();
     }

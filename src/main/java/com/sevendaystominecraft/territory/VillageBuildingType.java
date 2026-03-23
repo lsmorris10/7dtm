@@ -107,14 +107,20 @@ public enum VillageBuildingType {
     }
 
     public static VillageBuildingType weightedRandom(RandomSource random) {
+        return weightedRandomExcluding(random, null);
+    }
+
+    public static VillageBuildingType weightedRandomExcluding(RandomSource random, VillageBuildingType excluded) {
         VillageBuildingType[] values = values();
         int totalWeight = 0;
         for (VillageBuildingType type : values) {
+            if (type == excluded) continue;
             totalWeight += type.spawnWeight;
         }
         int roll = random.nextInt(totalWeight);
         int cumulative = 0;
         for (VillageBuildingType type : values) {
+            if (type == excluded) continue;
             cumulative += type.spawnWeight;
             if (roll < cumulative) return type;
         }

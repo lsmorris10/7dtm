@@ -22,8 +22,8 @@ public class MinimapOverlay {
     private static final ResourceLocation OVERLAY_ID =
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "minimap_hud");
 
-    static final int MAP_SIZE = 128;
-    private static final int MAP_RADIUS = 64;
+    static final int MAP_SIZE = 160;
+    private static final int MAP_RADIUS = 80;
     static final int MARGIN = 8;
     private static final int CORNER_RADIUS = 10;
     private static final int BG_COLOR = 0xAA000000;
@@ -31,7 +31,7 @@ public class MinimapOverlay {
     private static final int PLAYER_DOT_COLOR = 0xFFFFFFFF;
     private static final int PLAYER_DOT_SIZE = 4;
     private static final int OTHER_PLAYER_DOT_SIZE = 3;
-    private static final int SAMPLE_STEP = 4;
+    private static final int SAMPLE_STEP = 2;
     private static final int PIXEL_SIZE = SAMPLE_STEP;
     private static final int COLOR_EASY   = 0xFF44FF44;
     private static final int COLOR_MEDIUM = 0xFFFFCC00;
@@ -107,7 +107,6 @@ public class MinimapOverlay {
 
         renderOtherPlayers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
-        renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
         renderQuestMarkers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
@@ -357,7 +356,7 @@ public class MinimapOverlay {
         int movedX = Math.abs(playerX - cachedPlayerX);
         int movedZ = Math.abs(playerZ - cachedPlayerZ);
 
-        if (terrainCache != null && movedX < 8 && movedZ < 8 && (now - cacheTime) < CACHE_DURATION_MS) {
+        if (terrainCache != null && movedX < 4 && movedZ < 4 && (now - cacheTime) < CACHE_DURATION_MS) {
             return terrainCache;
         }
 

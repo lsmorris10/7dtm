@@ -53,6 +53,20 @@ public class TraderData extends SavedData {
         return false;
     }
 
+    public int countNearby(BlockPos pos, int chunkRadius) {
+        int chunkX = pos.getX() >> 4;
+        int chunkZ = pos.getZ() >> 4;
+        int count = 0;
+        for (TraderRecord record : tradersById.values()) {
+            int rx = record.getOrigin().getX() >> 4;
+            int rz = record.getOrigin().getZ() >> 4;
+            int dx = Math.abs(chunkX - rx);
+            int dz = Math.abs(chunkZ - rz);
+            if (dx <= chunkRadius && dz <= chunkRadius) count++;
+        }
+        return count;
+    }
+
     public TraderRecord getTraderById(int id) {
         return tradersById.get(id);
     }

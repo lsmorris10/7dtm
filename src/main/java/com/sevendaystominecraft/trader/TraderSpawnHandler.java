@@ -61,6 +61,10 @@ public class TraderSpawnHandler {
         BlockPos candidate = new BlockPos(blockX, 64, blockZ);
         if (traderData.hasNearby(candidate, minSpacing)) return;
 
+        int maxInRadius = TraderConfig.INSTANCE.maxTradersInRadius.get();
+        int checkRadius = TraderConfig.INSTANCE.maxTradersCheckRadius.get();
+        if (traderData.countNearby(candidate, checkRadius) >= maxInRadius) return;
+
         TerritoryData territoryData = TerritoryData.getOrCreate(serverLevel);
         if (territoryData.hasNearby(candidate, 5)) return;
 
@@ -95,7 +99,7 @@ public class TraderSpawnHandler {
 
         VillageClusterGenerator.VillageResult villageResult;
         try {
-            villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random);
+            villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, true);
 
             if (villageResult == null) return false;
 
@@ -135,7 +139,7 @@ public class TraderSpawnHandler {
 
         com.sevendaystominecraft.trader.TraderRecord record = data.addTrader(origin, name, tier);
 
-        trader.moveTo(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5, 0f, 0f);
+        trader.moveTo(origin.getX() + 0.5, origin.getY() + 1, origin.getZ() + 0.5, 0f, 0f);
         trader.setTraderName(name);
         trader.setTraderTier(tier);
         trader.setTraderId(record.getId());

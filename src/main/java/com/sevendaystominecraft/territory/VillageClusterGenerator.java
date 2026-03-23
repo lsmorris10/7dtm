@@ -54,6 +54,10 @@ public class VillageClusterGenerator {
     private static final int ROAD_CONNECTION_DISTANCE = 40;
 
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random) {
+        return generate(level, center, tier, random, false);
+    }
+
+    public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean allowTraderBuildings) {
         NBTTemplateLoader.init(level);
 
         int buildingCount = MIN_BUILDINGS + random.nextInt(MAX_BUILDINGS - MIN_BUILDINGS + 1);
@@ -75,13 +79,12 @@ public class VillageClusterGenerator {
         int attempts = 0;
 
         while (types.size() < buildingCount && attempts < maxAttempts) {
-            int i = attempts;
             VillageBuildingType buildingType;
-            if (i == 0 && random.nextFloat() < 0.15f) {
+            if (allowTraderBuildings && attempts == 0 && random.nextFloat() < 0.15f) {
                 buildingType = VillageBuildingType.TRADER_OUTPOST;
                 hasTrader = true;
             } else {
-                buildingType = VillageBuildingType.weightedRandom(random);
+                buildingType = VillageBuildingType.weightedRandomExcluding(random, allowTraderBuildings ? null : VillageBuildingType.TRADER_OUTPOST);
                 if (buildingType == VillageBuildingType.TRADER_OUTPOST && hasTrader) {
                     buildingType = VillageBuildingType.RESIDENTIAL;
                 }
