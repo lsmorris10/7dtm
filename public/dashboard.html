@@ -329,15 +329,15 @@
         <div class="header-icon">&#x2694;</div>
         <h1>BZHS Development History</h1>
       </div>
-      <p>Brutal Zombie Horde Survival — March 12–23, 2026 — 178 tasks, 12 days of development</p>
+      <p>Brutal Zombie Horde Survival — March 12–23, 2026 — 190 tasks, 13 days of development</p>
     </div>
 
     <div class="overall-progress" id="overall-progress"></div>
 
     <div class="top-stats">
-      <div class="stat-card"><div class="val" style="color:#22c55e">175</div><div class="lbl">Tasks Merged</div></div>
+      <div class="stat-card"><div class="val" style="color:#22c55e">187</div><div class="lbl">Tasks Merged</div></div>
       <div class="stat-card"><div class="val" style="color:#f97316">30/39</div><div class="lbl">Milestones Done</div></div>
-      <div class="stat-card"><div class="val" style="color:#8b5cf6">12</div><div class="lbl">Dev Days</div></div>
+      <div class="stat-card"><div class="val" style="color:#8b5cf6">13</div><div class="lbl">Dev Days</div></div>
       <div class="stat-card"><div class="val" style="color:#06b6d4">11</div><div class="lbl">Categories</div></div>
     </div>
 
@@ -575,10 +575,22 @@
       {id:174,title:"Fix trader spawning",category:"survival",status:"merged"}
     ],
     "March 23": [
+      {id:204,title:"Commands guide (docs/commands_guide.md)",category:"docs",status:"merged"},
+      {id:205,title:"Rebuild & deploy latest JAR",category:"deploy",status:"merged"},
+      {id:207,title:"Roads between buildings & vehicles on roads only",category:"map",status:"merged"},
+      {id:208,title:"Fix trader density, floor clipping & minimap quality",category:"survival",status:"merged"},
       {id:209,title:"Territory HUD (show territory & building names)",category:"hud",status:"merged"},
-      {id:210,title:"Trader compounds as safe zones (no zombie spawns)",category:"survival",status:"merged"},
+      {id:210,title:"Trader compounds as zombie-free safe zones",category:"survival",status:"merged"},
+      {id:211,title:"Unique skins for all 5 traders",category:"survival",status:"merged"},
+      {id:212,title:"Fix creative inventory override",category:"hud",status:"merged"},
       {id:213,title:"Full attribute names in inventory UI",category:"hud",status:"merged"},
-      {id:215,title:"Full documentation & website update",category:"docs",status:"merged"}
+      {id:214,title:"Fix building overlap in village clusters",category:"map",status:"merged"},
+      {id:215,title:"Full documentation & website update",category:"docs",status:"merged"},
+      {id:216,title:"Zombie bird flying & player-seeking AI",category:"zombies",status:"merged"},
+      {id:217,title:"Fix zombie drowning & drowned conversion",category:"zombies",status:"merged"},
+      {id:218,title:"Fix AK47 rendering & recoil sync",category:"weapons",status:"merged"},
+      {id:219,title:"Fix mismatched building labels in territory HUD",category:"hud",status:"merged"},
+      {id:220,title:"Fix building overlap clipping & missing zombies",category:"map",status:"merged"}
     ]
   };
 
@@ -774,7 +786,7 @@
     html += '<div class="stat-card"><div class="val" style="color:#3b82f6">' + total + '</div><div class="lbl">Total Tasks</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#22c55e">' + merged + '</div><div class="lbl">Merged</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#ef4444">' + cancelled + '</div><div class="lbl">Cancelled</div></div>';
-    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">12</div><div class="lbl">Dev Days</div></div>';
+    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">13</div><div class="lbl">Dev Days</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#f97316">' + msDone + '/39</div><div class="lbl">Milestones Done</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#06b6d4">' + Object.keys(catsUsed).length + '</div><div class="lbl">Categories</div></div>';
     html += '</div>';

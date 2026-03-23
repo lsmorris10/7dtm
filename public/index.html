@@ -512,7 +512,7 @@
         <span class="completion-bar-pct">77%</span>
       </div>
       <div class="completion-track"><div class="completion-fill" style="width:77%"></div></div>
-      <div class="completion-sub">30 of 39 milestones complete</div>
+      <div class="completion-sub">30 of 39 milestones complete — 187 tasks merged</div>
     </div>
   </section>
 
@@ -521,8 +521,8 @@
     <div class="features-grid">
       <div class="feature-card">
         <span class="icon">🧟</span>
-        <h3>20 Zombie Variants</h3>
-        <p>Dual speed system, stealth detection, coordinated block bashing, and smart A* pathfinding.</p>
+        <h3>22 Zombie Variants</h3>
+        <p>Dual speed system, stealth detection, coordinated block bashing, smart A* pathfinding, and flying zombie types.</p>
       </div>
       <div class="feature-card">
         <span class="icon">🌑</span>
@@ -622,7 +622,7 @@
       <ul class="milestone-list" style="margin-bottom:1.5rem;">
         <li><span class="check">✓</span> Vanilla damage scaling (20 HP base)</li>
         <li><span class="check">✓</span> Doubled day cycle (slower-tick refactor)</li>
-        <li><span class="check">✓</span> 20 zombie variants (including Zombie Bird &amp; Zombie Parrot)</li>
+        <li><span class="check">✓</span> 22 zombie variants (incl. flying Zombie Bird &amp; Zombie Parrot)</li>
         <li><span class="check">✓</span> Smart A* pathfinding with block-break cost</li>
         <li><span class="check">✓</span> Coordinated block bashing (3+ zombies stack damage)</li>
         <li><span class="check">✓</span> Blood Moon atmosphere (red fog, camera shake)</li>
@@ -630,6 +630,10 @@
         <li><span class="check">✓</span> Trademark name sweep (zombie, perk &amp; currency renames)</li>
         <li><span class="check">✓</span> Territory HUD (name display on POI entry)</li>
         <li><span class="check">✓</span> Vehicle wreckage blocks (decorative, drop scrap)</li>
+        <li><span class="check">✓</span> Roads between settlements with vehicles</li>
+        <li><span class="check">✓</span> Unique trader skins &amp; safe zone compounds</li>
+        <li><span class="check">✓</span> Admin commands (/7d2m — spawn, heatmap, loot, time)</li>
+        <li><span class="check">✓</span> Territory-aware building labels in HUD</li>
       </ul>
 
       <div class="coming-section">
@@ -648,20 +652,20 @@
   <div class="section recent-section">
     <h2>Recent Changes</h2>
     <ul class="recent-list">
+      <li><span class="dot">●</span> Building label fix (#219) — territory-aware building selection prevents theme mismatches in HUD</li>
+      <li><span class="dot">●</span> AK47 rendering fix (#218) — corrected first-person model + recoil sync</li>
+      <li><span class="dot">●</span> Zombie drowning fix (#217) — zombies no longer convert to Drowned in water</li>
+      <li><span class="dot">●</span> Flying zombie AI (#216) — Zombie Bird seeks players with dive attacks, Zombie Parrot shrieks heat</li>
+      <li><span class="dot">●</span> Building overlap fix (#214) — village cluster buildings no longer clip into each other</li>
+      <li><span class="dot">●</span> Unique trader skins (#211) — each of the 5 traders now has a distinct appearance</li>
+      <li><span class="dot">●</span> Trader safe zones (#210) — no zombie spawns within trader compounds</li>
       <li><span class="dot">●</span> Territory HUD (#209) — shows territory &amp; building names when entering a POI</li>
-      <li><span class="dot">●</span> Trader compounds as safe zones (#210) — no zombie spawns within trader compound</li>
-      <li><span class="dot">●</span> Full attribute names (#213) — inventory shows Strength/Perception/etc. instead of abbreviations</li>
-      <li><span class="dot">●</span> Complete Trader NPC system (#150) — 5 named traders (Joel, Rekt, Jen, Hugh, Bob) with specialty stock, buy/sell GUI, Better Barter pricing, Secret Stash</li>
-      <li><span class="dot">●</span> Quest system (#151) — 4 quest types (Kill Count, Clear Territory, Fetch &amp; Deliver, Buried Treasure) with HUD overlay and map markers</li>
-      <li><span class="dot">●</span> Power / electricity system — Generator Bank (100W), Battery Bank (1000 EU), Solar Panel (30W), wire connections via Electrical Parts</li>
-      <li><span class="dot">●</span> Building &amp; defense — 6-tier upgradeable blocks, wood/iron spikes, blade trap, electric fence, land claim block</li>
-      <li><span class="dot">●</span> Farming system — crops (4 growth stages), farm plots, dew collector, seed items</li>
-      <li><span class="dot">●</span> Armor system — 3 tiers (Light/Medium/Heavy) with movement modifiers and set bonuses</li>
-      <li><span class="dot">●</span> Stealth/noise system — per-player noise tracking, detection states (Unaware/Suspicious/Alert)</li>
-      <li><span class="dot">●</span> Smart A* pathfinding (#144) — block-break cost weighting for zombie pathfinding</li>
-      <li><span class="dot">●</span> Overworld biome placement (#165) — BZHS Apocalypse world preset with custom surface blocks</li>
-      <li><span class="dot">●</span> Zombie Bird &amp; Zombie Parrot — new flying zombie variants (swarming diver + heat-generating shrieker)</li>
-      <li><span class="dot">●</span> Big map screen — M key opens full map with territory labels, trader markers, quest markers</li>
+      <li><span class="dot">●</span> Roads &amp; vehicles (#207) — roads connect settlements, vehicles spawn on roads only</li>
+      <li><span class="dot">●</span> Commands guide (#204) — full reference page for all player &amp; admin commands</li>
+      <li><span class="dot">●</span> Trader NPC system (#150) — 5 named traders with specialty stock, buy/sell, quests</li>
+      <li><span class="dot">●</span> Power &amp; electricity — generators, batteries, solar panels, wire connections</li>
+      <li><span class="dot">●</span> Building &amp; defense — 6-tier blocks, spikes, blade trap, electric fence, land claim</li>
+      <li><span class="dot">●</span> Armor system — 3 tiers (Light/Medium/Heavy) with set bonuses</li>
     </ul>
   </div>
 
