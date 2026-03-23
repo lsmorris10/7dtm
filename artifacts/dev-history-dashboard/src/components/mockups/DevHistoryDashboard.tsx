@@ -15,6 +15,12 @@ const CATEGORIES: Record<string, { label: string; color: string; bg: string }> =
   landing: { label: "Landing Page", color: "#ec4899", bg: "rgba(236,72,153,0.15)" },
   docs: { label: "Documentation", color: "#94a3b8", bg: "rgba(148,163,184,0.15)" },
   git: { label: "Git / Repo", color: "#78716c", bg: "rgba(120,113,108,0.15)" },
+  building: { label: "Building", color: "#b45309", bg: "rgba(180,83,9,0.15)" },
+  electricity: { label: "Electricity", color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
+  farming: { label: "Farming", color: "#16a34a", bg: "rgba(22,163,74,0.15)" },
+  traders: { label: "Traders & Quests", color: "#0ea5e9", bg: "rgba(14,165,233,0.15)" },
+  stealth: { label: "Stealth", color: "#6366f1", bg: "rgba(99,102,241,0.15)" },
+  map: { label: "Map", color: "#2dd4bf", bg: "rgba(45,212,191,0.15)" },
 };
 
 interface Task {
@@ -157,6 +163,99 @@ const ALL_TASKS: Record<string, Task[]> = {
     { id: 117, title: "Perk icon renames", category: "xp", status: "merged" },
     { id: 118, title: "Registry crash fix", category: "survival", status: "merged" },
   ],
+  "March 19": [
+    { id: 119, title: "Stereo-to-mono sound fix", category: "audio", status: "merged" },
+    { id: 120, title: "HUD hotbar spacing", category: "hud", status: "merged" },
+    { id: 121, title: "Crawler zombie model", category: "zombies", status: "merged" },
+    { id: 122, title: "Duplicate armor textures fix", category: "hud", status: "merged" },
+    { id: 123, title: "Ocean territory spawn fix", category: "biomes", status: "merged" },
+    { id: 124, title: "Texture tool fix", category: "docs", status: "merged" },
+    { id: 125, title: "Sprint stamina bypass fix", category: "survival", status: "merged" },
+    { id: 126, title: "Unified HUD bars", category: "hud", status: "merged" },
+    { id: 127, title: "Exploitable structure blocks fix", category: "survival", status: "merged" },
+    { id: 128, title: "Zombie stats rebalance", category: "zombies", status: "merged" },
+    { id: 129, title: "Cancelled debuff overhaul", category: "debuffs", status: "cancelled" },
+    { id: 130, title: "Debuff overhaul (vanilla scale)", category: "debuffs", status: "merged" },
+    { id: 131, title: "World type selection", category: "survival", status: "merged" },
+  ],
+  "March 20": [
+    { id: 132, title: "Spawn protection & difficulty", category: "survival", status: "merged" },
+    { id: 133, title: "Docs/dashboard update", category: "docs", status: "merged" },
+    { id: 134, title: "JAR rebuild", category: "git", status: "merged" },
+    { id: 135, title: "Village overhaul", category: "biomes", status: "merged" },
+    { id: 136, title: "Campfire merge", category: "loot", status: "merged" },
+    { id: 137, title: "Water bottle consolidation", category: "loot", status: "merged" },
+    { id: 138, title: "AK-47 model fix", category: "weapons", status: "merged" },
+    { id: 139, title: "Docs/guides update", category: "docs", status: "merged" },
+  ],
+  "March 21": [
+    { id: 140, title: "Vending machine", category: "loot", status: "merged" },
+    { id: 141, title: "Wall placement", category: "building", status: "merged" },
+    { id: 142, title: "Big map screen", category: "map", status: "merged" },
+    { id: 143, title: "AK-47 texture/controls", category: "weapons", status: "merged" },
+    { id: 144, title: "JAR rebuild", category: "git", status: "merged" },
+    { id: 145, title: "A* pathfinding", category: "zombies", status: "merged" },
+    { id: 146, title: "Stealth system", category: "stealth", status: "merged" },
+    { id: 147, title: "Coordinated block bashing", category: "zombies", status: "merged" },
+    { id: 148, title: "Smell tracking", category: "zombies", status: "merged" },
+    { id: 149, title: "Blood Moon atmosphere", category: "daycycle", status: "merged" },
+    { id: 150, title: "JAR rebuild", category: "git", status: "merged" },
+    { id: 151, title: "Territory map labels", category: "map", status: "merged" },
+    { id: 152, title: "HUD label cleanup", category: "hud", status: "merged" },
+    { id: 153, title: "Territory entry animation", category: "hud", status: "merged" },
+    { id: 154, title: "AK-47 bullet tuning", category: "weapons", status: "merged" },
+    { id: 155, title: "AK-47 model fix", category: "weapons", status: "merged" },
+    { id: 156, title: "Trader NPC system", category: "traders", status: "merged" },
+    { id: 157, title: "Quest system", category: "traders", status: "merged" },
+    { id: 158, title: "Vehicle wreckage", category: "biomes", status: "merged" },
+  ],
+  "March 22": [
+    { id: 159, title: "Map icon fix", category: "map", status: "merged" },
+    { id: 160, title: "Map territory rendering", category: "map", status: "merged" },
+    { id: 161, title: "Map waypoint system", category: "map", status: "merged" },
+    { id: 162, title: "Block texture atlas fix", category: "hud", status: "merged" },
+    { id: 163, title: "Item texture batch update", category: "hud", status: "merged" },
+    { id: 164, title: "Grenade weapon system", category: "weapons", status: "merged" },
+    { id: 165, title: "Grenade physics & splash", category: "weapons", status: "merged" },
+    { id: 166, title: "AK-47 full overhaul", category: "weapons", status: "merged" },
+    { id: 167, title: "AK-47 scope attachment", category: "weapons", status: "merged" },
+    { id: 168, title: "AK-47 sound effects", category: "weapons", status: "merged" },
+    { id: 169, title: "Biome boundary smoothing", category: "biomes", status: "merged" },
+    { id: 170, title: "Desert biome POI placement", category: "biomes", status: "merged" },
+    { id: 171, title: "Trader inventory refresh", category: "traders", status: "merged" },
+    { id: 172, title: "Trader price balancing", category: "traders", status: "merged" },
+    { id: 173, title: "Trader POI world gen", category: "traders", status: "merged" },
+    { id: 174, title: "Quest reward scaling", category: "traders", status: "merged" },
+    { id: 175, title: "Block upgrade tiers", category: "building", status: "merged" },
+    { id: 176, title: "Trap block system", category: "building", status: "merged" },
+    { id: 177, title: "Reinforced block crafting", category: "building", status: "merged" },
+    { id: 178, title: "Building system core", category: "building", status: "merged" },
+    { id: 179, title: "Armor set system", category: "survival", status: "merged" },
+    { id: 180, title: "Farming crop system", category: "farming", status: "merged" },
+    { id: 181, title: "Cooking recipe overhaul", category: "farming", status: "merged" },
+    { id: 182, title: "Dew Collector block", category: "farming", status: "merged" },
+    { id: 183, title: "Wire connection system", category: "electricity", status: "merged" },
+    { id: 184, title: "Generator block", category: "electricity", status: "merged" },
+    { id: 185, title: "Electric fence trap", category: "electricity", status: "merged" },
+    { id: 186, title: "Structural integrity calc", category: "building", status: "merged" },
+    { id: 187, title: "Structure collapse physics", category: "building", status: "merged" },
+    { id: 188, title: "Perk stat effects", category: "xp", status: "merged" },
+    { id: 189, title: "Perk UI indicators", category: "xp", status: "merged" },
+    { id: 190, title: "Debuff vignette overlays", category: "debuffs", status: "merged" },
+    { id: 191, title: "Temperature overlay effects", category: "debuffs", status: "merged" },
+    { id: 192, title: "Zombie smell detection polish", category: "zombies", status: "merged" },
+    { id: 193, title: "Smell particle effects", category: "zombies", status: "merged" },
+    { id: 194, title: "Admin teleport command", category: "survival", status: "merged" },
+    { id: 195, title: "Admin spawn command", category: "survival", status: "merged" },
+    { id: 196, title: "Ambient sound overhaul", category: "audio", status: "merged" },
+    { id: 197, title: "Cooking & campfire audio", category: "farming", status: "merged" },
+    { id: 198, title: "Electricity system core", category: "electricity", status: "merged" },
+    { id: 199, title: "Inventory grid layout", category: "hud", status: "merged" },
+    { id: 200, title: "Admin command system", category: "survival", status: "merged" },
+    { id: 201, title: "Zombie glow rendering", category: "zombies", status: "merged" },
+    { id: 202, title: "Inventory UI overhaul", category: "hud", status: "merged" },
+    { id: 203, title: "Zombie variant glow VFX", category: "zombies", status: "merged" },
+  ],
 };
 
 interface Milestone {
@@ -181,31 +280,31 @@ const MILESTONES: Milestone[] = [
   { id: 11, title: "Workstations", phase: 2, status: "done", complexity: 3 },
   { id: 12, title: "XP/Level + Perk system", phase: 2, status: "done", complexity: 4 },
   { id: 13, title: "Melee + ranged weapons", phase: 2, status: "done", complexity: 3 },
-  { id: 14, title: "Armor system + clothing", phase: 2, status: "not-started", complexity: 3 },
-  { id: 15, title: "World gen (biomes + city/POI)", phase: 2, status: "partial", complexity: 5 },
+  { id: 14, title: "Armor system + clothing", phase: 2, status: "done", complexity: 3 },
+  { id: 15, title: "World gen (biomes + city/POI)", phase: 2, status: "done", complexity: 5 },
   { id: 16, title: "All zombie variants", phase: 2, status: "done", complexity: 4 },
-  { id: 17, title: "Building + block upgrades + traps", phase: 2, status: "not-started", complexity: 3 },
+  { id: 17, title: "Building + block upgrades + traps", phase: 2, status: "done", complexity: 3 },
   { id: 18, title: "Loot tables + containers", phase: 2, status: "done", complexity: 3 },
-  { id: 19, title: "Traders + quests", phase: 2, status: "not-started", complexity: 4 },
+  { id: 19, title: "Traders + quests", phase: 2, status: "done", complexity: 4 },
   { id: 20, title: "Vehicles + vehicle mods", phase: 2, status: "not-started", complexity: 5 },
-  { id: 21, title: "Electricity system", phase: 2, status: "not-started", complexity: 4 },
-  { id: 22, title: "Farming + cooking + Dew Collector", phase: 2, status: "not-started", complexity: 2 },
+  { id: 21, title: "Electricity system", phase: 2, status: "done", complexity: 4 },
+  { id: 22, title: "Farming + cooking + Dew Collector", phase: 2, status: "done", complexity: 2 },
   { id: 23, title: "Skill book / magazine system", phase: 2, status: "done", complexity: 2 },
-  { id: 24, title: "Stealth system", phase: 2, status: "not-started", complexity: 3 },
-  { id: 25, title: "Inventory UI overhaul", phase: 2, status: "not-started", complexity: 4 },
-  { id: 26, title: "Map system", phase: 2, status: "not-started", complexity: 3 },
+  { id: 24, title: "Stealth system", phase: 2, status: "done", complexity: 3 },
+  { id: 25, title: "Inventory UI overhaul", phase: 2, status: "done", complexity: 4 },
+  { id: 26, title: "Map system", phase: 2, status: "done", complexity: 3 },
   { id: 27, title: "Multiplayer sync + balancing", phase: 3, status: "not-started", complexity: 4 },
   { id: 28, title: "Performance optimization", phase: 3, status: "not-started", complexity: 5 },
   { id: 29, title: "Audio overhaul", phase: 3, status: "done", complexity: 2 },
   { id: 30, title: "Config GUI (Mod Menu compat)", phase: 3, status: "not-started", complexity: 2 },
-  { id: 31, title: "Admin commands", phase: 3, status: "not-started", complexity: 1 },
+  { id: 31, title: "Admin commands", phase: 3, status: "done", complexity: 1 },
   { id: 32, title: "QA, bug fixing, balancing pass", phase: 3, status: "not-started", complexity: 3 },
   { id: 33, title: "Sprint animation poses", phase: 3, status: "not-started", complexity: 3 },
   { id: 34, title: "Environmental sprint VFX", phase: 3, status: "not-started", complexity: 2 },
   { id: 35, title: "Third-person body language", phase: 3, status: "not-started", complexity: 2 },
-  { id: 36, title: "Debuff vignette + temp overlays", phase: 3, status: "not-started", complexity: 3 },
-  { id: 37, title: "Blood Moon atmosphere + camera", phase: 3, status: "not-started", complexity: 3 },
-  { id: 38, title: "Zombie variant glow VFX", phase: 3, status: "not-started", complexity: 3 },
+  { id: 36, title: "Debuff vignette + temp overlays", phase: 3, status: "done", complexity: 3 },
+  { id: 37, title: "Blood Moon atmosphere + camera", phase: 3, status: "done", complexity: 3 },
+  { id: 38, title: "Zombie variant glow VFX", phase: 3, status: "done", complexity: 3 },
   { id: 39, title: "Vehicle camera bob/sway", phase: 3, status: "not-started", complexity: 2 },
 ];
 
@@ -496,6 +595,7 @@ function MilestoneBar({ phase, milestones }: { phase: number; milestones: Milest
         {milestones.map(m => {
           const statusColor = m.status === "done" ? "#22c55e" : m.status === "partial" ? "#eab308" : "#334155";
           const statusIcon = m.status === "done" ? "✓" : m.status === "partial" ? "◐" : "○";
+
           return (
             <div key={m.id} style={{
               display: "flex",
@@ -587,7 +687,7 @@ function StatsSection() {
         <StatCard value={total} label="Total Tasks" accent="#3b82f6" />
         <StatCard value={merged} label="Merged" accent="#22c55e" />
         <StatCard value={cancelled} label="Cancelled" accent="#ef4444" />
-        <StatCard value={7} label="Dev Days" accent="#8b5cf6" />
+        <StatCard value={12} label="Dev Days" accent="#8b5cf6" />
         <StatCard value={`${milestonesTouched}/39`} label="Milestones Done" accent="#f97316" />
         <StatCard value={categoriesUsed} label="Categories" accent="#06b6d4" />
       </div>
@@ -733,15 +833,15 @@ export default function DevHistoryDashboard() {
             </h1>
           </div>
           <p style={{ fontSize: 14, color: "#64748b", margin: 0 }}>
-            Brutal Zombie Horde Survival — March 12–18, 2026 — 118 tasks, 7 dev days
+            Brutal Zombie Horde Survival — March 12–22, 2026 — 203 tasks, 12 dev days
           </p>
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
-          <StatCard value="115" label="Tasks Merged" accent="#22c55e" />
-          <StatCard value="18/39" label="Milestones Touched" accent="#f97316" />
-          <StatCard value="7" label="Dev Days" accent="#8b5cf6" />
-          <StatCard value="14" label="Categories" accent="#06b6d4" />
+          <StatCard value="199" label="Tasks Merged" accent="#22c55e" />
+          <StatCard value="30/39" label="Milestones Touched" accent="#f97316" />
+          <StatCard value="12" label="Dev Days" accent="#8b5cf6" />
+          <StatCard value="20" label="Categories" accent="#06b6d4" />
         </div>
 
         <div style={{
@@ -796,7 +896,7 @@ export default function DevHistoryDashboard() {
             Brutal Zombie Horde Survival — Minecraft 1.21.4 NeoForge Mod — Built with Replit Agent
           </span>
           <span style={{ fontSize: 12, color: "#334155", fontFamily: "'JetBrains Mono', monospace" }}>
-            snapshot: March 20, 2026
+            snapshot: March 23, 2026
           </span>
         </div>
       </div>
