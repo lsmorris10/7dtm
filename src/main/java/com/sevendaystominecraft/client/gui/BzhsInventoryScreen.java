@@ -305,7 +305,9 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
         int panelX = leftPos - 151;
         int panelY = topPos + 34;
         int panelW = 145;
-        int panelH = 55;
+        int rowHeight = 14;
+        Attribute[] attributes = Attribute.values();
+        int panelH = 5 + 12 + attributes.length * rowHeight + 5;
 
         graphics.fill(panelX, panelY, panelX + panelW, panelY + panelH, BG_COLOR);
         drawBorder(graphics, panelX, panelY, panelW, panelH, PANEL_BORDER);
@@ -316,23 +318,19 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
         graphics.drawString(font, "Attributes", px, py, GRAY, false);
         py += 12;
 
-        int spacing = 27;
-        Attribute[] attributes = Attribute.values();
-
         for (int i = 0; i < attributes.length; i++) {
             Attribute attr = attributes[i];
-            int attrX = px + i * spacing;
+            int rowY = py + i * rowHeight;
             int level = stats.getAttributeLevel(attr);
 
-            graphics.blit(RenderType::guiTextured, ATTRIBUTE_ICONS[i], attrX, py, 0, 0, 12, 12, 12, 12);
+            graphics.blit(RenderType::guiTextured, ATTRIBUTE_ICONS[i], px, rowY, 0, 0, 12, 12, 12, 12);
+
+            String displayName = attr.getDisplayName();
+            graphics.drawString(font, displayName, px + 15, rowY + 2, ATTRIBUTE_COLORS[i], false);
 
             String levelStr = String.valueOf(level);
-            int textW = font.width(levelStr);
-            graphics.drawString(font, levelStr, attrX + 6 - textW / 2, py + 14, ATTRIBUTE_COLORS[i], true);
-
-            String shortName = attr.getShortName();
-            int nameW = font.width(shortName);
-            graphics.drawString(font, shortName, attrX + 6 - nameW / 2, py + 24, ATTRIBUTE_COLORS[i], false);
+            int levelW = font.width(levelStr);
+            graphics.drawString(font, levelStr, panelX + panelW - 5 - levelW, rowY + 2, ATTRIBUTE_COLORS[i], true);
         }
     }
 
@@ -340,7 +338,7 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
         ArmorSetBonusHandler.ArmorCounts counts = ArmorSetBonusHandler.computeArmorCounts(player);
 
         int panelX = leftPos - 151;
-        int panelY = topPos + 93;
+        int panelY = topPos + 130;
         int panelW = 145;
         int panelH = 30;
 
