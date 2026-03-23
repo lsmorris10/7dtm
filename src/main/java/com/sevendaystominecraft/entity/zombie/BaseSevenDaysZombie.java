@@ -24,6 +24,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -65,6 +66,7 @@ public class BaseSevenDaysZombie extends Zombie {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ZombieDetectionGoal(this));
         goalSelector.addGoal(3, new ZombieBreakBlockGoal(this));
         goalSelector.addGoal(4, new ZombieHordePathGoal(this));
@@ -398,6 +400,11 @@ public class BaseSevenDaysZombie extends Zombie {
 
     @Override
     public boolean isSensitiveToWater() {
+        return false;
+    }
+
+    @Override
+    public boolean convertsInWater() {
         return false;
     }
 
