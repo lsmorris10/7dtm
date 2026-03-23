@@ -329,15 +329,15 @@
         <div class="header-icon">&#x2694;</div>
         <h1>BZHS Development History</h1>
       </div>
-      <p>Brutal Zombie Horde Survival — March 12–22, 2026 — 174 tasks, 11 days of development</p>
+      <p>Brutal Zombie Horde Survival — March 12–23, 2026 — 178 tasks, 12 days of development</p>
     </div>
 
     <div class="overall-progress" id="overall-progress"></div>
 
     <div class="top-stats">
-      <div class="stat-card"><div class="val" style="color:#22c55e">171</div><div class="lbl">Tasks Merged</div></div>
-      <div class="stat-card"><div class="val" style="color:#f97316">25/39</div><div class="lbl">Milestones Touched</div></div>
-      <div class="stat-card"><div class="val" style="color:#8b5cf6">11</div><div class="lbl">Dev Days</div></div>
+      <div class="stat-card"><div class="val" style="color:#22c55e">175</div><div class="lbl">Tasks Merged</div></div>
+      <div class="stat-card"><div class="val" style="color:#f97316">30/39</div><div class="lbl">Milestones Done</div></div>
+      <div class="stat-card"><div class="val" style="color:#8b5cf6">12</div><div class="lbl">Dev Days</div></div>
       <div class="stat-card"><div class="val" style="color:#06b6d4">11</div><div class="lbl">Categories</div></div>
     </div>
 
@@ -357,7 +357,7 @@
 
     <div class="footer-bar">
       <span class="footer-left">Brutal Zombie Horde Survival — Minecraft 1.21.4 NeoForge Mod — Built with Replit Agent — <a href="funding.html" style="color:#64748b;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#64748b'">Behind the Build</a></span>
-      <span class="footer-right">snapshot: March 22, 2026</span>
+      <span class="footer-right">snapshot: March 23, 2026</span>
     </div>
   </div>
 
@@ -573,6 +573,12 @@
       {id:172,title:"Farming/cooking/Dew Collector",category:"survival",status:"merged"},
       {id:173,title:"Rebuild and deploy JAR",category:"landing",status:"merged"},
       {id:174,title:"Fix trader spawning",category:"survival",status:"merged"}
+    ],
+    "March 23": [
+      {id:209,title:"Territory HUD (show territory & building names)",category:"hud",status:"merged"},
+      {id:210,title:"Trader compounds as safe zones (no zombie spawns)",category:"survival",status:"merged"},
+      {id:213,title:"Full attribute names in inventory UI",category:"hud",status:"merged"},
+      {id:215,title:"Full documentation & website update",category:"docs",status:"merged"}
     ]
   };
 
@@ -760,7 +766,7 @@
     var merged = allTasks.filter(function(t) { return t.status === "merged"; }).length;
     var cancelled = allTasks.filter(function(t) { return t.status === "cancelled"; }).length;
     var total = allTasks.length;
-    var msTouched = MILESTONES.filter(function(m) { return m.status === "done" || m.status === "partial"; }).length;
+    var msDone = MILESTONES.filter(function(m) { return m.status === "done"; }).length;
     var catsUsed = {};
     allTasks.forEach(function(t) { catsUsed[t.category] = true; });
 
@@ -768,8 +774,8 @@
     html += '<div class="stat-card"><div class="val" style="color:#3b82f6">' + total + '</div><div class="lbl">Total Tasks</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#22c55e">' + merged + '</div><div class="lbl">Merged</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#ef4444">' + cancelled + '</div><div class="lbl">Cancelled</div></div>';
-    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">11</div><div class="lbl">Dev Days</div></div>';
-    html += '<div class="stat-card"><div class="val" style="color:#f97316">' + msTouched + '/39</div><div class="lbl">Milestones Done</div></div>';
+    html += '<div class="stat-card"><div class="val" style="color:#8b5cf6">12</div><div class="lbl">Dev Days</div></div>';
+    html += '<div class="stat-card"><div class="val" style="color:#f97316">' + msDone + '/39</div><div class="lbl">Milestones Done</div></div>';
     html += '<div class="stat-card"><div class="val" style="color:#06b6d4">' + Object.keys(catsUsed).length + '</div><div class="lbl">Categories</div></div>';
     html += '</div>';
 

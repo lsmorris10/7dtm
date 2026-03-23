@@ -42,7 +42,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── BloodMoonClientState.java   — Client-side blood moon state singleton
 │   ├── BloodMoonSkyRenderer.java   — Red sky/fog tint during blood moon
 │   ├── MusicManager.java           — Context-aware music system (Day/Night/Combat/BloodMoon priority)
-│   ├── ModEntityRenderers.java     — Entity renderer registration for all 18 zombie types + territory label + trader + particle providers
+│   ├── ModEntityRenderers.java     — Entity renderer registration for all 20 zombie types + territory label + trader + particle providers
 │   ├── ScaledZombieRenderer.java   — ZombieRenderer subclass with configurable scale factor
 │   ├── FeralWightRenderer.java     — Feral Wight renderer with emissive red eye layer
 │   ├── SpiderZombieRenderer.java   — Spider Zombie renderer with emissive multi-eye layer
@@ -267,7 +267,7 @@ src/main/java/com/sevendaystominecraft/
 - **BloodMoonSkyRenderer**: Fog color tint that gradually ramps to red during active blood moon
 
 #### Custom Zombie System (Spec §3.1-3.2) — DONE
-- **ZombieVariant enum**: All 18 variants with base HP, damage, speed, XP, spawn day
+- **ZombieVariant enum**: All 20 variants with base HP, damage, speed, XP, spawn day
   - 3 modifier types (Radiated, Charged, Infernal) with configurable stat multipliers
 - **BaseSevenDaysZombie**: Core entity extending Zombie
   - Applies variant stats on spawn via `finalizeSpawn()` with tick fallback

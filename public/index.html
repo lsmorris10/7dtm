@@ -521,13 +521,13 @@
     <div class="features-grid">
       <div class="feature-card">
         <span class="icon">🧟</span>
-        <h3>18 Zombie Variants</h3>
-        <p>Dual speed system: zombies get faster at night AND in darkness. Night bonus + light-level bonus (highest wins).</p>
+        <h3>20 Zombie Variants</h3>
+        <p>Dual speed system, stealth detection, coordinated block bashing, and smart A* pathfinding.</p>
       </div>
       <div class="feature-card">
         <span class="icon">🌑</span>
         <h3>Blood Moon Hordes</h3>
-        <p>Every 7th night brings a brutal horde event with escalating waves and no hiding.</p>
+        <p>Every 7th night brings a brutal horde event with escalating waves, red fog, and camera shake.</p>
       </div>
       <div class="feature-card">
         <span class="icon">💀</span>
@@ -546,8 +546,33 @@
       </div>
       <div class="feature-card">
         <span class="icon">🧭</span>
-        <h3>Full HUD System</h3>
-        <p>Compass, minimap, and stats overlay keep you informed without breaking immersion.</p>
+        <h3>Full HUD &amp; Map System</h3>
+        <p>Compass, minimap, big map, territory labels, trader/quest markers, and stats overlay.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🏪</span>
+        <h3>Trader NPCs &amp; Quests</h3>
+        <p>5 named traders with specialty stock, buy/sell economy, Better Barter pricing, and 4 quest types.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">⚡</span>
+        <h3>Power &amp; Electricity</h3>
+        <p>Generators, batteries, solar panels, and wire connections powering traps and workstations.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🏗️</span>
+        <h3>Building &amp; Defense</h3>
+        <p>6-tier upgradeable blocks, spike traps, blade traps, electric fences, and land claim protection.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🌾</span>
+        <h3>Farming System</h3>
+        <p>Farm plots, 4-stage crops, dew collectors, and seeds for renewable food and water.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🛡️</span>
+        <h3>3-Tier Armor System</h3>
+        <p>Light, Medium, and Heavy armor with movement modifiers and 2pc/4pc set bonuses.</p>
       </div>
       <div class="feature-card">
         <span class="icon">🌅</span>
@@ -560,7 +585,7 @@
   <div class="section">
     <h2>Development Status</h2>
     <div class="status-card">
-      <p class="status-version"><strong>Alpha v0.1.0</strong> — Active development &middot; Updated March 20, 2026</p>
+      <p class="status-version"><strong>Alpha v0.1.0</strong> — Active development &middot; Updated March 23, 2026</p>
 
       <ul class="milestone-list">
         <li><span class="check">✓</span> Project scaffold &amp; architecture</li>
@@ -571,45 +596,50 @@
         <li><span class="check">✓</span> Loot &amp; crafting overhaul</li>
         <li><span class="check">✓</span> XP, leveling &amp; 45 perks</li>
         <li><span class="check">✓</span> Blood Moon / Horde Night</li>
-        <li><span class="check">✓</span> HUD — compass, minimap, stats overlay</li>
-        <li><span class="check">✓</span> Zombie AI (behavior tree + variant abilities)</li>
+        <li><span class="check">✓</span> HUD — compass, minimap, big map, stats overlay</li>
+        <li><span class="check">✓</span> Zombie AI (behavior tree, stealth detection, A* pathfinding)</li>
         <li><span class="check">✓</span> Workstation recipe processing system</li>
         <li><span class="check">✓</span> Basic melee &amp; ranged weapons</li>
         <li><span class="check">✓</span> Icon-based HUD for health, armor, food &amp; water</li>
-        <li><span class="check">✓</span> en_us.json language file (items, blocks, entities)</li>
         <li><span class="check">✓</span> Sound system &amp; context-aware gameplay music</li>
         <li><span class="check">✓</span> Territory POI system (star-rated difficulty)</li>
         <li><span class="check">✓</span> 3D weapon animations via GeckoLib</li>
         <li><span class="check">✓</span> Magazine / Skill Book system (6 series, 36 items)</li>
-        <li><span class="check">✓</span> Custom biomes (7 biomes with temperature &amp; density)</li>
-        <li><span class="check">✓</span> Sprint fix (client-side Mixin)</li>
+        <li><span class="check">✓</span> Custom biomes (7 biomes with overworld placement)</li>
         <li><span class="check">✓</span> Village settlements (8 building types, sleeper zombies)</li>
-        <li><span class="check">✓</span> Campfire merged into vanilla block</li>
-        <li><span class="check">✓</span> Water bottle consolidation (Glass Jars removed)</li>
+        <li><span class="check">✓</span> Trader NPC system (5 traders, buy/sell, quests)</li>
+        <li><span class="check">✓</span> Quest system (4 types, HUD overlay, map markers)</li>
+        <li><span class="check">✓</span> Power / electricity (generator, battery, solar panel)</li>
+        <li><span class="check">✓</span> Building &amp; defense (6-tier blocks, spikes, traps, land claim)</li>
+        <li><span class="check">✓</span> Farming system (crops, farm plots, dew collector)</li>
+        <li><span class="check">✓</span> Armor system (3 tiers with set bonuses)</li>
+        <li><span class="check">✓</span> Stealth / noise system (detection states, noise decay)</li>
+        <li><span class="check">✓</span> Custom inventory screen (stats, perks, debuffs)</li>
+        <li><span class="check">✓</span> Premade world system (bundled templates)</li>
       </ul>
 
       <p style="color:#999; font-size:0.82rem; margin-bottom:0.4rem; margin-top:0.75rem; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Post-Milestone Improvements</p>
       <ul class="milestone-list" style="margin-bottom:1.5rem;">
         <li><span class="check">✓</span> Vanilla damage scaling (20 HP base)</li>
         <li><span class="check">✓</span> Doubled day cycle (slower-tick refactor)</li>
-        <li><span class="check">✓</span> Dual zombie speed (night + darkness)</li>
-        <li><span class="check">✓</span> Mob damage scaling for all vanilla mobs</li>
-        <li><span class="check">✓</span> Zombie AI completion (variant special abilities)</li>
-        <li><span class="check">✓</span> Weapons system (melee &amp; ranged)</li>
+        <li><span class="check">✓</span> 20 zombie variants (including Zombie Bird &amp; Zombie Parrot)</li>
+        <li><span class="check">✓</span> Smart A* pathfinding with block-break cost</li>
+        <li><span class="check">✓</span> Coordinated block bashing (3+ zombies stack damage)</li>
+        <li><span class="check">✓</span> Blood Moon atmosphere (red fog, camera shake)</li>
         <li><span class="check">✓</span> GeckoLib bundled via Jar-in-Jar (single-file distribution)</li>
         <li><span class="check">✓</span> Trademark name sweep (zombie, perk &amp; currency renames)</li>
-        <li><span class="check">✓</span> Deprecated API fixes (NeoForge 1.21.4)</li>
-        <li><span class="check">✓</span> Legacy damage multiplier config cleanup</li>
+        <li><span class="check">✓</span> Territory HUD (name display on POI entry)</li>
+        <li><span class="check">✓</span> Vehicle wreckage blocks (decorative, drop scrap)</li>
       </ul>
 
       <div class="coming-section">
         <h3>Coming Next</h3>
         <ul class="coming-list">
-          <li>Overworld biome placement — surface builder and noise router for custom biomes</li>
           <li>Replace 349 placeholder textures with real pixel art</li>
           <li>Full world generation pipeline (city grid, POI templates)</li>
-          <li>Trader NPCs and quest system</li>
           <li>Vehicle system</li>
+          <li>Multiplayer sync &amp; balancing</li>
+          <li>Performance optimization</li>
         </ul>
       </div>
     </div>
@@ -618,19 +648,20 @@
   <div class="section recent-section">
     <h2>Recent Changes</h2>
     <ul class="recent-list">
-      <li><span class="dot">●</span> Village settlements (#135) — 8 building types (Abandoned House, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost) with sleeper zombies, loot containers, and difficulty scaling</li>
-      <li><span class="dot">●</span> Campfire merge (#136) — campfire workstation merged into vanilla campfire block; right-click a lit campfire to open the BZHS crafting UI</li>
-      <li><span class="dot">●</span> Water bottle consolidation (#137) — Glass Jars removed; vanilla water bottles auto-convert to Murky Water for purification at campfire</li>
-      <li><span class="dot">●</span> AK-47 fix (#138) — AK-47 weapon bug resolved</li>
-      <li><span class="dot">●</span> Perk icon renames (#117) — texture filenames updated to match renamed perk IDs from trademark sweep</li>
-      <li><span class="dot">●</span> Registry crash fix (#118) — fixed startup crash caused by stale registry references after trademark name sweep</li>
-      <li><span class="dot">●</span> Magazine / Skill Book system — 6 series (Steady Steve, Block Brawler, Sharpshot Sam, The Tinkerer, Overworld Chef, Dungeon Tactician), 36 items with per-issue bonuses and series mastery tracking</li>
-      <li><span class="dot">●</span> Custom biomes — 7 biome definitions (Pine Forest, Forest, Plains, Desert, Snowy Tundra, Burned Forest, Wasteland) with temperature ranges, zombie density multipliers, and loot tier bonuses</li>
-      <li><span class="dot">●</span> Trademark name sweep — zombie display names (Feral Wraith, Banshee, Riot Husk, Wrecking Husk, etc.), 12 perk IDs renamed, currency changed to Survivor's Coin</li>
-      <li><span class="dot">●</span> Context-aware gameplay music — day, night, combat, and blood moon tracks with smooth crossfading</li>
-      <li><span class="dot">●</span> 3D weapon animations via GeckoLib — AK-47 bolt action, 9mm Pistol slide, Grenade pull/throw with Jar-in-Jar bundling</li>
-      <li><span class="dot">●</span> Territory POI system — star-rated points of interest with procedural structures and difficulty tiers</li>
-      <li><span class="dot">●</span> Sprint fix — client-side LocalPlayer.aiStep() Mixin prevents rubber-banding</li>
+      <li><span class="dot">●</span> Territory HUD (#209) — shows territory &amp; building names when entering a POI</li>
+      <li><span class="dot">●</span> Trader compounds as safe zones (#210) — no zombie spawns within trader compound</li>
+      <li><span class="dot">●</span> Full attribute names (#213) — inventory shows Strength/Perception/etc. instead of abbreviations</li>
+      <li><span class="dot">●</span> Complete Trader NPC system (#150) — 5 named traders (Joel, Rekt, Jen, Hugh, Bob) with specialty stock, buy/sell GUI, Better Barter pricing, Secret Stash</li>
+      <li><span class="dot">●</span> Quest system (#151) — 4 quest types (Kill Count, Clear Territory, Fetch &amp; Deliver, Buried Treasure) with HUD overlay and map markers</li>
+      <li><span class="dot">●</span> Power / electricity system — Generator Bank (100W), Battery Bank (1000 EU), Solar Panel (30W), wire connections via Electrical Parts</li>
+      <li><span class="dot">●</span> Building &amp; defense — 6-tier upgradeable blocks, wood/iron spikes, blade trap, electric fence, land claim block</li>
+      <li><span class="dot">●</span> Farming system — crops (4 growth stages), farm plots, dew collector, seed items</li>
+      <li><span class="dot">●</span> Armor system — 3 tiers (Light/Medium/Heavy) with movement modifiers and set bonuses</li>
+      <li><span class="dot">●</span> Stealth/noise system — per-player noise tracking, detection states (Unaware/Suspicious/Alert)</li>
+      <li><span class="dot">●</span> Smart A* pathfinding (#144) — block-break cost weighting for zombie pathfinding</li>
+      <li><span class="dot">●</span> Overworld biome placement (#165) — BZHS Apocalypse world preset with custom surface blocks</li>
+      <li><span class="dot">●</span> Zombie Bird &amp; Zombie Parrot — new flying zombie variants (swarming diver + heat-generating shrieker)</li>
+      <li><span class="dot">●</span> Big map screen — M key opens full map with territory labels, trader markers, quest markers</li>
     </ul>
   </div>
 

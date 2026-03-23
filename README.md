@@ -36,10 +36,10 @@ A total conversion mod for **Minecraft 1.21.4** (NeoForge) inspired by **7 Days 
 - **Burn, Dysentery, Hypothermia, Hyperthermia, Radiation** — Various environmental triggers
 - All debuffs clear on death
 
-### Zombie System (18 Variants + 3 Modifiers)
+### Zombie System (20 Variants + 3 Modifiers)
 - **Humanoid (15)**: Walker, Crawler, Soldier, Frostbitten Woodsman, Bloated Shambler, Wall Creeper, Feral Wraith, Banshee, Riot Husk, Wrecking Husk, Nurse, Mutated Brute, Behemoth, Charged, Infernal
-- **Animals (3)**: Zombie Dog, Zombie Bear, Vulture
-- **Special Mechanics**: Explosions, acid spit projectiles, chain lightning, fire trails, wall climbing, healing aura, screamer spawning, flying dive attacks, ground pound AoE
+- **Animals (5)**: Zombie Dog, Zombie Bear, Vulture, Zombie Bird, Zombie Parrot
+- **Special Mechanics**: Explosions, acid spit projectiles, chain lightning, fire trails, wall climbing, healing aura, banshee spawning, flying dive/swoop attacks, heat shrieks, ground pound AoE
 - **Modifiers**: Radiated (HP regen), Charged (chain lightning), Infernal (fire trail + burn)
 - **Dual Speed System**: Night speed bonus when dayTime is in the night range (13000–23000), plus a separate darkness speed bonus when both block light and sky light are ≤ 7. When both conditions apply, the higher bonus is used (not additive)
 - Zombies do NOT burn in sunlight
@@ -48,7 +48,7 @@ A total conversion mod for **Minecraft 1.21.4** (NeoForge) inspired by **7 Days 
 ### Zombie AI Special Abilities
 - **Block breaking** — zombies path to and break blocks separating them from targets
 - **Heatmap investigation** — zombies in horde pathfinding mode route toward high-heat chunks
-- **Variant abilities**: Riot Husk acid spit, Wrecking Husk ground pound, Wall Creeper wall climbing, Charged chain lightning, Banshee horde spawning, Behemoth healing aura, Vulture dive attacks
+- **Variant abilities**: Riot Husk acid spit, Wrecking Husk explosion, Wall Creeper wall climbing, Charged chain lightning, Banshee horde spawning, Nurse healing aura, Behemoth ground pound, Vulture dive attacks, Zombie Bird swarm dive, Zombie Parrot heat shrieks
 - Fully layered priority behavior tree — target acquisition, ability selection, and movement all conditions-checked
 
 ### Basic Weapons System
@@ -140,7 +140,9 @@ Five server-side config files are generated in the `serverconfig/` folder:
 |-------|-------------|
 | [`docs/heatmap_guide.md`](docs/heatmap_guide.md) | Heatmap system mechanics with exact values |
 | [`docs/debuffs_guide.md`](docs/debuffs_guide.md) | All 12 debuffs with triggers, effects, and durations |
+| [`docs/zombie_guide.md`](docs/zombie_guide.md) | Zombie bestiary — all 20 variants with stats, abilities, and combat tips |
 | [`docs/crafting_guide.md`](docs/crafting_guide.md) | Full crafting system: workstations, recipes, quality tiers, materials |
+| [`docs/commands_guide.md`](docs/commands_guide.md) | All commands with syntax, parameters, and examples |
 | [`docs/texture_audit.md`](docs/texture_audit.md) | Placeholder texture audit report (349 of 388 textures need replacement) |
 | [`docs/edge-case-testing.md`](docs/edge-case-testing.md) | Edge case testing scenarios |
 | [`docs/bzhs_final_spec.md`](docs/bzhs_final_spec.md) | Full implementation spec (2273 lines, 20 sections) |
@@ -163,18 +165,78 @@ Copy the JAR into your Minecraft `mods/` folder (requires NeoForge 21.4.140 for 
 
 ## Status
 
+### Trader NPC System
+- **5 named traders** (Joel, Rekt, Jen, Hugh, Bob) with specialty stock per trader
+- Buy/sell GUI with Better Barter perk pricing integration
+- Secret Stash tab unlocked at Better Barter rank 5
+- Night closure (22:00-06:00 in-game) — traders refuse interaction
+- Trader compounds as safe zones — no zombie spawns within compound
+- Automatic restock cycle (configurable interval)
+- Cyan "T" markers on compass and map
+
+### Quest System
+- **4 quest types**: Kill Count, Clear Territory, Fetch & Deliver, Buried Treasure
+- Quest HUD overlay with progress tracking
+- Quest markers on compass, minimap, and big map
+- Accept/abandon/turn-in at trader NPCs
+- Tier-appropriate quest generation per trader
+- Quest refresh tied to trader restock cycle
+
+### Power / Electricity System
+- **Generator Bank** — fuel-powered (Gas Can), 100W output, 6000-tick burn time
+- **Battery Bank** — 1000 EU storage, charges from sources, discharges to devices
+- **Solar Panel** — 30W output during daytime with sky visibility
+- **Power Grid Manager** — SavedData tracking wire connections between sources and devices
+- Wire connections created via Electrical Parts right-click linking
+- Powered devices: Blade Trap, Electric Fence Post, Advanced Workbench
+
+### Building & Defense Blocks
+- **Upgradeable Block** — 6-tier progression: Wood Frame → Reinforced Wood → Cobblestone → Concrete → Reinforced Concrete → Steel (right-click upgrade via repair hammer)
+- **Wood Spikes** — Contact damage trap (4 dmg), 10 durability, degrades on hit
+- **Iron Spikes** — Contact damage trap (8 dmg), 20 durability, degrades on hit
+- **Blade Trap** — AoE damage (6 dmg), requires power
+- **Electric Fence Post** — Contact damage (5 dmg) + stun, requires power
+- **Land Claim Block** — 41-block protection radius preventing zombie spawns, one per player
+
+### Farming System
+- **Crop Block** — 4 growth stages (AGE 0-3), randomTick growth, Green Thumb perk integration
+- **Farm Plot Block** — Tilled soil (hoe + dirt/grass conversion), crops must be planted on Farm Plots
+- **Dew Collector** — Passive water generation (Murky Water every 6000 ticks with sky access)
+- **Seed Items** — Right-click-on-farm-plot plantable seeds
+
+### Armor System
+- **3 armor tiers**: Light (Padded), Medium (Scrap Iron), Heavy (Military)
+- Movement and stealth modifiers per tier
+- **Set bonuses**: 2-piece partial + 4-piece full (Light: noise reduction, Medium: stamina regen, Heavy: damage reduction)
+- Mixed-set warnings and armor shattered notifications
+
+### Stealth / Noise System
+- **NoiseManager** — Per-player noise tracking with 5-second linear decay
+- Noise sources: Gunshot (80), Sprint (15), Walk (5), Crouch (1), Block Break (10)
+- Zombies detect players via formula: `(noise × lightFactor) / distance²`
+- Detection states: Unaware → Suspicious → Alert with visual particle indicators
+
+### Custom Inventory Screen
+- Replaces vanilla inventory with BzhsInventoryScreen
+- Stats panel, perks panel, debuffs panel, armor set bonus display
+- Full attribute names (Strength/Perception/Fortitude/Agility/Intellect)
+
+### Premade World System
+- Bundled world templates for quick start
+- Create World screen integration with World Type toggle
+
 ### Implemented
 - Core survival stats & HUD
 - 12 debuff types with triggers and effects
-- 18 zombie variants with special mechanics
-- Zombie AI special abilities (block breaking, heatmap investigation, horde pathfinding, variant abilities)
-- Blood moon / horde night system
+- 20 zombie variants with special mechanics (including Zombie Bird and Zombie Parrot)
+- Zombie AI special abilities (block breaking, heatmap investigation, horde pathfinding, variant abilities, smart A* pathfinding, coordinated block bashing, stealth detection)
+- Blood moon / horde night system with atmosphere effects (red fog, camera shake)
 - Heatmap activity-based spawning
 - Loot containers, workstations, and crafting (all 7 workstations processing recipes)
 - XP, leveling, and 45-perk system
 - Basic weapons system (melee + ranged, quality-scaled)
 - Icon-based HUD (hearts, food, water, armor icon rows)
-- Compass, minimap, and player tracking
+- Compass, minimap, big map screen, and player tracking
 - Extended day cycle via slower-tick refactor (TIME_SCALE=2, vanilla 24k dayTime preserved)
 - 20 HP vanilla player base health
 - Zombie stats balanced for vanilla 20 HP scale
@@ -182,19 +244,31 @@ Copy the JAR into your Minecraft `mods/` folder (requires NeoForge 21.4.140 for 
 - Sound system foundation (8 custom events, gated playback, subtitles)
 - Context-aware gameplay music system (day/night/combat/blood moon)
 - Territory POIs (star-rated points of interest with procedural structures)
+- Territory HUD (shows territory & building names when inside a POI)
 - 3D weapon animations via Geckolib (AK-47, 9mm Pistol, Grenade)
 - GeckoLib bundled via Jar-in-Jar (single-file mod distribution)
-
 - Sprint fix: client-side `LocalPlayer.aiStep()` mixin prevents rubber-banding
 - Skill books / magazines: 6 series (36 items), per-issue bonuses, series mastery tracking
-
-- Custom biomes: 7 biome definitions (Pine Forest, Forest, Plains, Desert, Snowy Tundra, Burned Forest, Wasteland) with per-biome temperature ranges, zombie density multipliers, and loot tier bonuses
-
+- Custom biomes: 7 biome definitions with per-biome temperature ranges, zombie density multipliers, and loot tier bonuses
+- Overworld biome placement: BZHS Apocalypse world preset with custom surface rules
 - Trademark name sweep: zombie display names, perk IDs, and currency renamed to avoid trademark conflicts
+- Village settlements: 8 building types with sleeper zombies and difficulty scaling
+- Campfire merged into vanilla block
+- Water bottle consolidation (Glass Jars removed)
+- Vehicle wreckage blocks (decorative, drop scrap materials)
+- Trader NPC system with specialty stock and economy
+- Quest system (4 types, HUD overlay, map markers)
+- Power/electricity system (Generator, Battery, Solar Panel, wire connections)
+- Building & defense blocks (6-tier upgradeable, spikes, traps, land claim)
+- Farming system (crops, farm plots, dew collector)
+- Armor system (3 tiers with set bonuses)
+- Stealth/noise system (detection states, noise decay)
+- Custom inventory screen (stats, perks, debuffs, armor bonuses)
+- Premade world system (bundled templates)
 
 ### Planned / Next
-- Overworld biome placement (custom biome definitions exist, surface builder / noise router pending)
 - Replace placeholder textures with real pixel art (prioritize HUD icons, weapons, workstations)
 - Full world generation pipeline (city grid, POI templates)
-- Trader NPCs and quest system
 - Vehicle system
+- Multiplayer sync & balancing
+- Performance optimization

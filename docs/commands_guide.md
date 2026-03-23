@@ -427,18 +427,18 @@ Spawn specific zombie variants near your position for testing.
 |---------|---------|-------------|
 | `walker` | `normal` | Standard zombie |
 | `crawler` | — | Low, fast ground zombie |
-| `frozen_lumberjack` | — | Tough cold-biome zombie |
-| `bloated_walker` | — | Tanky, slow walker |
-| `spider_zombie` | `spider` | Wall-climbing, jump-boosted |
-| `feral_wight` | `feral`, `wight` | Fast, aggressive late-game zombie |
-| `cop` | `spitter` | Acid vomit ranged attack |
-| `screamer` | — | Screams to attract more zombies |
+| `frozen_lumberjack` | — | Tough cold-biome zombie (Frostbitten Woodsman) |
+| `bloated_walker` | — | Tanky, slow walker (Bloated Shambler) |
+| `spider_zombie` | `spider` | Wall-climbing, jump-boosted (Wall Creeper) |
+| `feral_wight` | `feral`, `wight` | Fast, aggressive late-game zombie (Feral Wraith) |
+| `cop` | `spitter` | Acid vomit ranged attack (Riot Husk) |
+| `screamer` | — | Screams to attract more zombies (Banshee) |
 | `zombie_dog` | `dog` | Fast pack hunter |
 | `vulture` | — | Flying dive-bomber |
 | `zombie_bird` | `bird` | Fast swarming flyer |
 | `zombie_parrot` | `parrot` | Erratic flyer, generates heat |
-| `demolisher` | — | Explodes on chest hit |
-| `mutated_chuck` | — | Acid vomit ranged |
+| `demolisher` | — | Explodes on chest hit (Wrecking Husk) |
+| `mutated_chuck` | — | Acid vomit ranged (Mutated Brute) |
 | `zombie_bear` | `bear` | Charge + AoE swipe |
 | `nurse` | — | Heals nearby zombies |
 | `soldier` | — | Armored walker variant |

@@ -23,7 +23,7 @@
 
 ## Current Status & Next Up
 
-**Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay). Plus: Village settlements, campfire merge, water bottle consolidation.
+**Completed Milestones:** 1 (Scaffold), 2 (Player Stats), 3 (Debuffs — all 12 types), 4 (Temperature — partial), 5 (Heatmap), 6 (Loot & Crafting), 7 (XP/Leveling/Perks), 8 (Blood Moon/Horde Night), 9 (HUD — compass, minimap, stats overlay), 10 (Weapons), 11 (Skill Books/Magazines), 14 (Armor), 15 (World Gen — Biomes + Overworld), 17 (Building + Traps), 18 (Loot Tables), 19 (Traders + Quests), 21 (Electricity), 22 (Farming), 24 (Stealth), 25 (Inventory UI), 26 (Map). Plus: Village settlements, campfire merge, water bottle consolidation, premade worlds.
 
 **March 16–17 Major Completed Work:**
 - Zombie AI behavior tree refactored (#72) — fully layered, priority-ordered, conditions-checked AI system
@@ -61,19 +61,57 @@
 - Registry crash fix (#118) — fixed startup crash caused by stale registry references after the trademark name sweep
 
 **March 19–20 Completed Work:**
-- Village overhaul (#135) — village settlement system with 8 building types (Abandoned House, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost), sleeper zombie spawning, per-building loot containers
-- Campfire merge (#136) — campfire workstation merged into vanilla campfire block; right-clicking a lit vanilla campfire opens the BZHS crafting UI
-- Water bottle consolidation (#137) — Glass Jars removed; vanilla water bottles auto-convert to Murky Water via `WaterBottleConversionHandler`; purify at campfire
-- AK-47 fix (#138) — AK-47 weapon bug resolved
+- Village overhaul (#129) — village settlement system with 8 building types (Abandoned House, Crack-a-Book, Working Stiffs, Pass-n-Gas, Pop-n-Pills, Farm, Utility, Trader Outpost), sleeper zombie spawning, per-building loot containers
+- Campfire merge (#130) — campfire workstation merged into vanilla campfire block; right-clicking a lit vanilla campfire opens the BZHS crafting UI
+- Water bottle consolidation (#131) — Glass Jars removed; vanilla water bottles auto-convert to Murky Water via `WaterBottleConversionHandler`; purify at campfire
+- AK-47 fix (#132) — AK-47 weapon bug resolved
+- World type selection (#125) — Generated vs Premade world types on Create World screen
+- Spawn protection (#126) — distance-based difficulty scaling
+- Debuff overhaul (#124) — debuffs updated to match 7 Days to Die values
+
+**March 21 Completed Work (Tasks #134–#143):**
+- Vending machine blocks (#134–#135) — two-block-tall textured vending machines with wall-only placement
+- Big map screen (#136) — M key opens full map with territory labels and markers
+- AK-47 texture fix (#137) — gun texture and controls improved
+- Rebuild and deploy JAR (#138)
+- Territory labels on map and minimap (#139) — territories visible on all map views
+- HUD cleanup (#140) — removed 'Difficulty:' label text
+- Territory entry announcement animation (#141) — HUD animation when entering a territory
+- AK-47 bullet speed and range boost (#142)
+- Fix AK-47 and Pistol 9mm 3D model rendering (#143)
+
+**March 22 Completed Work:**
+- Smart A* pathfinding (#144) — block-break cost weighting for zombie pathfinding
+- Stealth and detection system (#145) — Unaware → Suspicious → Alert states with visual indicators
+- Coordinated block bashing (#146) — 3+ zombies stack damage on same block
+- Blood Moon atmosphere effects (#147) — red fog, camera shake during horde night
+- Smell tracking system (#148) — config-gated 3.0 preview feature
+- Complete Trader NPC system (#150) — Joel, Rekt, Jen, Hugh, Bob with specialty stock, buy/sell GUI, Better Barter pricing, Secret Stash, night closure
+- Quest system (#151) — 4 quest types (Kill Count, Clear Territory, Fetch & Deliver, Buried Treasure), HUD overlay, map markers
+- Overworld biome placement (#165) — BZHS Apocalypse world preset with custom surface blocks per biome
+- Trader economy (#166) — specialty stock, Better Barter perk integration
+- Priority texture replacement (#167) — weapons, ammo, HUD textures updated
+- Building system (#170) — upgradeable blocks (6-tier), wood/iron spikes, blade trap, electric fence, land claim block
+- Armor system (#171) — 3 tiers (Light/Padded, Medium/Scrap Iron, Heavy/Military) with set bonuses
+- Farming system (#172) — crops, farm plots, dew collector, seed items
+- Power/electricity system (part of building #170) — generator, battery, solar panel, wire connections
+- Vehicle wreckage blocks (#163) — decorative blocks that drop scrap
+- Multiple bug fixes (#152–#164) — map arrow, textures, structure placement, grenade, water bottles
+
+**March 23 (Tasks #209, #210, #213):**
+- Territory HUD (#209) — shows territory & building names when inside a POI
+- Trader compounds as safe zones (#210) — no zombie spawns within trader compound
+- Full attribute names in inventory (#213) — shows Strength/Perception/etc. instead of STR/PER
 
 **Current Focus / In Progress:**
-- Overworld biome placement — surface builder / noise router for custom biome definitions (definitions exist, placement pending)
+- Building overlap fix (#214) — preventing overlapping structures during world generation
 
 **Next Up:**
 - Custom textures — replace 349 placeholder textures with real pixel art (prioritize HUD icons, weapons, workstations)
 - Full world generation pipeline (city grid, POI templates)
-- Trader NPCs and quest system
 - Vehicle system
+- Multiplayer sync & balancing
+- Performance optimization
 
 ---
 
@@ -88,43 +126,52 @@
 
 3. **PLACEHOLDER TEXTURES (349 of 388)** — Most item, GUI, and some block textures are auto-generated colored squares. Gameplay is functional but visually unpolished. Full list in `docs/texture_audit.md`.
 
----
-
-## Next Session — Debug & Test Checklist (March 20+)
-
-- **P1 — Build & Launch:** Does the mod build cleanly? Any Mixin or registry errors on startup? (Registry crash fix #118 should resolve previous startup issues.)
-- **P2 — Basic Weapons (melee):** Stone Axe, Wooden Club, Baseball Bat, Sledgehammer — do they deal correct damage with quality scaling? Attack speed correct?
-- **P3 — Basic Weapons (ranged):** Pipe Pistol, Primitive Bow — do they fire? Ammo consumption correct? Hit detection working?
-- **P4 — Workstation Recipe Processing:** Campfire, Forge, Workbench — do recipes process with correct fuel consumption and output? Does Forge smelting take the right time?
-- **P5 — Zombie AI Special Abilities:** Riot Husk acid spit, Wrecking Husk ground pound, Wall Creeper climbing, Charged chain lightning — do variant abilities trigger correctly? Does block breaking AI activate on targeted blocks?
-- **P6 — Icon-Based HUD:** Hearts, food, water, armor shown as icon rows (not stat bars)? Icons update correctly as values change? No overlap with compass or minimap?
-- **P7 — Heatmap + Zombie Investigation:** Does horde pathfinding respond to heat? Do zombies investigate high-heat areas?
-- **P8 — Container GUIs:** Open all workstation and loot container GUIs — do they render correctly and accept/process items?
-- **P9 — World Startup:** Does a fresh new world generate and load without errors or crashes?
-- **P10 — Blood Moon:** Every 7th night still triggers correctly with the rebalanced zombie HP/damage?
-- **P11 — Territory POIs:** Do POI structures spawn in expected locations and biomes?
-- **P12 — Sound & Music:** Do zombie sounds, combat sounds, ambient sounds, and context-aware music tracks play correctly? Day/night/combat/blood moon crossfading working?
-- **P13 — Geckolib Animations:** Do animated weapon models (AK-47, 9mm Pistol, Grenade) render without errors?
-- **P14 — Sprint Fix:** Sprint rubber-banding resolved? (Fixed in #106 via LocalPlayerSprintMixin.)
-- **P15 — Skill Books:** Do magazine/skill book items drop, read correctly, and grant per-issue bonuses? Series mastery tracking working?
-- **P16 — Custom Biomes:** Do biome temperature ranges, zombie density multipliers, and loot tier bonuses apply correctly?
-- **P17 — Perk Icons:** Do renamed perk icon textures load and display correctly in the perk UI? (Fixed in #117.)
-- **P18 — Landing Page + Funding:** Funding page loads? Ko-fi/Patreon links work?
+4. **BUILDING OVERLAP (#214 — In Progress)** — Structures can sometimes overlap during world generation. Fix in progress.
 
 ---
 
 ## Recent Completed Work
 
-**March 19–20 Session (Tasks #135–#139)**
-- Village overhaul (#135) — village settlement system with 8 building types and sleeper zombies
-- Campfire merge (#136) — campfire workstation merged into vanilla campfire block
-- Water bottle consolidation (#137) — Glass Jars replaced with vanilla water bottle → Murky Water auto-conversion
-- AK-47 fix (#138) — AK-47 weapon bug resolved
-- Docs update + zombie guide (#139) — all docs updated with renamed zombie names, zombie_guide.md created, campfire/water bottle changes reflected in crafting_guide.md, JAR rebuilt
+**March 23 (Tasks #209, #210, #213, #215)**
+- Territory HUD (#209) — shows territory & building names when entering POI
+- Trader compounds as safe zones (#210) — suppresses zombie spawns in trader compounds
+- Full attribute names (#213) — inventory shows Strength/Perception/etc. instead of abbreviations
+- Full documentation & website update (#215) — all docs, guides, README, website pages updated
 
-**March 18 Session (Tasks #117–#118)**
-- Perk icon renames (#117) — texture filenames updated to match renamed perk IDs
-- Registry crash fix (#118) — fixed startup crash from stale registry references after trademark sweep
+**March 22 Session (Tasks #144–#174)**
+- Smart A* pathfinding (#144) — block-break cost for zombie pathing
+- Stealth and detection system (#145) — Unaware → Suspicious → Alert
+- Coordinated block bashing (#146) — 3+ zombies stack damage
+- Blood Moon atmosphere (#147) — red fog, camera shake
+- Smell tracking (#148) — config-gated preview
+- Complete Trader NPC system (#150) — 5 traders with shop GUI
+- Quest system (#151) — 4 quest types with HUD/map integration
+- Overworld biome placement (#165) — BZHS Apocalypse world preset
+- Building system (#170) — upgradeable blocks, spikes, traps, land claim
+- Armor system (#171) — 3 tiers with set bonuses
+- Farming system (#172) — crops, farm plots, dew collector
+- Multiple bug fixes and texture updates (#152–#168)
+
+**March 21 Session (Tasks #134–#143)**
+- Vending machines (#134–#135) — two-block-tall with wall placement
+- Big map screen (#136) — M key full map
+- Territory labels on map (#139) — visible on all views
+- Territory entry announcement (#141) — HUD animation
+- AK-47 improvements (#137, #142, #143)
+
+**March 19–20 Session (Tasks #115–#133)**
+- Debuff overhaul (#124) — updated to 7DTD values
+- World type selection (#125) — premade world support
+- Spawn protection (#126) — distance-based difficulty
+- Village overhaul (#129) — 8 building types with sleeper zombies
+- Campfire merge (#130) — merged into vanilla campfire block
+- Water bottle consolidation (#131) — Glass Jars replaced with vanilla water bottle conversion
+- AK-47 fix (#132) — weapon bug resolved
+- Multiple HUD and texture fixes (#115–#123)
+
+**March 18 Session (Tasks #112–#114)**
+- Perk icon renames (#112) — texture filenames updated to match renamed perk IDs
+- Registry crash fix (#113) — fixed startup crash from stale registry references after trademark sweep
 
 **March 16–17 Session (Tasks #72–#111)**
 - Zombie AI behavior tree refactored (#72)

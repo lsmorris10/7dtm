@@ -348,3 +348,115 @@ The mod introduces 17 key materials used across all crafting systems. Here's whe
 - **The Forge generates heat** — running the Forge adds +3 heat/min to your chunk (capped at +30), which can attract Banshees and mini-hordes. Forge in batches and let the heat decay between sessions, or accept the combat risk.
 - **Gas requires planning** — you need Oil Shale (desert mining) refined at a Chemistry Station (Physician 1 perk). Vehicles are useless without fuel, so unlock the Chemistry Station before building your first vehicle.
 - **Cement Mixer unlocks concrete** — the jump from Cobblestone (500 HP) to Concrete (1500 HP) is massive for base defense. Prioritize this before your first horde night if possible.
+
+---
+
+## Farming System
+
+The farming system provides a renewable source of food and water, essential for long-term survival.
+
+### Farm Plot Block
+
+Created by using a hoe on dirt or grass blocks. Farm Plots are permanent tilled soil that does not revert — unlike vanilla farmland. All crops must be planted on Farm Plot blocks.
+
+### Crop Block
+
+Crops grow through 4 stages (AGE 0-3) via randomTick growth. The Green Thumb perk can speed up growth. Harvest mature crops (AGE 3) to collect produce and seeds for replanting.
+
+### Dew Collector
+
+A passive water generation device. When placed with sky access, the Dew Collector generates a Murky Water Bottle every 6000 ticks (~5 real minutes). It has 4 output slots and its own GUI. Essential for desert bases or locations far from water sources.
+
+### Seed Items
+
+Seeds are right-click-to-plant items that can only be placed on Farm Plot blocks. They grow into the corresponding crop over time.
+
+---
+
+## Power / Electricity System
+
+The electricity system powers advanced defense blocks and the Advanced Workbench.
+
+### Generator Bank
+
+| Property | Value |
+|----------|-------|
+| Fuel | Gas Can |
+| Burn Time | 6000 ticks per fuel unit |
+| Output | 100W |
+
+A fuel-powered generator. Place a Gas Can in the fuel slot to generate power. Wire connections link the generator to powered devices.
+
+### Battery Bank
+
+| Property | Value |
+|----------|-------|
+| Storage | 1000 EU max |
+| Role | Energy storage + redistribution |
+
+Charges from connected power sources (Generator or Solar Panel) and discharges to connected powered devices. Acts as a buffer to keep devices running when generators cycle.
+
+### Solar Panel
+
+| Property | Value |
+|----------|-------|
+| Output | 30W (daytime only) |
+| Requirement | Sky visibility |
+
+Generates power during daytime with direct sky access. No fuel needed — place and connect to devices or battery banks.
+
+### Wire Connections
+
+Right-click a power source with Electrical Parts, then right-click a powered device to create a wire connection. Wire connections are tracked by the PowerGridManager SavedData and persist across server restarts.
+
+### Powered Devices
+
+| Device | Effect | Power Required |
+|--------|--------|----------------|
+| Blade Trap | 6 dmg AoE to nearby entities | Yes |
+| Electric Fence Post | 5 dmg + stun on contact | Yes |
+| Advanced Workbench | End-game crafting station | Yes |
+
+---
+
+## Building & Defense System
+
+### Upgradeable Block
+
+A 6-tier block progression upgraded via right-click with a repair hammer:
+
+| Tier | Block | Materials to Upgrade |
+|------|-------|---------------------|
+| 1 | Wood Frame | (starting block) |
+| 2 | Reinforced Wood | Wood Planks |
+| 3 | Cobblestone | Cobblestone |
+| 4 | Concrete | Concrete Mix (from Cement Mixer) |
+| 5 | Reinforced Concrete | Forged Iron |
+| 6 | Steel | Forged Steel |
+
+### Defensive Blocks
+
+| Block | Damage | Durability | Notes |
+|-------|--------|-----------|-------|
+| Wood Spikes | 4 | 10 hits | Contact damage, degrades on hit |
+| Iron Spikes | 8 | 20 hits | Contact damage, degrades on hit |
+| Blade Trap | 6 (AoE) | — | Requires power, damages nearby entities |
+| Electric Fence Post | 5 + stun | — | Requires power, contact damage + stun effect |
+
+### Land Claim Block
+
+Places a 41-block protection radius that prevents zombie spawns within the area. Limited to one per player.
+
+---
+
+## Armor System
+
+Three armor tiers with movement and stealth trade-offs:
+
+| Tier | Name | Protection | Movement Modifier | Set Bonus (2pc) | Set Bonus (4pc) |
+|------|------|-----------|-------------------|----------------|----------------|
+| Light | Padded | Low | None | 50% noise reduction | 100% noise reduction |
+| Medium | Scrap Iron | Medium | Slight speed reduction | 10% stamina regen | 20% stamina regen |
+| Heavy | Military | High | Moderate speed reduction | 12% damage reduction | 25% damage reduction |
+
+Each set has 4 pieces (Helmet, Chestplate, Leggings, Boots). Wearing pieces from different tiers triggers a mixed-set warning.

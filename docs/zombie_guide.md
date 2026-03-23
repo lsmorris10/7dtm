@@ -1,6 +1,6 @@
 # Brutal Zombie Horde Survival — Zombie Bestiary
 
-A complete guide to every zombie type in the mod, including base stats, special abilities, spawn conditions, modifier variants, and universal behaviors.
+A complete guide to every zombie type in the mod (20 variants + 3 modifiers), including base stats, special abilities, spawn conditions, modifier variants, and universal behaviors.
 
 ---
 
@@ -18,14 +18,16 @@ A complete guide to every zombie type in the mod, including base stats, special 
 | 8 | Banshee | 16 | 1.9 | 1.5 | 250 | 7 | Scream summons 4-8 zombies |
 | 9 | Zombie Dog | 16 | 6.8 | 3.5 | 200 | 3 | Pack spawning, high speed |
 | 10 | Vulture | 12 | 4.5 | 4.0 | 200 | 7 | Flight, swoop attack |
-| 11 | Wrecking Husk | 160 | 11.3 | 1.0 | 800 | 21 | Chest-hit explosion (8-block radius) |
-| 12 | Mutated Brute | 50 | 6.8 | 1.3 | 350 | 14 | Ranged vomit attack (11 blocks) |
-| 13 | Zombie Bear | 120 | 13.1 | 2.0 | 500 | 14 | High damage, charge attack |
-| 14 | Nurse | 24 | 3.8 | 1.0 | 250 | 7 | Healing aura (5-block radius, 5 HP/sec to nearby zombies) |
-| 15 | Soldier | 80 | 9.4 | 1.5 | 400 | 14 | Armored, high HP |
-| 16 | Charged | * | * | * | 550 | 21 | Chain lightning on melee hit |
-| 17 | Infernal | * | * | * | 550 | 21 | Fire trail, fire immunity |
-| 18 | Behemoth | 400 | 18.8 | 0.8 | 2000 | 35 | Ground pound AoE, knockback immune |
+| 11 | Zombie Bird | 8 | 3.0 | 4.5 | 150 | 1 | Fast swarming flyer, rapid dive attacks |
+| 12 | Zombie Parrot | 10 | 3.5 | 5.0 | 175 | 3 | Erratic flyer, heat generation via shrieks |
+| 13 | Wrecking Husk | 160 | 11.3 | 1.0 | 800 | 21 | Chest-hit explosion (8-block radius) |
+| 14 | Mutated Brute | 50 | 6.8 | 1.3 | 350 | 14 | Ranged vomit attack (11 blocks) |
+| 15 | Zombie Bear | 120 | 13.1 | 2.0 | 500 | 14 | High damage, charge attack |
+| 16 | Nurse | 24 | 3.8 | 1.0 | 250 | 7 | Healing aura (5-block radius, 5 HP/sec to nearby zombies) |
+| 17 | Soldier | 80 | 9.4 | 1.5 | 400 | 14 | Armored, high HP |
+| 18 | Charged | * | * | * | 550 | 21 | Chain lightning on melee hit |
+| 19 | Infernal | * | * | * | 550 | 21 | Fire trail, fire immunity |
+| 20 | Behemoth | 400 | 18.8 | 0.8 | 2000 | 35 | Ground pound AoE, knockback immune |
 
 \* Charged and Infernal are standalone entity types whose base stats are calculated from default values (20 HP, 3.0 damage, 1.0 speed) multiplied by their respective modifier multipliers.
 
@@ -459,6 +461,50 @@ Village settlements contain sleeper zombies that spawn inside buildings. The num
 
 ---
 
+### Zombie Bird
+
+| Property | Value |
+|----------|-------|
+| HP | 8 |
+| Damage | 3.0 |
+| Speed | 4.5 blocks/sec |
+| XP | 150 |
+| First Appears | Day 1 |
+
+A fast, swarming flying zombie that attacks in groups with rapid dive attacks. Zombie Birds are fragile (only 8 HP) but extremely fast at 4.5 blocks/sec — faster than Vultures. They spawn in flocks, making them dangerous through sheer numbers. Their short dive cooldowns mean they attack frequently.
+
+**Special Abilities:**
+- **Flight:** Flies above ground level with no gravity
+- **Swarm Dive:** Rapid dive attacks at targets with short cooldowns
+- **Flock Behavior:** Groups together with nearby Zombie Birds for coordinated attacks
+- **Fall Immunity:** Takes no fall damage
+
+Zombie Birds are best dealt with using ranged weapons or area-of-effect attacks. Their low HP means they go down quickly, but missing them is easy due to their speed and erratic flight patterns.
+
+---
+
+### Zombie Parrot
+
+| Property | Value |
+|----------|-------|
+| HP | 10 |
+| Damage | 3.5 |
+| Speed | 5.0 blocks/sec |
+| XP | 175 |
+| First Appears | Day 3 |
+
+An erratic hovering flyer that swoops at targets and generates heatmap heat through periodic shrieks. The Zombie Parrot is the fastest zombie in the game at 5.0 blocks/sec. Its shrieks add heat to the chunk it occupies, potentially attracting more zombies over time — making it a dangerous force multiplier if left alive.
+
+**Special Abilities:**
+- **Flight:** Flies above ground level with no gravity, erratic hovering movement
+- **Swoop Attack:** Dives at targets with rapid attacks
+- **Heat Shriek:** Periodically shrieks (every 200-400 ticks), adding heat to the current chunk via the heatmap system
+- **Fall Immunity:** Takes no fall damage
+
+Zombie Parrots are priority targets — their heat generation can snowball into larger zombie encounters. Kill them quickly before their shrieks push the chunk's heat level above spawn thresholds.
+
+---
+
 ## Combat Tips
 
 - **Kill Nurses first** — their healing aura can out-heal your damage, making every other zombie in the group effectively unkillable.
@@ -469,3 +515,5 @@ Village settlements contain sleeper zombies that spawn inside buildings. The num
 - **Respect Zombie Bears** — 120 HP, 13.1 damage, and 2.0 speed makes them one of the most dangerous mid-game threats.
 - **Behemoths require preparation** — at 400 HP with knockback immunity and a ground pound AoE, you need end-game gear and ideally a group.
 - **Darkness means danger** — underground caves trigger the darkness speed bonus on all zombies, even during daytime. Bring light sources and good weapons.
+- **Kill Zombie Parrots quickly** — their periodic shrieks add heat to the chunk, which can snowball into larger zombie encounters if left unchecked.
+- **Zombie Birds come in swarms** — individually weak at 8 HP, but their 4.5 speed and flock behavior makes them dangerous in numbers. Use area attacks or rapid-fire weapons.
