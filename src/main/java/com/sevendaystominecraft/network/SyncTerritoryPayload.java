@@ -16,7 +16,26 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
             new CustomPacketPayload.Type<>(
                     ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "sync_territory"));
 
-    public record TerritoryEntry(int id, int x, int y, int z, int tier, String label) {}
+    public record BuildingEntry(int x, int y, int z, String displayName) {}
+
+    public record TerritoryEntry(int id, int x, int y, int z, int tier, String label,
+                                  List<BuildingEntry> buildings) {}
+
+    private static final StreamCodec<ByteBuf, BuildingEntry> BUILDING_CODEC = StreamCodec.of(
+            (buf, entry) -> {
+                buf.writeInt(entry.x());
+                buf.writeInt(entry.y());
+                buf.writeInt(entry.z());
+                ByteBufCodecs.STRING_UTF8.encode(buf, entry.displayName());
+            },
+            buf -> {
+                int x = buf.readInt();
+                int y = buf.readInt();
+                int z = buf.readInt();
+                String name = ByteBufCodecs.STRING_UTF8.decode(buf);
+                return new BuildingEntry(x, y, z, name);
+            }
+    );
 
     private static final StreamCodec<ByteBuf, TerritoryEntry> ENTRY_CODEC = StreamCodec.of(
             (buf, entry) -> {
@@ -26,6 +45,10 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
                 buf.writeInt(entry.z());
                 buf.writeInt(entry.tier());
                 ByteBufCodecs.STRING_UTF8.encode(buf, entry.label());
+                buf.writeInt(entry.buildings().size());
+                for (BuildingEntry b : entry.buildings()) {
+                    BUILDING_CODEC.encode(buf, b);
+                }
             },
             buf -> {
                 int id = buf.readInt();
@@ -34,7 +57,12 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
                 int z = buf.readInt();
                 int tier = buf.readInt();
                 String label = ByteBufCodecs.STRING_UTF8.decode(buf);
-                return new TerritoryEntry(id, x, y, z, tier, label);
+                int buildingCount = buf.readInt();
+                List<BuildingEntry> buildings = new ArrayList<>(buildingCount);
+                for (int i = 0; i < buildingCount; i++) {
+                    buildings.add(BUILDING_CODEC.decode(buf));
+                }
+                return new TerritoryEntry(id, x, y, z, tier, label, buildings);
             }
     );
 

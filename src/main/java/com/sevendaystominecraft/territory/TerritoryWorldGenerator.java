@@ -95,6 +95,11 @@ public class TerritoryWorldGenerator {
             spawnLabelEntity(serverLevel, record, origin.above(tier.getLabelHeight() + 5));
 
             record.setBuildingCenters(villageResult.buildingCenters);
+            java.util.List<String> typeNames = new java.util.ArrayList<>();
+            for (VillageBuildingType bt : villageResult.buildingTypes) {
+                typeNames.add(bt.getDisplayName());
+            }
+            record.setBuildingTypeNames(typeNames);
             SleeperZombieManager.spawnSleepers(serverLevel, record, villageResult.perBuildingZombieSpawns);
 
             data.markDirtyRecord();

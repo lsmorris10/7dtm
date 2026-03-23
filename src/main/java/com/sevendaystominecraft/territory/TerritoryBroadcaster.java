@@ -3,6 +3,7 @@ package com.sevendaystominecraft.territory;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.config.TerritoryConfig;
 import com.sevendaystominecraft.network.SyncTerritoryPayload;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.BuildingEntry;
 import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -50,13 +51,24 @@ public class TerritoryBroadcaster {
                 if (record.isCleared()) {
                     label = label + " [Cleared]";
                 }
+
+                List<BuildingEntry> buildingEntries = new ArrayList<>();
+                List<BlockPos> centers = record.getBuildingCenters();
+                List<String> typeNames = record.getBuildingTypeNames();
+                for (int i = 0; i < centers.size(); i++) {
+                    BlockPos pos = centers.get(i);
+                    String displayName = (i < typeNames.size()) ? typeNames.get(i) : "";
+                    buildingEntries.add(new BuildingEntry(pos.getX(), pos.getY(), pos.getZ(), displayName));
+                }
+
                 entries.add(new TerritoryEntry(
                         record.getId(),
                         record.getOrigin().getX(),
                         record.getOrigin().getY(),
                         record.getOrigin().getZ(),
                         record.getTier().getTier(),
-                        label
+                        label,
+                        buildingEntries
                 ));
             }
 

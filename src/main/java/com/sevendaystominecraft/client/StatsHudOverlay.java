@@ -6,7 +6,8 @@ import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.perk.LevelManager;
 
-import com.sevendaystominecraft.territory.TerritoryLabelEntity;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.BuildingEntry;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -15,7 +16,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -167,6 +167,10 @@ public class StatsHudOverlay {
         lastNearestTerritoryEntityId = -1;
     }
 
+    private static final double TERRITORY_DISPLAY_RANGE = 64.0;
+    private static final double TERRITORY_DISPLAY_RANGE_SQ = TERRITORY_DISPLAY_RANGE * TERRITORY_DISPLAY_RANGE;
+    private static final double BUILDING_DISPLAY_RANGE_SQ = 12.0 * 12.0;
+
     private static void renderBottomLeftArea(GuiGraphics graphics, Minecraft mc, Player player) {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
         int x = MARGIN_X;
@@ -186,31 +190,49 @@ public class StatsHudOverlay {
                 sb.append(biomeName);
             }
 
-            java.util.List<TerritoryLabelEntity> labels = mc.level.getEntitiesOfClass(
-                    TerritoryLabelEntity.class,
-                    new AABB(player.blockPosition()).inflate(80)
-            );
-            if (!labels.isEmpty()) {
-                TerritoryLabelEntity nearest = null;
-                double nearestDist = Double.MAX_VALUE;
-                for (TerritoryLabelEntity label : labels) {
-                    double dist = player.distanceToSqr(label);
-                    if (dist < nearestDist) {
-                        nearestDist = dist;
-                        nearest = label;
+            double playerX = player.getX();
+            double playerZ = player.getZ();
+
+            java.util.List<TerritoryEntry> territories = TerritoryClientState.getTerritories();
+            TerritoryEntry nearest = null;
+            double nearestDistSq = Double.MAX_VALUE;
+            for (TerritoryEntry entry : territories) {
+                double dx = playerX - entry.x();
+                double dz = playerZ - entry.z();
+                double distSq = dx * dx + dz * dz;
+                if (distSq < nearestDistSq) {
+                    nearestDistSq = distSq;
+                    nearest = entry;
+                }
+            }
+
+            if (nearest != null && nearestDistSq <= TERRITORY_DISPLAY_RANGE_SQ) {
+                sb.append("  |  ").append(nearest.label());
+
+                String nearestBuildingName = null;
+                double nearestBuildingDistSq = BUILDING_DISPLAY_RANGE_SQ;
+                for (BuildingEntry building : nearest.buildings()) {
+                    if (building.displayName().isEmpty()) continue;
+                    double bdx = playerX - building.x();
+                    double bdz = playerZ - building.z();
+                    double bDistSq = bdx * bdx + bdz * bdz;
+                    if (bDistSq < nearestBuildingDistSq) {
+                        nearestBuildingDistSq = bDistSq;
+                        nearestBuildingName = building.displayName();
                     }
                 }
-                if (nearest != null) {
-                    sb.append("  |  ").append(nearest.getLabelText());
-                    int territoryId = nearest.getTerritoryId();
-                    if (territoryId != lastNearestTerritoryEntityId) {
-                        lastNearestTerritoryEntityId = territoryId;
-                        TerritoryAnnouncement.trigger(
-                                nearest.getLabelText(),
-                                nearest.getTerritoryTier(),
-                                territoryId
-                        );
-                    }
+                if (nearestBuildingName != null) {
+                    sb.append("  |  ").append(nearestBuildingName);
+                }
+
+                int territoryId = nearest.id();
+                if (territoryId != lastNearestTerritoryEntityId) {
+                    lastNearestTerritoryEntityId = territoryId;
+                    TerritoryAnnouncement.trigger(
+                            nearest.label(),
+                            nearest.tier(),
+                            territoryId
+                    );
                 }
             } else {
                 lastNearestTerritoryEntityId = -1;

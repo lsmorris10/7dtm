@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 
+import net.minecraft.nbt.StringTag;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +22,7 @@ public class TerritoryRecord {
     private boolean awakened;
     private int zombiesRemaining;
     private final List<BlockPos> buildingCenters = new ArrayList<>();
+    private final List<String> buildingTypeNames = new ArrayList<>();
     private final Set<Integer> awakenedBuildings = new HashSet<>();
 
     public TerritoryRecord(int id, BlockPos origin, TerritoryTier tier, TerritoryType type) {
@@ -40,6 +43,7 @@ public class TerritoryRecord {
     public boolean isAwakened() { return awakened; }
     public int getZombiesRemaining() { return zombiesRemaining; }
     public List<BlockPos> getBuildingCenters() { return buildingCenters; }
+    public List<String> getBuildingTypeNames() { return buildingTypeNames; }
 
     public void setCleared(boolean cleared) { this.cleared = cleared; }
     public void setAwakened(boolean awakened) { this.awakened = awakened; }
@@ -54,6 +58,11 @@ public class TerritoryRecord {
     public void setBuildingCenters(List<BlockPos> centers) {
         this.buildingCenters.clear();
         this.buildingCenters.addAll(centers);
+    }
+
+    public void setBuildingTypeNames(List<String> names) {
+        this.buildingTypeNames.clear();
+        this.buildingTypeNames.addAll(names);
     }
 
     public boolean isBuildingAwakened(int buildingIndex) {
@@ -93,6 +102,12 @@ public class TerritoryRecord {
         }
         tag.put("buildings", buildingsTag);
 
+        ListTag buildingTypesTag = new ListTag();
+        for (String name : buildingTypeNames) {
+            buildingTypesTag.add(StringTag.valueOf(name));
+        }
+        tag.put("buildingTypeNames", buildingTypesTag);
+
         int[] awakenedArr = awakenedBuildings.stream().mapToInt(Integer::intValue).toArray();
         tag.putIntArray("awakenedBuildings", awakenedArr);
 
@@ -120,6 +135,13 @@ public class TerritoryRecord {
                 CompoundTag bTag = buildingsTag.getCompound(i);
                 record.buildingCenters.add(new BlockPos(
                         bTag.getInt("bx"), bTag.getInt("by"), bTag.getInt("bz")));
+            }
+        }
+
+        if (tag.contains("buildingTypeNames", Tag.TAG_LIST)) {
+            ListTag typesTag = tag.getList("buildingTypeNames", Tag.TAG_STRING);
+            for (int i = 0; i < typesTag.size(); i++) {
+                record.buildingTypeNames.add(typesTag.getString(i));
             }
         }
 
