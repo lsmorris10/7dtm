@@ -14,7 +14,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class VillageClusterGenerator {
 
@@ -49,6 +51,7 @@ public class VillageClusterGenerator {
     private static final int BUILDING_SPACING = 26;
     private static final int BUILDING_GAP = 4;
     private static final int PATH_BLOCK_RADIUS = 1;
+    private static final int ROAD_CONNECTION_DISTANCE = 40;
 
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random) {
         NBTTemplateLoader.init(level);
@@ -127,11 +130,6 @@ public class VillageClusterGenerator {
                 types.add(buildingType);
                 placedCenters.add(buildingPos);
                 placedFootprints.add(new int[]{halfX, halfZ});
-
-                if (placedCenters.size() > 1) {
-                    BlockPos prevCenter = placedCenters.get(placedCenters.size() - 2);
-                    buildPath(level, prevCenter, buildingPos);
-                }
             }
             attempts++;
         }
@@ -140,11 +138,28 @@ public class VillageClusterGenerator {
             return null;
         }
 
+        Set<BlockPos> roadPositionSet = new HashSet<>();
+
         if (!placedCenters.isEmpty()) {
-            buildPath(level, villageCenter, placedCenters.get(0));
+            buildPath(level, villageCenter, placedCenters.get(0), roadPositionSet);
         }
 
-        scatterExteriorProps(level, villageCenter, placedCenters, tier, random);
+        for (int i = 0; i < placedCenters.size(); i++) {
+            for (int j = i + 1; j < placedCenters.size(); j++) {
+                BlockPos a = placedCenters.get(i);
+                BlockPos b = placedCenters.get(j);
+                double dx = a.getX() - b.getX();
+                double dz = a.getZ() - b.getZ();
+                double dist = Math.sqrt(dx * dx + dz * dz);
+                if (dist <= ROAD_CONNECTION_DISTANCE) {
+                    buildPath(level, a, b, roadPositionSet);
+                }
+            }
+        }
+
+        List<BlockPos> roadPositions = new ArrayList<>(roadPositionSet);
+
+        scatterExteriorProps(level, villageCenter, placedCenters, roadPositions, tier, random);
 
         return new VillageResult(villageCenter, allZombieSpawns, perBuildingSpawns, placedCenters,
                 allLootPos, allLootTypes, types, placedCenters.size());
@@ -199,7 +214,7 @@ public class VillageClusterGenerator {
         return candidate;
     }
 
-    private static void buildPath(ServerLevel level, BlockPos from, BlockPos to) {
+    private static void buildPath(ServerLevel level, BlockPos from, BlockPos to, Set<BlockPos> roadPositions) {
         int dx = to.getX() - from.getX();
         int dz = to.getZ() - from.getZ();
         int steps = Math.max(Math.abs(dx), Math.abs(dz));
@@ -220,6 +235,7 @@ public class VillageClusterGenerator {
                                 || TerrainValidator.isVegetation(current.getBlock())) {
                             setBlock(level, pathPos, Blocks.GRAVEL.defaultBlockState());
                             setBlock(level, pathPos.above(), Blocks.AIR.defaultBlockState());
+                            roadPositions.add(pathPos.above());
                         }
                     }
                 }
@@ -229,8 +245,21 @@ public class VillageClusterGenerator {
 
     private static void scatterExteriorProps(ServerLevel level, BlockPos center,
                                               List<BlockPos> buildingCenters,
+                                              List<BlockPos> roadPositions,
                                               TerritoryTier tier, RandomSource random) {
         int propCount = 3 + random.nextInt(5) + tier.getTier();
+
+        int vehicleCount = 1 + random.nextInt(3);
+        if (!roadPositions.isEmpty()) {
+            List<BlockPos> availableRoadPositions = new ArrayList<>(roadPositions);
+            for (int i = 0; i < vehicleCount && !availableRoadPositions.isEmpty(); i++) {
+                int idx = random.nextInt(availableRoadPositions.size());
+                BlockPos roadPos = availableRoadPositions.remove(idx);
+                if (level.isLoaded(roadPos)) {
+                    placeVehicleWreckage(level, roadPos, random);
+                }
+            }
+        }
 
         for (int i = 0; i < propCount; i++) {
             int offsetX = random.nextInt(60) - 30;
@@ -246,14 +275,12 @@ public class VillageClusterGenerator {
             if (!TerrainValidator.isSolidTerrainBlock(belowState.getBlock())) continue;
 
             float roll = random.nextFloat();
-            if (roll < 0.25f) {
+            if (roll < 0.4f) {
                 placeTrashPile(level, propPos, tier, random);
-            } else if (roll < 0.45f) {
+            } else if (roll < 0.7f) {
                 placeMailbox(level, propPos, tier, random);
-            } else if (roll < 0.6f) {
-                placeVendingMachine(level, propPos, tier, random);
             } else {
-                placeVehicleWreckage(level, propPos, random);
+                placeVendingMachine(level, propPos, tier, random);
             }
         }
     }
