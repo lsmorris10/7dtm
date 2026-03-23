@@ -68,6 +68,7 @@ public class TerritoryBroadcaster {
                         record.getOrigin().getZ(),
                         record.getTier().getTier(),
                         label,
+                        record.getType().getDisplayName(),
                         buildingEntries
                 ));
             }

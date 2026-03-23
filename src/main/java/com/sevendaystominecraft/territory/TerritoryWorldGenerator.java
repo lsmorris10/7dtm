@@ -86,7 +86,7 @@ public class TerritoryWorldGenerator {
 
         try {
             VillageClusterGenerator.VillageResult villageResult =
-                    VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random);
+                    VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, type);
 
             if (villageResult == null) return;
 

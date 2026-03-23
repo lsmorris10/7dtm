@@ -55,10 +55,18 @@ public class VillageClusterGenerator {
     private static final int ROAD_CONNECTION_DISTANCE = 40;
 
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random) {
-        return generate(level, center, tier, random, false);
+        return generate(level, center, tier, random, false, null);
     }
 
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean isTraderCompound) {
+        return generate(level, center, tier, random, isTraderCompound, null);
+    }
+
+    public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, TerritoryType territoryType) {
+        return generate(level, center, tier, random, false, territoryType);
+    }
+
+    public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean isTraderCompound, TerritoryType territoryType) {
         NBTTemplateLoader.init(level);
 
         int buildingCount = MIN_BUILDINGS + random.nextInt(MAX_BUILDINGS - MIN_BUILDINGS + 1);
@@ -79,7 +87,12 @@ public class VillageClusterGenerator {
         int attempts = 0;
 
         while (types.size() < buildingCount && attempts < maxAttempts) {
-            VillageBuildingType buildingType = VillageBuildingType.weightedRandom(random);
+            VillageBuildingType buildingType;
+            if (territoryType != null) {
+                buildingType = VillageBuildingType.weightedRandomFrom(random, territoryType.getAllowedBuildings());
+            } else {
+                buildingType = VillageBuildingType.weightedRandom(random);
+            }
 
             int sizeRange = Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1);
             int sizeX = buildingType.getMinSize() + random.nextInt(sizeRange);

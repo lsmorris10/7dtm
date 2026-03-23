@@ -98,7 +98,7 @@ public class TraderSpawnHandler {
 
         VillageClusterGenerator.VillageResult villageResult;
         try {
-            villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, true);
+            villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, true, type);
 
             if (villageResult == null) return false;
 

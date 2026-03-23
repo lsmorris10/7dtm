@@ -221,7 +221,7 @@ public class StatsHudOverlay {
                         nearestBuildingName = building.displayName();
                     }
                 }
-                if (nearestBuildingName != null) {
+                if (nearestBuildingName != null && !nearestBuildingName.equals(nearest.typeName())) {
                     sb.append("  |  ").append(nearestBuildingName);
                 }
 

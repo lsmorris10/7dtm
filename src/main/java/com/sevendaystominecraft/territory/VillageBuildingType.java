@@ -128,4 +128,24 @@ public enum VillageBuildingType {
         }
         return RESIDENTIAL;
     }
+
+    public static VillageBuildingType weightedRandomFrom(RandomSource random, java.util.List<VillageBuildingType> allowed) {
+        if (allowed == null || allowed.isEmpty()) {
+            return weightedRandom(random);
+        }
+        int totalWeight = 0;
+        for (VillageBuildingType type : allowed) {
+            totalWeight += type.spawnWeight;
+        }
+        if (totalWeight <= 0) {
+            return allowed.get(random.nextInt(allowed.size()));
+        }
+        int roll = random.nextInt(totalWeight);
+        int cumulative = 0;
+        for (VillageBuildingType type : allowed) {
+            cumulative += type.spawnWeight;
+            if (roll < cumulative) return type;
+        }
+        return allowed.get(0);
+    }
 }

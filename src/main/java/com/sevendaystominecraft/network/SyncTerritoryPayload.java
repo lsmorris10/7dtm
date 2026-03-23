@@ -19,7 +19,7 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
     public record BuildingEntry(int x, int y, int z, String displayName) {}
 
     public record TerritoryEntry(int id, int x, int y, int z, int tier, String label,
-                                  List<BuildingEntry> buildings) {}
+                                  String typeName, List<BuildingEntry> buildings) {}
 
     private static final StreamCodec<ByteBuf, BuildingEntry> BUILDING_CODEC = StreamCodec.of(
             (buf, entry) -> {
@@ -45,6 +45,7 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
                 buf.writeInt(entry.z());
                 buf.writeInt(entry.tier());
                 ByteBufCodecs.STRING_UTF8.encode(buf, entry.label());
+                ByteBufCodecs.STRING_UTF8.encode(buf, entry.typeName());
                 buf.writeInt(entry.buildings().size());
                 for (BuildingEntry b : entry.buildings()) {
                     BUILDING_CODEC.encode(buf, b);
@@ -57,12 +58,13 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
                 int z = buf.readInt();
                 int tier = buf.readInt();
                 String label = ByteBufCodecs.STRING_UTF8.decode(buf);
+                String typeName = ByteBufCodecs.STRING_UTF8.decode(buf);
                 int buildingCount = buf.readInt();
                 List<BuildingEntry> buildings = new ArrayList<>(buildingCount);
                 for (int i = 0; i < buildingCount; i++) {
                     buildings.add(BUILDING_CODEC.decode(buf));
                 }
-                return new TerritoryEntry(id, x, y, z, tier, label, buildings);
+                return new TerritoryEntry(id, x, y, z, tier, label, typeName, buildings);
             }
     );
 
