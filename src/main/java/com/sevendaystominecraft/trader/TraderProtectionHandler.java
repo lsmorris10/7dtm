@@ -24,9 +24,10 @@ public class TraderProtectionHandler {
 
         BlockPos pos = event.getEntity().blockPosition();
         int protectionRadius = TraderConfig.INSTANCE.protectionRadius.get();
+        int compoundRadius = TraderConfig.INSTANCE.compoundProtectionRadius.get();
         TraderData data = TraderData.getOrCreate(serverLevel);
 
-        if (data.isInProtectionZone(pos, protectionRadius)) {
+        if (data.isInProtectionZone(pos, protectionRadius, compoundRadius)) {
             event.setCanceled(true);
         }
     }

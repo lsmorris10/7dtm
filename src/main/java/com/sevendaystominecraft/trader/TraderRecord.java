@@ -25,6 +25,7 @@ public class TraderRecord {
     private boolean stockInitialized = false;
     private final List<QuestDefinition> availableQuests = new ArrayList<>();
     private long lastQuestRefreshDay = -1;
+    private BlockPos compoundCenter;
 
     public TraderRecord(int id, BlockPos origin, String name, int tier) {
         this.id = id;
@@ -32,6 +33,7 @@ public class TraderRecord {
         this.name = name;
         this.tier = tier;
         this.lastRestockDay = -1;
+        this.compoundCenter = origin;
         initializeStock();
     }
 
@@ -53,6 +55,8 @@ public class TraderRecord {
     public int getTier() { return tier; }
     public long getLastRestockDay() { return lastRestockDay; }
     public void setLastRestockDay(long day) { this.lastRestockDay = day; }
+    public BlockPos getCompoundCenter() { return compoundCenter; }
+    public void setCompoundCenter(BlockPos center) { this.compoundCenter = center; }
 
     public int getStock(int offerIndex) {
         return stock.getOrDefault(offerIndex, 0);
@@ -101,6 +105,12 @@ public class TraderRecord {
         tag.putInt("tier", tier);
         tag.putLong("lastRestockDay", lastRestockDay);
 
+        if (compoundCenter != null) {
+            tag.putInt("compoundCenterX", compoundCenter.getX());
+            tag.putInt("compoundCenterY", compoundCenter.getY());
+            tag.putInt("compoundCenterZ", compoundCenter.getZ());
+        }
+
         ListTag stockList = new ListTag();
         for (Map.Entry<Integer, Integer> entry : stock.entrySet()) {
             CompoundTag stockEntry = new CompoundTag();
@@ -129,6 +139,14 @@ public class TraderRecord {
         int tier = tag.getInt("tier");
         TraderRecord record = new TraderRecord(id, origin, name, tier);
         record.lastRestockDay = tag.getLong("lastRestockDay");
+
+        if (tag.contains("compoundCenterX")) {
+            record.compoundCenter = new BlockPos(
+                    tag.getInt("compoundCenterX"),
+                    tag.getInt("compoundCenterY"),
+                    tag.getInt("compoundCenterZ")
+            );
+        }
 
         if (tag.contains("stock")) {
             record.stock.clear();

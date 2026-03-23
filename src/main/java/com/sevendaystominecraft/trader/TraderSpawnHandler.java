@@ -8,7 +8,6 @@ import com.sevendaystominecraft.territory.TerritoryTier;
 import com.sevendaystominecraft.territory.TerritoryType;
 import com.sevendaystominecraft.territory.TerrainValidator;
 import com.sevendaystominecraft.territory.VillageClusterGenerator;
-import com.sevendaystominecraft.territory.SleeperZombieManager;
 import com.sevendaystominecraft.territory.TerritoryRecord;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -105,7 +104,6 @@ public class TraderSpawnHandler {
 
             TerritoryRecord territoryRecord = territoryData.addTerritory(origin, tier, type);
             territoryRecord.setBuildingCenters(villageResult.buildingCenters);
-            SleeperZombieManager.spawnSleepers(serverLevel, territoryRecord, villageResult.perBuildingZombieSpawns);
             territoryData.markDirtyRecord();
 
         } catch (Exception e) {
@@ -118,11 +116,11 @@ public class TraderSpawnHandler {
         if (villageResult.buildingCenters != null && !villageResult.buildingCenters.isEmpty()) {
             traderPos = villageResult.buildingCenters.get(0);
         }
-        spawnTraderEntity(serverLevel, traderPos);
+        spawnTraderEntity(serverLevel, traderPos, villageResult.center);
         return true;
     }
 
-    private static void spawnTraderEntity(ServerLevel serverLevel, BlockPos origin) {
+    private static void spawnTraderEntity(ServerLevel serverLevel, BlockPos origin, BlockPos compoundCenter) {
         TraderData data = TraderData.getOrCreate(serverLevel);
 
         int blockX = origin.getX();
@@ -138,6 +136,7 @@ public class TraderSpawnHandler {
         }
 
         com.sevendaystominecraft.trader.TraderRecord record = data.addTrader(origin, name, tier);
+        record.setCompoundCenter(compoundCenter);
 
         trader.moveTo(origin.getX() + 0.5, origin.getY() + 1, origin.getZ() + 0.5, 0f, 0f);
         trader.setTraderName(name);

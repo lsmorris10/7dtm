@@ -96,12 +96,21 @@ public class TraderData extends SavedData {
         setDirty();
     }
 
-    public boolean isInProtectionZone(BlockPos pos, int protectionRadius) {
+    public boolean isInProtectionZone(BlockPos pos, int protectionRadius, int compoundProtectionRadius) {
         for (TraderRecord record : tradersById.values()) {
-            double dx = record.getOrigin().getX() - pos.getX();
-            double dz = record.getOrigin().getZ() - pos.getZ();
-            if (Math.sqrt(dx * dx + dz * dz) <= protectionRadius) {
+            double dxTrader = record.getOrigin().getX() - pos.getX();
+            double dzTrader = record.getOrigin().getZ() - pos.getZ();
+            if (Math.sqrt(dxTrader * dxTrader + dzTrader * dzTrader) <= protectionRadius) {
                 return true;
+            }
+
+            BlockPos compound = record.getCompoundCenter();
+            if (compound != null) {
+                double dxCompound = compound.getX() - pos.getX();
+                double dzCompound = compound.getZ() - pos.getZ();
+                if (Math.sqrt(dxCompound * dxCompound + dzCompound * dzCompound) <= compoundProtectionRadius) {
+                    return true;
+                }
             }
         }
         return false;

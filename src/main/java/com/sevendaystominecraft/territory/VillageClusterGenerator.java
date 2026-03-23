@@ -57,7 +57,7 @@ public class VillageClusterGenerator {
         return generate(level, center, tier, random, false);
     }
 
-    public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean allowTraderBuildings) {
+    public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean isTraderCompound) {
         NBTTemplateLoader.init(level);
 
         int buildingCount = MIN_BUILDINGS + random.nextInt(MAX_BUILDINGS - MIN_BUILDINGS + 1);
@@ -73,25 +73,12 @@ public class VillageClusterGenerator {
         int surfaceY = TerrainValidator.findSolidGroundY(level, center.getX(), center.getZ());
         BlockPos villageCenter = new BlockPos(center.getX(), surfaceY, center.getZ());
 
-        boolean hasTrader = false;
         int slotIndex = 0;
         int maxAttempts = buildingCount + 8;
         int attempts = 0;
 
         while (types.size() < buildingCount && attempts < maxAttempts) {
-            VillageBuildingType buildingType;
-            if (allowTraderBuildings && attempts == 0 && random.nextFloat() < 0.15f) {
-                buildingType = VillageBuildingType.TRADER_OUTPOST;
-                hasTrader = true;
-            } else {
-                buildingType = VillageBuildingType.weightedRandomExcluding(random, allowTraderBuildings ? null : VillageBuildingType.TRADER_OUTPOST);
-                if (buildingType == VillageBuildingType.TRADER_OUTPOST && hasTrader) {
-                    buildingType = VillageBuildingType.RESIDENTIAL;
-                }
-                if (buildingType == VillageBuildingType.TRADER_OUTPOST) {
-                    hasTrader = true;
-                }
-            }
+            VillageBuildingType buildingType = VillageBuildingType.weightedRandom(random);
 
             int sizeRange = Math.max(1, buildingType.getMaxSize() - buildingType.getMinSize() + 1);
             int sizeX = buildingType.getMinSize() + random.nextInt(sizeRange);
@@ -121,10 +108,15 @@ public class VillageClusterGenerator {
             }
 
             if (result != null) {
-                int maxZombiesForBuilding = buildingType.getZombieCount(random, tier.getTier());
-                List<BlockPos> cappedSpawns = new ArrayList<>(result.zombieSpawnPositions);
-                if (cappedSpawns.size() > maxZombiesForBuilding) {
-                    cappedSpawns = new ArrayList<>(cappedSpawns.subList(0, maxZombiesForBuilding));
+                List<BlockPos> cappedSpawns;
+                if (isTraderCompound) {
+                    cappedSpawns = new ArrayList<>();
+                } else {
+                    int maxZombiesForBuilding = buildingType.getZombieCount(random, tier.getTier());
+                    cappedSpawns = new ArrayList<>(result.zombieSpawnPositions);
+                    if (cappedSpawns.size() > maxZombiesForBuilding) {
+                        cappedSpawns = new ArrayList<>(cappedSpawns.subList(0, maxZombiesForBuilding));
+                    }
                 }
                 allZombieSpawns.addAll(cappedSpawns);
                 perBuildingSpawns.add(cappedSpawns);

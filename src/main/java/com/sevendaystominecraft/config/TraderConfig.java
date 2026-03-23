@@ -19,6 +19,7 @@ public class TraderConfig {
     public final ModConfigSpec.IntValue minChunkSpacing;
     public final ModConfigSpec.IntValue spawnChanceDenominator;
     public final ModConfigSpec.IntValue protectionRadius;
+    public final ModConfigSpec.IntValue compoundProtectionRadius;
     public final ModConfigSpec.IntValue restockIntervalDays;
     public final ModConfigSpec.IntValue syncRangeBlocks;
     public final ModConfigSpec.IntValue tier1MaxDistance;
@@ -52,6 +53,11 @@ public class TraderConfig {
                 .comment("Radius in blocks around each trader where zombie spawns and block breaking are suppressed.",
                          "Default 30.")
                 .defineInRange("protectionRadius", 30, 10, 100);
+
+        compoundProtectionRadius = builder
+                .comment("Radius in blocks around the compound center where natural zombie spawning is suppressed.",
+                         "Covers the full trader outpost building cluster. Default 80.")
+                .defineInRange("compoundProtectionRadius", 80, 30, 200);
 
         restockIntervalDays = builder
                 .comment("Number of in-game days between trader inventory restocks.",
