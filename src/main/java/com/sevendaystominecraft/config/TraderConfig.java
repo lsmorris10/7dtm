@@ -91,8 +91,8 @@ public class TraderConfig {
 
         maxTradersInRadius = builder
                 .comment("Maximum number of trader outposts allowed within the check radius.",
-                         "Prevents clustering of traders in one area. Default 2.")
-                .defineInRange("maxTradersInRadius", 2, 1, 10);
+                         "Prevents clustering of traders in one area. Default 1.")
+                .defineInRange("maxTradersInRadius", 1, 1, 10);
 
         maxTradersCheckRadius = builder
                 .comment("Radius in chunks to check for the max trader limit.",

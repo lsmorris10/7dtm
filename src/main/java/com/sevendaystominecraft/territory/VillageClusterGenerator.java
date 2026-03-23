@@ -49,6 +49,8 @@ public class VillageClusterGenerator {
 
     private static final int MIN_BUILDINGS = 4;
     private static final int MAX_BUILDINGS = 7;
+    private static final int TRADER_MIN_BUILDINGS = 2;
+    private static final int TRADER_MAX_BUILDINGS = 3;
     private static final int BUILDING_SPACING = 26;
     private static final int BUILDING_GAP = 7;
     private static final int PATH_BLOCK_RADIUS = 1;
@@ -69,7 +71,9 @@ public class VillageClusterGenerator {
     public static VillageResult generate(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random, boolean isTraderCompound, TerritoryType territoryType) {
         NBTTemplateLoader.init(level);
 
-        int buildingCount = MIN_BUILDINGS + random.nextInt(MAX_BUILDINGS - MIN_BUILDINGS + 1);
+        int minBuildings = isTraderCompound ? TRADER_MIN_BUILDINGS : MIN_BUILDINGS;
+        int maxBuildings = isTraderCompound ? TRADER_MAX_BUILDINGS : MAX_BUILDINGS;
+        int buildingCount = minBuildings + random.nextInt(maxBuildings - minBuildings + 1);
 
         List<BlockPos> allZombieSpawns = new ArrayList<>();
         List<List<BlockPos>> perBuildingSpawns = new ArrayList<>();
@@ -170,7 +174,7 @@ public class VillageClusterGenerator {
             attempts++;
         }
 
-        if (placedCenters.size() < MIN_BUILDINGS) {
+        if (placedCenters.size() < minBuildings) {
             return null;
         }
 
