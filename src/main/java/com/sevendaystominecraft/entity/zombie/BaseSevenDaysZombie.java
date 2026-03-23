@@ -41,6 +41,8 @@ public class BaseSevenDaysZombie extends Zombie {
     protected boolean isHordeMob;
     private boolean statsApplied = false;
     private float lastDisplayedHP = -1;
+    private ZombieDetectionGoal baseDetectionGoal;
+    private final java.util.List<net.minecraft.world.entity.ai.goal.Goal> groundOnlyGoals = new java.util.ArrayList<>();
 
     public BaseSevenDaysZombie(EntityType<? extends Zombie> type, Level level, ZombieVariant variant) {
         super(type, level);
@@ -67,12 +69,33 @@ public class BaseSevenDaysZombie extends Zombie {
     protected void registerGoals() {
         super.registerGoals();
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new ZombieDetectionGoal(this));
-        goalSelector.addGoal(3, new ZombieBreakBlockGoal(this));
-        goalSelector.addGoal(4, new ZombieHordePathGoal(this));
-        goalSelector.addGoal(5, new ZombieInvestigateGoal(this));
+        baseDetectionGoal = new ZombieDetectionGoal(this);
+        goalSelector.addGoal(1, baseDetectionGoal);
+        ZombieBreakBlockGoal breakGoal = new ZombieBreakBlockGoal(this);
+        ZombieHordePathGoal hordeGoal = new ZombieHordePathGoal(this);
+        ZombieInvestigateGoal investigateGoal = new ZombieInvestigateGoal(this);
+        goalSelector.addGoal(3, breakGoal);
+        goalSelector.addGoal(4, hordeGoal);
+        goalSelector.addGoal(5, investigateGoal);
+        groundOnlyGoals.add(breakGoal);
+        groundOnlyGoals.add(hordeGoal);
+        groundOnlyGoals.add(investigateGoal);
         if (ZombieConfig.INSTANCE.smellTrackingEnabled.get()) {
-            goalSelector.addGoal(6, new ZombieSmellGoal(this));
+            ZombieSmellGoal smellGoal = new ZombieSmellGoal(this);
+            goalSelector.addGoal(6, smellGoal);
+            groundOnlyGoals.add(smellGoal);
+        }
+    }
+
+    protected void removeBaseDetectionGoal() {
+        if (baseDetectionGoal != null) {
+            goalSelector.removeGoal(baseDetectionGoal);
+        }
+    }
+
+    protected void removeGroundOnlyGoals() {
+        for (net.minecraft.world.entity.ai.goal.Goal goal : groundOnlyGoals) {
+            goalSelector.removeGoal(goal);
         }
     }
 

@@ -1,6 +1,9 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
+import com.sevendaystominecraft.entity.zombie.ai.BirdPursueTargetGoal;
+import com.sevendaystominecraft.entity.zombie.ai.BirdScanForPlayerGoal;
+import com.sevendaystominecraft.entity.zombie.ai.FlyWanderGoal;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,8 +29,13 @@ public class VultureEntity extends BaseSevenDaysZombie {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        removeBaseDetectionGoal();
+        removeGroundOnlyGoals();
         goalSelector.addGoal(1, new DiveAttackGoal(this));
+        goalSelector.addGoal(2, new BirdPursueTargetGoal(this));
         goalSelector.addGoal(3, new CircleGoal(this));
+        goalSelector.addGoal(4, new BirdScanForPlayerGoal(this));
+        goalSelector.addGoal(5, new FlyWanderGoal(this));
     }
 
     @Override
@@ -81,7 +89,8 @@ public class VultureEntity extends BaseSevenDaysZombie {
         public boolean canUse() {
             LivingEntity target = vulture.getTarget();
             if (target == null || !target.isAlive()) return false;
-            return vulture.diveCooldown <= 0 && vulture.getY() > target.getY() + 3;
+            return vulture.diveCooldown <= 0 && vulture.distanceTo(target) <= 10.0
+                    && vulture.getY() > target.getY() + 3;
         }
 
         @Override

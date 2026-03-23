@@ -1,6 +1,9 @@
 package com.sevendaystominecraft.entity.zombie;
 
 import com.sevendaystominecraft.config.ZombieConfig;
+import com.sevendaystominecraft.entity.zombie.ai.BirdPursueTargetGoal;
+import com.sevendaystominecraft.entity.zombie.ai.BirdScanForPlayerGoal;
+import com.sevendaystominecraft.entity.zombie.ai.FlyWanderGoal;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,8 +29,13 @@ public class ZombieBirdEntity extends BaseSevenDaysZombie {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        removeBaseDetectionGoal();
+        removeGroundOnlyGoals();
         goalSelector.addGoal(1, new SwarmDiveGoal(this));
+        goalSelector.addGoal(2, new BirdPursueTargetGoal(this));
         goalSelector.addGoal(3, new FlockGoal(this));
+        goalSelector.addGoal(4, new BirdScanForPlayerGoal(this));
+        goalSelector.addGoal(5, new FlyWanderGoal(this));
     }
 
     @Override
@@ -81,7 +89,8 @@ public class ZombieBirdEntity extends BaseSevenDaysZombie {
         public boolean canUse() {
             LivingEntity target = bird.getTarget();
             if (target == null || !target.isAlive()) return false;
-            return bird.diveCooldown <= 0 && bird.getY() > target.getY() + 2;
+            return bird.diveCooldown <= 0 && bird.distanceTo(target) <= 10.0
+                    && bird.getY() > target.getY() + 2;
         }
 
         @Override
