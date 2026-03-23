@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.client.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -10,6 +11,7 @@ public class InventoryScreenReplacer {
 
     public static void onScreenOpening(ScreenEvent.Opening event) {
         if (!(event.getScreen() instanceof InventoryScreen)) return;
+        if (event.getScreen() instanceof CreativeModeInventoryScreen) return;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
