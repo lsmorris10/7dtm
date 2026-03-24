@@ -479,8 +479,9 @@ public class VillageBuildingBuilder {
 
             while (attempts < 20) {
                 int dx, dz;
+                int wall = -1;
                 if (lootType.isWallFurniture()) {
-                    int wall = (wallCycle + random.nextInt(2)) % 4;
+                    wall = (wallCycle + random.nextInt(2)) % 4;
                     int freeRangeX = Math.max(1, innerHalfX - 1);
                     int freeRangeZ = Math.max(1, innerHalfZ - 1);
                     switch (wall) {
@@ -508,9 +509,17 @@ public class VillageBuildingBuilder {
                                     && abovePos.getY() - base.getY() < wallHeight
                                     && level.getBlockState(abovePos).canBeReplaced()
                                     && !lootPos.contains(abovePos)) {
+                                Direction vendingFacing = switch (wall) {
+                                    case 0 -> Direction.SOUTH;
+                                    case 1 -> Direction.NORTH;
+                                    case 2 -> Direction.EAST;
+                                    default -> Direction.WEST;
+                                };
                                 BlockState lowerState = lootBlock.defaultBlockState()
                                         .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
-                                                DoubleBlockHalf.LOWER);
+                                                DoubleBlockHalf.LOWER)
+                                        .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.FACING,
+                                                vendingFacing);
                                 BlockState upperState = lowerState
                                         .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
                                                 DoubleBlockHalf.UPPER);

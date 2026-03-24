@@ -121,8 +121,9 @@ public class TerritoryStructureBuilder {
 
             while (attempts < 20) {
                 int dx, dz;
+                int wall = -1;
                 if (lootType.isWallFurniture() && innerHalf > 0) {
-                    int wall = (wallCycle + random.nextInt(2)) % 4;
+                    wall = (wallCycle + random.nextInt(2)) % 4;
                     int freeRange = Math.max(1, innerHalf - 1);
                     switch (wall) {
                         case 0 -> { dx = innerHalf;  dz = random.nextInt(freeRange * 2 + 1) - freeRange; }
@@ -148,9 +149,17 @@ public class TerritoryStructureBuilder {
                             if (abovePos.getY() < level.getMaxY()
                                     && level.getBlockState(abovePos).canBeReplaced()
                                     && !lootPos.contains(abovePos)) {
+                                net.minecraft.core.Direction vendingFacing = switch (wall) {
+                                    case 0 -> net.minecraft.core.Direction.WEST;
+                                    case 1 -> net.minecraft.core.Direction.EAST;
+                                    case 2 -> net.minecraft.core.Direction.NORTH;
+                                    default -> net.minecraft.core.Direction.SOUTH;
+                                };
                                 BlockState lowerState = lootBlock.defaultBlockState()
                                         .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
-                                                net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER);
+                                                net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER)
+                                        .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.FACING,
+                                                vendingFacing);
                                 BlockState upperState = lowerState
                                         .setValue(com.sevendaystominecraft.block.loot.VendingMachineBlock.HALF,
                                                 net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER);
