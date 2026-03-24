@@ -59,6 +59,30 @@
     ],
     "subtitle": "subtitles.sevendaystominecraft.shotgun_fire"
   },
+  "gun_fire_smg": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_9mm"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_smg"
+  },
+  "gun_fire_hunting_rifle": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_hunting_rifle"
+  },
+  "gun_fire_sniper_rifle": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_sniper_rifle"
+  },
+  "gun_fire_m60": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_m60"
+  },
   "weapon_reload": {
     "sounds": [
       "sevendaystominecraft:weapon_reload"

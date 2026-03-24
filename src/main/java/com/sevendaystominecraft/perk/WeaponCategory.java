@@ -13,6 +13,8 @@ public enum WeaponCategory {
     BOW,
     PISTOL,
     RIFLE,
+    SHOTGUN,
+    MACHINE_GUN,
     STUN_BATON,
     NONE;
 
@@ -23,8 +25,10 @@ public enum WeaponCategory {
 
         if (item instanceof GeoRangedWeaponItem ranged) {
             return switch (ranged.getWeaponType()) {
-                case PISTOL_9MM -> PISTOL;
-                case AK47 -> RIFLE;
+                case PISTOL_9MM, SMG -> PISTOL;
+                case AK47, HUNTING_RIFLE, SNIPER_RIFLE -> RIFLE;
+                case SHOTGUN -> SHOTGUN;
+                case M60 -> MACHINE_GUN;
             };
         }
 
@@ -47,6 +51,8 @@ public enum WeaponCategory {
             case BOW -> "archery";
             case PISTOL -> "gunslinger";
             case RIFLE -> "rifle_guy";
+            case SHOTGUN -> "boomstick";
+            case MACHINE_GUN -> "rifle_guy";
             case STUN_BATON -> "electrocutioner";
             case NONE -> null;
         };
@@ -54,7 +60,7 @@ public enum WeaponCategory {
 
     public float getDamagePerRank() {
         return switch (this) {
-            case FIST, CLUB, SLEDGEHAMMER, KNIFE, SPEAR, BOW, PISTOL, RIFLE -> 0.10f;
+            case FIST, CLUB, SLEDGEHAMMER, KNIFE, SPEAR, BOW, PISTOL, RIFLE, SHOTGUN, MACHINE_GUN -> 0.10f;
             case STUN_BATON -> 0.15f;
             case NONE -> 0.0f;
         };
@@ -69,7 +75,7 @@ public enum WeaponCategory {
 
     public boolean isRanged() {
         return switch (this) {
-            case BOW, PISTOL, RIFLE -> true;
+            case BOW, PISTOL, RIFLE, SHOTGUN, MACHINE_GUN -> true;
             default -> false;
         };
     }

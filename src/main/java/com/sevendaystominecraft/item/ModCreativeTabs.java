@@ -117,8 +117,15 @@ public class ModCreativeTabs {
                         output.accept(ModItems.IRON_SLEDGEHAMMER.get());
                         output.accept(ModItems.PISTOL_9MM.get());
                         output.accept(ModItems.AK47.get());
+                        output.accept(ModItems.SHOTGUN.get());
+                        output.accept(ModItems.SMG.get());
+                        output.accept(ModItems.HUNTING_RIFLE.get());
+                        output.accept(ModItems.SNIPER_RIFLE.get());
+                        output.accept(ModItems.M60.get());
                         output.accept(ModItems.AMMO_9MM.get());
                         output.accept(ModItems.AMMO_762.get());
+                        output.accept(ModItems.AMMO_SHOTGUN_SHELL.get());
+                        output.accept(ModItems.AMMO_44_MAGNUM.get());
                         output.accept(ModItems.GRENADE.get());
                     })
                     .build());

@@ -149,6 +149,12 @@ public class ModItems {
     public static final Supplier<Item> AMMO_762 = ITEMS.register("ammo_762",
             () -> new Item(new Item.Properties().setId(key("ammo_762")).stacksTo(64)));
 
+    public static final Supplier<Item> AMMO_SHOTGUN_SHELL = ITEMS.register("ammo_shotgun_shell",
+            () -> new Item(new Item.Properties().setId(key("ammo_shotgun_shell")).stacksTo(64)));
+
+    public static final Supplier<Item> AMMO_44_MAGNUM = ITEMS.register("ammo_44_magnum",
+            () -> new Item(new Item.Properties().setId(key("ammo_44_magnum")).stacksTo(64)));
+
     public static final Supplier<Item> PISTOL_9MM = ITEMS.register("pistol_9mm",
             () -> new GeoRangedWeaponItem(
                     new Item.Properties().setId(key("pistol_9mm")).durability(250).stacksTo(1),
@@ -163,6 +169,46 @@ public class ModItems {
                     30, 50, GeoRangedWeaponItem.WeaponType.AK47,
                     () -> ModSounds.GUN_FIRE_AK47.get(),
                     0.005, 200, true, true));
+
+    public static final Supplier<Item> SHOTGUN = ITEMS.register("shotgun",
+            () -> new GeoRangedWeaponItem(
+                    new Item.Properties().setId(key("shotgun")).durability(400).stacksTo(1),
+                    48.0f, 16, 3.5f, 5.0f, () -> AMMO_SHOTGUN_SHELL.get(),
+                    8, 60, GeoRangedWeaponItem.WeaponType.SHOTGUN,
+                    () -> ModSounds.SHOTGUN_FIRE.get(),
+                    0.02, 40, false, false, 8));
+
+    public static final Supplier<Item> SMG = ITEMS.register("smg",
+            () -> new GeoRangedWeaponItem(
+                    new Item.Properties().setId(key("smg")).durability(350).stacksTo(1),
+                    6.0f, 3, 4.0f, 4.0f, () -> AMMO_9MM.get(),
+                    30, 40, GeoRangedWeaponItem.WeaponType.SMG,
+                    () -> ModSounds.GUN_FIRE_SMG.get(),
+                    0.01, 100, true, false));
+
+    public static final Supplier<Item> HUNTING_RIFLE = ITEMS.register("hunting_rifle",
+            () -> new GeoRangedWeaponItem(
+                    new Item.Properties().setId(key("hunting_rifle")).durability(400).stacksTo(1),
+                    18.0f, 20, 6.0f, 1.5f, () -> AMMO_762.get(),
+                    5, 50, GeoRangedWeaponItem.WeaponType.HUNTING_RIFLE,
+                    () -> ModSounds.GUN_FIRE_HUNTING_RIFLE.get(),
+                    0.003, 300, false, false));
+
+    public static final Supplier<Item> SNIPER_RIFLE = ITEMS.register("sniper_rifle",
+            () -> new GeoRangedWeaponItem(
+                    new Item.Properties().setId(key("sniper_rifle")).durability(450).stacksTo(1),
+                    30.0f, 30, 8.0f, 0.5f, () -> AMMO_762.get(),
+                    5, 60, GeoRangedWeaponItem.WeaponType.SNIPER_RIFLE,
+                    () -> ModSounds.GUN_FIRE_SNIPER_RIFLE.get(),
+                    0.001, 400, false, false));
+
+    public static final Supplier<Item> M60 = ITEMS.register("m60",
+            () -> new GeoRangedWeaponItem(
+                    new Item.Properties().setId(key("m60")).durability(600).stacksTo(1),
+                    10.0f, 3, 5.0f, 4.5f, () -> AMMO_762.get(),
+                    100, 80, GeoRangedWeaponItem.WeaponType.M60,
+                    () -> ModSounds.GUN_FIRE_M60.get(),
+                    0.005, 200, true, false, 1, 0.7f));
 
     public static final Supplier<Item> GRENADE = ITEMS.register("grenade",
             () -> new GrenadeItem(

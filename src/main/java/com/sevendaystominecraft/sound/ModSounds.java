@@ -27,6 +27,10 @@ public class ModSounds {
     public static final Supplier<SoundEvent> GUN_FIRE_9MM = register("gun_fire_9mm");
     public static final Supplier<SoundEvent> GUN_FIRE_AK47 = register("gun_fire_ak47");
     public static final Supplier<SoundEvent> SHOTGUN_FIRE = register("shotgun_fire");
+    public static final Supplier<SoundEvent> GUN_FIRE_SMG = register("gun_fire_smg");
+    public static final Supplier<SoundEvent> GUN_FIRE_HUNTING_RIFLE = register("gun_fire_hunting_rifle");
+    public static final Supplier<SoundEvent> GUN_FIRE_SNIPER_RIFLE = register("gun_fire_sniper_rifle");
+    public static final Supplier<SoundEvent> GUN_FIRE_M60 = register("gun_fire_m60");
     public static final Supplier<SoundEvent> WEAPON_RELOAD = register("weapon_reload");
     public static final Supplier<SoundEvent> MELEE_SWING = register("melee_swing");
     public static final Supplier<SoundEvent> MELEE_HIT = register("melee_hit");

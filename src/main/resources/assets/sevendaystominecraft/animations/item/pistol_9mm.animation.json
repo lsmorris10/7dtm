@@ -39,6 +39,20 @@
         }
       }
     },
+    "animation.pistol_9mm.rack": {
+      "loop": false,
+      "animation_length": 0.4,
+      "bones": {
+        "slide": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.1": [0, 0, 3],
+            "0.3": [0, 0, 3],
+            "0.4": [0, 0, 0]
+          }
+        }
+      }
+    },
     "animation.pistol_9mm.reload": {
       "loop": false,
       "animation_length": 1.8,

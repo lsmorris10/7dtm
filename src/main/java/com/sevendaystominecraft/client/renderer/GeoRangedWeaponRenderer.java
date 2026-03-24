@@ -29,6 +29,11 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
         return switch (item.getWeaponType()) {
             case AK47 -> "ak47";
             case PISTOL_9MM -> "pistol_9mm";
+            case SHOTGUN -> "shotgun";
+            case SMG -> "smg";
+            case HUNTING_RIFLE -> "hunting_rifle";
+            case SNIPER_RIFLE -> "sniper_rifle";
+            case M60 -> "m60";
         };
     }
 
@@ -57,15 +62,22 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 isReRender, partialTick, packedLight, packedOverlay, renderColor);
     }
 
+    private boolean isLongGun() {
+        return switch (weaponName) {
+            case "ak47", "shotgun", "hunting_rifle", "sniper_rifle", "m60" -> true;
+            default -> false;
+        };
+    }
+
     private void applyDisplayTransforms(PoseStack poseStack, ItemDisplayContext context) {
         if (context == null) return;
 
-        boolean isAk47 = "ak47".equals(weaponName);
+        boolean longGun = isLongGun();
         float scale;
 
         switch (context) {
             case FIRST_PERSON_RIGHT_HAND:
-                if (isAk47) {
+                if (longGun) {
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.3, -0.1, -0.5);
@@ -78,7 +90,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 }
                 break;
             case FIRST_PERSON_LEFT_HAND:
-                if (isAk47) {
+                if (longGun) {
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.3, -0.1, -0.5);
@@ -91,7 +103,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 }
                 break;
             case THIRD_PERSON_RIGHT_HAND:
-                if (isAk47) {
+                if (longGun) {
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.1, 0.3, 0.1);
@@ -103,7 +115,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 }
                 break;
             case THIRD_PERSON_LEFT_HAND:
-                if (isAk47) {
+                if (longGun) {
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.1, 0.3, 0.1);
@@ -115,35 +127,23 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 }
                 break;
             case GUI:
-                if (isAk47) {
+                if (longGun) {
                     scale = 0.45f;
-                    poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.0, 0.5, 0.0);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-15));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(135));
                 } else {
                     scale = 0.5f;
-                    poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.0, 0.5, 0.0);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-15));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(135));
                 }
+                poseStack.scale(scale, scale, scale);
+                poseStack.translate(0.0, 0.5, 0.0);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-15));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135));
                 break;
             case GROUND:
-                if (isAk47) {
-                    scale = 0.4f;
-                } else {
-                    scale = 0.35f;
-                }
+                scale = longGun ? 0.4f : 0.35f;
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(0.0, 0.3, 0.0);
                 break;
             case FIXED:
-                if (isAk47) {
-                    scale = 0.45f;
-                } else {
-                    scale = 0.45f;
-                }
+                scale = 0.45f;
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(0.0, 0.5, 0.0);
                 poseStack.mulPose(Axis.YP.rotationDegrees(180));

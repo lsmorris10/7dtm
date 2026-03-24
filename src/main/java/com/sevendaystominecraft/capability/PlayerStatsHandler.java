@@ -64,6 +64,8 @@ public class PlayerStatsHandler {
         if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
+        cleanupHeavyWeaponModifier(player);
+
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
         SurvivalConfig cfg = SurvivalConfig.INSTANCE;
 
@@ -711,5 +713,20 @@ public class PlayerStatsHandler {
             }
         }
         return false;
+    }
+
+    private static final ResourceLocation HEAVY_WEAPON_SLOWDOWN_ID =
+            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "heavy_weapon_slowdown");
+
+    private static void cleanupHeavyWeaponModifier(Player player) {
+        ItemStack mainHand = player.getMainHandItem();
+        boolean holdingHeavyWeapon = mainHand.getItem() instanceof com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem gun
+                && gun.getMovementPenaltyMultiplier() < 1.0f;
+        if (!holdingHeavyWeapon) {
+            AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speedAttr != null && speedAttr.getModifier(HEAVY_WEAPON_SLOWDOWN_ID) != null) {
+                speedAttr.removeModifier(HEAVY_WEAPON_SLOWDOWN_ID);
+            }
+        }
     }
 }

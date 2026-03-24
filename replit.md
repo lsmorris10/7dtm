@@ -469,12 +469,19 @@ src/main/java/com/sevendaystominecraft/
 #### Weapons System — DONE
 - **Melee weapons**: 3 weapons via `SwordItem` + `ToolMaterial`:
   - Stone Club (4 dmg, -2.8 speed, wood durability), Baseball Bat (5 dmg, -2.6 speed), Iron Sledgehammer (9 dmg, -3.4 speed, iron durability)
-- **Ranged weapons**: 2 guns via `GeoRangedWeaponItem` (Geckolib `GeoItem`, magazine system, reload state machine):
+- **Ranged weapons**: 7 guns via `GeoRangedWeaponItem` (Geckolib `GeoItem`, magazine system, reload state machine):
   - 9mm Pistol (8 dmg, 8-tick cooldown, 15-round mag, 36-tick reload, 250 dur)
-  - AK-47 (12 dmg, 4-tick cooldown, 30-round mag, 50-tick reload, 500 dur)
+  - AK-47 (12 dmg, 4-tick cooldown, 30-round mag, 50-tick reload, 500 dur, full-auto)
+  - Shotgun (48 dmg total / 8 pellets, 16-tick cooldown, 8-round mag, 60-tick reload, 400 dur, spread pattern)
+  - SMG (6 dmg, 3-tick cooldown, 30-round mag, 40-tick reload, 350 dur, full-auto, 9mm ammo)
+  - Hunting Rifle (18 dmg, 20-tick cooldown, 5-round mag, 50-tick reload, 400 dur, high accuracy)
+  - Sniper Rifle (30 dmg, 30-tick cooldown, 5-round mag, 60-tick reload, 450 dur, minimal spread, long range)
+  - M60 (10 dmg, 3-tick cooldown, 100-round belt, 80-tick reload, 600 dur, full-auto, 30% movement penalty when held)
+- **Shotgun multi-pellet mechanic**: `pelletsPerShot` parameter; when >1, spawns multiple BulletEntity projectiles with randomized spread, damage split across pellets
+- **WeaponCategory**: SHOTGUN and MACHINE_GUN categories added; perk mappings: shotgun→boomstick, machine_gun→rifle_guy
 - **Grenade**: `GrenadeItem` (Geckolib `GeoItem`, right-click throws a `GrenadeEntity`):
   - Throwable, 3-second fuse (60 ticks), 5-block explosion radius, stackable to 16
-- **Ammo**: 9mm Ammo, 7.62mm Ammo (stackable to 64)
+- **Ammo**: 9mm Ammo, 7.62mm Ammo, Shotgun Shell, .44 Magnum Round (stackable to 64)
 - **BulletEntity**: `ThrowableItemProjectile` with near-zero gravity (0.01), configurable damage, crit particles
 - **GrenadeEntity**: `ThrowableItemProjectile` with 0.05 gravity, 60-tick fuse, `Level.ExplosionInteraction.NONE` explosion
 - **Geckolib 4.8.5**: Added as dependency (`software.bernie.geckolib:geckolib-neoforge-1.21.4:4.8.5`)
@@ -485,7 +492,7 @@ src/main/java/com/sevendaystominecraft/
   - 3D voxel-style `.geo.json` models at `assets/sevendaystominecraft/geo/item/`
   - Keyframe animations at `assets/sevendaystominecraft/animations/item/`
   - Placeholder textures at `assets/sevendaystominecraft/textures/item/`
-  - Animations: AK-47 (idle/fire/rack/reload), Pistol (idle/fire/reload), Grenade (idle/pin_pull/throw)
+  - Animations: AK-47 (idle/fire/rack/reload), Pistol (idle/fire/reload), Grenade (idle/pin_pull/throw), Shotgun/SMG/Hunting Rifle/Sniper Rifle/M60 (idle/fire/rack/reload each)
   - Magazine system tracked via `CustomData` ItemStack component (NBT)
 - **Crafting**: Melee at Workbench, guns at Advanced Workbench, ammo at Chemistry Station
 - **Creative tab**: BZHS Weapons tab with all melee + ranged + ammo + grenade items

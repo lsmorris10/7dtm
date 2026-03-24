@@ -51,7 +51,10 @@ public class PerkRegistry {
                 "+10% pistol damage, +5% reload speed per rank", false));
         register(new PerkDefinition("rifle_guy", "Rifle Guy", Attribute.PERCEPTION,
                 5, new int[]{2, 3, 5, 7, 9},
-                "+10% rifle/sniper damage per rank", false));
+                "+10% rifle/sniper/machine gun damage per rank", false));
+        register(new PerkDefinition("boomstick", "Boomstick", Attribute.PERCEPTION,
+                5, new int[]{1, 2, 4, 6, 8},
+                "+10% shotgun damage, +5% reload speed per rank", false));
         register(new PerkDefinition("demolitions_expert", "Demolitions Expert", Attribute.PERCEPTION,
                 5, new int[]{1, 3, 5, 7, 9},
                 "+20% explosive damage, +1 blast radius at rank 5", false));
