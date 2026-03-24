@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,6 +76,40 @@ public class VillageClusterGenerator {
         int maxBuildings = isTraderCompound ? TRADER_MAX_BUILDINGS : MAX_BUILDINGS;
         int buildingCount = minBuildings + random.nextInt(maxBuildings - minBuildings + 1);
 
+        int gridSize = (int) Math.ceil(Math.sqrt(MAX_BUILDINGS));
+        int maxBuildingHalf = 0;
+        for (VillageBuildingType type : VillageBuildingType.values()) {
+            maxBuildingHalf = Math.max(maxBuildingHalf, (type.getMaxSize() + 1) / 2);
+        }
+        maxBuildingHalf = Math.max(maxBuildingHalf, 16);
+        int maxOffset = (gridSize / 2) * BUILDING_SPACING + 6 + maxBuildingHalf + ROAD_CONNECTION_DISTANCE / 2;
+        List<ChunkPos> forcedChunks = new ArrayList<>();
+        int minChunkX = (center.getX() - maxOffset) >> 4;
+        int maxChunkX = (center.getX() + maxOffset) >> 4;
+        int minChunkZ = (center.getZ() - maxOffset) >> 4;
+        int maxChunkZ = (center.getZ() + maxOffset) >> 4;
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                ChunkPos cp = new ChunkPos(cx, cz);
+                if (!level.getForcedChunks().contains(cp.toLong())) {
+                    level.setChunkForced(cx, cz, true);
+                    forcedChunks.add(cp);
+                }
+            }
+        }
+
+        try {
+            return generateInner(level, center, tier, random, isTraderCompound, territoryType, buildingCount, minBuildings);
+        } finally {
+            for (ChunkPos cp : forcedChunks) {
+                level.setChunkForced(cp.x, cp.z, false);
+            }
+        }
+    }
+
+    private static VillageResult generateInner(ServerLevel level, BlockPos center, TerritoryTier tier, RandomSource random,
+                                                boolean isTraderCompound, TerritoryType territoryType,
+                                                int buildingCount, int minBuildings) {
         List<BlockPos> allZombieSpawns = new ArrayList<>();
         List<List<BlockPos>> perBuildingSpawns = new ArrayList<>();
         List<BlockPos> allLootPos = new ArrayList<>();
