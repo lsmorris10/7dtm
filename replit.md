@@ -180,6 +180,8 @@ src/main/java/com/sevendaystominecraft/
 │   ├── ConsumableStatItem.java     — Consumable item that modifies food/water stats, applies/cures debuffs, grants regen
 │   ├── SeedItem.java               — Right-click-on-farm-plot plantable seed item
 │   ├── QualityTier.java            — Quality tier enum (T1-T6: Poor → Legendary) with stat multipliers
+│   ├── VanillaGearMaterials.java   — Maps vanilla tools/armor to MaterialTier (WOOD→NETHERITE), baseline quality tiers, and material-specific scrap yields
+│   ├── VanillaGearHandler.java     — Event handler: auto-assigns quality on pickup/craft, scales attack damage/armor/mining speed via NeoForge events, client tooltip injection for quality display
 │   ├── armor/
 │   │   ├── ArmorTier.java          — Enum: LIGHT (Padded), MEDIUM (Scrap Iron), HEAVY (Military) with movement/stealth modifiers
 │   │   ├── ModArmorMaterials.java  — ArmorMaterial definitions (PADDED, SCRAP_IRON, MILITARY) with protection/durability/toughness
@@ -221,6 +223,7 @@ src/main/java/com/sevendaystominecraft/
 │   ├── LivingEntityHurtMixin.java  — Custom damage handling
 │   ├── PlayerHealMixin.java        — Blocks vanilla passive regen
 │   ├── SprintBlockMixin.java       — Sprint blocked when low stamina
+│   ├── VanillaItemDurabilityMixin.java — Scales vanilla gear durability by QualityTier stat multiplier
 │   └── CreateWorldScreenMixin.java — Intercepts Create World to handle premade world creation
 └── network/
     ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory + quests)

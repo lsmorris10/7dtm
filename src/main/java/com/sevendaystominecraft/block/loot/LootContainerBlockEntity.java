@@ -5,6 +5,7 @@ import com.sevendaystominecraft.block.ModBlockEntities;
 import com.sevendaystominecraft.config.LootConfig;
 import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.item.QualityTier;
+import com.sevendaystominecraft.item.VanillaGearMaterials;
 import com.sevendaystominecraft.loot.LootStageCalculator;
 
 import net.minecraft.core.BlockPos;
@@ -148,6 +149,10 @@ public class LootContainerBlockEntity extends BlockEntity {
             if (!stack.isEmpty()) {
                 if (qualityEnabled) {
                     QualityTier tier = QualityTier.randomForLootStage(lootStage, random);
+                    QualityTier baseline = VanillaGearMaterials.getBaselineQuality(stack.getItem());
+                    if (baseline != null && baseline.getLevel() > tier.getLevel()) {
+                        tier = baseline;
+                    }
                     CompoundTag tag = stack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
                             net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
                     tag.putInt("QualityTier", tier.getLevel());
@@ -182,13 +187,13 @@ public class LootContainerBlockEntity extends BlockEntity {
         return switch (type) {
             case TRASH_PILE -> pickRandom(random, lootStage,
                     ModItems.IRON_SCRAP, ModItems.DUCT_TAPE, () -> Items.CLAY_BALL);
-            case CARDBOARD_BOX -> pickRandom(random, lootStage,
+            case CARDBOARD_BOX -> pickRandomWithVanillaGear(random, lootStage, 0.15f,
                     ModItems.IRON_SCRAP, ModItems.MECHANICAL_PARTS, ModItems.DUCT_TAPE, ModItems.POLYMER);
             case GUN_SAFE -> pickRandom(random, lootStage,
                     ModItems.MECHANICAL_PARTS, ModItems.FORGED_IRON, ModItems.FORGED_STEEL, ModItems.SURVIVORS_COIN);
             case MUNITIONS_BOX -> pickRandom(random, lootStage,
                     ModItems.IRON_SCRAP, ModItems.LEAD, ModItems.NITRATE, ModItems.MECHANICAL_PARTS, ModItems.FORGED_STEEL);
-            case SUPPLY_CRATE -> pickRandomWithArmor(random, lootStage,
+            case SUPPLY_CRATE -> pickRandomWithArmorAndVanillaGear(random, lootStage,
                     ModItems.FORGED_IRON, ModItems.FORGED_STEEL, ModItems.MECHANICAL_PARTS,
                     ModItems.ELECTRICAL_PARTS, ModItems.POLYMER, ModItems.SURVIVORS_COIN);
             case KITCHEN_CABINET -> pickRandomVanilla(random,
@@ -197,7 +202,7 @@ public class LootContainerBlockEntity extends BlockEntity {
                     Items.GOLDEN_APPLE, Items.GLISTERING_MELON_SLICE);
             case BOOKSHELF -> pickRandomVanilla(random,
                     Items.BOOK, Items.PAPER, Items.WRITABLE_BOOK);
-            case TOOL_CRATE -> pickRandom(random, lootStage,
+            case TOOL_CRATE -> pickRandomWithVanillaGear(random, lootStage, 0.30f,
                     ModItems.IRON_SCRAP, ModItems.MECHANICAL_PARTS, ModItems.FORGED_IRON,
                     ModItems.NAIL, ModItems.SPRING, ModItems.DUCT_TAPE);
             case FUEL_CACHE -> pickRandom(random, lootStage,
@@ -223,11 +228,76 @@ public class LootContainerBlockEntity extends BlockEntity {
     }
 
     @SafeVarargs
+    private static ItemStack pickRandomWithVanillaGear(Random random, int lootStage, float chance, Supplier<Item>... baseItems) {
+        if (random.nextFloat() < chance) {
+            return pickVanillaGearForLootStage(random, lootStage);
+        }
+        return pickRandom(random, lootStage, baseItems);
+    }
+
+    @SafeVarargs
+    private static ItemStack pickRandomWithArmorAndVanillaGear(Random random, int lootStage, Supplier<Item>... baseItems) {
+        float roll = random.nextFloat();
+        if (roll < 0.25f) {
+            return pickArmorForLootStage(random, lootStage);
+        }
+        if (roll < 0.45f) {
+            return pickVanillaGearForLootStage(random, lootStage);
+        }
+        return pickRandom(random, lootStage, baseItems);
+    }
+
+    @SafeVarargs
     private static ItemStack pickRandomWithArmor(Random random, int lootStage, Supplier<Item>... baseItems) {
         if (random.nextFloat() < 0.25f) {
             return pickArmorForLootStage(random, lootStage);
         }
         return pickRandom(random, lootStage, baseItems);
+    }
+
+    private static ItemStack pickVanillaGearForLootStage(Random random, int lootStage) {
+        Item[] lowTierTools = {
+                Items.WOODEN_PICKAXE, Items.WOODEN_AXE, Items.WOODEN_SWORD,
+                Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_SWORD
+        };
+        Item[] lowTierArmor = {
+                Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS
+        };
+        Item[] midTierTools = {
+                Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_SWORD, Items.IRON_SHOVEL,
+                Items.GOLDEN_PICKAXE, Items.GOLDEN_AXE, Items.GOLDEN_SWORD
+        };
+        Item[] midTierArmor = {
+                Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
+                Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS,
+                Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS
+        };
+        Item[] highTierTools = {
+                Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_SWORD, Items.DIAMOND_SHOVEL
+        };
+        Item[] highTierArmor = {
+                Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS
+        };
+        Item[] topTierTools = {
+                Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_SWORD, Items.NETHERITE_SHOVEL
+        };
+        Item[] topTierArmor = {
+                Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS
+        };
+
+        Item[] pool;
+        if (lootStage >= 80) {
+            pool = random.nextBoolean() ? topTierTools : topTierArmor;
+        } else if (lootStage >= 50) {
+            pool = random.nextBoolean() ? highTierTools : highTierArmor;
+        } else if (lootStage >= 20) {
+            pool = random.nextBoolean() ? midTierTools : midTierArmor;
+        } else {
+            pool = random.nextBoolean() ? lowTierTools : lowTierArmor;
+        }
+
+        Item chosen = pool[random.nextInt(pool.length)];
+        return new ItemStack(chosen, 1);
     }
 
     private static ItemStack pickArmorForLootStage(Random random, int lootStage) {
