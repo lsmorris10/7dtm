@@ -9,8 +9,7 @@
         "PlayerHealMixin",
         "LivingEntityHurtMixin",
         "SprintBlockMixin",
-        "FractureJumpMixin",
-        "VanillaItemDurabilityMixin"
+        "FractureJumpMixin"
     ],
     "client": [
         "LocalPlayerSprintMixin",
