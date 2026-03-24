@@ -81,6 +81,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.3, -0.1, -0.5);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
                     poseStack.mulPose(Axis.ZP.rotationDegrees(-5));
                 } else {
                     scale = 0.5f;
@@ -94,6 +95,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.3, -0.1, -0.5);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
                     poseStack.mulPose(Axis.ZP.rotationDegrees(5));
                 } else {
                     scale = 0.5f;
@@ -107,6 +109,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.1, 0.3, 0.1);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
@@ -119,6 +122,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.1, 0.3, 0.1);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
