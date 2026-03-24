@@ -46,8 +46,8 @@ public class TraderConfig {
 
         spawnChanceDenominator = builder
                 .comment("1-in-N chance per new chunk to attempt placing a trader outpost.",
-                         "Lower = more traders. Default 400.")
-                .defineInRange("spawnChanceDenominator", 400, 5, 2000);
+                         "Lower = more traders. Default 1500.")
+                .defineInRange("spawnChanceDenominator", 1500, 5, 5000);
 
         protectionRadius = builder
                 .comment("Radius in blocks around each trader where zombie spawns and block breaking are suppressed.",

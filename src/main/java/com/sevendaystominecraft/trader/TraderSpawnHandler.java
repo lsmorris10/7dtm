@@ -18,14 +18,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class TraderSpawnHandler {
 
     private static final int OFFSET_WITHIN_CHUNK = 8;
+
+    private static volatile boolean generationInProgress = false;
+
+    private static final Set<BlockPos> pendingOutpostPositions = new HashSet<>();
 
     public static void onChunkLoad(ChunkEvent.Load event) {
         if (!event.isNewChunk()) return;
         if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
         if (!serverLevel.dimension().equals(Level.OVERWORLD)) return;
+
+        if (generationInProgress) return;
 
         ChunkPos chunkPos = event.getChunk().getPos();
         int blockX = chunkPos.getMinBlockX() + OFFSET_WITHIN_CHUNK;
@@ -33,23 +42,29 @@ public class TraderSpawnHandler {
 
         TraderData traderData = TraderData.getOrCreate(serverLevel);
 
+        BlockPos candidate = new BlockPos(blockX, 64, blockZ);
+        int minSpacing = TraderConfig.INSTANCE.minChunkSpacing.get();
+
+        if (isNearPendingOutpost(candidate, minSpacing)) return;
+
         if (!traderData.isGuaranteedSpawnPlaced()) {
             double distFromSpawn = Math.sqrt((double) blockX * blockX + (double) blockZ * blockZ);
             int guaranteeRadius = TraderConfig.INSTANCE.guaranteeRadius.get();
             if (distFromSpawn <= guaranteeRadius) {
-                if (!traderData.hasNearby(new BlockPos(blockX, 64, blockZ), 3)) {
+                if (!traderData.hasNearby(candidate, minSpacing) && !isNearPendingOutpost(candidate, minSpacing)) {
+                    pendingOutpostPositions.add(candidate);
                     if (tryPlaceTraderOutpost(serverLevel, blockX, blockZ)) {
                         traderData.setGuaranteedSpawnPlaced(true);
                         SevenDaysToMinecraft.LOGGER.info(
                                 "[BZHS Trader] Guaranteed near-spawn trader outpost placed at ({}, {})", blockX, blockZ);
-                        return;
                     }
+                    pendingOutpostPositions.remove(candidate);
+                    return;
                 }
             }
         }
 
         int chanceDenom = TraderConfig.INSTANCE.spawnChanceDenominator.get();
-        int minSpacing = TraderConfig.INSTANCE.minChunkSpacing.get();
 
         long seed = serverLevel.getSeed();
         long chunkSeed = chunkPos.toLong() ^ seed ^ 0xDEAD7BADE8123L;
@@ -57,8 +72,8 @@ public class TraderSpawnHandler {
 
         if (chunkRandom.nextInt(chanceDenom) != 0) return;
 
-        BlockPos candidate = new BlockPos(blockX, 64, blockZ);
         if (traderData.hasNearby(candidate, minSpacing)) return;
+        if (isNearPendingOutpost(candidate, minSpacing)) return;
 
         int maxInRadius = TraderConfig.INSTANCE.maxTradersInRadius.get();
         int checkRadius = TraderConfig.INSTANCE.maxTradersCheckRadius.get();
@@ -70,12 +85,36 @@ public class TraderSpawnHandler {
         var biome = serverLevel.getBiome(candidate);
         if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER)) return;
 
+        pendingOutpostPositions.add(candidate);
         tryPlaceTraderOutpost(serverLevel, blockX, blockZ);
+        pendingOutpostPositions.remove(candidate);
+    }
+
+    private static boolean isNearPendingOutpost(BlockPos pos, int minChunkSpacing) {
+        int chunkX = pos.getX() >> 4;
+        int chunkZ = pos.getZ() >> 4;
+        for (BlockPos pending : pendingOutpostPositions) {
+            int px = pending.getX() >> 4;
+            int pz = pending.getZ() >> 4;
+            int dx = Math.abs(chunkX - px);
+            int dz = Math.abs(chunkZ - pz);
+            if (dx <= minChunkSpacing && dz <= minChunkSpacing) return true;
+        }
+        return false;
     }
 
     private static final int SLOPE_CHECK_HALF = 8;
 
     private static boolean tryPlaceTraderOutpost(ServerLevel serverLevel, int blockX, int blockZ) {
+        generationInProgress = true;
+        try {
+            return tryPlaceTraderOutpostInner(serverLevel, blockX, blockZ);
+        } finally {
+            generationInProgress = false;
+        }
+    }
+
+    private static boolean tryPlaceTraderOutpostInner(ServerLevel serverLevel, int blockX, int blockZ) {
         int surfaceY = serverLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, blockX, blockZ);
         if (surfaceY <= 0) return false;
 
@@ -91,16 +130,23 @@ public class TraderSpawnHandler {
             return false;
         }
 
+        TraderData traderData = TraderData.getOrCreate(serverLevel);
         TerritoryData territoryData = TerritoryData.getOrCreate(serverLevel);
 
         TerritoryTier tier = TerritoryTier.fromNumber(1);
         TerritoryType type = TerritoryType.TRADER_OUTPOST;
 
+        TraderRecord placeholder = traderData.addTrader(origin, "__pending__", 1);
+        int placeholderId = placeholder.getId();
+
         VillageClusterGenerator.VillageResult villageResult;
         try {
             villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, true, type);
 
-            if (villageResult == null) return false;
+            if (villageResult == null) {
+                traderData.removeTrader(placeholderId);
+                return false;
+            }
 
             TerritoryRecord territoryRecord = territoryData.addTerritory(origin, tier, type);
             territoryRecord.setBuildingCenters(villageResult.buildingCenters);
@@ -109,8 +155,11 @@ public class TraderSpawnHandler {
         } catch (Exception e) {
             SevenDaysToMinecraft.LOGGER.error("[BZHS Trader] Error generating outpost at {}: {}",
                     origin, e.getMessage());
+            traderData.removeTrader(placeholderId);
             return false;
         }
+
+        traderData.removeTrader(placeholderId);
 
         BlockPos traderPos = origin;
         if (villageResult.buildingCenters != null && !villageResult.buildingCenters.isEmpty()) {

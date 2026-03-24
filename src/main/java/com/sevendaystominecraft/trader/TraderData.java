@@ -40,6 +40,12 @@ public class TraderData extends SavedData {
         return record;
     }
 
+    public void removeTrader(int id) {
+        if (tradersById.remove(id) != null) {
+            setDirty();
+        }
+    }
+
     public boolean hasNearby(BlockPos pos, int minChunkSpacing) {
         int chunkX = pos.getX() >> 4;
         int chunkZ = pos.getZ() >> 4;
