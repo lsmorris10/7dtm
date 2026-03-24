@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:campfire"
+    },
+    "title": {
+      "text": "Campfire Cook I"
+    },
+    "description": {
+      "text": "Unlocked tea and coffee recipes"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "rank": {
+      "trigger": "sevendaystominecraft:perk_rank",
+      "conditions": {
+        "perk_id": "campfire_cook",
+        "min_rank": 1
+      }
+    }
+  }
+}

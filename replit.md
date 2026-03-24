@@ -219,12 +219,18 @@ src/main/java/com/sevendaystominecraft/
 │   ├── BloodMoonTracker.java       — SavedData for day tracking & blood moon phase state
 │   ├── BloodMoonEventHandler.java  — Server tick handler for blood moon timeline + sleep prevention
 │   └── HordeSpawner.java           — Wave spawning with composition table, config day thresholds
+├── advancement/
+│   ├── ModTriggers.java          — DeferredRegister for custom CriterionTrigger types
+│   ├── PerkRankTrigger.java      — Custom trigger fires when player gains a perk rank
+│   ├── MagazineReadTrigger.java  — Custom trigger fires when player reads a magazine issue
+│   ├── RecipeUnlockManager.java  — Maps perk ranks/magazine issues to workstation recipe IDs; handles unlocking
+│   └── StarterRecipeHandler.java — Grants baseline survival recipes on player login/respawn
 ├── perk/
 │   ├── Attribute.java            — 5 attribute enum (STR/PER/FOR/AGI/INT)
 │   ├── PerkDefinition.java       — Perk data class with rank requirements
 │   ├── PerkRegistry.java         — Static registry of all 45 perks (40 + 5 masteries)
 │   ├── LevelManager.java         — XP gain, level-up formula, zombie kill + block break hooks
-│   ├── PerkCommand.java          — /bzhs level, /bzhs perk, /bzhs attribute, /bzhs perks commands
+│   ├── PerkCommand.java          — /bzhs level, /bzhs perk, /bzhs attribute, /bzhs perks commands (fires recipe unlock triggers)
 │   └── PerkEffectHandler.java    — Perk effect hooks (damage reduction, mining speed, unkillable, ghost)
 ├── mixin/
 │   ├── FoodDataMixin.java          — Cancels vanilla food saturation

@@ -65,6 +65,7 @@ public class VanillaCampfireHandler {
 
         CampfireWorkstationSavedData savedData = CampfireWorkstationSavedData.get(serverLevel);
         CampfireWorkstationSavedData.CampfireData data = savedData.getOrCreate(pos);
+        data.setLastInteractedPlayer(serverPlayer.getUUID());
 
         CampfireDataBlockEntity fakeBE = new CampfireDataBlockEntity(pos, state, data);
 

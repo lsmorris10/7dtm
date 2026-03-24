@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:enchanted_book"
+    },
+    "title": {
+      "text": "Overworld Chef Mastery"
+    },
+    "description": {
+      "text": "Mastery complete — unlocked specialty food recipes"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "mastery": {
+      "trigger": "sevendaystominecraft:magazine_read",
+      "conditions": {
+        "series_id": "overworld_chef",
+        "require_mastery": true
+      }
+    }
+  }
+}

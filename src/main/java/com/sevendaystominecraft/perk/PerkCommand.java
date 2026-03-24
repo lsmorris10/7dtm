@@ -145,6 +145,8 @@ public class PerkCommand {
                         perk.getDisplayName(), nextRank, perk.getDescription())
         ), false);
 
+        com.sevendaystominecraft.advancement.RecipeUnlockManager.onPerkRankGained(player, perkId, nextRank);
+
         PlayerStatsHandler.sendStatsToClient(player, stats);
         return 1;
     }

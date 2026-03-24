@@ -80,6 +80,8 @@ public class SevenDaysToMinecraft {
 
         ModEntities.ENTITY_TYPES.register(modEventBus);
 
+        com.sevendaystominecraft.advancement.ModTriggers.TRIGGER_TYPES.register(modEventBus);
+
         ModMagazines.init();
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);

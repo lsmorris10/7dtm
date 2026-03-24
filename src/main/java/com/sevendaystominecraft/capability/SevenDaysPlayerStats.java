@@ -3,9 +3,11 @@ package com.sevendaystominecraft.capability;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.sevendaystominecraft.magazine.MagazinePlayerData;
 import com.sevendaystominecraft.perk.Attribute;
@@ -56,6 +58,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     private final Map<String, Integer> activePerks = new HashMap<>();
 
     private long unkillableCooldownEnd = 0;
+
+    private final Set<String> unlockedRecipes = new HashSet<>();
 
     private final List<QuestInstance> activeQuests = new ArrayList<>();
     private String trackedQuestId = "";
@@ -206,6 +210,22 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     public MagazinePlayerData getMagazineData() { return magazineData; }
 
     // =====================================================================
+    // Recipe Unlocks
+    // =====================================================================
+
+    public boolean unlockRecipe(String recipeId) {
+        return unlockedRecipes.add(recipeId);
+    }
+
+    public boolean isRecipeUnlocked(String recipeId) {
+        return unlockedRecipes.contains(recipeId);
+    }
+
+    public Set<String> getUnlockedRecipes() {
+        return Collections.unmodifiableSet(unlockedRecipes);
+    }
+
+    // =====================================================================
     // Quests
     // =====================================================================
 
@@ -283,6 +303,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
         if (other instanceof SevenDaysPlayerStats concrete) {
             this.magazineData.copyFrom(concrete.getMagazineData());
+            this.unlockedRecipes.clear();
+            this.unlockedRecipes.addAll(concrete.unlockedRecipes);
             this.activeQuests.clear();
             for (QuestInstance quest : concrete.getActiveQuests()) {
                 this.activeQuests.add(QuestInstance.load(quest.save()));
@@ -340,6 +362,14 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         tag.putLong("UnkillableCooldown", unkillableCooldownEnd);
 
         tag.put("Magazines", magazineData.save());
+
+        if (!unlockedRecipes.isEmpty()) {
+            ListTag recipeList = new ListTag();
+            for (String recipeId : unlockedRecipes) {
+                recipeList.add(net.minecraft.nbt.StringTag.valueOf(recipeId));
+            }
+            tag.put("UnlockedRecipes", recipeList);
+        }
 
         if (!activeQuests.isEmpty()) {
             ListTag questList = new ListTag();
@@ -416,6 +446,14 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
         if (tag.contains("Magazines")) {
             magazineData.load(tag.getCompound("Magazines"));
+        }
+
+        unlockedRecipes.clear();
+        if (tag.contains("UnlockedRecipes")) {
+            ListTag recipeList = tag.getList("UnlockedRecipes", Tag.TAG_STRING);
+            for (int i = 0; i < recipeList.size(); i++) {
+                unlockedRecipes.add(recipeList.getString(i));
+            }
         }
 
         activeQuests.clear();

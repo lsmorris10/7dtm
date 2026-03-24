@@ -198,6 +198,22 @@ public class WorkstationBlockEntity extends BlockEntity {
         WorkstationCraftingRecipe recipe = holder.get().value();
         if (!canFitOutput(recipe.getResult())) return null;
 
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            String recipeId = holder.get().id().location().toString();
+            net.minecraft.server.level.ServerPlayer crafter = resolveCrafter(serverLevel);
+            if (crafter != null) {
+                com.sevendaystominecraft.capability.SevenDaysPlayerStats stats =
+                        crafter.getData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get());
+                if (!com.sevendaystominecraft.advancement.RecipeUnlockManager.isRecipeUnlocked(stats, recipeId)) {
+                    return null;
+                }
+            } else {
+                if (!com.sevendaystominecraft.advancement.RecipeUnlockManager.isStarterRecipe(recipeId)) {
+                    return null;
+                }
+            }
+        }
+
         return recipe;
     }
 

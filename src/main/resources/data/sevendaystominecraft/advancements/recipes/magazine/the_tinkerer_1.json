@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": {
+      "text": "The Tinkerer #1"
+    },
+    "description": {
+      "text": "Reading unlocked repair item recipes"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "read": {
+      "trigger": "sevendaystominecraft:magazine_read",
+      "conditions": {
+        "series_id": "the_tinkerer",
+        "issue": 1
+      }
+    }
+  }
+}

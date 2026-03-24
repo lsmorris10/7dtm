@@ -97,6 +97,7 @@ public class CampfireWorkstationSavedData extends SavedData {
         private int craftProgress;
         private int craftTimeTotal;
         private Runnable dirtyCallback;
+        private java.util.UUID lastInteractedPlayer;
 
         public void setDirtyCallback(Runnable callback) {
             this.dirtyCallback = callback;
@@ -106,6 +107,15 @@ public class CampfireWorkstationSavedData extends SavedData {
             if (dirtyCallback != null) {
                 dirtyCallback.run();
             }
+        }
+
+        public void setLastInteractedPlayer(java.util.UUID uuid) {
+            this.lastInteractedPlayer = uuid;
+            markDirty();
+        }
+
+        public java.util.UUID getLastInteractedPlayer() {
+            return lastInteractedPlayer;
         }
 
         public NonNullList<ItemStack> getItems() { return items; }
@@ -135,6 +145,10 @@ public class CampfireWorkstationSavedData extends SavedData {
         public int getBurnTimeTotal() { return burnTimeTotal; }
         public int getCraftProgress() { return craftProgress; }
         public int getCraftTimeTotal() { return craftTimeTotal; }
+
+        public boolean tick() {
+            return tick(null);
+        }
 
         public boolean tick(ServerLevel level) {
             boolean changed = false;
@@ -196,7 +210,7 @@ public class CampfireWorkstationSavedData extends SavedData {
             if (inputStacks.isEmpty()) return null;
 
             WorkstationRecipeInput input = new WorkstationRecipeInput(inputStacks);
-            if (level.getServer() == null) return null;
+            if (level == null || level.getServer() == null) return null;
             Optional<RecipeHolder<WorkstationCraftingRecipe>> holder =
                     level.getServer().getRecipeManager().getRecipeFor(TYPE.getRecipeType(), input, level);
 
@@ -204,6 +218,28 @@ public class CampfireWorkstationSavedData extends SavedData {
 
             WorkstationCraftingRecipe recipe = holder.get().value();
             if (!canFitOutput(recipe.getResult())) return null;
+
+            String recipeId = holder.get().id().location().toString();
+            if (lastInteractedPlayer != null) {
+                net.minecraft.server.level.ServerPlayer crafter =
+                        level.getServer().getPlayerList().getPlayer(lastInteractedPlayer);
+                if (crafter != null) {
+                    com.sevendaystominecraft.capability.SevenDaysPlayerStats stats =
+                            crafter.getData(com.sevendaystominecraft.capability.ModAttachments.PLAYER_STATS.get());
+                    if (!com.sevendaystominecraft.advancement.RecipeUnlockManager.isRecipeUnlocked(stats, recipeId)) {
+                        return null;
+                    }
+                } else {
+                    if (!com.sevendaystominecraft.advancement.RecipeUnlockManager.isStarterRecipe(recipeId)) {
+                        return null;
+                    }
+                }
+            } else {
+                if (!com.sevendaystominecraft.advancement.RecipeUnlockManager.isStarterRecipe(recipeId)) {
+                    return null;
+                }
+            }
+
             return recipe;
         }
 
@@ -281,6 +317,9 @@ public class CampfireWorkstationSavedData extends SavedData {
             tag.putInt("BurnTimeTotal", burnTimeTotal);
             tag.putInt("CraftProgress", craftProgress);
             tag.putInt("CraftTimeTotal", craftTimeTotal);
+            if (lastInteractedPlayer != null) {
+                tag.putUUID("LastPlayer", lastInteractedPlayer);
+            }
         }
 
         public void load(CompoundTag tag, HolderLookup.Provider registries) {
@@ -290,6 +329,9 @@ public class CampfireWorkstationSavedData extends SavedData {
             burnTimeTotal = tag.getInt("BurnTimeTotal");
             craftProgress = tag.getInt("CraftProgress");
             craftTimeTotal = tag.getInt("CraftTimeTotal");
+            if (tag.hasUUID("LastPlayer")) {
+                lastInteractedPlayer = tag.getUUID("LastPlayer");
+            }
         }
     }
 }

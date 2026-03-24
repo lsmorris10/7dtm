@@ -66,10 +66,16 @@ public class MagazineItem extends Item {
                 Component.literal("✦ " + series.displayName() + " #" + issue + " — " + bonusText)
                         .withStyle(ChatFormatting.GREEN), false);
 
-        if (magData.hasCompletedSeries(seriesId)) {
+        boolean mastery = magData.hasCompletedSeries(seriesId);
+        if (mastery) {
             player.displayClientMessage(
                     Component.literal("★ MASTERY COMPLETE: " + series.displayName() + " — " + series.masteryDescription())
                             .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), false);
+        }
+
+        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            com.sevendaystominecraft.advancement.RecipeUnlockManager.onMagazineRead(
+                    serverPlayer, seriesId, issue, mastery);
         }
 
         return InteractionResult.SUCCESS_SERVER;
