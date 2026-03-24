@@ -1,0 +1,22 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 5
+    },
+    {
+      "ingredient": "sevendaystominecraft:mechanical_parts",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:electrical_parts",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:generator_bank",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

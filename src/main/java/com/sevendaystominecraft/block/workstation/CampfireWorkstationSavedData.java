@@ -1,5 +1,7 @@
 package com.sevendaystominecraft.block.workstation;
 
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationCraftingRecipe;
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -10,12 +12,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -131,14 +136,14 @@ public class CampfireWorkstationSavedData extends SavedData {
         public int getCraftProgress() { return craftProgress; }
         public int getCraftTimeTotal() { return craftTimeTotal; }
 
-        public boolean tick() {
+        public boolean tick(ServerLevel level) {
             boolean changed = false;
             if (burnTime > 0) {
                 burnTime--;
                 changed = true;
             }
 
-            WorkstationRecipe matchedRecipe = findMatchingRecipe();
+            WorkstationCraftingRecipe matchedRecipe = findMatchingRecipe(level);
 
             if (burnTime == 0 && matchedRecipe != null) {
                 int fuelSlot = TYPE.getInputSlots() + TYPE.getOutputSlots();
@@ -161,8 +166,8 @@ public class CampfireWorkstationSavedData extends SavedData {
             }
 
             if (burnTime > 0 && matchedRecipe != null) {
-                if (craftTimeTotal != matchedRecipe.processingTicks()) {
-                    craftTimeTotal = matchedRecipe.processingTicks();
+                if (craftTimeTotal != matchedRecipe.getProcessingTicks()) {
+                    craftTimeTotal = matchedRecipe.getProcessingTicks();
                 }
                 if (craftTimeTotal <= 0) craftTimeTotal = 200;
                 craftProgress++;
@@ -180,7 +185,7 @@ public class CampfireWorkstationSavedData extends SavedData {
             return changed;
         }
 
-        private WorkstationRecipe findMatchingRecipe() {
+        private WorkstationCraftingRecipe findMatchingRecipe(ServerLevel level) {
             List<ItemStack> inputStacks = new ArrayList<>();
             for (int i = 0; i < TYPE.getInputSlots() && i < items.size(); i++) {
                 ItemStack stack = items.get(i);
@@ -190,18 +195,15 @@ public class CampfireWorkstationSavedData extends SavedData {
             }
             if (inputStacks.isEmpty()) return null;
 
-            WorkstationRecipe recipe = WorkstationRecipes.findMatch(TYPE, ing -> {
-                int total = 0;
-                for (ItemStack stack : inputStacks) {
-                    if (ing.testStack(stack)) {
-                        total += stack.getCount();
-                    }
-                }
-                return total;
-            });
-            if (recipe == null) return null;
+            WorkstationRecipeInput input = new WorkstationRecipeInput(inputStacks);
+            if (level.getServer() == null) return null;
+            Optional<RecipeHolder<WorkstationCraftingRecipe>> holder =
+                    level.getServer().getRecipeManager().getRecipeFor(TYPE.getRecipeType(), input, level);
 
-            if (!canFitOutput(recipe.output())) return null;
+            if (holder.isEmpty()) return null;
+
+            WorkstationCraftingRecipe recipe = holder.get().value();
+            if (!canFitOutput(recipe.getResult())) return null;
             return recipe;
         }
 
@@ -219,21 +221,19 @@ public class CampfireWorkstationSavedData extends SavedData {
             return false;
         }
 
-        private void processRecipe(WorkstationRecipe recipe) {
-            recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
-            addToOutput(recipe.output().copy());
-        }
-
-        private void consumeFromInputSlots(WorkstationRecipe.Ingredient ing, int count) {
-            int remaining = count;
-            for (int i = 0; i < TYPE.getInputSlots() && i < items.size() && remaining > 0; i++) {
-                ItemStack stack = items.get(i);
-                if (ing.testStack(stack)) {
-                    int take = Math.min(remaining, stack.getCount());
-                    stack.shrink(take);
-                    remaining -= take;
+        private void processRecipe(WorkstationCraftingRecipe recipe) {
+            for (SizedIngredient sized : recipe.getIngredients()) {
+                int remaining = sized.count();
+                for (int i = 0; i < TYPE.getInputSlots() && i < items.size() && remaining > 0; i++) {
+                    ItemStack stack = items.get(i);
+                    if (sized.ingredient().test(stack)) {
+                        int take = Math.min(remaining, stack.getCount());
+                        stack.shrink(take);
+                        remaining -= take;
+                    }
                 }
             }
+            addToOutput(recipe.getResult().copy());
         }
 
         private void addToOutput(ItemStack result) {

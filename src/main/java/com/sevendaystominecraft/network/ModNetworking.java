@@ -100,6 +100,24 @@ public class ModNetworking {
                 ModNetworking::handleQuestAction
         );
 
+        registrar.playToServer(
+                WorkstationRecipeSelectPayload.TYPE,
+                WorkstationRecipeSelectPayload.STREAM_CODEC,
+                ModNetworking::handleWorkstationRecipeSelect
+        );
+
+        registrar.playToServer(
+                WorkstationRecipeRequestPayload.TYPE,
+                WorkstationRecipeRequestPayload.STREAM_CODEC,
+                ModNetworking::handleWorkstationRecipeRequest
+        );
+
+        registrar.playToClient(
+                WorkstationRecipeListPayload.TYPE,
+                WorkstationRecipeListPayload.STREAM_CODEC,
+                ModNetworking::handleWorkstationRecipeList
+        );
+
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
     }
 
@@ -190,6 +208,57 @@ public class ModNetworking {
             if (player == null) return;
             if (!(player instanceof ServerPlayer serverPlayer)) return;
             QuestActionHandler.handleAction(serverPlayer, payload);
+        });
+    }
+
+    private static void handleWorkstationRecipeRequest(WorkstationRecipeRequestPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+            if (!(player.containerMenu instanceof com.sevendaystominecraft.block.workstation.WorkstationMenu wsMenu)) return;
+            if (wsMenu.getBlockEntity() == null) return;
+            if (player.getServer() == null) return;
+
+            com.sevendaystominecraft.block.workstation.WorkstationType type = wsMenu.getBlockEntity().getWorkstationType();
+            var recipeManager = player.getServer().getRecipeManager();
+
+            java.util.List<WorkstationRecipeListPayload.Entry> entries = new java.util.ArrayList<>();
+            for (var holder : recipeManager.getRecipes()) {
+                if (holder.value().getType().equals(type.getRecipeType())) {
+                    if (holder.value() instanceof com.sevendaystominecraft.block.workstation.recipe.WorkstationCraftingRecipe recipe) {
+                        entries.add(new WorkstationRecipeListPayload.Entry(
+                                holder.id().location(),
+                                recipe.getResult().copy(),
+                                recipe.getProcessingTicks(),
+                                recipe.getIngredients()
+                        ));
+                    }
+                }
+            }
+            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(serverPlayer, new WorkstationRecipeListPayload(entries));
+        });
+    }
+
+    private static void handleWorkstationRecipeList(WorkstationRecipeListPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player.containerMenu instanceof com.sevendaystominecraft.block.workstation.WorkstationMenu wsMenu)) return;
+
+            wsMenu.acceptRecipeList(payload.entries());
+        });
+    }
+
+    private static void handleWorkstationRecipeSelect(WorkstationRecipeSelectPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+            if (!(player.containerMenu instanceof com.sevendaystominecraft.block.workstation.WorkstationMenu wsMenu)) return;
+            if (!wsMenu.stillValid(player)) return;
+
+            wsMenu.handleRecipeSelect(serverPlayer, payload.recipeId());
         });
     }
 

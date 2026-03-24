@@ -1,0 +1,14 @@
+{
+  "type": "sevendaystominecraft:cement_mixer_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:concrete_mix",
+      "count": 4
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:cement",
+    "count": 2
+  },
+  "processing_ticks": 400
+}

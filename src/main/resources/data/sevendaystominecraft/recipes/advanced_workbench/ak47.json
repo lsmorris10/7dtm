@@ -1,0 +1,22 @@
+{
+  "type": "sevendaystominecraft:advanced_workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_steel",
+      "count": 5
+    },
+    {
+      "ingredient": "sevendaystominecraft:mechanical_parts",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:spring",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:ak47",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

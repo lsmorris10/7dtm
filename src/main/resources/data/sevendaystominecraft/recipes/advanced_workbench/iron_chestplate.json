@@ -1,0 +1,21 @@
+{
+  "type": "sevendaystominecraft:advanced_workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_steel",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:mechanical_parts",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:duct_tape"
+    }
+  ],
+  "result": {
+    "id": "minecraft:iron_chestplate",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

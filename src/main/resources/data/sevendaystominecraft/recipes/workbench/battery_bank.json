@@ -1,0 +1,22 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:electrical_parts",
+      "count": 4
+    },
+    {
+      "ingredient": "sevendaystominecraft:duct_tape",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:battery_bank",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

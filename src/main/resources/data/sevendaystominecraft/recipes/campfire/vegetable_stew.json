@@ -1,0 +1,19 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:corn"
+    },
+    {
+      "ingredient": "sevendaystominecraft:potato_crop_item"
+    },
+    {
+      "ingredient": "sevendaystominecraft:boiled_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:vegetable_stew",
+    "count": 1
+  },
+  "processing_ticks": 400
+}

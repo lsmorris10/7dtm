@@ -1,0 +1,21 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:glass",
+      "count": 4
+    },
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:duct_tape"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:dew_collector",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

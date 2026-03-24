@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:gunpowder"
+    },
+    {
+      "ingredient": "sevendaystominecraft:forged_lead"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:ammo_9mm",
+    "count": 8
+  },
+  "processing_ticks": 150
+}

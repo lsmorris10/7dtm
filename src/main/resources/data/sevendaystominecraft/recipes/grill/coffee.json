@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:grill_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:coffee_beans",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:boiled_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:coffee",
+    "count": 1
+  },
+  "processing_ticks": 150
+}

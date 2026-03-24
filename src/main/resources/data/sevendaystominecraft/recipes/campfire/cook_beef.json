@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:beef"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cooked_beef",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

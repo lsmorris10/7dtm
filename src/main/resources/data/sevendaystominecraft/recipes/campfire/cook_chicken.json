@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:chicken"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cooked_chicken",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

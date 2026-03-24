@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:stick",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:string"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:splint",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

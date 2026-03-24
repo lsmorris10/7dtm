@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:advanced_workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_steel"
+    },
+    {
+      "ingredient": "minecraft:stick",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "minecraft:iron_sword",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

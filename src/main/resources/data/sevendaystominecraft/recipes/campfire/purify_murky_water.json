@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:murky_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:boiled_water",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

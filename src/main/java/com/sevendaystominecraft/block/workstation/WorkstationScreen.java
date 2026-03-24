@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.block.workstation;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.client.gui.WorkstationRecipeBookComponent;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,6 +16,9 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationMenu> 
 
     private final int workstationBottom;
     private final int fuelY;
+    private WorkstationRecipeBookComponent recipeBook;
+    private int recipeBookButtonX;
+    private int recipeBookButtonY;
 
     public WorkstationScreen(WorkstationMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
@@ -46,10 +50,82 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationMenu> 
     }
 
     @Override
+    protected void init() {
+        super.init();
+        recipeBook = new WorkstationRecipeBookComponent(this.menu);
+        recipeBook.init(this.leftPos, this.topPos, this.imageHeight);
+        this.menu.setRecipeListConsumer(recipeBook::setRecipes);
+        recipeBookButtonX = leftPos + imageWidth - 22;
+        recipeBookButtonY = topPos + 4;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (mouseX >= recipeBookButtonX && mouseX < recipeBookButtonX + 16
+                && mouseY >= recipeBookButtonY && mouseY < recipeBookButtonY + 12) {
+            recipeBook.toggleVisibility();
+            if (recipeBook.isVisible()) {
+                net.neoforged.neoforge.network.PacketDistributor.sendToServer(
+                        new com.sevendaystominecraft.network.WorkstationRecipeRequestPayload());
+            }
+            updateRecipeBookPosition();
+            return true;
+        }
+
+        if (recipeBook != null && recipeBook.isVisible()) {
+            if (recipeBook.mouseClicked(mouseX, mouseY, button)) {
+                return true;
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (recipeBook != null && recipeBook.isVisible()) {
+            if (recipeBook.mouseScrolled(mouseX, mouseY, scrollX, scrollY)) {
+                return true;
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (recipeBook != null && recipeBook.isVisible()) {
+            if (recipeBook.keyPressed(keyCode, scanCode, modifiers)) {
+                return true;
+            }
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (recipeBook != null && recipeBook.isVisible()) {
+            if (recipeBook.charTyped(codePoint, modifiers)) {
+                return true;
+            }
+        }
+        return super.charTyped(codePoint, modifiers);
+    }
+
+    private void updateRecipeBookPosition() {
+        if (recipeBook != null) {
+            recipeBook.init(this.leftPos, this.topPos, this.imageHeight);
+        }
+    }
+
+    @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, 0xFFC6C6C6);
 
         graphics.fill(leftPos + 4, topPos + 4, leftPos + imageWidth - 4, topPos + 16, 0xFF555555);
+
+        int btnColor = (recipeBook != null && recipeBook.isVisible()) ? 0xFF4A6A2F : 0xFF6A6A6A;
+        graphics.fill(recipeBookButtonX, recipeBookButtonY, recipeBookButtonX + 16, recipeBookButtonY + 12, btnColor);
+        graphics.drawString(this.font, Component.literal("\u2261"), recipeBookButtonX + 4, recipeBookButtonY + 2, 0xFFFFFF, false);
 
         WorkstationBlockEntity be = menu.getBlockEntity();
         if (be != null) {
@@ -130,6 +206,11 @@ public class WorkstationScreen extends AbstractContainerScreen<WorkstationMenu> 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+
+        if (recipeBook != null && recipeBook.isVisible()) {
+            recipeBook.render(graphics, mouseX, mouseY, partialTick);
+        }
+
         renderTooltip(graphics, mouseX, mouseY);
     }
 }

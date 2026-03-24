@@ -1,0 +1,20 @@
+{
+  "type": "sevendaystominecraft:advanced_workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_steel",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:spring"
+    },
+    {
+      "ingredient": "sevendaystominecraft:mechanical_parts"
+    }
+  ],
+  "result": {
+    "id": "minecraft:crossbow",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

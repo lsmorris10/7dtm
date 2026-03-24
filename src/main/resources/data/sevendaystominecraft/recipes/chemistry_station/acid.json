@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:nitrate"
+    },
+    {
+      "ingredient": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:acid",
+    "count": 1
+  },
+  "processing_ticks": 300
+}

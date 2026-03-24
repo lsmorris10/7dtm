@@ -1,0 +1,19 @@
+{
+  "type": "sevendaystominecraft:grill_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:beef"
+    },
+    {
+      "ingredient": "sevendaystominecraft:corn"
+    },
+    {
+      "ingredient": "sevendaystominecraft:potato_crop_item"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:hobo_stew",
+    "count": 1
+  },
+  "processing_ticks": 400
+}

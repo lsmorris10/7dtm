@@ -1,0 +1,14 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:oil_shale",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:polymer",
+    "count": 1
+  },
+  "processing_ticks": 250
+}

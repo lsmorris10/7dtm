@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:forge_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:lead"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:forged_lead",
+    "count": 1
+  },
+  "processing_ticks": 250
+}

@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:grill_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:porkchop"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cooked_porkchop",
+    "count": 1
+  },
+  "processing_ticks": 150
+}

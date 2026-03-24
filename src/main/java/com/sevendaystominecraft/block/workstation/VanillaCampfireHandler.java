@@ -118,7 +118,7 @@ public class VanillaCampfireHandler {
                 continue;
             }
 
-            if (data.tick()) {
+            if (data.tick(serverLevel)) {
                 savedData.setDirty();
             }
 

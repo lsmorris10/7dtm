@@ -1,10 +1,13 @@
 package com.sevendaystominecraft.block.workstation;
 
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationCraftingRecipe;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -12,13 +15,26 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 public class WorkstationMenu extends AbstractContainerMenu {
 
     private final WorkstationBlockEntity blockEntity;
     private final ContainerData data;
     private final int playerInvY;
+    private java.util.function.Consumer<java.util.List<com.sevendaystominecraft.network.WorkstationRecipeListPayload.Entry>> recipeListConsumer;
+
+    public void setRecipeListConsumer(java.util.function.Consumer<java.util.List<com.sevendaystominecraft.network.WorkstationRecipeListPayload.Entry>> consumer) {
+        this.recipeListConsumer = consumer;
+    }
+
+    public void acceptRecipeList(java.util.List<com.sevendaystominecraft.network.WorkstationRecipeListPayload.Entry> entries) {
+        if (recipeListConsumer != null) {
+            recipeListConsumer.accept(entries);
+        }
+    }
 
     public WorkstationMenu(int containerId, Inventory playerInv, WorkstationBlockEntity blockEntity) {
         super(ModMenuTypes.WORKSTATION_MENU.get(), containerId);
@@ -156,6 +172,75 @@ public class WorkstationMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return blockEntity == null || blockEntity.stillValid(player);
+    }
+
+    public void handleRecipeSelect(ServerPlayer player, ResourceLocation recipeId) {
+        if (blockEntity == null) return;
+
+        WorkstationType type = blockEntity.getWorkstationType();
+        if (player.getServer() == null) return;
+        var optionalHolder = player.getServer().getRecipeManager()
+                .byKey(net.minecraft.resources.ResourceKey.create(
+                        net.minecraft.core.registries.Registries.RECIPE, recipeId));
+
+        if (optionalHolder.isEmpty()) return;
+        RecipeHolder<?> rawHolder = optionalHolder.get();
+        if (!(rawHolder.value() instanceof WorkstationCraftingRecipe recipe)) return;
+        if (!rawHolder.value().getType().equals(type.getRecipeType())) return;
+
+        for (SizedIngredient sized : recipe.getIngredients()) {
+            int available = 0;
+            for (int invSlot = 0; invSlot < player.getInventory().getContainerSize(); invSlot++) {
+                ItemStack invStack = player.getInventory().getItem(invSlot);
+                if (!invStack.isEmpty() && sized.ingredient().test(invStack)) {
+                    available += invStack.getCount();
+                }
+            }
+            for (int i = 0; i < type.getInputSlots() && i < blockEntity.getContainerSize(); i++) {
+                ItemStack existing = blockEntity.getItem(i);
+                if (!existing.isEmpty() && sized.ingredient().test(existing)) {
+                    available += existing.getCount();
+                }
+            }
+            if (available < sized.count()) return;
+        }
+
+        for (int i = 0; i < type.getInputSlots() && i < blockEntity.getContainerSize(); i++) {
+            ItemStack existing = blockEntity.getItem(i);
+            if (!existing.isEmpty()) {
+                if (!player.getInventory().add(existing.copy())) return;
+                blockEntity.setItem(i, ItemStack.EMPTY);
+            }
+        }
+
+        int slotIndex = 0;
+        for (SizedIngredient sized : recipe.getIngredients()) {
+            if (slotIndex >= type.getInputSlots()) break;
+
+            int needed = sized.count();
+            ItemStack gathered = ItemStack.EMPTY;
+
+            for (int invSlot = 0; invSlot < player.getInventory().getContainerSize() && needed > 0; invSlot++) {
+                ItemStack invStack = player.getInventory().getItem(invSlot);
+                if (!invStack.isEmpty() && sized.ingredient().test(invStack)) {
+                    int take = Math.min(needed, invStack.getCount());
+                    if (gathered.isEmpty()) {
+                        gathered = invStack.copyWithCount(take);
+                    } else {
+                        gathered.grow(take);
+                    }
+                    invStack.shrink(take);
+                    needed -= take;
+                }
+            }
+
+            if (!gathered.isEmpty()) {
+                blockEntity.setItem(slotIndex, gathered);
+            }
+            slotIndex++;
+        }
+
+        broadcastChanges();
     }
 
     private static class WorkstationSlot extends Slot {

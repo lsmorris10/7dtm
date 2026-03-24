@@ -1,0 +1,14 @@
+{
+  "type": "sevendaystominecraft:forge_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:nail",
+    "count": 4
+  },
+  "processing_ticks": 100
+}

@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:mutton"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cooked_mutton",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

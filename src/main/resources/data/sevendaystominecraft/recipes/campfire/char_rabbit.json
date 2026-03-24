@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:rabbit"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:charred_meat",
+    "count": 1
+  },
+  "processing_ticks": 100
+}

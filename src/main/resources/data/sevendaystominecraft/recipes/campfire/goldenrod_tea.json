@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:goldenrod"
+    },
+    {
+      "ingredient": "sevendaystominecraft:boiled_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:goldenrod_tea",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

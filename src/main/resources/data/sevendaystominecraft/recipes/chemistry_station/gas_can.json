@@ -1,0 +1,14 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:oil_shale",
+      "count": 3
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:gas_can",
+    "count": 1
+  },
+  "processing_ticks": 400
+}

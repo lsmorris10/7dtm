@@ -1,0 +1,18 @@
+{
+  "type": "sevendaystominecraft:advanced_workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 5
+    },
+    {
+      "ingredient": "sevendaystominecraft:mechanical_parts",
+      "count": 3
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:forged_steel",
+    "count": 2
+  },
+  "processing_ticks": 0
+}

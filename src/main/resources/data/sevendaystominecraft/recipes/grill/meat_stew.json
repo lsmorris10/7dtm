@@ -1,0 +1,19 @@
+{
+  "type": "sevendaystominecraft:grill_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:beef"
+    },
+    {
+      "ingredient": "sevendaystominecraft:potato_crop_item"
+    },
+    {
+      "ingredient": "sevendaystominecraft:boiled_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:meat_stew",
+    "count": 1
+  },
+  "processing_ticks": 300
+}

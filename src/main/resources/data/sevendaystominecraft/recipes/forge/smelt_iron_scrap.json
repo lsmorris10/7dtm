@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:forge_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:iron_scrap"
+    }
+  ],
+  "result": {
+    "id": "minecraft:iron_ingot",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

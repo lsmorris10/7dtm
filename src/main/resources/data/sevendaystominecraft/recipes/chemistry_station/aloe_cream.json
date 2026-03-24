@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:vine",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:aloe_cream",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

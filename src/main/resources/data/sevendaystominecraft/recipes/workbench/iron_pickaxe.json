@@ -1,0 +1,18 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:stick",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:forged_iron",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "minecraft:iron_pickaxe",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

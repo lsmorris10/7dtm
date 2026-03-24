@@ -1,0 +1,21 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:oak_planks",
+      "count": 3
+    },
+    {
+      "ingredient": "sevendaystominecraft:nail",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:duct_tape"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:baseball_bat",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

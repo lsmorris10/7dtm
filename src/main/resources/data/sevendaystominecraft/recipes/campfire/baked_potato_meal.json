@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:potato_crop_item"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:baked_potato_meal",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

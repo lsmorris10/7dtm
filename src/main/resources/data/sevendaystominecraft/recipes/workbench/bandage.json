@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:paper",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:string"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:bandage",
+    "count": 2
+  },
+  "processing_ticks": 0
+}

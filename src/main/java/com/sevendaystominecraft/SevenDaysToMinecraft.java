@@ -38,6 +38,9 @@ import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 import com.sevendaystominecraft.magazine.ModMagazines;
 import com.sevendaystominecraft.network.ModNetworking;
+import com.sevendaystominecraft.block.workstation.recipe.ModIngredientTypes;
+import com.sevendaystominecraft.block.workstation.recipe.ModRecipeSerializers;
+import com.sevendaystominecraft.block.workstation.recipe.ModRecipeTypes;
 import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.sound.ModSounds;
 
@@ -86,6 +89,10 @@ public class SevenDaysToMinecraft {
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ModSounds.SOUND_EVENTS.register(modEventBus);
         ModParticles.PARTICLE_TYPES.register(modEventBus);
+        ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+        ModIngredientTypes.INGREDIENT_TYPES.register(modEventBus);
+        com.sevendaystominecraft.block.workstation.recipe.ModRecipeBookCategories.RECIPE_BOOK_CATEGORIES.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);

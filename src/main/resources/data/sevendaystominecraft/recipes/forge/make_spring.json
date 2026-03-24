@@ -1,0 +1,13 @@
+{
+  "type": "sevendaystominecraft:forge_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:spring",
+    "count": 1
+  },
+  "processing_ticks": 150
+}

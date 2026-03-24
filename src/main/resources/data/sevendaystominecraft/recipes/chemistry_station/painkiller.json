@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:glass_bottle"
+    },
+    {
+      "ingredient": "sevendaystominecraft:nitrate"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:painkiller",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

@@ -1,0 +1,17 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:nitrate",
+      "count": 2
+    },
+    {
+      "ingredient": "minecraft:coal"
+    }
+  ],
+  "result": {
+    "id": "minecraft:gunpowder",
+    "count": 2
+  },
+  "processing_ticks": 200
+}

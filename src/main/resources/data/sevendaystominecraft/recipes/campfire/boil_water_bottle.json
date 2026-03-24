@@ -1,0 +1,15 @@
+{
+  "type": "sevendaystominecraft:campfire_workstation",
+  "ingredients": [
+    {
+      "ingredient": {
+        "type": "sevendaystominecraft:water_bottle"
+      }
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:boiled_water",
+    "count": 1
+  },
+  "processing_ticks": 200
+}

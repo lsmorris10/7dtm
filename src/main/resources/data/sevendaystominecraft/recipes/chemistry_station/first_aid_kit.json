@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:chemistry_station_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:bandage"
+    },
+    {
+      "ingredient": "sevendaystominecraft:antibiotics"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:first_aid_kit",
+    "count": 1
+  },
+  "processing_ticks": 300
+}

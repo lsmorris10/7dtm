@@ -1,5 +1,9 @@
 package com.sevendaystominecraft.block.workstation;
 
+import com.sevendaystominecraft.block.workstation.recipe.ModRecipeTypes;
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationCraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+
 public enum WorkstationType {
     CAMPFIRE("campfire", "Campfire", true, 3, 1, 1),
     GRILL("grill", "Grill", true, 3, 1, 1),
@@ -32,4 +36,16 @@ public enum WorkstationType {
     public int getOutputSlots() { return outputSlots; }
     public int getFuelSlots() { return fuelSlots; }
     public int getTotalSlots() { return inputSlots + outputSlots + fuelSlots; }
+
+    public RecipeType<WorkstationCraftingRecipe> getRecipeType() {
+        return switch (this) {
+            case CAMPFIRE -> ModRecipeTypes.CAMPFIRE.get();
+            case GRILL -> ModRecipeTypes.GRILL.get();
+            case FORGE -> ModRecipeTypes.FORGE.get();
+            case CEMENT_MIXER -> ModRecipeTypes.CEMENT_MIXER.get();
+            case WORKBENCH -> ModRecipeTypes.WORKBENCH.get();
+            case CHEMISTRY_STATION -> ModRecipeTypes.CHEMISTRY_STATION.get();
+            case ADVANCED_WORKBENCH -> ModRecipeTypes.ADVANCED_WORKBENCH.get();
+        };
+    }
 }

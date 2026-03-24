@@ -1,0 +1,16 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:forged_iron"
+    },
+    {
+      "ingredient": "minecraft:stick"
+    }
+  ],
+  "result": {
+    "id": "minecraft:iron_shovel",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

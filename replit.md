@@ -67,12 +67,20 @@ src/main/java/com/sevendaystominecraft/
 │   ├── workstation/
 │   │   ├── WorkstationType.java    — Enum: Campfire, Grill, Workbench, Forge, Cement Mixer, Chemistry Station, Advanced Workbench
 │   │   ├── WorkstationBlock.java   — BaseEntityBlock for all workstation types
-│   │   ├── WorkstationBlockEntity.java — Block entity with fuel, crafting progress, input/output slots
-│   │   ├── WorkstationMenu.java    — Container menu for workstation GUI
-│   │   ├── WorkstationScreen.java  — Client-side GUI screen for workstations
+│   │   ├── WorkstationBlockEntity.java — Block entity with fuel, crafting progress, input/output slots; uses RecipeManager for recipe lookup
+│   │   ├── WorkstationMenu.java    — Container menu for workstation GUI; recipe book component + recipe select handling
+│   │   ├── WorkstationScreen.java  — Client-side GUI screen for workstations with recipe book toggle
 │   │   ├── VanillaCampfireHandler.java — Event handler: intercepts right-click on vanilla campfire to open workstation GUI
 │   │   ├── CampfireWorkstationSavedData.java — SavedData storing per-position campfire workstation inventory/fuel/progress
-│   │   └── CampfireDataBlockEntity.java — Adapter bridging CampfireData to WorkstationBlockEntity for menu compatibility
+│   │   ├── CampfireDataBlockEntity.java — Adapter bridging CampfireData to WorkstationBlockEntity for menu compatibility
+│   │   └── recipe/
+│   │       ├── WorkstationCraftingRecipe.java — Recipe<WorkstationRecipeInput> implementation with SizedIngredient list
+│   │       ├── WorkstationRecipeInput.java    — RecipeInput wrapper for workstation slot items
+│   │       ├── ModRecipeTypes.java            — 7 RecipeType registrations (one per workstation type)
+│   │       ├── ModRecipeSerializers.java       — 7 RecipeSerializer registrations
+│   │       ├── ModRecipeBookCategories.java    — RecipeBookCategory for workstation recipes
+│   │       ├── WaterBottleIngredient.java      — ICustomIngredient for water bottle matching
+│   │       └── ModIngredientTypes.java         — Custom ingredient type registration
 │   ├── building/
 │   │   ├── UpgradeableBlock.java     — 6-tier upgradeable block (Wood Frame→Reinforced Wood→Cobblestone→Concrete→Reinforced Concrete→Steel) with right-click upgrade via repair hammer
 │   │   ├── WoodSpikesBlock.java      — Contact damage trap (4 dmg), 10 durability, degrades on hit
@@ -506,7 +514,7 @@ Milestones 1-9 complete (except #4 Temperature which is partial). Milestone 3 (D
 ## Loot & Crafting System (Spec §6) — DONE
 - **Items**: 17 core materials + Survivor's Coin registered via ModItems with creative tabs
 - **Quality Tiers**: T1 (Poor, ×0.7) → T6 (Legendary, ×1.5) with color codes and mod slot scaling
-- **Workstations**: 7 workstation blocks (Campfire, Grill, Workbench, Forge, Cement Mixer, Chemistry Station, Advanced Workbench) with block entities, container menus, and GUI screens; fuel-based workstations tick to process items
+- **Workstations**: 7 workstation blocks (Campfire, Grill, Workbench, Forge, Cement Mixer, Chemistry Station, Advanced Workbench) with block entities, container menus, and GUI screens; fuel-based workstations tick to process items; 75 data-driven JSON recipes loaded via RecipeManager with custom recipe types; recipe book browser panel with search/scroll/click-to-fill
 - **Loot Containers**: 8 loot container blocks (Trash Pile, Cardboard Box, Gun Safe, Munitions Box, Supply Crate, Kitchen Cabinet, Medicine Cabinet, Bookshelf) with loot generation scaled by player loot stage and configurable respawn timers
 - **Loot Stage**: Calculated per player: `floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)`, synced to client every 10 seconds
 - **Scrapping**: Tools/weapons/armor/electronics/food can be scrapped into materials, with workbench giving full yield and inventory giving 50%

@@ -1,6 +1,8 @@
 package com.sevendaystominecraft.block.workstation;
 
 import com.sevendaystominecraft.block.ModBlockEntities;
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationCraftingRecipe;
+import com.sevendaystominecraft.block.workstation.recipe.WorkstationRecipeInput;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -10,12 +12,15 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class WorkstationBlockEntity extends BlockEntity {
 
@@ -109,7 +114,7 @@ public class WorkstationBlockEntity extends BlockEntity {
             burnTime--;
         }
 
-        WorkstationRecipe matchedRecipe = findMatchingRecipe();
+        WorkstationCraftingRecipe matchedRecipe = findMatchingRecipe();
 
         if (burnTime == 0 && matchedRecipe != null) {
             int fuelSlot = getFuelSlotStart();
@@ -132,8 +137,8 @@ public class WorkstationBlockEntity extends BlockEntity {
         }
 
         if (burnTime > 0 && matchedRecipe != null) {
-            if (craftTimeTotal != matchedRecipe.processingTicks()) {
-                craftTimeTotal = matchedRecipe.processingTicks();
+            if (craftTimeTotal != matchedRecipe.getProcessingTicks()) {
+                craftTimeTotal = matchedRecipe.getProcessingTicks();
             }
             if (craftTimeTotal <= 0) craftTimeTotal = 200;
             craftProgress++;
@@ -151,16 +156,16 @@ public class WorkstationBlockEntity extends BlockEntity {
     }
 
     private void tickInstantStation() {
-        WorkstationRecipe matchedRecipe = findMatchingRecipe();
+        WorkstationCraftingRecipe matchedRecipe = findMatchingRecipe();
         if (matchedRecipe != null) {
-            if (matchedRecipe.processingTicks() <= 0) {
+            if (matchedRecipe.getProcessingTicks() <= 0) {
                 processRecipe(matchedRecipe);
                 craftProgress = 0;
                 craftTimeTotal = 0;
                 setChanged();
             } else {
-                if (craftTimeTotal != matchedRecipe.processingTicks()) {
-                    craftTimeTotal = matchedRecipe.processingTicks();
+                if (craftTimeTotal != matchedRecipe.getProcessingTicks()) {
+                    craftTimeTotal = matchedRecipe.getProcessingTicks();
                 }
                 craftProgress++;
                 if (craftProgress >= craftTimeTotal) {
@@ -177,14 +182,21 @@ public class WorkstationBlockEntity extends BlockEntity {
         }
     }
 
-    private WorkstationRecipe findMatchingRecipe() {
+    private WorkstationCraftingRecipe findMatchingRecipe() {
+        if (level == null) return null;
+
         List<ItemStack> inputStacks = collectInputStacks();
         if (inputStacks.isEmpty()) return null;
 
-        WorkstationRecipe recipe = WorkstationRecipes.findMatch(workstationType, ing -> countMatchingStacks(inputStacks, ing));
-        if (recipe == null) return null;
+        WorkstationRecipeInput input = new WorkstationRecipeInput(inputStacks);
+        if (level.getServer() == null) return null;
+        Optional<RecipeHolder<WorkstationCraftingRecipe>> holder =
+                level.getServer().getRecipeManager().getRecipeFor(workstationType.getRecipeType(), input, level);
 
-        if (!canFitOutput(recipe.output())) return null;
+        if (holder.isEmpty()) return null;
+
+        WorkstationCraftingRecipe recipe = holder.get().value();
+        if (!canFitOutput(recipe.getResult())) return null;
 
         return recipe;
     }
@@ -198,16 +210,6 @@ public class WorkstationBlockEntity extends BlockEntity {
             }
         }
         return stacks;
-    }
-
-    private static int countMatchingStacks(List<ItemStack> stacks, WorkstationRecipe.Ingredient ing) {
-        int total = 0;
-        for (ItemStack stack : stacks) {
-            if (ing.testStack(stack)) {
-                total += stack.getCount();
-            }
-        }
-        return total;
     }
 
     private boolean canFitOutput(ItemStack output) {
@@ -224,9 +226,9 @@ public class WorkstationBlockEntity extends BlockEntity {
         return false;
     }
 
-    private void processRecipe(WorkstationRecipe recipe) {
-        recipe.consumeInputs((ing, count) -> consumeFromInputSlots(ing, count));
-        ItemStack output = recipe.output().copy();
+    private void processRecipe(WorkstationCraftingRecipe recipe) {
+        consumeRecipeInputs(recipe);
+        ItemStack output = recipe.getResult().copy();
 
         if (level instanceof net.minecraft.server.level.ServerLevel sl) {
             applyPerkQualityBonus(sl, output);
@@ -244,6 +246,20 @@ public class WorkstationBlockEntity extends BlockEntity {
             for (net.minecraft.server.level.ServerPlayer player : serverLevel.getPlayers(
                     p -> p.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) < 64)) {
                 com.sevendaystominecraft.smell.SmellTracker.markRecentlyCookedFor(player);
+            }
+        }
+    }
+
+    private void consumeRecipeInputs(WorkstationCraftingRecipe recipe) {
+        for (SizedIngredient sized : recipe.getIngredients()) {
+            int remaining = sized.count();
+            for (int i = 0; i < workstationType.getInputSlots() && i < items.size() && remaining > 0; i++) {
+                ItemStack stack = items.get(i);
+                if (sized.ingredient().test(stack)) {
+                    int take = Math.min(remaining, stack.getCount());
+                    stack.shrink(take);
+                    remaining -= take;
+                }
             }
         }
     }
@@ -312,18 +328,6 @@ public class WorkstationBlockEntity extends BlockEntity {
             int physicianRank = stats.getPerkRank("physician");
             if (physicianRank > 0 && serverLevel.getRandom().nextFloat() < 0.15f * physicianRank) {
                 output.grow(1);
-            }
-        }
-    }
-
-    private void consumeFromInputSlots(WorkstationRecipe.Ingredient ing, int count) {
-        int remaining = count;
-        for (int i = 0; i < workstationType.getInputSlots() && i < items.size() && remaining > 0; i++) {
-            ItemStack stack = items.get(i);
-            if (ing.testStack(stack)) {
-                int take = Math.min(remaining, stack.getCount());
-                stack.shrink(take);
-                remaining -= take;
             }
         }
     }

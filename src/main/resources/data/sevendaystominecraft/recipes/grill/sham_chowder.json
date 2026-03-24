@@ -1,0 +1,20 @@
+{
+  "type": "sevendaystominecraft:grill_workstation",
+  "ingredients": [
+    {
+      "ingredient": "sevendaystominecraft:potato_crop_item",
+      "count": 2
+    },
+    {
+      "ingredient": "sevendaystominecraft:corn"
+    },
+    {
+      "ingredient": "sevendaystominecraft:boiled_water"
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:sham_chowder",
+    "count": 1
+  },
+  "processing_ticks": 300
+}
