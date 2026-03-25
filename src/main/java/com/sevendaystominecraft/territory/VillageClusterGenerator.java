@@ -53,7 +53,7 @@ public class VillageClusterGenerator {
     private static final int TRADER_MIN_BUILDINGS = 2;
     private static final int TRADER_MAX_BUILDINGS = 3;
     private static final int BUILDING_SPACING = 26;
-    private static final int BUILDING_GAP = 7;
+    private static final int BUILDING_GAP = 10;
     private static final int PATH_BLOCK_RADIUS = 1;
     private static final int ROAD_CONNECTION_DISTANCE = 40;
 

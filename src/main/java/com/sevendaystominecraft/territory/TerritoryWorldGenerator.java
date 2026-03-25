@@ -84,13 +84,18 @@ public class TerritoryWorldGenerator {
         BlockPos origin = new BlockPos(blockX, surfaceY, blockZ);
         if (serverLevel.getBlockState(origin).liquid() || serverLevel.getBlockState(origin.below()).liquid()) return;
 
+        data.addPending(candidate);
         try {
             VillageClusterGenerator.VillageResult villageResult =
                     VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, type);
 
-            if (villageResult == null) return;
+            if (villageResult == null) {
+                data.removePending(candidate);
+                return;
+            }
 
             TerritoryRecord record = data.addTerritory(origin, tier, type);
+            data.removePending(candidate);
 
             spawnLabelEntity(serverLevel, record, origin.above(tier.getLabelHeight() + 5));
 
@@ -112,6 +117,7 @@ public class TerritoryWorldGenerator {
                     biomeMin, biomeMax);
 
         } catch (Exception e) {
+            data.removePending(candidate);
             SevenDaysToMinecraft.LOGGER.error("[BZHS Village] Error generating village at {}: {}",
                     origin, e.getMessage());
         }

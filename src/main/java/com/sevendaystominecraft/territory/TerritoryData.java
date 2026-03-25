@@ -12,8 +12,10 @@ import net.minecraft.world.level.saveddata.SavedData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TerritoryData extends SavedData {
 
@@ -21,6 +23,7 @@ public class TerritoryData extends SavedData {
 
     private final Map<Integer, TerritoryRecord> territoriesById = new HashMap<>();
     private final Map<Long, Integer> chunkToTerritoryId = new HashMap<>();
+    private final Set<Long> pendingPositions = new HashSet<>();
     private int nextId = 1;
 
     public TerritoryData() {}
@@ -56,7 +59,28 @@ public class TerritoryData extends SavedData {
             int dz = Math.abs(chunkZ - rz);
             if (dx <= minChunkSpacing && dz <= minChunkSpacing) return true;
         }
+        for (long packed : pendingPositions) {
+            int px = (int) packed;
+            int pz = (int) (packed >> 32);
+            int dx = Math.abs(chunkX - px);
+            int dz = Math.abs(chunkZ - pz);
+            if (dx <= minChunkSpacing && dz <= minChunkSpacing) return true;
+        }
         return false;
+    }
+
+    public void addPending(BlockPos pos) {
+        int chunkX = pos.getX() >> 4;
+        int chunkZ = pos.getZ() >> 4;
+        long key = ((long) chunkX & 0xFFFFFFFFL) | (((long) chunkZ & 0xFFFFFFFFL) << 32);
+        pendingPositions.add(key);
+    }
+
+    public void removePending(BlockPos pos) {
+        int chunkX = pos.getX() >> 4;
+        int chunkZ = pos.getZ() >> 4;
+        long key = ((long) chunkX & 0xFFFFFFFFL) | (((long) chunkZ & 0xFFFFFFFFL) << 32);
+        pendingPositions.remove(key);
     }
 
     public TerritoryRecord getTerritoryById(int id) {
