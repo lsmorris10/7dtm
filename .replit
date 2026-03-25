@@ -26,12 +26,12 @@ args = "Preview Site"
 name = "Build Mod"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "export JAVA_HOME=$(dirname $(dirname $(which java))) && ./gradlew build --no-daemon"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "Preview Site"

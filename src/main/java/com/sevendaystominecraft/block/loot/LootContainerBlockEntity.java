@@ -22,7 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.TridentItem;
 
 import com.sevendaystominecraft.item.armor.TieredArmorItem;
@@ -181,7 +181,7 @@ public class LootContainerBlockEntity extends BlockEntity {
         }
         return item instanceof TieredArmorItem
                 || item instanceof SwordItem
-                || item instanceof TieredItem
+                || item instanceof DiggerItem
                 || item instanceof BowItem
                 || item instanceof CrossbowItem
                 || item instanceof TridentItem
