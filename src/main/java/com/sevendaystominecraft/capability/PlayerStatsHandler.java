@@ -271,8 +271,8 @@ public class PlayerStatsHandler {
                 SevenDaysPlayerStats newStats = event.getEntity().getData(ModAttachments.PLAYER_STATS.get());
                 newStats.copyFrom(oldStats);
 
-                newStats.setFood(newStats.getMaxFood() * 0.5f);
-                newStats.setWater(newStats.getMaxWater() * 0.5f);
+                newStats.setFood(newStats.getMaxFood());
+                newStats.setWater(newStats.getMaxWater());
                 newStats.setStamina(newStats.getMaxStamina());
 
                 clearAllDebuffs(event.getEntity(), newStats);
