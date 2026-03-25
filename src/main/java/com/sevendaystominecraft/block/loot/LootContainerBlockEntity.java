@@ -15,9 +15,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.TridentItem;
+
+import com.sevendaystominecraft.item.armor.TieredArmorItem;
+import com.sevendaystominecraft.item.weapon.RangedWeaponItem;
+import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -147,7 +157,7 @@ public class LootContainerBlockEntity extends BlockEntity {
         for (int i = 0; i < itemCount; i++) {
             ItemStack stack = generateItemForType(containerType, lootStage, random);
             if (!stack.isEmpty()) {
-                if (qualityEnabled) {
+                if (qualityEnabled && supportsQuality(stack.getItem())) {
                     QualityTier tier = QualityTier.randomForLootStage(lootStage, random);
                     QualityTier baseline = VanillaGearMaterials.getBaselineQuality(stack.getItem());
                     if (baseline != null && baseline.getLevel() > tier.getLevel()) {
@@ -163,6 +173,21 @@ public class LootContainerBlockEntity extends BlockEntity {
             }
         }
         setChanged();
+    }
+
+    private static boolean supportsQuality(Item item) {
+        if (VanillaGearMaterials.isVanillaGear(item)) {
+            return true;
+        }
+        return item instanceof TieredArmorItem
+                || item instanceof SwordItem
+                || item instanceof TieredItem
+                || item instanceof BowItem
+                || item instanceof CrossbowItem
+                || item instanceof TridentItem
+                || item instanceof ArmorItem
+                || item instanceof RangedWeaponItem
+                || item instanceof GeoRangedWeaponItem;
     }
 
     private int getBaseItemCount() {
