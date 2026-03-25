@@ -80,8 +80,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 if (longGun) {
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.3, -0.1, -0.5);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(0.05, -0.1, -0.3);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                     poseStack.mulPose(Axis.ZP.rotationDegrees(-5));
                 } else {
                     scale = 0.5f;
@@ -94,8 +94,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 if (longGun) {
                     scale = 0.85f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(-0.3, -0.1, -0.5);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(-0.05, -0.1, -0.3);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                     poseStack.mulPose(Axis.ZP.rotationDegrees(5));
                 } else {
                     scale = 0.5f;
@@ -108,8 +108,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 if (longGun) {
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.1, 0.3, 0.1);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(0.1, 0.3, -0.1);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
@@ -121,8 +121,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 if (longGun) {
                     scale = 0.6f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(-0.1, 0.3, 0.1);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.translate(-0.1, 0.3, -0.1);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
