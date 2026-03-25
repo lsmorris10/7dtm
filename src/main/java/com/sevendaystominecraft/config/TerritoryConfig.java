@@ -37,13 +37,13 @@ public class TerritoryConfig {
 
         spawnChanceDenominator = builder
                 .comment("1-in-N chance per new chunk to generate a territory.",
-                         "Lower = more territories. Default 40 gives approx 1 territory per 40 new chunks.")
-                .defineInRange("spawnChanceDenominator", 40, 5, 200);
+                         "Lower = more territories. Default 27 gives approx 1 territory per 27 new chunks.")
+                .defineInRange("spawnChanceDenominator", 27, 5, 200);
 
         minChunkSpacing = builder
                 .comment("Minimum chunk distance between any two territory centers.",
-                         "16 = territories must be at least 256 blocks apart.")
-                .defineInRange("minChunkSpacing", 16, 4, 64);
+                         "13 = territories must be at least 208 blocks apart.")
+                .defineInRange("minChunkSpacing", 13, 4, 64);
 
         syncRangeBlocks = builder
                 .comment("Radius in blocks within which territories are synced to the client compass.",
