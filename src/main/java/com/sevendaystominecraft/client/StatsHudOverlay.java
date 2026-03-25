@@ -4,6 +4,9 @@ import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
+import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler;
+import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler.ArmorCounts;
+import com.sevendaystominecraft.item.armor.ArmorTier;
 import com.sevendaystominecraft.perk.LevelManager;
 
 import com.sevendaystominecraft.network.SyncTerritoryPayload.BuildingEntry;
@@ -14,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -41,6 +45,11 @@ public class StatsHudOverlay {
     private static final int WATER_COLOR = 0xFF3388CC;
     private static final int WATER_LOW_COLOR = 0xFF224488;
     private static final int XP_COLOR = 0xFF9933FF;
+    private static final int ARMOR_LIGHT_COLOR = 0xFF55AA55;
+    private static final int ARMOR_MEDIUM_COLOR = 0xFFCC8833;
+    private static final int ARMOR_HEAVY_COLOR = 0xFFCC3333;
+    private static final int ARMOR_DEFAULT_COLOR = 0xFF6688AA;
+    private static final float ARMOR_MAX = 19.0f;
     private static final int BORDER_COLOR = 0xFF333333;
     private static final int TEXT_COLOR = 0xFFFFFFFF;
     private static final int DEBUFF_COLOR = 0xFFFF5555;
@@ -93,6 +102,19 @@ public class StatsHudOverlay {
         float healthPct = (maxHealth > 0) ? health / maxHealth : 0f;
         drawStatBar(graphics, x, y, "Health", healthPct, health, maxHealth,
                 healthPct < LOW_THRESHOLD ? HEALTH_LOW_COLOR : HEALTH_COLOR);
+        y += BAR_HEIGHT + BAR_SPACING + 2;
+
+        float armorValue = (float) player.getAttributeValue(Attributes.ARMOR);
+        float armorMax = Math.max(ARMOR_MAX, armorValue);
+        float armorPct = (armorMax > 0) ? armorValue / armorMax : 0f;
+        ArmorCounts counts = ArmorSetBonusHandler.computeArmorCounts(player);
+        int armorColor = getArmorBarColor(counts);
+        drawStatBar(graphics, x, y, "Armor", armorPct, armorValue, armorMax, armorColor);
+        String setLabel = getArmorSetLabel(counts);
+        if (!setLabel.isEmpty()) {
+            int labelX = x + LABEL_WIDTH + BAR_WIDTH + 4 + mc.font.width(String.format("%.0f/%.0f", armorValue, armorMax)) + 6;
+            graphics.drawString(mc.font, setLabel, labelX, y, TEXT_COLOR, true);
+        }
         y += BAR_HEIGHT + BAR_SPACING + 2;
 
         float staminaPct = (stats.getMaxStamina() > 0) ? stats.getStamina() / stats.getMaxStamina() : 0f;
@@ -258,6 +280,51 @@ public class StatsHudOverlay {
             }
         }
         return result.toString();
+    }
+
+    private static int getArmorBarColor(ArmorCounts counts) {
+        int total = counts.light() + counts.medium() + counts.heavy();
+        if (total == 0) return ARMOR_DEFAULT_COLOR;
+
+        if (counts.heavy() > 0 && counts.light() == 0 && counts.medium() == 0) return ARMOR_HEAVY_COLOR;
+        if (counts.medium() > 0 && counts.light() == 0 && counts.heavy() == 0) return ARMOR_MEDIUM_COLOR;
+        if (counts.light() > 0 && counts.medium() == 0 && counts.heavy() == 0) return ARMOR_LIGHT_COLOR;
+
+        if (counts.heavy() >= counts.medium() && counts.heavy() >= counts.light()) return ARMOR_HEAVY_COLOR;
+        if (counts.medium() >= counts.light()) return ARMOR_MEDIUM_COLOR;
+        return ARMOR_LIGHT_COLOR;
+    }
+
+    private static String getArmorSetLabel(ArmorCounts counts) {
+        int total = counts.light() + counts.medium() + counts.heavy();
+        if (total == 0) return "";
+
+        StringBuilder sb = new StringBuilder();
+        if (counts.light() >= 2) {
+            sb.append(counts.light()).append("pc Light");
+        }
+        if (counts.medium() >= 2) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(counts.medium()).append("pc Medium");
+        }
+        if (counts.heavy() >= 2) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(counts.heavy()).append("pc Heavy");
+        }
+
+        if (sb.length() == 0 && total > 0) {
+            int tiersWorn = 0;
+            ArmorTier singleTier = null;
+            if (counts.light() > 0) { tiersWorn++; singleTier = ArmorTier.LIGHT; }
+            if (counts.medium() > 0) { tiersWorn++; singleTier = ArmorTier.MEDIUM; }
+            if (counts.heavy() > 0) { tiersWorn++; singleTier = ArmorTier.HEAVY; }
+            if (tiersWorn == 1 && singleTier != null) {
+                return singleTier.name().charAt(0) + singleTier.name().substring(1).toLowerCase();
+            }
+            return "";
+        }
+
+        return sb.toString();
     }
 
     private static void drawStatBar(GuiGraphics graphics, int x, int y,
