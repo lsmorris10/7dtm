@@ -150,6 +150,22 @@ public class SleeperZombieManager {
     }
 
     private static BlockPos findSafeInteriorY(ServerLevel level, BlockPos rawPos) {
+        BlockPos result = findSafeInteriorYAt(level, rawPos);
+        if (result != null) return result;
+
+        int[][] offsets = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        for (int[] off : offsets) {
+            result = findSafeInteriorYAt(level, rawPos.offset(off[0], 0, off[1]));
+            if (result != null) return result;
+        }
+
+        SevenDaysToMinecraft.LOGGER.debug(
+                "[BZHS Territory] Skipped sleeper spawn position at ({}, {}, {}): no valid 2-block air gap found",
+                rawPos.getX(), rawPos.getY(), rawPos.getZ());
+        return null;
+    }
+
+    private static BlockPos findSafeInteriorYAt(ServerLevel level, BlockPos rawPos) {
         int startY = rawPos.getY();
         for (int dy = 0; dy <= 3; dy++) {
             BlockPos test = new BlockPos(rawPos.getX(), startY + dy, rawPos.getZ());

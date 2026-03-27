@@ -94,16 +94,18 @@ public class VillageBuildingBuilder {
             buildPorch(level, base, halfX, halfZ, floorBlock, frameBlock, random);
         }
 
-        collectInteriorPositions(base, halfX, halfZ, zombieSpawnPos);
         placeLoot(level, base, halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random, doorSide);
 
         if (willHaveSecondFloor) {
             int secondFloorY = wallHeight + 1;
             buildSecondFloor(level, base, halfX, halfZ, secondFloorY, wallBlock, floorBlock, frameBlock, random);
             placeWindows(level, base.above(secondFloorY), halfX, halfZ, wallHeight, random);
-            collectInteriorPositions(base.above(secondFloorY), halfX, halfZ, zombieSpawnPos);
             placeLoot(level, base.above(secondFloorY), halfX, halfZ, wallHeight, tier, buildingType, lootPos, lootTypes, random, doorSide);
             buildPeakedRoof(level, base, halfX, halfZ, secondFloorY + wallHeight, roofBlock, frameBlock);
+            collectInteriorPositions(level, base, halfX, halfZ, zombieSpawnPos);
+            collectInteriorPositions(level, base.above(secondFloorY), halfX, halfZ, zombieSpawnPos);
+        } else {
+            collectInteriorPositions(level, base, halfX, halfZ, zombieSpawnPos);
         }
 
         return new BuildingResult(base, zombieSpawnPos, lootPos, lootTypes, sizeX, sizeZ);
@@ -448,17 +450,23 @@ public class VillageBuildingBuilder {
         }
     }
 
-    private static void collectInteriorPositions(BlockPos base, int halfX, int halfZ,
+    private static void collectInteriorPositions(ServerLevel level, BlockPos base, int halfX, int halfZ,
                                                   List<BlockPos> spawnPositions) {
         int innerHalfX = halfX - 1;
         int innerHalfZ = halfZ - 1;
         if (innerHalfX <= 0 || innerHalfZ <= 0) {
-            spawnPositions.add(base.above(1));
+            BlockPos candidate = base.above(1);
+            if (level.getBlockState(candidate).isAir() && level.getBlockState(candidate.above()).isAir()) {
+                spawnPositions.add(candidate);
+            }
             return;
         }
         for (int dx = -innerHalfX; dx <= innerHalfX; dx += 2) {
             for (int dz = -innerHalfZ; dz <= innerHalfZ; dz += 2) {
-                spawnPositions.add(base.offset(dx, 1, dz));
+                BlockPos candidate = base.offset(dx, 1, dz);
+                if (level.getBlockState(candidate).isAir() && level.getBlockState(candidate.above()).isAir()) {
+                    spawnPositions.add(candidate);
+                }
             }
         }
     }

@@ -57,8 +57,8 @@ public class TerritoryStructureBuilder {
         buildWalls(level, base, halfSize, wallHeight, wallBlock);
         buildRoof(level, base, halfSize, wallHeight, roofBlock);
 
-        collectInteriorPositions(base, halfSize, wallHeight, zombieSpawnPos);
         placeLoot(level, base, halfSize, wallHeight, tier, type, lootPos, lootTypes, random);
+        collectInteriorPositions(level, base, halfSize, wallHeight, zombieSpawnPos);
 
         BlockPos labelPos = base.above(wallHeight + tier.getLabelHeight());
         return new BuildResult(labelPos, zombieSpawnPos, lootPos, lootTypes);
@@ -90,16 +90,22 @@ public class TerritoryStructureBuilder {
         }
     }
 
-    private static void collectInteriorPositions(BlockPos base, int halfSize, int wallHeight,
+    private static void collectInteriorPositions(ServerLevel level, BlockPos base, int halfSize, int wallHeight,
                                                   List<BlockPos> spawnPositions) {
         int innerHalf = halfSize - 1;
         if (innerHalf <= 0) {
-            spawnPositions.add(base.above(1));
+            BlockPos candidate = base.above(1);
+            if (level.getBlockState(candidate).isAir() && level.getBlockState(candidate.above()).isAir()) {
+                spawnPositions.add(candidate);
+            }
             return;
         }
         for (int dx = -innerHalf; dx <= innerHalf; dx += 2) {
             for (int dz = -innerHalf; dz <= innerHalf; dz += 2) {
-                spawnPositions.add(base.offset(dx, 1, dz));
+                BlockPos candidate = base.offset(dx, 1, dz);
+                if (level.getBlockState(candidate).isAir() && level.getBlockState(candidate.above()).isAir()) {
+                    spawnPositions.add(candidate);
+                }
             }
         }
     }
