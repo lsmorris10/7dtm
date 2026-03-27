@@ -1,0 +1,48 @@
+#Brutal Zombie Horde Survival — Horde Night / Blood Moon Configuration
+#Spec reference: §4.1 (blood moon mechanics), §4.2 (scaling formula)
+[horde]
+	#Blood moon occurs every N days (spec §4.1: default 7)
+	# Default: 7
+	# Range: 1 ~ 30
+	hordeCycleLength = 7
+	#Base zombie count for wave 1 on the first blood moon (spec §4.2: 8)
+	# Default: 8
+	# Range: 4 ~ 64
+	baseCount = 8
+	#Scales the horde growth curve (spec §4.2: 1.0)
+	# Default: 1.0
+	# Range: 0.1 ~ 5.0
+	difficultyMultiplier = 1.0
+	#Hard cap on zombies per wave (spec §4.2: 64)
+	# Default: 64
+	# Range: 16 ~ 256
+	maxPerWave = 64
+	#Number of waves per blood moon night (spec §4.2: 4)
+	# Default: 4
+	# Range: 1 ~ 12
+	waveCount = 4
+	#Seconds between waves (spec §4.2: 600 = 10 minutes)
+	# Default: 600
+	# Range: 120 ~ 1800
+	waveIntervalSec = 600
+	#Whether surviving horde zombies burn at sunrise (spec §4.1)
+	burnAtDawn = true
+
+	#Day thresholds for when special zombie types begin appearing in hordes
+	[horde.composition]
+		#First day Ferals appear in horde waves (spec §4.2: 14)
+		# Default: 14
+		# Range: 1 ~ 100
+		feralDay = 14
+		#First day Demolishers appear in horde waves (spec §4.2: 21)
+		# Default: 21
+		# Range: 7 ~ 100
+		demolisherDay = 21
+		#First day Charged zombies appear in horde waves (spec §4.2, 2.6 NEW: 21)
+		# Default: 21
+		# Range: 7 ~ 100
+		chargedDay = 21
+		#First day Infernal zombies appear in horde waves (spec §4.2, 2.6 NEW: 21)
+		# Default: 21
+		# Range: 7 ~ 100
+		infernalDay = 21

@@ -71,7 +71,8 @@ public class ModBlocks {
         return BlockBehaviour.Properties.of()
                 .setId(blockKey(name))
                 .strength(2.0f)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .noOcclusion();
     }
 
     private static BlockBehaviour.Properties metalContainerProps(String name) {
@@ -198,6 +199,14 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY)
                     .requiresCorrectToolForDrops()));
+
+    public static final Supplier<Block> IRON_SCRAP_BLOCK = registerWithItem("iron_scrap",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .setId(blockKey("iron_scrap"))
+                    .strength(1.5f, 3.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .mapColor(net.minecraft.world.level.material.MapColor.COLOR_GRAY)));
 
     public static final Supplier<Block> UPGRADEABLE_FRAME = registerWithItem("upgradeable_frame",
             () -> new UpgradeableBlock(BlockBehaviour.Properties.of()

@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.item;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.item.weapon.GrenadeItem;
 import com.sevendaystominecraft.sound.ModSounds;
@@ -36,8 +37,9 @@ public class ModItems {
                 ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, name));
     }
 
-    public static final Supplier<Item> IRON_SCRAP = ITEMS.register("iron_scrap",
-            () -> new Item(new Item.Properties().setId(key("iron_scrap")).stacksTo(64)));
+    // Iron scrap is now a placeable block — registered in ModBlocks as IRON_SCRAP_BLOCK.
+    // This lazy delegate preserves the ModItems.IRON_SCRAP API for all existing references.
+    public static final Supplier<Item> IRON_SCRAP = () -> ModBlocks.IRON_SCRAP_BLOCK.get().asItem();
 
     public static final Supplier<Item> LEAD = ITEMS.register("lead",
             () -> new Item(new Item.Properties().setId(key("lead")).stacksTo(64)));

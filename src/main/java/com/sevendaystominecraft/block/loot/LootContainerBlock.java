@@ -12,12 +12,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +30,7 @@ public class LootContainerBlock extends BaseEntityBlock {
     public static final MapCodec<LootContainerBlock> CODEC = simpleCodec(p -> new LootContainerBlock(p, LootContainerType.CARDBOARD_BOX));
 
     private final LootContainerType containerType;
+    private static final VoxelShape TRASH_PILE_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D);
 
     public LootContainerBlock(Properties properties, LootContainerType containerType) {
         super(properties);
@@ -44,6 +49,22 @@ public class LootContainerBlock extends BaseEntityBlock {
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if (this.containerType == LootContainerType.TRASH_PILE) {
+            return TRASH_PILE_SHAPE;
+        }
+        return super.getShape(state, level, pos, context);
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if (this.containerType == LootContainerType.TRASH_PILE) {
+            return TRASH_PILE_SHAPE;
+        }
+        return super.getCollisionShape(state, level, pos, context);
     }
 
     @Override

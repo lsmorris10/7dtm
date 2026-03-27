@@ -42,7 +42,7 @@ public class BaseSevenDaysZombie extends Zombie {
     private boolean statsApplied = false;
     private float lastDisplayedHP = -1;
     private ZombieDetectionGoal baseDetectionGoal;
-    private final java.util.List<net.minecraft.world.entity.ai.goal.Goal> groundOnlyGoals = new java.util.ArrayList<>();
+    private java.util.List<net.minecraft.world.entity.ai.goal.Goal> groundOnlyGoals;
 
     public BaseSevenDaysZombie(EntityType<? extends Zombie> type, Level level, ZombieVariant variant) {
         super(type, level);
@@ -77,6 +77,7 @@ public class BaseSevenDaysZombie extends Zombie {
         goalSelector.addGoal(3, breakGoal);
         goalSelector.addGoal(4, hordeGoal);
         goalSelector.addGoal(5, investigateGoal);
+        if (groundOnlyGoals == null) groundOnlyGoals = new java.util.ArrayList<>();
         groundOnlyGoals.add(breakGoal);
         groundOnlyGoals.add(hordeGoal);
         groundOnlyGoals.add(investigateGoal);
@@ -94,6 +95,7 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     protected void removeGroundOnlyGoals() {
+        if (groundOnlyGoals == null) return;
         for (net.minecraft.world.entity.ai.goal.Goal goal : groundOnlyGoals) {
             goalSelector.removeGoal(goal);
         }

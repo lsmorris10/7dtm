@@ -1,0 +1,16 @@
+#Brutal Zombie Horde Survival — Loot & Crafting Configuration
+#Controls loot container respawn, abundance, and quality scaling (spec §8)
+[loot]
+	#Number of in-game days before looted containers respawn their loot
+	#0 = containers never respawn, default = 5
+	# Default: 5
+	# Range: 0 ~ 30
+	respawnDays = 5
+	#Multiplier for the amount of loot found in containers
+	#0.25 = very scarce, 1.0 = normal, 4.0 = very abundant
+	# Default: 1.0
+	# Range: 0.25 ~ 4.0
+	abundanceMultiplier = 1.0
+	#Whether loot quality scales with the player's loot stage
+	#If false, all loot is random quality regardless of player progression
+	qualityScaling = true

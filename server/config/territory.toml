@@ -1,0 +1,63 @@
+#Brutal Zombie Horde Survival — Territory Configuration
+#Controls how Territory POIs (Points of Interest) generate and behave (spec §2.2)
+[territory]
+	#1-in-N chance per new chunk to generate a territory.
+	#Lower = more territories. Default 27 gives approx 1 territory per 27 new chunks.
+	# Default: 27
+	# Range: 5 ~ 200
+	spawnChanceDenominator = 40
+	#Minimum chunk distance between any two territory centers.
+	#13 = territories must be at least 208 blocks apart.
+	# Default: 13
+	# Range: 4 ~ 64
+	minChunkSpacing = 16
+	#Radius in blocks within which territories are synced to the client compass.
+	#Higher values show more territory markers on the compass.
+	# Default: 512
+	# Range: 64 ~ 2048
+	syncRangeBlocks = 512
+	#Radius in blocks within which approaching a territory triggers zombie population.
+	#Zombies are only spawned when a player first enters this range.
+	# Default: 64
+	# Range: 16 ~ 256
+	entryTriggerRangeBlocks = 64
+	#Radius in blocks around vanilla structures (villages, outposts, etc.)
+	#where BZHS territories will not generate. Set to 0 to disable.
+	#Default 80 prevents territory/village overlap.
+	# Default: 80
+	# Range: 0 ~ 256
+	vanillaStructureExclusionRadius = 80
+
+#Spawn Protection — Distance-based difficulty scaling around world spawn (0,0)
+#Controls the difficulty curve so early-game areas near spawn are survivable.
+[spawnProtection]
+	#Radius in blocks around world spawn (0,0) where only easy territories generate.
+	#Default 200 = ~12 chunks. Only tiers up to safeZoneMaxTier spawn here.
+	# Default: 200
+	# Range: 0 ~ 2000
+	safeZoneRadius = 200
+	#Radius in blocks for the mid-range zone (between safe zone and this value).
+	#Territories up to midRangeMaxTier can generate in this band.
+	# Default: 500
+	# Range: 0 ~ 5000
+	midRangeRadius = 500
+	#Radius in blocks for the far-range zone (between mid-range and this value).
+	#Territories up to farRangeMaxTier can generate. Beyond this, all tiers are allowed.
+	# Default: 1000
+	# Range: 0 ~ 10000
+	farRangeRadius = 1000
+	#Maximum territory tier allowed in the safe zone. Default 1 (Walkers/Crawlers only).
+	# Default: 1
+	# Range: 1 ~ 5
+	safeZoneMaxTier = 1
+	#Maximum territory tier allowed in the mid-range zone. Default 2.
+	# Default: 2
+	# Range: 1 ~ 5
+	midRangeMaxTier = 2
+	#Maximum territory tier allowed in the far-range zone. Default 3.
+	# Default: 3
+	# Range: 1 ~ 5
+	farRangeMaxTier = 3
+	#If true, territory zombie spawner checks each zombie type's minSpawnDay.
+	#Zombies that require a later day are replaced with easier types.
+	enforceMinSpawnDay = true

@@ -1,0 +1,67 @@
+#Brutal Zombie Horde Survival — Trader NPC Configuration
+[trader]
+	#Guaranteed radius in blocks from world spawn (0,0) within which
+	#at least one Trader Outpost will generate. Default 150.
+	# Default: 150
+	# Range: 50 ~ 500
+	guaranteeRadius = 150
+	#Minimum chunk distance between any two trader outposts.
+	#80 chunks = roughly 1280 blocks apart.
+	# Default: 80
+	# Range: 10 ~ 200
+	minChunkSpacing = 80
+	#1-in-N chance per new chunk to attempt placing a trader outpost.
+	#Lower = more traders. Default 1500.
+	# Default: 1500
+	# Range: 5 ~ 5000
+	spawnChanceDenominator = 400
+	#Radius in blocks around each trader where zombie spawns and block breaking are suppressed.
+	#Default 30.
+	# Default: 30
+	# Range: 10 ~ 100
+	protectionRadius = 30
+	#Radius in blocks around the compound center where natural zombie spawning is suppressed.
+	#Covers the full trader outpost building cluster. Default 80.
+	# Default: 80
+	# Range: 30 ~ 200
+	compoundProtectionRadius = 80
+	#Number of in-game days between trader inventory restocks.
+	#Default 3.
+	# Default: 3
+	# Range: 1 ~ 30
+	restockIntervalDays = 3
+	#Radius in blocks within which traders are synced to the client for map display.
+	#Default 512.
+	# Default: 512
+	# Range: 64 ~ 2048
+	syncRangeBlocks = 512
+	#Traders within this distance from spawn stock Tier 1 items.
+	#Default 300.
+	# Default: 300
+	# Range: 100 ~ 2000
+	tier1MaxDistance = 300
+	#Traders within this distance from spawn stock Tier 2 items.
+	#Beyond this distance, traders stock Tier 3+ items. Default 800.
+	# Default: 800
+	# Range: 200 ~ 5000
+	tier2MaxDistance = 800
+	#Maximum surface Y elevation at which a trader outpost can spawn.
+	#Prevents traders from appearing on mountain peaks. Default 100.
+	# Default: 100
+	# Range: 50 ~ 256
+	maxElevation = 100
+	#Maximum allowed slope variance (difference between highest and lowest
+	#sample points) for a trader outpost location. Default 6.
+	# Default: 6
+	# Range: 2 ~ 20
+	maxSlopeVariance = 6
+	#Maximum number of trader outposts allowed within the check radius.
+	#Prevents clustering of traders in one area. Default 1.
+	# Default: 1
+	# Range: 1 ~ 10
+	maxTradersInRadius = 1
+	#Radius in chunks to check for the max trader limit.
+	#100 chunks = roughly 1600 blocks. Default 100.
+	# Default: 100
+	# Range: 20 ~ 500
+	maxTradersCheckRadius = 100

@@ -1,0 +1,32 @@
+#Brutal Zombie Horde Survival — Quest System Configuration
+[quest]
+	#Maximum number of quests a player can have active at once.
+	#Default 3.
+	# Default: 3
+	# Range: 1 ~ 10
+	maxActiveQuests = 3
+	#Multiplier applied to quest XP rewards.
+	#Default 1.0.
+	# Default: 1.0
+	# Range: 0.1 ~ 10.0
+	xpRewardMultiplier = 1.0
+	#Multiplier applied to quest token rewards.
+	#Default 1.0.
+	# Default: 1.0
+	# Range: 0.1 ~ 10.0
+	tokenRewardMultiplier = 1.0
+	#Legacy config — quests now refresh automatically when the trader restocks.
+	#This value is no longer used. Kept for config compatibility.
+	# Default: 3
+	# Range: 1 ~ 30
+	questRefreshIntervalDays = 3
+	#Number of quests each trader offers at a time.
+	#Default 4.
+	# Default: 4
+	# Range: 3 ~ 8
+	questsPerTrader = 4
+	#Maximum distance in blocks from trader for buried treasure quests.
+	#Default 200.
+	# Default: 200
+	# Range: 50 ~ 500
+	buriedTreasureMaxRange = 200

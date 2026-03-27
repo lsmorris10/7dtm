@@ -1,0 +1,246 @@
+#Brutal Zombie Horde Survival — Survival Mechanics Configuration
+[survival]
+
+	[survival.food_water]
+		#Passive food drain per minute at rest
+		# Default: 0.2
+		# Range: 0.0 ~ 10.0
+		foodDrainPerMinute = 0.2
+		#Passive water drain per minute at rest
+		# Default: 0.3
+		# Range: 0.0 ~ 10.0
+		waterDrainPerMinute = 0.3
+		#Water drain multiplier in desert/hot biomes
+		# Default: 1.5
+		# Range: 1.0 ~ 5.0
+		waterDrainDesertMultiplier = 1.5
+		#Food drain multiplier while sprinting/mining
+		# Default: 2.0
+		# Range: 1.0 ~ 10.0
+		foodDrainActivityMultiplier = 2.0
+
+	[survival.stamina]
+		#Stamina drain per second while sprinting
+		# Default: 10.0
+		# Range: 0.0 ~ 50.0
+		staminaDrainSprint = 10.0
+		#Stamina cost per melee swing (base)
+		# Default: 12.0
+		# Range: 0.0 ~ 50.0
+		staminaDrainMelee = 12.0
+		#Stamina cost per mining swing
+		# Default: 5.0
+		# Range: 0.0 ~ 50.0
+		staminaDrainMining = 5.0
+		#Stamina cost per jump
+		# Default: 8.0
+		# Range: 0.0 ~ 50.0
+		staminaDrainJump = 8.0
+		#Stamina regen per second at rest
+		# Default: 8.0
+		# Range: 0.0 ~ 50.0
+		staminaRegenRest = 8.0
+		#Stamina regen per second while walking
+		# Default: 4.0
+		# Range: 0.0 ~ 50.0
+		staminaRegenWalking = 4.0
+
+	[survival.health]
+		#Health regen per second when above food/water thresholds
+		# Default: 0.1
+		# Range: 0.0 ~ 10.0
+		healthRegenRate = 0.1
+		#Food must be above this % of max for health regen
+		# Default: 50.0
+		# Range: 0.0 ~ 100.0
+		healthRegenFoodThreshold = 50.0
+		#Water must be above this % of max for health regen
+		# Default: 50.0
+		# Range: 0.0 ~ 100.0
+		healthRegenWaterThreshold = 50.0
+
+	[survival.cascade]
+		#Below this food/water %, stamina regen halved
+		# Default: 30.0
+		# Range: 0.0 ~ 100.0
+		cascadeThreshold1 = 30.0
+		#Below this food/water %, health drains
+		# Default: 10.0
+		# Range: 0.0 ~ 100.0
+		cascadeThreshold2 = 10.0
+		#Health drain/sec when food/water < threshold2
+		# Default: 0.1
+		# Range: 0.0 ~ 10.0
+		cascadeHealthDrainSlow = 0.1
+		#Health drain/sec when food/water = 0
+		# Default: 0.4
+		# Range: 0.0 ~ 20.0
+		cascadeHealthDrainFast = 0.4
+		#Movement speed penalty when food/water = 0 (0.4 = 40%)
+		# Default: 0.4
+		# Range: 0.0 ~ 1.0
+		cascadeSpeedPenalty = 0.4
+
+	[survival.debuffs]
+		#Bleeding chance on zombie melee hit (0.3 = 30%)
+		# Default: 0.3
+		# Range: 0.0 ~ 1.0
+		bleedingChance = 0.3
+		#Base infection chance on zombie hit (0.1 = 10%)
+		# Default: 0.1
+		# Range: 0.0 ~ 1.0
+		infectionBaseChance = 0.1
+		#Bleeding duration in ticks (1200 = 60 sec)
+		# Default: 1200
+		# Range: 20 ~ 72000
+		bleedingDuration = 1200
+		#Bleeding HP damage per second (0.2 = 1% of 20 HP)
+		# Default: 0.2
+		# Range: 0.0 ~ 10.0
+		bleedingDamagePerSec = 0.2
+		#Bleeding stamina drain per second
+		# Default: 1.0
+		# Range: 0.0 ~ 50.0
+		bleedingStaminaDrainPerSec = 1.0
+		#Infection Stage 1 duration in ticks (336000 = ~7 in-game days at 2x time scale)
+		# Default: 336000
+		# Range: 200 ~ 1000000
+		infection1Duration = 336000
+		#Infection Stage 1 stamina regen multiplier (0.5 = 50% reduction)
+		# Default: 0.5
+		# Range: 0.0 ~ 1.0
+		infection1StaminaRegenMult = 0.5
+		#Infection Stage 1 HP drain per tick interval (0.05)
+		# Default: 0.05
+		# Range: 0.0 ~ 10.0
+		infection1HpDrain = 0.05
+		#Infection Stage 1 HP drain interval in ticks (40 = every 2 sec)
+		# Default: 40
+		# Range: 1 ~ 1200
+		infection1HpDrainInterval = 40
+		#Infection Stage 2 HP damage per second (0.2 = 1%/sec)
+		# Default: 0.2
+		# Range: 0.0 ~ 10.0
+		infection2DamagePerSec = 0.2
+		#Infection Stage 2 stamina regen multiplier (0.25 = 75% reduction)
+		# Default: 0.25
+		# Range: 0.0 ~ 1.0
+		infection2StaminaRegenMult = 0.25
+		#Dysentery duration in ticks (2400 = 120 sec)
+		# Default: 2400
+		# Range: 20 ~ 72000
+		dysenteryDuration = 2400
+		#Sprain duration in ticks (2400 = 120 sec)
+		# Default: 2400
+		# Range: 20 ~ 72000
+		sprainDuration = 2400
+		#Fracture duration in ticks (6000 = 300 sec)
+		# Default: 6000
+		# Range: 20 ~ 144000
+		fractureDuration = 6000
+		#Concussion duration in ticks (600 = 30 sec)
+		# Default: 600
+		# Range: 20 ~ 72000
+		concussionDuration = 600
+		#Burn duration in ticks (600 = 30 sec)
+		# Default: 600
+		# Range: 20 ~ 72000
+		burnDuration = 600
+		#Burn HP damage per second (0.2 = 1%/sec)
+		# Default: 0.2
+		# Range: 0.0 ~ 10.0
+		burnDamagePerSec = 0.2
+		#Hypothermia HP drain per interval (0.1)
+		# Default: 0.1
+		# Range: 0.0 ~ 10.0
+		hypothermiaHpDrain = 0.1
+		#Hypothermia HP drain interval in ticks (40 = every 2 sec)
+		# Default: 40
+		# Range: 1 ~ 1200
+		hypothermiaHpDrainInterval = 40
+		#Hyperthermia stamina regen multiplier (0.5 = 50% reduction)
+		# Default: 0.5
+		# Range: 0.0 ~ 1.0
+		hyperthermiaStaminaRegenMult = 0.5
+		#Hyperthermia HP drain per interval (0.1)
+		# Default: 0.1
+		# Range: 0.0 ~ 10.0
+		hyperthermiaHpDrain = 0.1
+		#Hyperthermia HP drain interval in ticks (40 = every 2 sec)
+		# Default: 40
+		# Range: 1 ~ 1200
+		hyperthermiaHpDrainInterval = 40
+
+	[survival.temperature]
+		#Core temp adjustment rate toward ambient (°F/sec)
+		# Default: 0.3
+		# Range: 0.01 ~ 10.0
+		tempAdjustRate = 0.3
+		#Core temp below which cold exposure timer starts (°F)
+		# Default: 32.0
+		# Range: -50.0 ~ 100.0
+		hypothermiaThreshold = 32.0
+		#Core temp above which heat exposure timer starts (°F)
+		# Default: 110.0
+		# Range: 80.0 ~ 200.0
+		hyperthermiaThreshold = 110.0
+		#Core temp above which hypothermia debuff clears (°F)
+		# Default: 50.0
+		# Range: -50.0 ~ 120.0
+		hypothermiaClearThreshold = 50.0
+		#Core temp below which hyperthermia debuff clears (°F)
+		# Default: 100.0
+		# Range: 60.0 ~ 200.0
+		hyperthermiaClearThreshold = 100.0
+		#Ticks of exposure before temperature debuff triggers (2400 = 120 sec)
+		# Default: 2400
+		# Range: 20 ~ 72000
+		temperatureExposureTicks = 2400
+		#Temperature modifier when raining at player position (°F)
+		# Default: -15.0
+		# Range: -50.0 ~ 0.0
+		rainTempModifier = -15.0
+		#Temperature modifier when snowing at player position (°F)
+		# Default: -20.0
+		# Range: -50.0 ~ 0.0
+		snowTempModifier = -20.0
+		#Temperature modifier when player is in water (°F)
+		# Default: -25.0
+		# Range: -50.0 ~ 0.0
+		waterTempModifier = -25.0
+		#Temperature bonus when near fire/campfire/furnace within 5 blocks (°F)
+		# Default: 15.0
+		# Range: 0.0 ~ 50.0
+		fireTempBonus = 15.0
+		#Temperature that underground areas (below Y=40) trend toward (°F)
+		# Default: 55.0
+		# Range: 0.0 ~ 120.0
+		undergroundNormTemp = 55.0
+
+	[survival.restoration]
+		#Multiplier applied to vanilla food nutrition to get BZHS food restoration (e.g. steak nutrition=8 * 5.0 = 40 food restored)
+		# Default: 5.0
+		# Range: 0.1 ~ 50.0
+		foodRestorationMultiplier = 5.0
+		#Water restored per drink (water bottle, potion, milk bucket)
+		# Default: 25.0
+		# Range: 1.0 ~ 100.0
+		waterPerDrink = 25.0
+
+	[survival.xp]
+		#Mod XP awarded for killing vanilla hostile mobs (not BZHS zombies)
+		# Default: 50
+		# Range: 0 ~ 1000
+		vanillaMobXP = 50
+
+	[survival.combat]
+		#Multiplier for player damage dealt to BZHS zombie entities (2.0 = double damage)
+		# Default: 1.0
+		# Range: 0.1 ~ 10.0
+		playerDamageMultiplier = 1.0
+
+	[survival.sync]
+		#How often to sync stats to client (in ticks, 20 = 1 sec)
+		# Default: 10
+		# Range: 1 ~ 100
+		syncIntervalTicks = 10
