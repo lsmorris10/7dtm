@@ -6,8 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import com.sevendaystominecraft.block.farming.FarmPlotBlock;
 
 import java.util.function.Supplier;
 
@@ -26,7 +26,7 @@ public class SeedItem extends Item {
         BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof FarmPlotBlock) {
+        if (state.getBlock() instanceof FarmBlock) {
             BlockPos above = pos.above();
             if (level.getBlockState(above).isAir()) {
                 if (!level.isClientSide) {

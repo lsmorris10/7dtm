@@ -1,1 +1,7 @@
-{"parent":"minecraft:block/cross","textures":{"cross":"sevendaystominecraft:item/corn_seed"}}
+{
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "sevendaystominecraft:block/corn_crop_stage1"
+  }
+}

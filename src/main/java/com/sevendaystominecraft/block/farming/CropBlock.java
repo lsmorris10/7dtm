@@ -15,6 +15,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -63,7 +64,7 @@ public class CropBlock extends Block {
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
-        return below.getBlock() instanceof FarmPlotBlock;
+        return below.getBlock() instanceof FarmBlock;
     }
 
     @Override
@@ -87,8 +88,11 @@ public class CropBlock extends Block {
         if (lightLevel >= 9) {
             int threshold = 1;
             BlockState belowState = level.getBlockState(pos.below());
-            if (belowState.getBlock() instanceof FarmPlotBlock farmPlot && farmPlot.isHydrated(belowState)) {
-                threshold = 2;
+            if (belowState.getBlock() instanceof FarmBlock) {
+                int moisture = belowState.getValue(FarmBlock.MOISTURE);
+                if (moisture > 0) {
+                    threshold = 2;
+                }
             }
 
             if (random.nextInt(5) < threshold) {

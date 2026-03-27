@@ -9,7 +9,7 @@ import com.sevendaystominecraft.block.building.UpgradeableBlock;
 import com.sevendaystominecraft.block.building.WoodSpikesBlock;
 import com.sevendaystominecraft.block.farming.CropBlock;
 import com.sevendaystominecraft.block.farming.DewCollectorBlock;
-import com.sevendaystominecraft.block.farming.FarmPlotBlock;
+
 import com.sevendaystominecraft.block.loot.LootContainerBlock;
 import com.sevendaystominecraft.block.loot.LootContainerType;
 import com.sevendaystominecraft.block.loot.VendingMachineBlock;
@@ -251,13 +251,6 @@ public class ModBlocks {
                     .strength(50.0f, 1200.0f)
                     .sound(SoundType.METAL)
                     .lightLevel(state -> 7)));
-
-    public static final Supplier<Block> FARM_PLOT_BLOCK = registerWithItem("farm_plot",
-            () -> new FarmPlotBlock(BlockBehaviour.Properties.of()
-                    .setId(blockKey("farm_plot"))
-                    .strength(0.6f)
-                    .sound(SoundType.GRAVEL)
-                    .mapColor(net.minecraft.world.level.material.MapColor.DIRT)));
 
     private static BlockBehaviour.Properties cropProps(String name) {
         return BlockBehaviour.Properties.of()

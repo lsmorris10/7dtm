@@ -102,7 +102,7 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.CEMENT_MIXER_BLOCK.get());
                         output.accept(ModBlocks.CHEMISTRY_STATION_BLOCK.get());
                         output.accept(ModBlocks.ADVANCED_WORKBENCH_BLOCK.get());
-                        output.accept(ModBlocks.FARM_PLOT_BLOCK.get());
+
                         output.accept(ModBlocks.DEW_COLLECTOR_BLOCK.get());
                     })
                     .build());
