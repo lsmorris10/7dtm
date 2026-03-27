@@ -80,13 +80,13 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                 if (longGun) {
                     scale = 1.0f;
                     poseStack.scale(scale, scale, scale);
-                    poseStack.translate(0.1, -0.3, 0.4); // adjusted translation
-                    poseStack.mulPose(Axis.YP.rotationDegrees(0)); // pointing forward?
+                    poseStack.translate(0.1, -0.3, 0.4);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.5f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.6, 0.4, -0.2);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 }
                 break;
             case FIRST_PERSON_LEFT_HAND:
@@ -94,12 +94,12 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     scale = 1.0f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.1, -0.3, 0.4);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(0));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.5f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(-0.6, 0.4, -0.2);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 }
                 break;
             case THIRD_PERSON_RIGHT_HAND:
@@ -108,12 +108,12 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.0, 0.1, 0.2);
                     poseStack.mulPose(Axis.XP.rotationDegrees(90));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(0)); 
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.0, 0.5, 0.0);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 }
                 break;
             case THIRD_PERSON_LEFT_HAND:
@@ -122,12 +122,12 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.0, 0.1, 0.2);
                     poseStack.mulPose(Axis.XP.rotationDegrees(90));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(0));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 } else {
                     scale = 0.4f;
                     poseStack.scale(scale, scale, scale);
                     poseStack.translate(0.0, 0.5, 0.0);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(90));
                 }
                 break;
             case GUI:
