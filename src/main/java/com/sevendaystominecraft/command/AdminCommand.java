@@ -23,24 +23,35 @@ import com.sevendaystominecraft.territory.TerritoryData;
 import com.sevendaystominecraft.territory.TerritoryRecord;
 import com.sevendaystominecraft.territory.TerritoryTier;
 import com.sevendaystominecraft.territory.TerritoryType;
+import com.sevendaystominecraft.territory.VillageBuildingBuilder;
+import com.sevendaystominecraft.territory.VillageBuildingType;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
+import net.minecraft.world.level.block.entity.StructureBlockEntity;
+import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import java.util.*;
@@ -150,6 +161,7 @@ public class AdminCommand {
                         .then(buildZombieCommand())
                         .then(buildLootCommand())
                         .then(buildGiveCommand())
+                        .then(buildShowcaseCommand())
                 )
         );
     }
@@ -638,6 +650,122 @@ public class AdminCommand {
                 PREFIX + SUCCESS_COLOR + "Gave " + count + "x " + itemId +
                         (qualityName != null ? " (" + qualityName + " quality)" : "") +
                         " to " + player.getName().getString() + "."), true);
+        return 1;
+    }
+
+    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> buildShowcaseCommand() {
+        return Commands.literal("showcase")
+                .executes(AdminCommand::executeShowcase);
+    }
+
+    private static int executeShowcase(CommandContext<CommandSourceStack> ctx) {
+        ServerPlayer player = ctx.getSource().getPlayer();
+        if (player == null) return sendPlayerRequired(ctx);
+
+        ServerLevel level = player.serverLevel();
+        BlockPos playerPos = player.blockPosition();
+        int baseY = playerPos.getY();
+        VillageBuildingType[] types = VillageBuildingType.values();
+        int spacing = 30;
+        int startX = playerPos.getX();
+        int startZ = playerPos.getZ();
+
+        int rowLength = (types.length - 1) * spacing + 20;
+        int areaMinX = startX - 20;
+        int areaMaxX = startX + rowLength;
+        int areaMinZ = startZ - 125;
+        int areaMaxZ = startZ + 125;
+
+        ctx.getSource().sendSuccess(() -> Component.literal(
+                PREFIX + INFO_COLOR + "Flattening terrain and placing buildings..."), false);
+
+        int maxClearY = level.getMaxY();
+        int minFillY = level.getMinY();
+        for (int x = areaMinX; x <= areaMaxX; x++) {
+            for (int z = areaMinZ; z <= areaMaxZ; z++) {
+                for (int y = minFillY; y < baseY; y++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    if (!level.getBlockState(pos).is(Blocks.STONE)) {
+                        level.setBlock(pos, Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
+                }
+                BlockPos grassPos = new BlockPos(x, baseY, z);
+                if (!level.getBlockState(grassPos).is(Blocks.GRASS_BLOCK)) {
+                    level.setBlock(grassPos, Blocks.GRASS_BLOCK.defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+                for (int y = baseY + 1; y <= maxClearY; y++) {
+                    BlockPos clearPos = new BlockPos(x, y, z);
+                    if (!level.getBlockState(clearPos).isAir()) {
+                        level.setBlock(clearPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+        }
+
+        RandomSource random = RandomSource.create(12345);
+        StringBuilder buildingList = new StringBuilder();
+
+        for (int i = 0; i < types.length; i++) {
+            VillageBuildingType type = types[i];
+            int buildX = startX + i * spacing;
+            BlockPos origin = new BlockPos(buildX, baseY, startZ);
+
+            int sizeX = type.getMaxSize();
+            int sizeZ = type.getMaxSize();
+
+            VillageBuildingBuilder.BuildingResult result;
+            if (type == VillageBuildingType.TRADER_OUTPOST) {
+                result = VillageBuildingBuilder.build(level, origin, type, TerritoryTier.TIER_1, random);
+                sizeX = 16;
+                sizeZ = 16;
+            } else {
+                result = VillageBuildingBuilder.build(level, origin, type, TerritoryTier.TIER_1, random, sizeX, sizeZ);
+            }
+
+            String nbtName = type.name().toLowerCase() + "_1";
+            String nbtFile = nbtName + ".nbt";
+
+            int halfX = result.sizeX / 2;
+            int halfZ = result.sizeZ / 2;
+            int totalHeight = type.getWallHeight() * 2 + 10;
+            int footprintX = 2 * halfX + 1;
+            int footprintZ = 2 * halfZ + 1;
+
+            BlockPos signPos = new BlockPos(buildX, baseY + 1, startZ - halfZ - 2);
+            level.setBlock(signPos, Blocks.OAK_SIGN.defaultBlockState()
+                    .setValue(StandingSignBlock.ROTATION, 0), Block.UPDATE_CLIENTS);
+            if (level.getBlockEntity(signPos) instanceof SignBlockEntity signBE) {
+                SignText frontText = signBE.getFrontText()
+                        .setMessage(0, Component.literal(type.getDisplayName()))
+                        .setMessage(1, Component.literal("---"))
+                        .setMessage(2, Component.literal(nbtFile))
+                        .setMessage(3, Component.literal(""));
+                signBE.setText(frontText, true);
+                signBE.setChanged();
+            }
+
+            BlockPos structPos = new BlockPos(buildX + 1, baseY + 1, startZ - halfZ - 2);
+            level.setBlock(structPos, Blocks.STRUCTURE_BLOCK.defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.StructureBlock.MODE, StructureMode.SAVE),
+                    Block.UPDATE_CLIENTS);
+            if (level.getBlockEntity(structPos) instanceof StructureBlockEntity structBE) {
+                structBE.setStructureName(nbtName);
+                structBE.setStructurePos(new BlockPos(-halfX - 1, -1, 2));
+                structBE.setStructureSize(new Vec3i(footprintX, totalHeight, footprintZ));
+                structBE.setChanged();
+            }
+
+            buildingList.append("\n  ").append(i + 1).append(". ")
+                    .append(type.name()).append(" -> ").append(nbtFile);
+        }
+
+        player.teleportTo(level, startX, baseY + 1, startZ - 15, java.util.Set.of(), player.getYRot(), player.getXRot(), true);
+
+        final String list = buildingList.toString();
+        ctx.getSource().sendSuccess(() -> Component.literal(
+                PREFIX + SUCCESS_COLOR + "Showcase complete! Placed " + VillageBuildingType.values().length +
+                " buildings:" + list), false);
+
         return 1;
     }
 
