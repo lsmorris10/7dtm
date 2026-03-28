@@ -162,6 +162,18 @@ public class ModEntities {
                             .sized(0.6f, 1.95f).clientTrackingRange(10)
                             .build(key("trader")));
 
+    public static final Supplier<EntityType<AirdropPlaneEntity>> AIRDROP_PLANE =
+            ENTITY_TYPES.register("airdrop_plane", () ->
+                    EntityType.Builder.<AirdropPlaneEntity>of(AirdropPlaneEntity::new, MobCategory.MISC)
+                            .sized(6.0f, 2.0f).clientTrackingRange(20).updateInterval(2)
+                            .build(key("airdrop_plane")));
+
+    public static final Supplier<EntityType<FallingAirdropEntity>> FALLING_AIRDROP =
+            ENTITY_TYPES.register("falling_airdrop", () ->
+                    EntityType.Builder.<FallingAirdropEntity>of(FallingAirdropEntity::new, MobCategory.MISC)
+                            .sized(2.0f, 4.0f).clientTrackingRange(20).updateInterval(2)
+                            .build(key("falling_airdrop")));
+
     public static class AttributeRegistration {
         public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
             event.put(WALKER.get(), BaseSevenDaysZombie.createBaseZombieAttributes().build());

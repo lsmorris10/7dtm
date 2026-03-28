@@ -7,6 +7,7 @@ import com.sevendaystominecraft.item.ModItems;
 import com.sevendaystominecraft.item.QualityTier;
 import com.sevendaystominecraft.item.VanillaGearMaterials;
 import com.sevendaystominecraft.loot.LootStageCalculator;
+import com.sevendaystominecraft.worlddata.AirdropManager;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -143,6 +144,10 @@ public class LootContainerBlockEntity extends BlockEntity {
         hasBeenLooted = true;
         lastLootedGameTime = level.getDayTime();
         setChanged();
+
+        if (worldPosition.distSqr(new net.minecraft.core.Vec3i(0, worldPosition.getY(), 0)) < 300 * 300) {
+            AirdropManager.get((net.minecraft.server.level.ServerLevel) level).onContainerLootedNearSpawn();
+        }
     }
 
     private void generateLootForType(int lootStage, double abundance, boolean qualityEnabled) {
