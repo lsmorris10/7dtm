@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerSprintMixin {
 
-    @Inject(method = "aiStep", at = @At("TAIL"))
+    @Inject(method = "aiStep", at = @At("HEAD"))
     private void sevendaystominecraft$cancelClientSprint(CallbackInfo ci) {
         LocalPlayer self = (LocalPlayer) (Object) this;
         if (!self.isSprinting()) return;
