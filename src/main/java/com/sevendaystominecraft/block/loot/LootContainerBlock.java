@@ -1,9 +1,13 @@
 package com.sevendaystominecraft.block.loot;
 
 import com.mojang.serialization.MapCodec;
+import com.sevendaystominecraft.territory.TerritoryData;
+import com.sevendaystominecraft.territory.TerritoryRecord;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -82,6 +86,17 @@ public class LootContainerBlock extends BaseEntityBlock {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof LootContainerBlockEntity lootBE) {
+                int tId = lootBE.getTerritoryId();
+                if (tId > 0 && level instanceof ServerLevel serverLevel) {
+                    TerritoryData data = TerritoryData.getOrCreate(serverLevel);
+                    TerritoryRecord record = data.getTerritoryById(tId);
+                    if (record != null && record.getZombiesRemaining() > 0) {
+                        serverPlayer.sendSystemMessage(
+                                Component.literal("Defeat all zombies first! (" + record.getZombiesRemaining() + " remaining)")
+                                        .withStyle(ChatFormatting.RED));
+                        return InteractionResult.SUCCESS;
+                    }
+                }
                 lootBE.tryGenerateLoot(serverPlayer);
                 com.sevendaystominecraft.sound.ModSounds.playAtBlock(
                         com.sevendaystominecraft.sound.ModSounds.LOOT_OPEN, level, pos,

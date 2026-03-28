@@ -55,9 +55,9 @@ public enum TerritoryTier {
                     ModEntities.BLOATED_WALKER
             };
             case TIER_3 -> new Supplier[]{
-                    ModEntities.WALKER, ModEntities.CRAWLER,
-                    ModEntities.BLOATED_WALKER, ModEntities.FERAL_WIGHT,
-                    ModEntities.SPIDER_ZOMBIE
+                    ModEntities.CRAWLER,
+                    ModEntities.BLOATED_WALKER, ModEntities.FERAL_WIGHT, ModEntities.FERAL_WIGHT,
+                    ModEntities.SPIDER_ZOMBIE, ModEntities.SPIDER_ZOMBIE
             };
             case TIER_4 -> new Supplier[]{
                     ModEntities.FERAL_WIGHT, ModEntities.COP, ModEntities.SPIDER_ZOMBIE,

@@ -39,7 +39,7 @@ public enum VillageBuildingType {
 
     UTILITY("Utility Building", 8,
             new LootContainerType[]{LootContainerType.SUPPLY_CRATE, LootContainerType.MUNITIONS_BOX, LootContainerType.TOOL_CRATE},
-            2, 4, 7, 10, 4,
+            4, 8, 7, 10, 4,
             Blocks.COBBLESTONE, Blocks.STONE, Blocks.COBBLESTONE_SLAB, Blocks.COBBLESTONE),
 
     TRADER_OUTPOST("Trader Outpost", 3,

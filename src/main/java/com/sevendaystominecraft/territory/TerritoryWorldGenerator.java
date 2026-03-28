@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.territory;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
 import com.sevendaystominecraft.config.TerritoryConfig;
 import com.sevendaystominecraft.entity.ModEntities;
 import com.sevendaystominecraft.worldgen.BiomeProperties;
@@ -96,6 +97,8 @@ public class TerritoryWorldGenerator {
 
             TerritoryRecord record = data.addTerritory(origin, tier, type);
             data.removePending(candidate);
+
+            setTerritoryIdOnLootContainers(serverLevel, villageResult.allLootPositions, record.getId());
 
             spawnLabelEntity(serverLevel, record, origin.above(tier.getLabelHeight() + 5));
 
@@ -221,6 +224,14 @@ public class TerritoryWorldGenerator {
     public static boolean isInSafeZone(int blockX, int blockZ) {
         double dist = Math.sqrt((double) blockX * blockX + (double) blockZ * blockZ);
         return dist <= TerritoryConfig.INSTANCE.safeZoneRadius.get();
+    }
+
+    public static void setTerritoryIdOnLootContainers(ServerLevel level, java.util.List<BlockPos> lootPositions, int territoryId) {
+        for (BlockPos pos : lootPositions) {
+            if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
+                be.setTerritoryId(territoryId);
+            }
+        }
     }
 
     private static void spawnLabelEntity(ServerLevel level, TerritoryRecord record, BlockPos labelPos) {

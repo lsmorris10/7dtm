@@ -149,6 +149,8 @@ public class TraderSpawnHandler {
             }
 
             TerritoryRecord territoryRecord = territoryData.addTerritory(origin, tier, type);
+            com.sevendaystominecraft.territory.TerritoryWorldGenerator.setTerritoryIdOnLootContainers(
+                    serverLevel, villageResult.allLootPositions, territoryRecord.getId());
             territoryRecord.setBuildingCenters(villageResult.buildingCenters);
             territoryData.markDirtyRecord();
 

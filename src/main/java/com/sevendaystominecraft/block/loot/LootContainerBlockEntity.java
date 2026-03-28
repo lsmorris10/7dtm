@@ -42,6 +42,7 @@ public class LootContainerBlockEntity extends BlockEntity {
     private long lastLootedGameTime = -1;
     private boolean hasBeenLooted = false;
     private int territoryTier = 0;
+    private int territoryId = 0;
 
     public LootContainerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LOOT_CONTAINER_BE.get(), pos, state);
@@ -73,6 +74,15 @@ public class LootContainerBlockEntity extends BlockEntity {
 
     public int getTerritoryTier() {
         return territoryTier;
+    }
+
+    public void setTerritoryId(int id) {
+        this.territoryId = Math.max(0, id);
+        setChanged();
+    }
+
+    public int getTerritoryId() {
+        return territoryId;
     }
 
     public void resetForAdmin(boolean clearTimer) {
@@ -381,6 +391,9 @@ public class LootContainerBlockEntity extends BlockEntity {
         if (territoryTier > 0) {
             tag.putInt("TerritoryTier", territoryTier);
         }
+        if (territoryId > 0) {
+            tag.putInt("TerritoryId", territoryId);
+        }
     }
 
     @Override
@@ -400,5 +413,6 @@ public class LootContainerBlockEntity extends BlockEntity {
         lastLootedGameTime = tag.getLong("LastLootedGameTime");
         hasBeenLooted = tag.getBoolean("HasBeenLooted");
         territoryTier = tag.contains("TerritoryTier") ? tag.getInt("TerritoryTier") : 0;
+        territoryId = tag.contains("TerritoryId") ? Math.max(0, tag.getInt("TerritoryId")) : 0;
     }
 }
