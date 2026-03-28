@@ -315,6 +315,62 @@
       padding-top: 1rem;
     }
 
+    .community-server-section {
+      background: linear-gradient(180deg, rgba(128,0,0,0.15) 0%, rgba(128,0,0,0.05) 100%);
+      border-top: 1px solid rgba(128, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(128, 0, 0, 0.3);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .community-server-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .community-server-section h2 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      border: none;
+      padding: 0;
+      font-weight: 700;
+    }
+    .community-server-desc {
+      color: #bbb;
+      font-size: 0.95rem;
+      max-width: 560px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+    .server-address-box {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(128, 0, 0, 0.4);
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      margin-bottom: 1.25rem;
+    }
+    .server-address-label {
+      color: #777;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .server-address-value {
+      color: #c0392b;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      word-break: break-word;
+    }
+    .community-server-sub {
+      color: #666;
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
     .email-section {
       background: linear-gradient(180deg, rgba(128,0,0,0.1) 0%, rgba(128,0,0,0.05) 100%);
       border-top: 1px solid rgba(128, 0, 0, 0.25);
@@ -430,6 +486,8 @@
       .section h2 { font-size: 1.4rem; }
       .email-form { flex-direction: column; }
       .email-form button { padding: 0.8rem; }
+      .community-server-section { padding: 2rem 1rem; }
+      .server-address-box { padding: 0.75rem 1.5rem; }
       .trust-badges { gap: 0.4rem; }
       .badge { font-size: 0.75rem; padding: 0.3rem 0.7rem; }
       .feature-card { padding: 1rem; }
@@ -669,6 +727,17 @@
       <li><span class="dot">●</span> Armor system — 3 tiers (Light/Medium/Heavy) with set bonuses</li>
     </ul>
   </div>
+
+  <section class="community-server-section">
+    <div class="community-server-icon">⚔</div>
+    <h2>Community Server</h2>
+    <p class="community-server-desc">Experience BZHS the way it's meant to be played — together. We're building a public community Minecraft server where survivors can team up, trade, build, and brave the hordes side by side.</p>
+    <div class="server-address-box">
+      <span class="server-address-label">Server Address</span>
+      <span class="server-address-value">Coming Soon</span>
+    </div>
+    <p class="community-server-sub">Stay tuned — the server address will be announced here when we're ready to open the gates.</p>
+  </section>
 
   <div class="disclaimer">
     <p><strong>Disclaimer:</strong> This mod is unofficial fan-made content inspired by 7 Days to Die and is not affiliated with, endorsed by, or connected to The Fun Pimps in any way.</p>
