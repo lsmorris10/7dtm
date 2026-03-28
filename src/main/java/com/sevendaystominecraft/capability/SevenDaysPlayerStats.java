@@ -59,6 +59,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
     private long unkillableCooldownEnd = 0;
 
+    private int goldenAppleSprintBuffTicks = 0;
+
     private final Set<String> unlockedRecipes = new HashSet<>();
 
     private final List<QuestInstance> activeQuests = new ArrayList<>();
@@ -209,6 +211,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
     public MagazinePlayerData getMagazineData() { return magazineData; }
 
+    public int getGoldenAppleSprintBuffTicks() { return goldenAppleSprintBuffTicks; }
+    public void setGoldenAppleSprintBuffTicks(int ticks) { this.goldenAppleSprintBuffTicks = Math.max(0, ticks); }
+    public boolean hasGoldenAppleSprintBuff() { return goldenAppleSprintBuffTicks > 0; }
+
     // =====================================================================
     // Recipe Unlocks
     // =====================================================================
@@ -302,6 +308,7 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         this.unkillableCooldownEnd = other.getUnkillableCooldownEnd();
 
         if (other instanceof SevenDaysPlayerStats concrete) {
+            this.goldenAppleSprintBuffTicks = concrete.getGoldenAppleSprintBuffTicks();
             this.magazineData.copyFrom(concrete.getMagazineData());
             this.unlockedRecipes.clear();
             this.unlockedRecipes.addAll(concrete.unlockedRecipes);
@@ -360,6 +367,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         }
 
         tag.putLong("UnkillableCooldown", unkillableCooldownEnd);
+
+        if (goldenAppleSprintBuffTicks > 0) {
+            tag.putInt("GoldenAppleSprintBuff", goldenAppleSprintBuffTicks);
+        }
 
         tag.put("Magazines", magazineData.save());
 
@@ -461,6 +472,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         }
 
         unkillableCooldownEnd = tag.contains("UnkillableCooldown") ? tag.getLong("UnkillableCooldown") : 0;
+
+        goldenAppleSprintBuffTicks = tag.contains("GoldenAppleSprintBuff") ? tag.getInt("GoldenAppleSprintBuff") : 0;
 
         if (tag.contains("Magazines")) {
             magazineData.load(tag.getCompound("Magazines"));

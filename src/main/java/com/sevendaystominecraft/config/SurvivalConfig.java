@@ -148,6 +148,10 @@ public class SurvivalConfig {
     // ── XP ───────────────────────────────────────────────────────────────
     public final ModConfigSpec.IntValue vanillaMobXP;
 
+    // ── Golden Apple Sprint Buff ────────────────────────────────────────
+    public final ModConfigSpec.IntValue goldenAppleSprintDuration;
+    public final ModConfigSpec.IntValue enchantedGoldenAppleSprintDuration;
+
     // ── Player Damage ────────────────────────────────────────────────────
     public final ModConfigSpec.DoubleValue playerDamageMultiplier;
 
@@ -358,6 +362,16 @@ public class SurvivalConfig {
         waterPerDrink = builder
                 .comment("Water restored per drink (water bottle, potion, milk bucket)")
                 .defineInRange("waterPerDrink", 5.0, 1.0, 100.0);
+        builder.pop();
+
+        // Golden Apple Sprint Buff
+        builder.push("golden_apple");
+        goldenAppleSprintDuration = builder
+                .comment("Golden apple sprint buff duration in ticks (200 = 10 sec)")
+                .defineInRange("goldenAppleSprintDuration", 200, 20, 2400);
+        enchantedGoldenAppleSprintDuration = builder
+                .comment("Enchanted golden apple sprint buff duration in ticks (400 = 20 sec)")
+                .defineInRange("enchantedGoldenAppleSprintDuration", 400, 20, 4800);
         builder.pop();
 
         // XP

@@ -56,6 +56,10 @@ public class PlayerStatsHandler {
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "freeze_slowdown");
     private static final ResourceLocation CARDIO_SPEED_ID =
             ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "cardio_speed_bonus");
+    private static final ResourceLocation GOLDEN_APPLE_SPRINT_ID =
+            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "golden_apple_sprint_buff");
+    private static final ResourceLocation ARMOR_SPEED_MOD_ID =
+            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "armor_speed_modifier");
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -256,6 +260,9 @@ public class PlayerStatsHandler {
         // ── 8. Perk: Rule 1 Cardio sprint speed bonus ───────────────────
         applyCardioSpeedBonus(player, stats);
 
+        // ── 8b. Golden Apple Sprint Buff ─────────────────────────────────
+        tickGoldenAppleSprintBuff(serverPlayer, stats);
+
         // ── 9. Sync to Client (throttled) ───────────────────────────────
         int syncInterval = cfg.syncIntervalTicks.get();
         if (player.tickCount % syncInterval == 0) {
@@ -286,6 +293,7 @@ public class PlayerStatsHandler {
         }
         stats.setColdExposureTicks(0);
         stats.setHeatExposureTicks(0);
+        stats.setGoldenAppleSprintBuffTicks(0);
 
         var speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
@@ -293,6 +301,7 @@ public class PlayerStatsHandler {
             speedAttr.removeModifier(FRACTURE_SLOWDOWN_ID);
             speedAttr.removeModifier(HYPOTHERMIA_SLOWDOWN_ID);
             speedAttr.removeModifier(FREEZE_SLOWDOWN_ID);
+            speedAttr.removeModifier(GOLDEN_APPLE_SPRINT_ID);
         }
 
         player.removeEffect(MobEffects.CONFUSION);
@@ -350,6 +359,15 @@ public class PlayerStatsHandler {
         if (stack.is(Items.GOLDEN_APPLE) || stack.is(Items.ENCHANTED_GOLDEN_APPLE)) {
             clearAllDebuffs(serverPlayer, stats);
             changed = true;
+
+            int duration = stack.is(Items.ENCHANTED_GOLDEN_APPLE)
+                    ? SurvivalConfig.INSTANCE.enchantedGoldenAppleSprintDuration.get()
+                    : SurvivalConfig.INSTANCE.goldenAppleSprintDuration.get();
+            stats.setGoldenAppleSprintBuffTicks(duration);
+            applyGoldenAppleSprintBuff(serverPlayer);
+            int durationSec = duration / 20;
+            serverPlayer.sendSystemMessage(
+                    net.minecraft.network.chat.Component.literal("§a[GOLDEN APPLE] Light on your feet! (" + durationSec + "s)"));
         }
 
         if (changed) {
@@ -472,6 +490,79 @@ public class PlayerStatsHandler {
             if (attribute.hasModifier(CARDIO_SPEED_ID)) {
                 attribute.removeModifier(CARDIO_SPEED_ID);
             }
+        }
+    }
+
+    private static void tickGoldenAppleSprintBuff(ServerPlayer player, SevenDaysPlayerStats stats) {
+        if (!stats.hasGoldenAppleSprintBuff()) return;
+
+        int remaining = stats.getGoldenAppleSprintBuffTicks() - 1;
+        stats.setGoldenAppleSprintBuffTicks(remaining);
+
+        if (remaining > 0) {
+            applyGoldenAppleSprintBuff(player);
+            if (remaining % 20 == 0) {
+                int secondsLeft = remaining / 20;
+                player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§a⚡ Sprint Buff: " + secondsLeft + "s"),
+                        true);
+            }
+        } else {
+            removeGoldenAppleSprintBuff(player);
+            player.sendSystemMessage(
+                    net.minecraft.network.chat.Component.literal("§c[GOLDEN APPLE] Sprint buff expired!"));
+        }
+    }
+
+    private static void applyGoldenAppleSprintBuff(Player player) {
+        var speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speedAttr == null) return;
+
+        double negativeProduct = 1.0;
+
+        var armorMod = speedAttr.getModifier(ARMOR_SPEED_MOD_ID);
+        if (armorMod != null && armorMod.amount() < 0) {
+            negativeProduct *= (1.0 + armorMod.amount());
+        }
+
+        var starvMod = speedAttr.getModifier(STARVATION_SLOWDOWN_ID);
+        if (starvMod != null && starvMod.amount() < 0) {
+            negativeProduct *= (1.0 + starvMod.amount());
+        }
+
+        var heavyWeaponMod = speedAttr.getModifier(HEAVY_WEAPON_SLOWDOWN_ID);
+        if (heavyWeaponMod != null && heavyWeaponMod.amount() < 0) {
+            negativeProduct *= (1.0 + heavyWeaponMod.amount());
+        }
+
+        if (negativeProduct >= 0.999) {
+            if (speedAttr.hasModifier(GOLDEN_APPLE_SPRINT_ID)) {
+                speedAttr.removeModifier(GOLDEN_APPLE_SPRINT_ID);
+            }
+            return;
+        }
+
+        double buffAmount = (1.0 / negativeProduct) - 1.0;
+
+        if (speedAttr.hasModifier(GOLDEN_APPLE_SPRINT_ID)) {
+            var existing = speedAttr.getModifier(GOLDEN_APPLE_SPRINT_ID);
+            if (existing != null && Math.abs(existing.amount() - buffAmount) < 0.001) {
+                return;
+            }
+            speedAttr.removeModifier(GOLDEN_APPLE_SPRINT_ID);
+        }
+
+        speedAttr.addTransientModifier(new AttributeModifier(
+                GOLDEN_APPLE_SPRINT_ID,
+                buffAmount,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+        ));
+    }
+
+    private static void removeGoldenAppleSprintBuff(Player player) {
+        var speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speedAttr != null && speedAttr.hasModifier(GOLDEN_APPLE_SPRINT_ID)) {
+            speedAttr.removeModifier(GOLDEN_APPLE_SPRINT_ID);
         }
     }
 
