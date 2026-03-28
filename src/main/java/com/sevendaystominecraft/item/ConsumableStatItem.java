@@ -9,9 +9,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 public class ConsumableStatItem extends Item {
@@ -41,13 +43,32 @@ public class ConsumableStatItem extends Item {
     }
 
     @Override
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        if (waterRestore > 0 && foodRestore == 0) {
+            return ItemUseAnimation.DRINK;
+        }
+        return ItemUseAnimation.EAT;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 32;
+    }
+
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
+        player.startUsingItem(hand);
+        return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+        if (level.isClientSide() || !(entityLiving instanceof Player player)) {
+            return stack;
         }
 
         if (!player.hasData(ModAttachments.PLAYER_STATS.get())) {
-            return InteractionResult.PASS;
+            return stack;
         }
 
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
@@ -109,7 +130,6 @@ public class ConsumableStatItem extends Item {
             }
         }
 
-        ItemStack stack = player.getItemInHand(hand);
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
@@ -118,6 +138,6 @@ public class ConsumableStatItem extends Item {
             PlayerStatsHandler.sendStatsToClient(serverPlayer, stats);
         }
 
-        return InteractionResult.CONSUME;
+        return stack;
     }
 }
