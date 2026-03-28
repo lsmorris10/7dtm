@@ -46,6 +46,8 @@ public class MinimapOverlay {
     private static final int COLOR_GROUP_MEMBER = 0xFF55FFAA;
     private static final int COLOR_WAYPOINT = 0xFFFF6600;
     private static final int WAYPOINT_DOT_SIZE = 4;
+    private static final int BOUNDARY_PADDING = 12;
+    private static final int BOUNDARY_ALPHA = 0x88;
 
     private static int[] terrainCache = null;
     private static int cachedPlayerX = Integer.MIN_VALUE;
@@ -109,6 +111,8 @@ public class MinimapOverlay {
         int centerX = mapX + halfMap;
         int centerY = mapY + halfMap;
 
+        renderTerritoryBoundaries(graphics, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
+
         renderOtherPlayers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
@@ -123,6 +127,74 @@ public class MinimapOverlay {
         String coordsText = String.format("(%d, %d)", playerBlockX, playerBlockZ);
         int coordsWidth = mc.font.width(coordsText);
         graphics.drawString(mc.font, coordsText, mapX + (MAP_SIZE - coordsWidth) / 2, mapY + MAP_SIZE + 3, 0xFFCCCCCC, true);
+    }
+
+    private static void renderTerritoryBoundaries(GuiGraphics graphics, Player player,
+                                                    int centerX, int centerY, int mapX, int mapY,
+                                                    double cosYaw, double sinYaw) {
+        List<TerritoryEntry> territories = TerritoryClientState.getTerritories();
+        if (territories.isEmpty()) return;
+
+        for (TerritoryEntry entry : territories) {
+            if (entry.buildings().isEmpty()) continue;
+
+            int minBX = Integer.MAX_VALUE, maxBX = Integer.MIN_VALUE;
+            int minBZ = Integer.MAX_VALUE, maxBZ = Integer.MIN_VALUE;
+            for (var b : entry.buildings()) {
+                if (b.x() < minBX) minBX = b.x();
+                if (b.x() > maxBX) maxBX = b.x();
+                if (b.z() < minBZ) minBZ = b.z();
+                if (b.z() > maxBZ) maxBZ = b.z();
+            }
+            minBX -= BOUNDARY_PADDING;
+            minBZ -= BOUNDARY_PADDING;
+            maxBX += BOUNDARY_PADDING;
+            maxBZ += BOUNDARY_PADDING;
+
+            boolean cleared = entry.label().endsWith("[Cleared]");
+            int tierColor = cleared ? COLOR_CLEARED : getTierColor(entry.tier());
+            int color = (BOUNDARY_ALPHA << 24) | (tierColor & 0x00FFFFFF);
+
+            double[] worldCornersX = { minBX, maxBX, maxBX, minBX };
+            double[] worldCornersZ = { minBZ, minBZ, maxBZ, maxBZ };
+
+            int[] screenCX = new int[4];
+            int[] screenCY = new int[4];
+            for (int i = 0; i < 4; i++) {
+                double dx = worldCornersX[i] - player.getX();
+                double dz = worldCornersZ[i] - player.getZ();
+                double sdx = -(dx * cosYaw + dz * sinYaw);
+                double sdy = dx * sinYaw - dz * cosYaw;
+                screenCX[i] = centerX + (int) sdx;
+                screenCY[i] = centerY + (int) sdy;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int next = (i + 1) % 4;
+                drawClippedLine(graphics, screenCX[i], screenCY[i], screenCX[next], screenCY[next],
+                        mapX, mapY, color);
+            }
+        }
+    }
+
+    private static void drawClippedLine(GuiGraphics graphics, int x1, int y1, int x2, int y2,
+                                          int mapX, int mapY, int color) {
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+        int sx = x1 < x2 ? 1 : -1;
+        int sy = y1 < y2 ? 1 : -1;
+        int err = dx - dy;
+        int cx = x1, cy = y1;
+
+        while (true) {
+            if (isInsideRoundedRect(cx - mapX, cy - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                graphics.fill(cx, cy, cx + 1, cy + 1, color);
+            }
+            if (cx == x2 && cy == y2) break;
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; cx += sx; }
+            if (e2 < dx) { err += dx; cy += sy; }
+        }
     }
 
     private static void renderTerritories(GuiGraphics graphics, Minecraft mc, Player player,

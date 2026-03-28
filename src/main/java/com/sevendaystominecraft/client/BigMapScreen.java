@@ -38,6 +38,8 @@ public class BigMapScreen extends Screen {
     private static final int COLOR_QUEST = 0xFFFFFF00;
     private static final int COLOR_GROUP_MEMBER = 0xFF55FFAA;
     private static final int COLOR_WAYPOINT = 0xFFFF6600;
+    private static final int BOUNDARY_PADDING = 12;
+    private static final int BOUNDARY_ALPHA = 0x88;
 
     private int[] terrainCache = null;
     private int cachedPlayerX = Integer.MIN_VALUE;
@@ -131,6 +133,8 @@ public class BigMapScreen extends Screen {
 
         int centerX = mapX + mapDisplaySize / 2;
         int centerY = mapY + mapDisplaySize / 2;
+
+        renderTerritoryBoundaries(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
 
         renderOtherPlayers(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
 
@@ -280,6 +284,62 @@ public class BigMapScreen extends Screen {
             int e2 = 2 * err;
             if (e2 > -dy) { err -= dy; x1 += sx; }
             if (e2 < dx) { err += dx; y1 += sy; }
+        }
+    }
+
+    private void renderTerritoryBoundaries(GuiGraphics graphics, Minecraft mc, Player player,
+                                            int centerX, int centerY, int mapX, int mapY,
+                                            int mapDisplaySize, float scale) {
+        List<TerritoryEntry> territories = TerritoryClientState.getTerritories();
+        if (territories.isEmpty()) return;
+
+        int mapRight = mapX + mapDisplaySize;
+        int mapBottom = mapY + mapDisplaySize;
+
+        for (TerritoryEntry entry : territories) {
+            if (entry.buildings().isEmpty()) continue;
+
+            int minBX = Integer.MAX_VALUE, maxBX = Integer.MIN_VALUE;
+            int minBZ = Integer.MAX_VALUE, maxBZ = Integer.MIN_VALUE;
+            for (var b : entry.buildings()) {
+                if (b.x() < minBX) minBX = b.x();
+                if (b.x() > maxBX) maxBX = b.x();
+                if (b.z() < minBZ) minBZ = b.z();
+                if (b.z() > maxBZ) maxBZ = b.z();
+            }
+            minBX -= BOUNDARY_PADDING;
+            minBZ -= BOUNDARY_PADDING;
+            maxBX += BOUNDARY_PADDING;
+            maxBZ += BOUNDARY_PADDING;
+
+            int left = centerX + (int) ((minBX - player.getX()) * scale);
+            int right = centerX + (int) ((maxBX - player.getX()) * scale);
+            int top = centerY + (int) ((minBZ - player.getZ()) * scale);
+            int bottom = centerY + (int) ((maxBZ - player.getZ()) * scale);
+
+            if (right < mapX || left > mapRight || bottom < mapY || top > mapBottom) continue;
+
+            int clLeft = Math.max(left, mapX);
+            int clRight = Math.min(right, mapRight);
+            int clTop = Math.max(top, mapY);
+            int clBottom = Math.min(bottom, mapBottom);
+
+            boolean cleared = entry.label().endsWith("[Cleared]");
+            int tierColor = cleared ? COLOR_CLEARED : getTierColor(entry.tier());
+            int color = (BOUNDARY_ALPHA << 24) | (tierColor & 0x00FFFFFF);
+
+            if (top >= mapY && top < mapBottom) {
+                graphics.fill(clLeft, top, clRight, top + 1, color);
+            }
+            if (bottom >= mapY && bottom < mapBottom) {
+                graphics.fill(clLeft, bottom, clRight, bottom + 1, color);
+            }
+            if (left >= mapX && left < mapRight) {
+                graphics.fill(left, clTop, left + 1, clBottom, color);
+            }
+            if (right >= mapX && right < mapRight) {
+                graphics.fill(right, clTop, right + 1, clBottom, color);
+            }
         }
     }
 
