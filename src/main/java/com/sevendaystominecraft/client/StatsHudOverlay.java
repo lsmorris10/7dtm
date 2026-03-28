@@ -318,35 +318,28 @@ public class StatsHudOverlay {
     }
 
     private static String getArmorSetLabel(ArmorCounts counts) {
+        if (counts.light() >= 4) {
+            return "4pc Light";
+        }
+        if (counts.medium() >= 4) {
+            return "4pc Medium";
+        }
+        if (counts.heavy() >= 4) {
+            return "4pc Heavy";
+        }
+
         int total = counts.light() + counts.medium() + counts.heavy();
         if (total == 0) return "";
 
-        StringBuilder sb = new StringBuilder();
-        if (counts.light() >= 2) {
-            sb.append(counts.light()).append("pc Light");
+        int tiersWorn = 0;
+        ArmorTier singleTier = null;
+        if (counts.light() > 0) { tiersWorn++; singleTier = ArmorTier.LIGHT; }
+        if (counts.medium() > 0) { tiersWorn++; singleTier = ArmorTier.MEDIUM; }
+        if (counts.heavy() > 0) { tiersWorn++; singleTier = ArmorTier.HEAVY; }
+        if (tiersWorn == 1 && singleTier != null) {
+            return singleTier.name().charAt(0) + singleTier.name().substring(1).toLowerCase();
         }
-        if (counts.medium() >= 2) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(counts.medium()).append("pc Medium");
-        }
-        if (counts.heavy() >= 2) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(counts.heavy()).append("pc Heavy");
-        }
-
-        if (sb.length() == 0 && total > 0) {
-            int tiersWorn = 0;
-            ArmorTier singleTier = null;
-            if (counts.light() > 0) { tiersWorn++; singleTier = ArmorTier.LIGHT; }
-            if (counts.medium() > 0) { tiersWorn++; singleTier = ArmorTier.MEDIUM; }
-            if (counts.heavy() > 0) { tiersWorn++; singleTier = ArmorTier.HEAVY; }
-            if (tiersWorn == 1 && singleTier != null) {
-                return singleTier.name().charAt(0) + singleTier.name().substring(1).toLowerCase();
-            }
-            return "";
-        }
-
-        return sb.toString();
+        return "";
     }
 
     private static void drawStatBar(GuiGraphics graphics, int x, int y,

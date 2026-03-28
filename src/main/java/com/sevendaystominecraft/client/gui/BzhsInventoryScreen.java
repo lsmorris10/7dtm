@@ -354,20 +354,11 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
         if (counts.heavy() >= 4) {
             bonusText = "Heavy (4): -25% DMG";
             bonusColor = HEAVY_ARMOR_COLOR;
-        } else if (counts.heavy() >= 2) {
-            bonusText = "Heavy (2): -12% DMG";
-            bonusColor = HEAVY_ARMOR_COLOR;
         } else if (counts.medium() >= 4) {
             bonusText = "Medium (4): +20% STA";
             bonusColor = MEDIUM_ARMOR_COLOR;
-        } else if (counts.medium() >= 2) {
-            bonusText = "Medium (2): +10% STA";
-            bonusColor = MEDIUM_ARMOR_COLOR;
         } else if (counts.light() >= 4) {
             bonusText = "Light (4): 0% Noise";
-            bonusColor = LIGHT_ARMOR_COLOR;
-        } else if (counts.light() >= 2) {
-            bonusText = "Light (2): -50% Noise";
             bonusColor = LIGHT_ARMOR_COLOR;
         } else {
             bonusText = "No set bonus";

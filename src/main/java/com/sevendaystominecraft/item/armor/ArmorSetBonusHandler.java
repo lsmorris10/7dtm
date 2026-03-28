@@ -35,8 +35,6 @@ public class ArmorSetBonusHandler {
             EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
     };
 
-    private static final String MIXED_SET_WARNING_KEY = "sevendtm_mixed_set_warned";
-
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -49,7 +47,6 @@ public class ArmorSetBonusHandler {
         applyMovementModifier(player, speedMod);
         applyLightArmorPerkProtection(serverPlayer, counts);
         applyQualityArmorBonus(serverPlayer);
-        checkMixedSetWarning(serverPlayer, counts);
     }
 
     public static ArmorCounts computeArmorCounts(Player player) {
@@ -233,31 +230,6 @@ public class ArmorSetBonusHandler {
         }
     }
 
-    private static void checkMixedSetWarning(ServerPlayer player, ArmorCounts counts) {
-        int totalArmor = counts.light + counts.medium + counts.heavy;
-        if (totalArmor < 2) {
-            player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, false);
-            return;
-        }
-
-        int tiersWorn = 0;
-        if (counts.light > 0) tiersWorn++;
-        if (counts.medium > 0) tiersWorn++;
-        if (counts.heavy > 0) tiersWorn++;
-
-        boolean hasBonusActive = counts.light >= 2 || counts.medium >= 2 || counts.heavy >= 2;
-
-        if (tiersWorn > 1 && !hasBonusActive) {
-            if (!player.getPersistentData().getBoolean(MIXED_SET_WARNING_KEY)) {
-                player.sendSystemMessage(Component.literal(
-                        "§e[ARMOR] §7Mixed armor set — no set bonus active. Wear 2+ pieces of one tier for a bonus."));
-                player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, true);
-            }
-        } else {
-            player.getPersistentData().putBoolean(MIXED_SET_WARNING_KEY, false);
-        }
-    }
-
     private static int getBaseDefense(TieredArmorItem tiered) {
         return switch (tiered.getArmorTier()) {
             case LIGHT -> ModArmorMaterials.PADDED.defense().getOrDefault(tiered.getArmorType(), 0);
@@ -285,10 +257,6 @@ public class ArmorSetBonusHandler {
             return 0.0f;
         }
 
-        if (counts.light >= 2) {
-            return 0.5f;
-        }
-
         float reductionPerPiece = ArmorTier.LIGHT.getStealthReductionPerPiece();
 
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
@@ -306,8 +274,6 @@ public class ArmorSetBonusHandler {
         float bonus = 0.0f;
         if (counts.medium >= 4) {
             bonus = 0.20f;
-        } else if (counts.medium >= 2) {
-            bonus = 0.10f;
         }
 
         if (bonus > 0.0f) {
@@ -325,9 +291,6 @@ public class ArmorSetBonusHandler {
         ArmorCounts counts = computeArmorCounts(player);
         if (counts.heavy >= 4) {
             return 0.75f;
-        }
-        if (counts.heavy >= 2) {
-            return 0.88f;
         }
         return 1.0f;
     }
