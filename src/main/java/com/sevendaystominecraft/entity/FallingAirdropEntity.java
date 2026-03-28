@@ -8,6 +8,7 @@ import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -48,7 +49,7 @@ public class FallingAirdropEntity extends Entity implements GeoEntity {
         if (!this.level().isClientSide()) {
             if (this.onGround() || this.verticalCollision) {
                 placeCrate();
-            } else if (this.getY() < this.level().getMinBuildHeight()) {
+            } else if (this.getY() < this.level().getMinY()) {
                 this.discard();
             }
         }
@@ -59,7 +60,7 @@ public class FallingAirdropEntity extends Entity implements GeoEntity {
         Level level = this.level();
 
         // Find standard ground
-        while (level.getBlockState(pos).isAir() && pos.getY() > level.getMinBuildHeight()) {
+        while (level.getBlockState(pos).isAir() && pos.getY() > level.getMinY()) {
             pos = pos.below();
         }
 
@@ -74,6 +75,11 @@ public class FallingAirdropEntity extends Entity implements GeoEntity {
 
         SevenDaysToMinecraft.LOGGER.info("[BZHS] Airdrop landed at {}!", pos);
         this.discard();
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        return false;
     }
 
     @Override
