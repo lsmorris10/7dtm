@@ -220,5 +220,14 @@
         "stream": true
       }
     ]
+  },
+  "music_trader_outpost": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/trader_outpost",
+        "stream": true
+      }
+    ]
   }
 }

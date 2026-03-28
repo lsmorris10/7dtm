@@ -53,6 +53,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> MUSIC_EXPLORATION_NIGHT = register("music_exploration_night");
     public static final Supplier<SoundEvent> MUSIC_BLOOD_MOON = register("music_blood_moon");
     public static final Supplier<SoundEvent> MUSIC_COMBAT = register("music_combat");
+    public static final Supplier<SoundEvent> MUSIC_TRADER_OUTPOST = register("music_trader_outpost");
 
     private static Supplier<SoundEvent> register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, name);

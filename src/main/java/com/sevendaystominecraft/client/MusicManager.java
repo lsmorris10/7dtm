@@ -11,6 +11,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,6 +28,7 @@ public class MusicManager {
         NONE,
         DAY,
         NIGHT,
+        TRADER_OUTPOST,
         COMBAT,
         BLOOD_MOON
     }
@@ -37,6 +39,8 @@ public class MusicManager {
     private static final int COMBAT_DETECTION_RADIUS = 24;
     private static final int COMBAT_GRACE_PERIOD_TICKS = 200;
     private static final int CONTEXT_SWITCH_COOLDOWN_TICKS = 40;
+    private static final double TRADER_OUTPOST_RADIUS_SQ = 80.0 * 80.0;
+    private static final String TRADER_OUTPOST_TYPE_NAME = "Trader Outpost";
 
     private static MusicContext currentContext = MusicContext.NONE;
     private static MusicContext pendingContext = null;
@@ -135,6 +139,10 @@ public class MusicManager {
             return MusicContext.COMBAT;
         }
 
+        if (isInTraderOutpost(mc)) {
+            return MusicContext.TRADER_OUTPOST;
+        }
+
         long timeOfDay = mc.level.getDayTime() % 24000L;
         if (timeOfDay >= NIGHT_START_TIME && timeOfDay < DAY_START_TIME) {
             return MusicContext.NIGHT;
@@ -159,12 +167,28 @@ public class MusicManager {
         return !nearby.isEmpty();
     }
 
+    private static boolean isInTraderOutpost(Minecraft mc) {
+        double playerX = mc.player.getX();
+        double playerZ = mc.player.getZ();
+        for (TerritoryEntry entry : TerritoryClientState.getTerritories()) {
+            if (TRADER_OUTPOST_TYPE_NAME.equals(entry.typeName())) {
+                double dx = playerX - entry.x();
+                double dz = playerZ - entry.z();
+                if (dx * dx + dz * dz <= TRADER_OUTPOST_RADIUS_SQ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private static Supplier<SoundEvent> getSoundForContext(MusicContext context) {
         return switch (context) {
             case DAY -> ModSounds.MUSIC_EXPLORATION_DAY;
             case NIGHT -> ModSounds.MUSIC_EXPLORATION_NIGHT;
             case BLOOD_MOON -> ModSounds.MUSIC_BLOOD_MOON;
             case COMBAT -> ModSounds.MUSIC_COMBAT;
+            case TRADER_OUTPOST -> ModSounds.MUSIC_TRADER_OUTPOST;
             case NONE -> null;
         };
     }
