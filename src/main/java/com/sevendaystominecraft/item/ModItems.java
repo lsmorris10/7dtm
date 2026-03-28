@@ -106,8 +106,7 @@ public class ModItems {
                     SevenDaysPlayerStats.DEBUFF_SPRAIN,
                     SevenDaysPlayerStats.DEBUFF_FRACTURE));
 
-    public static final Supplier<Item> GAS_CAN = ITEMS.register("gas_can",
-            () -> new Item(new Item.Properties().setId(key("gas_can")).stacksTo(16)));
+    public static final Supplier<Item> GAS_CAN = () -> ModBlocks.GAS_CAN_BLOCK.get().asItem();
 
     public static final Supplier<Item> FORGED_LEAD = ITEMS.register("forged_lead",
             () -> new Item(new Item.Properties().setId(key("forged_lead")).stacksTo(64)));

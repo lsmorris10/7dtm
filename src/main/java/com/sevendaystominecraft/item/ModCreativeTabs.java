@@ -181,6 +181,7 @@ public class ModCreativeTabs {
                         output.accept(ModBlocks.LAND_CLAIM_BLOCK.get());
                         output.accept(ModItems.REPAIR_HAMMER.get());
                         output.accept(ModItems.WRENCH.get());
+                        output.accept(ModBlocks.GAS_CAN_BLOCK.get());
                     })
                     .build());
 

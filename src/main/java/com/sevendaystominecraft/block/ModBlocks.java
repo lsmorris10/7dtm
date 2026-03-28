@@ -316,14 +316,25 @@ public class ModBlocks {
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
+    public static final Supplier<Block> GAS_CAN_BLOCK = registerWithItem("gas_can",
+            () -> new GasCanBlock(BlockBehaviour.Properties.of()
+                    .setId(blockKey("gas_can"))
+                    .strength(0.5f, 0.5f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()),
+            new Item.Properties().setId(itemKey("gas_can")).stacksTo(16));
+
     private static Supplier<Block> registerBlock(String name, Supplier<Block> blockSupplier) {
         return BLOCKS.register(name, blockSupplier);
     }
 
     private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier) {
+        return registerWithItem(name, blockSupplier, new Item.Properties().setId(itemKey(name)));
+    }
+
+    private static Supplier<Block> registerWithItem(String name, Supplier<Block> blockSupplier, Item.Properties itemProps) {
         Supplier<Block> block = BLOCKS.register(name, blockSupplier);
-        BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(),
-                new Item.Properties().setId(itemKey(name))));
+        BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(), itemProps));
         return block;
     }
 }

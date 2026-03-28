@@ -1,6 +1,7 @@
 package com.sevendaystominecraft.capability;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
+import com.sevendaystominecraft.block.GasCanBlock;
 import com.sevendaystominecraft.config.SurvivalConfig;
 import com.sevendaystominecraft.entity.projectile.GrenadeEntity;
 import com.sevendaystominecraft.entity.zombie.CopZombie;
@@ -29,7 +30,7 @@ public class ExplosionHandler {
         Vec3 center = explosion.center();
         Entity sourceEntity = explosion.getDirectSourceEntity();
 
-        if (sourceEntity instanceof GrenadeEntity) {
+        if (sourceEntity instanceof GrenadeEntity || GasCanBlock.isGasCanExplosion) {
             event.getAffectedEntities().clear();
         }
 
