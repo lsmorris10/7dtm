@@ -158,6 +158,11 @@ public class VanillaGearHandler {
             QualityTier quality = VanillaGearMaterials.getQualityFromStack(stack);
             if (quality == null) return;
 
+            if (!event.getToolTip().isEmpty()) {
+                Component originalName = event.getToolTip().getFirst();
+                event.getToolTip().set(0, quality.applyToName(originalName));
+            }
+
             int insertIdx = Math.min(1, event.getToolTip().size());
             event.getToolTip().add(insertIdx, Component.literal("")
                     .append(Component.literal("Quality: " + quality.getDisplayName())

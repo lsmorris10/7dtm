@@ -34,6 +34,16 @@ public class TieredArmorItem extends ArmorItem {
     }
 
     @Override
+    public Component getName(ItemStack stack) {
+        Component originalName = super.getName(stack);
+        QualityTier quality = getQuality(stack);
+        if (quality != null) {
+            return quality.applyToName(originalName);
+        }
+        return originalName;
+    }
+
+    @Override
     public int getMaxDamage(ItemStack stack) {
         int baseDurability = super.getMaxDamage(stack);
         QualityTier quality = getQuality(stack);
@@ -60,7 +70,9 @@ public class TieredArmorItem extends ArmorItem {
 
         QualityTier quality = getQuality(stack);
         if (quality != null) {
-            tooltipComponents.add(Component.literal(quality.getColor() + "Quality: " + quality.getDisplayName()));
+            tooltipComponents.add(Component.literal("")
+                    .append(Component.literal("Quality: " + quality.getDisplayName())
+                            .withStyle(quality.getColor())));
         }
 
         tooltipComponents.add(Component.literal("§7Tier: §f" + armorTier.getDisplayName()));
