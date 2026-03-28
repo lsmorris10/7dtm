@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.entity.zombie;
 
+import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.config.ZombieConfig;
@@ -27,6 +28,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +46,7 @@ public class BaseSevenDaysZombie extends Zombie {
     private boolean statsApplied = false;
     private float lastDisplayedHP = -1;
     private ZombieDetectionGoal baseDetectionGoal;
-    private java.util.List<net.minecraft.world.entity.ai.goal.Goal> groundOnlyGoals;
+    protected final List<net.minecraft.world.entity.ai.goal.Goal> groundOnlyGoals = new ArrayList<>();
 
     public BaseSevenDaysZombie(EntityType<? extends Zombie> type, Level level, ZombieVariant variant) {
         super(type, level);
@@ -77,7 +81,11 @@ public class BaseSevenDaysZombie extends Zombie {
         goalSelector.addGoal(3, breakGoal);
         goalSelector.addGoal(4, hordeGoal);
         goalSelector.addGoal(5, investigateGoal);
-        if (groundOnlyGoals == null) groundOnlyGoals = new java.util.ArrayList<>();
+        if (groundOnlyGoals == null) {
+            // This happens when super() calls registerGoals() before this class's field initializers run
+            return; 
+        }
+        groundOnlyGoals.clear();
         groundOnlyGoals.add(breakGoal);
         groundOnlyGoals.add(hordeGoal);
         groundOnlyGoals.add(investigateGoal);
@@ -95,9 +103,14 @@ public class BaseSevenDaysZombie extends Zombie {
     }
 
     protected void removeGroundOnlyGoals() {
-        if (groundOnlyGoals == null) return;
+        if (groundOnlyGoals == null) {
+            SevenDaysToMinecraft.LOGGER.warn("[BZHS] groundOnlyGoals was null for variant " + this.variant + " during removal!");
+            return;
+        }
         for (net.minecraft.world.entity.ai.goal.Goal goal : groundOnlyGoals) {
-            goalSelector.removeGoal(goal);
+            if (goal != null) {
+                goalSelector.removeGoal(goal);
+            }
         }
     }
 

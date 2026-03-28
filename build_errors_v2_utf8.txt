@@ -1,0 +1,500 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+-------------------------------------
+NeoGradle detected a problem with your project: Run.getProgramArguments()
+Details: The method getProgramArguments() is deprecated and will be removed in the future
+Potential Solution: Use getArguments() instead of getProgramArguments()
+More information: https://github.com/neoforged/NeoGradle/blob/NG_7.0/README.md#common-runs-configuration-types-configure-by-type
+-------------------------------------
+
+> Task :cacheVersionManifest1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableClient1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableServer1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsClient1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsServer1.21.4 UP-TO-DATE
+> Task :neoFormListLibraries UP-TO-DATE
+> Task :neoFormStripClient UP-TO-DATE
+> Task :neoFormExtractServer UP-TO-DATE
+> Task :neoFormStripServer UP-TO-DATE
+> Task :neoFormMerge UP-TO-DATE
+> Task :neoFormMergeMappings UP-TO-DATE
+> Task :neoFormRename UP-TO-DATE
+> Task :neoFormDecompile UP-TO-DATE
+> Task :neoFormApplyForgesAccessTransformer UP-TO-DATE
+> Task :neoFormInject UP-TO-DATE
+> Task :neoFormPatch UP-TO-DATE
+> Task :neoFormPatchUserDev UP-TO-DATE
+> Task :neoFormApplyOfficialMappings UP-TO-DATE
+> Task :neoFormUnzipAdditionalSources UP-TO-DATE
+> Task :neoFormUnzipSources UP-TO-DATE
+> Task :create1.21.4ClientExtraJar UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.4_client-extra UP-TO-DATE
+> Task :neoFormRecompile UP-TO-DATE
+> Task :neoFormPackRecomp UP-TO-DATE
+> Task :supplyRawJarForneoFormJoined1.21.4-20241203.161809 UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.4.140 UP-TO-DATE
+
+> Task :compileJava
+./gradlew : C:\Users\ls
+mor\OneDrive\Desktop\7d
+tm Mod Development Work
+space\src\main\java\com
+\sevendaystominecraft\c
+lient\model\AirdropPlan
+eModel.java:8: error: 
+AirdropPlaneModel is 
+not abstract and does 
+not override abstract 
+method getTextureResour
+ce(AirdropPlaneEntity,G
+eoRenderer<AirdropPlane
+Entity>) in GeoModel
+At line:1 char:1
++ ./gradlew 
+compileJava 
+--console=plain > 
+build_errors_v2.txt 
+2>&1
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (C:\Users\lsmo   
+ r\...y>) in GeoMod    
+el:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+public class 
+AirdropPlaneModel 
+extends GeoModel<Airdro
+pPlaneEntity> {
+       ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\AirdropPlaneModel.
+java:10: error: method 
+does not override or 
+implement a method 
+from a supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\AirdropPlaneModel.
+java:15: error: method 
+does not override or 
+implement a method 
+from a supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\A
+irdropPlaneEntity.java:
+124: error: hurt(Damage
+Source,float) in 
+AirdropPlaneEntity 
+cannot override hurt(Da
+mageSource,float) in 
+Entity
+    public boolean 
+hurt(DamageSource 
+source, float amount) {
+                   ^
+  overridden method is 
+final
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\A
+irdropPlaneEntity.java:
+123: error: method 
+does not override or 
+implement a method 
+from a supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:8: error: 
+FallingAirdropModel is 
+not abstract and does 
+not override abstract 
+method getTextureResour
+ce(FallingAirdropEntity
+,GeoRenderer<FallingAir
+dropEntity>) in 
+GeoModel
+public class 
+FallingAirdropModel 
+extends GeoModel<Fallin
+gAirdropEntity> {
+       ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:10: error: 
+method does not 
+override or implement 
+a method from a 
+supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:15: error: 
+method does not 
+override or implement 
+a method from a 
+supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:56: error: cannot 
+find symbol
+            serverLevel
+.setBlock(pos, ModBlock
+s.AIRDROP_CRATE.get().d
+efaultBlockState(), 3);
+                       
+                       
+ ^
+  symbol:   variable 
+AIRDROP_CRATE
+  location: class 
+ModBlocks
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:79: error: hurt(Damag
+eSource,float) in 
+FallingAirdropEntity 
+cannot override hurt(Da
+mageSource,float) in 
+Entity
+    public boolean 
+hurt(DamageSource 
+source, float amount) {
+                   ^
+  overridden method is 
+final
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:78: error: method 
+does not override or 
+implement a method 
+from a supertype
+    @Override
+    ^
+C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\event\Ai
+rdropHandler.java:42: 
+error: cannot find 
+symbol
+            manager.set
+AirdropsEnabled(true); 
+// Force enable for now
+                   ^
+  symbol:   method setA
+irdropsEnabled(boolean)
+  location: variable 
+manager of type 
+AirdropManager
+Note: Some input files 
+use or override a 
+deprecated API.
+Note: Recompile with 
+-Xlint:deprecation for 
+details.
+Note: C:\Users\lsmor\On
+eDrive\Desktop\7dtm 
+Mod Development Workspa
+ce\src\main\java\com\se
+vendaystominecraft\bloc
+k\loot\LootContainerBlo
+ckEntity.java uses 
+unchecked or unsafe 
+operations.
+Note: Recompile with 
+-Xlint:unchecked for 
+details.
+12 errors
+
+> Task :compileJava FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/lsmor/OneDrive/Desktop/7dtm%20Mod%20Development%20Workspace/build/reports/problems/problems-report.html
+
+FAILURE: Build failed 
+with an exception.
+
+* What went wrong:
+Execution failed for 
+task ':compileJava'.
+> Compilation failed; 
+see the compiler 
+output below.
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\AirdropPlaneModel.
+java:8: error: 
+AirdropPlaneModel is 
+not abstract and does 
+not override abstract 
+method getTextureResour
+ce(AirdropPlaneEntity,G
+eoRenderer<AirdropPlane
+Entity>) in GeoModel
+  public class 
+AirdropPlaneModel 
+extends GeoModel<Airdro
+pPlaneEntity> {
+         ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\AirdropPlaneModel.
+java:10: error: method 
+does not override or 
+implement a method 
+from a supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\AirdropPlaneModel.
+java:15: error: method 
+does not override or 
+implement a method 
+from a supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\A
+irdropPlaneEntity.java:
+124: error: hurt(Damage
+Source,float) in 
+AirdropPlaneEntity 
+cannot override hurt(Da
+mageSource,float) in 
+Entity
+      public boolean 
+hurt(DamageSource 
+source, float amount) {
+                     ^
+    overridden method 
+is final
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\A
+irdropPlaneEntity.java:
+123: error: method 
+does not override or 
+implement a method 
+from a supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:8: error: 
+FallingAirdropModel is 
+not abstract and does 
+not override abstract 
+method getTextureResour
+ce(FallingAirdropEntity
+,GeoRenderer<FallingAir
+dropEntity>) in 
+GeoModel
+  public class 
+FallingAirdropModel 
+extends GeoModel<Fallin
+gAirdropEntity> {
+         ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:10: error: 
+method does not 
+override or implement 
+a method from a 
+supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\client\m
+odel\FallingAirdropMode
+l.java:15: error: 
+method does not 
+override or implement 
+a method from a 
+supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:56: error: cannot 
+find symbol
+              serverLev
+el.setBlock(pos, ModBlo
+cks.AIRDROP_CRATE.get()
+.defaultBlockState(), 
+3);
+                       
+                       
+   ^
+    symbol:   variable 
+AIRDROP_CRATE
+    location: class 
+ModBlocks
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:79: error: hurt(Damag
+eSource,float) in 
+FallingAirdropEntity 
+cannot override hurt(Da
+mageSource,float) in 
+Entity
+      public boolean 
+hurt(DamageSource 
+source, float amount) {
+                     ^
+    overridden method 
+is final
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\entity\F
+allingAirdropEntity.jav
+a:78: error: method 
+does not override or 
+implement a method 
+from a supertype
+      @Override
+      ^
+  C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\s
+rc\main\java\com\sevend
+aystominecraft\event\Ai
+rdropHandler.java:42: 
+error: cannot find 
+symbol
+              manager.s
+etAirdropsEnabled(true)
+; // Force enable for 
+now
+                     ^
+    symbol:   method se
+tAirdropsEnabled(boolea
+n)
+    location: variable 
+manager of type 
+AirdropManager
+  Note: Some input 
+files use or override 
+a deprecated API.
+  Note: Recompile with 
+-Xlint:deprecation for 
+details.
+  Note: C:\Users\lsmor\
+OneDrive\Desktop\7dtm 
+Mod Development Workspa
+ce\src\main\java\com\se
+vendaystominecraft\bloc
+k\loot\LootContainerBlo
+ckEntity.java uses 
+unchecked or unsafe 
+operations.
+  Note: Recompile with 
+-Xlint:unchecked for 
+details.
+  12 errors
+
+* Try:
+> Check your code and 
+dependencies to fix 
+the compilation 
+error(s)
+> Run with --scan to 
+get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 10s
+27 actionable tasks: 1 executed, 26 up-to-date

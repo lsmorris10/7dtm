@@ -1,0 +1,186 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+-------------------------------------
+NeoGradle detected a problem with your project: Run.getProgramArguments()
+Details: The method getProgramArguments() is deprecated and will be removed in the future
+Potential Solution: Use getArguments() instead of getProgramArguments()
+More information: https://github.com/neoforged/NeoGradle/blob/NG_7.0/README.md#common-runs-configuration-types-configure-by-type
+-------------------------------------
+
+> Task :cacheVersionManifest1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableClient1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableServer1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsClient1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsServer1.21.4 UP-TO-DATE
+> Task :neoFormListLibraries UP-TO-DATE
+> Task :neoFormStripClient UP-TO-DATE
+> Task :neoFormExtractServer UP-TO-DATE
+> Task :neoFormStripServer UP-TO-DATE
+> Task :neoFormMerge UP-TO-DATE
+> Task :neoFormMergeMappings UP-TO-DATE
+> Task :neoFormRename UP-TO-DATE
+> Task :neoFormDecompile UP-TO-DATE
+> Task :neoFormApplyForgesAccessTransformer UP-TO-DATE
+> Task :neoFormInject UP-TO-DATE
+> Task :neoFormPatch UP-TO-DATE
+> Task :neoFormPatchUserDev UP-TO-DATE
+> Task :neoFormApplyOfficialMappings UP-TO-DATE
+> Task :neoFormUnzipAdditionalSources UP-TO-DATE
+> Task :neoFormUnzipSources UP-TO-DATE
+> Task :create1.21.4ClientExtraJar UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.4_client-extra UP-TO-DATE
+> Task :neoFormRecompile UP-TO-DATE
+> Task :neoFormPackRecomp UP-TO-DATE
+> Task :supplyRawJarForneoFormJoined1.21.4-20241203.161809 UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.4.140 UP-TO-DATE
+
+> Task :compileJava FAILED
+./gradlew : C:\Users\lsmo
+r\OneDrive\Desktop\7dtm 
+Mod Development Workspace
+\src\main\java\com\sevend
+aystominecraft\client\mod
+el\FallingAirdropModel.ja
+va:6: error: class, 
+interface, enum, or 
+record expected
+At line:1 char:1
++ ./gradlew compileJava 
+--console=plain > 
+build_errors.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecifi    
+ed: (C:\Users\lsmo    
+r\...record expect    
+ed:String) [], Rem    
+oteException
+    + FullyQualifiedEr   
+ rorId : NativeComm    
+andError
+ 
+package com.sevendaystomi
+necraft.client.model;
+^
+C:\Users\lsmor\OneDrive\D
+esktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:8
+: error: class, 
+interface, enum, or 
+record expected
+import com.sevendaystomin
+ecraft.SevenDaysToMinecra
+ft;
+^
+C:\Users\lsmor\OneDrive\D
+esktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:9
+: error: class, 
+interface, enum, or 
+record expected
+import com.sevendaystomin
+ecraft.entity.FallingAird
+ropEntity;
+^
+C:\Users\lsmor\OneDrive\D
+esktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:1
+0: error: class, 
+interface, enum, or 
+record expected
+import software.bernie.ge
+ckolib.model.GeoModel;
+^
+4 errors
+
+[Incubating] Problems report is available at: file:///C:/Users/lsmor/OneDrive/Desktop/7dtm%20Mod%20Development%20Workspace/build/reports/problems/problems-report.html
+
+FAILURE: Build failed 
+with an exception.
+
+* What went wrong:
+Execution failed for 
+task ':compileJava'.
+> Compilation failed; 
+see the compiler output 
+below.
+  C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:6
+: error: class, 
+interface, enum, or 
+record expected
+  package com.sevendaysto
+minecraft.client.model;
+  ^
+  C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:8
+: error: class, 
+interface, enum, or 
+record expected
+  import com.sevendaystom
+inecraft.SevenDaysToMinec
+raft;
+  ^
+  C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:9
+: error: class, 
+interface, enum, or 
+record expected
+  import com.sevendaystom
+inecraft.entity.FallingAi
+rdropEntity;
+  ^
+  C:\Users\lsmor\OneDrive
+\Desktop\7dtm Mod 
+Development Workspace\src
+\main\java\com\sevendayst
+ominecraft\client\model\F
+allingAirdropModel.java:1
+0: error: class, 
+interface, enum, or 
+record expected
+  import software.bernie.
+geckolib.model.GeoModel;
+  ^
+  4 errors
+
+* Try:
+> Check your code and 
+dependencies to fix the 
+compilation error(s)
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+> Run with --scan to get 
+full insights.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 9s
+27 actionable tasks: 1 executed, 26 up-to-date

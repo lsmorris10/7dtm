@@ -2,84 +2,77 @@ package com.sevendaystominecraft.entity;
 
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.block.ModBlocks;
-import com.sevendaystominecraft.block.loot.LootContainerType;
-import com.sevendaystominecraft.block.loot.LootContainerBlockEntity;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FallingAirdropEntity extends Entity implements GeoEntity {
+public class FallingAirdropEntity extends Mob implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     
     private double speed = -0.15;
 
-    public FallingAirdropEntity(EntityType<?> type, Level level) {
+    public FallingAirdropEntity(EntityType<? extends Mob> type, Level level) {
         super(type, level);
-        this.noPhysics = false; // Need collision for the ground
+        this.noPhysics = false; 
     }
 
-    @Override
-    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) { }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) { }
 
     @Override
     public void tick() {
         super.tick();
 
-        this.setDeltaMovement(0, speed, 0);
-        this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
-
-        if (!this.level().isClientSide()) {
-            if (this.onGround() || this.verticalCollision) {
-                placeCrate();
-            } else if (this.getY() < this.level().getMinY()) {
-                this.discard();
+        if (!this.level().isClientSide) {
+            this.setDeltaMovement(0, speed, 0);
+            
+            BlockPos pos = this.blockPosition();
+            BlockState state = this.level().getBlockState(pos.below());
+            
+            if (!state.isAir() && !state.liquid()) {
+                land();
             }
         }
     }
 
-    private void placeCrate() {
-        BlockPos pos = this.blockPosition();
-        Level level = this.level();
-
-        // Find standard ground
-        while (level.getBlockState(pos).isAir() && pos.getY() > level.getMinY()) {
-            pos = pos.below();
+    private void land() {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            BlockPos pos = this.blockPosition();
+            serverLevel.setBlock(pos, ModBlocks.SUPPLY_CRATE_BLOCK.get().defaultBlockState(), 3);
+            
+            SevenDaysToMinecraft.LOGGER.info("[BZHS] Airdrop landed at {}!", pos);
+            this.discard();
         }
-
-        pos = pos.above();
-        
-        BlockState crateState = ModBlocks.SUPPLY_CRATE_BLOCK.get().defaultBlockState();
-        level.setBlockAndUpdate(pos, crateState);
-        
-        if (level.getBlockEntity(pos) instanceof LootContainerBlockEntity be) {
-            be.setTerritoryTier(5); // High tier loot for airdrops
-        }
-
-        SevenDaysToMinecraft.LOGGER.info("[BZHS] Airdrop landed at {}!", pos);
-        this.discard();
     }
 
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        return false;
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
     }
 
     @Override

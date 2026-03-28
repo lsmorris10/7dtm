@@ -1,0 +1,50 @@
+﻿[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 1 5
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 8 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 4
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 12
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 12
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 8 7
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 11
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 15
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 10
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 6
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 9 15
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 5
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 13
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 13
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS Trader] Placed Trader Rekt (Tier 1) at outpost (11, 64, 36)
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS Trader] Guaranteed near-spawn trader outpost placed at (8, 8)
+[10:27:44] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:27:44] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 2 ms
+[10:27:44] [Server thread/INFO] [minecraft/DedicatedServer]: Done (5.256s)! For help, type "help"
+[10:27:44] [Server thread/DEBUG] [ne.ne.ne.ne.DualStackUtils/]: Detected IPv6 address: "0:0:0:0:0:0:0:0"
+[10:27:44] [Server thread/DEBUG] [ne.ne.ne.se.LanguageHook/]: Loaded 4 language files for en_us
+[10:27:44] [Server thread/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: []
+[10:27:44] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: BZHS Server Starting ∩┐╜ Loading world data...
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS] Day 1 has begun
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS] Disabled vanilla daylight cycle ∩┐╜ using TIME_SCALE=2 slower-tick day cycle
+[10:28:44] [Server thread/INFO] [minecraft/MinecraftServer]: Server empty for 60 seconds, pausing
+[10:28:44] [Server thread/DEBUG] [ne.ne.ne.co.CommonHooks/WP]: Gathered mod list to write to world save world

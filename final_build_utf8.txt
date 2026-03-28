@@ -1,0 +1,99 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+-------------------------------------
+NeoGradle detected a problem with your project: Run.getProgramArguments()
+Details: The method getProgramArguments() is deprecated and will be removed in the future
+Potential Solution: Use getArguments() instead of getProgramArguments()
+More information: https://github.com/neoforged/NeoGradle/blob/NG_7.0/README.md#common-runs-configuration-types-configure-by-type
+-------------------------------------
+
+> Task :clean
+> Task :cacheVersionManifest1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableClient1.21.4 UP-TO-DATE
+> Task :cacheVersionExecutableServer1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsClient1.21.4 UP-TO-DATE
+> Task :cacheVersionMappingsServer1.21.4 UP-TO-DATE
+> Task :neoFormListLibraries UP-TO-DATE
+> Task :neoFormStripClient UP-TO-DATE
+> Task :neoFormExtractServer UP-TO-DATE
+> Task :neoFormStripServer UP-TO-DATE
+> Task :neoFormMerge UP-TO-DATE
+> Task :neoFormMergeMappings UP-TO-DATE
+> Task :neoFormRename UP-TO-DATE
+> Task :neoFormDecompile UP-TO-DATE
+> Task :neoFormApplyForgesAccessTransformer UP-TO-DATE
+> Task :neoFormInject UP-TO-DATE
+> Task :neoFormPatch UP-TO-DATE
+> Task :neoFormPatchUserDev UP-TO-DATE
+> Task :neoFormApplyOfficialMappings UP-TO-DATE
+> Task :neoFormUnzipAdditionalSources UP-TO-DATE
+> Task :neoFormUnzipSources UP-TO-DATE
+> Task :create1.21.4ClientExtraJar UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.4_client-extra UP-TO-DATE
+> Task :neoFormRecompile UP-TO-DATE
+> Task :neoFormPackRecomp
+> Task :supplyRawJarForneoFormJoined1.21.4-20241203.161809
+> Task :selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.4.140 UP-TO-DATE
+
+> Task :compileJava
+./gradlew : Note: Some 
+input files use or 
+override a deprecated API.
+At line:1 char:1
++ ./gradlew clean build > 
+final_build.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecifi    ed: 
+(Note: Some in    
+pu...deprecated AP    
+I.:String) [], Rem    
+oteException
+    + FullyQualifiedEr    
+rorId : NativeComm    
+andError
+ 
+Note: Recompile with 
+-Xlint:deprecation for 
+details.
+Note: C:\Users\lsmor\OneDri
+ve\Desktop\7dtm Mod 
+Development Workspace\src\m
+ain\java\com\sevendaystomin
+ecraft\block\loot\LootConta
+inerBlockEntity.java uses 
+unchecked or unsafe 
+operations.
+Note: Recompile with 
+-Xlint:unchecked for 
+details.
+
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :jarJar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :neoFormJoined1.21.4-20241203.161809DownloadAssets UP-TO-DATE
+> Task :neoFormJoined1.21.4-20241203.161809ExtractNatives UP-TO-DATE
+> Task :writeMinecraftClasspathJunit
+> Task :testJunit NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+
+[Incubating] Problems report is available at: file:///C:/Users/lsmor/OneDrive/Desktop/7dtm%20Mod%20Development%20Workspace/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 59s
+34 actionable tasks: 8 executed, 26 up-to-date

@@ -281,8 +281,8 @@ public class VillageClusterGenerator {
             int[] existingFoot = placedFootprints.get(i);
             int distX = Math.abs(candidate.getX() - existing.getX());
             int distZ = Math.abs(candidate.getZ() - existing.getZ());
-            int minDistX = halfX + existingFoot[0] + BUILDING_GAP;
-            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP;
+            int minDistX = halfX + existingFoot[0] + BUILDING_GAP + 4; // Added margin for porches/extras
+            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP + 4;
             if (distX < minDistX && distZ < minDistZ) return null;
         }
 
@@ -296,8 +296,8 @@ public class VillageClusterGenerator {
             int[] existingFoot = placedFootprints.get(i);
             int distX = Math.abs(center.getX() - existing.getX());
             int distZ = Math.abs(center.getZ() - existing.getZ());
-            int minDistX = halfX + existingFoot[0] + BUILDING_GAP;
-            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP;
+            int minDistX = halfX + existingFoot[0] + BUILDING_GAP + 4; // Added margin for porches/extras
+            int minDistZ = halfZ + existingFoot[1] + BUILDING_GAP + 4;
             if (distX < minDistX && distZ < minDistZ) return true;
         }
         return false;

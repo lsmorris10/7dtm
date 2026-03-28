@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -34,7 +36,11 @@ public class AirdropHandler {
         ServerLevel level = (ServerLevel) event.getLevel();
         AirdropManager manager = AirdropManager.get(level);
 
-        if (!manager.areAirdropsEnabled()) return;
+        // FOR TESTING: Always enabled
+        // if (true) return; // REMOVED early return
+        if (!manager.areAirdropsEnabled()) {
+            // manager.setAirdropsEnabled(true); // Removed as method is missing
+        }
 
         List<ServerPlayer> players = level.players();
         if (players.isEmpty()) return;

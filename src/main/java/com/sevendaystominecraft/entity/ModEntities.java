@@ -197,6 +197,8 @@ public class ModEntities {
             event.put(INFERNAL.get(), InfernalZombie.createAttributes().build());
             event.put(BEHEMOTH.get(), BehemothZombie.createAttributes().build());
             event.put(TRADER.get(), TraderEntity.createAttributes().build());
+            event.put(AIRDROP_PLANE.get(), AirdropPlaneEntity.createAttributes().build());
+            event.put(FALLING_AIRDROP.get(), FallingAirdropEntity.createAttributes().build());
         }
     }
 }

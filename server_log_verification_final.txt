@@ -1,0 +1,100 @@
+﻿[10:27:38] [Server thread/DEBUG] [io.ne.ut.in.PlatformDependent/]: org.jctools-core.MpscChunkedArrayQueue: available
+[10:27:38] [Server thread/INFO] [minecraft/ServerConnectionListener]: Using default channel type
+[10:27:38] [Server thread/DEBUG] [io.ne.ch.DefaultChannelId/]: -Dio.netty.processId: 29848 (auto-detected)
+[10:27:38] [Server thread/DEBUG] [io.ne.ut.NetUtil/]: -Djava.net.preferIPv4Stack: false
+[10:27:38] [Server thread/DEBUG] [io.ne.ut.NetUtil/]: -Djava.net.preferIPv6Addresses: true
+[10:27:38] [Server thread/DEBUG] [io.ne.ut.NetUtilInitializations/]: Loopback interface: loopback_0 (Software Loopback Interface 1, 0:0:0:0:0:0:0:1)
+[10:27:38] [Server thread/DEBUG] [io.ne.ut.NetUtil/]: Failed to get SOMAXCONN from sysctl and file \proc\sys\net\core\somaxconn. Default: 200
+[10:27:38] [Server thread/DEBUG] [io.ne.ch.DefaultChannelId/]: -Dio.netty.machineId: 10:ff:e0:ff:fe:60:6f:68 (auto-detected)
+[10:27:38] [Server thread/DEBUG] [io.ne.bo.ChannelInitializerExtensions/]: -Dio.netty.bootstrap.extensions: null
+[10:27:38] [Server thread/WARN] [minecraft/DedicatedServer]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[10:27:38] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[10:27:38] [Server thread/WARN] [minecraft/DedicatedServer]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[10:27:38] [Server thread/WARN] [minecraft/DedicatedServer]: To change this, set "online-mode" to "true" in the server.properties file.
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loading configs type SERVER
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\survival.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\survival.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.ne.co.NeoForgeConfig/FORGEMOD]: Loaded NeoForge config file neoforge-server.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\neoforge-server.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\neoforge-server.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\horde.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\horde.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\zombies.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\zombies.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\heatmap.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\heatmap.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\loot.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\loot.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\territory.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\territory.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\trader.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\trader.toml for changes
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\quest.toml
+[10:27:38] [Server thread/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file C:\Users\lsmor\OneDrive\Desktop\7dtm Mod Development Workspace\runs\server\config\quest.toml for changes
+[10:27:38] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "world"
+[10:27:40] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 8 8
+[10:27:40] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS Village] NBT template scan complete. 0 building types have templates.
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 12 15
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 7
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 7
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 7
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 10
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 0
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 1 5
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 8 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 4
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 12
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 12
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 8
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 8 7
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 0 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 11
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 15
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 4 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 10
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 2
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 6
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 13 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 9 15
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 3
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 15 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 7 1
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 5
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 9
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 11 13
+[10:27:43] [Server thread/ERROR] [minecraft/ChunkAccess]: Unprimed heightmap: WORLD_SURFACE_WG 3 13
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS Trader] Placed Trader Rekt (Tier 1) at outpost (11, 64, 36)
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS Trader] Guaranteed near-spawn trader outpost placed at (8, 8)
+[10:27:44] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:27:44] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 2 ms
+[10:27:44] [Server thread/INFO] [minecraft/DedicatedServer]: Done (5.256s)! For help, type "help"
+[10:27:44] [Server thread/DEBUG] [ne.ne.ne.ne.DualStackUtils/]: Detected IPv6 address: "0:0:0:0:0:0:0:0"
+[10:27:44] [Server thread/DEBUG] [ne.ne.ne.se.LanguageHook/]: Loaded 4 language files for en_us
+[10:27:44] [Server thread/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: []
+[10:27:44] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: BZHS Server Starting ∩┐╜ Loading world data...
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS] Day 1 has begun
+[10:27:44] [Server thread/INFO] [co.se.SevenDaysToMinecraft/]: [BZHS] Disabled vanilla daylight cycle ∩┐╜ using TIME_SCALE=2 slower-tick day cycle
+[10:28:44] [Server thread/INFO] [minecraft/MinecraftServer]: Server empty for 60 seconds, pausing
+[10:28:44] [Server thread/DEBUG] [ne.ne.ne.co.CommonHooks/WP]: Gathered mod list to write to world save world
