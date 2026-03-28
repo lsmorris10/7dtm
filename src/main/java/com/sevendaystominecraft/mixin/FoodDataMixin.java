@@ -6,9 +6,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Mixin into {@link FoodData#tick(ServerPlayer)} to disable vanilla hunger entirely.
+ * Mixin into {@link FoodData} to disable vanilla hunger and allow eating at all times.
  *
  * Spec §1.1: "Override FoodData entirely" — all food/saturation/exhaustion
  * logic is replaced by our custom system in {@link com.sevendaystominecraft.capability.PlayerStatsHandler}.
@@ -18,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  *   <li>Cancels the vanilla FoodData.tick() method at HEAD</li>
  *   <li>Prevents vanilla hunger bar depletion, saturation calculations,
  *       and natural regen tied to foodLevel</li>
+ *   <li>Forces canEat() to always return true so vanilla food items can be
+ *       consumed regardless of the frozen food level</li>
  *   <li>Our custom drain/regen runs in PlayerTickEvent instead</li>
  * </ul>
  *
@@ -39,5 +42,10 @@ public abstract class FoodDataMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void sevendaystominecraft$cancelVanillaTick(ServerPlayer player, CallbackInfo ci) {
         ci.cancel();
+    }
+
+    @Inject(method = "canEat", at = @At("HEAD"), cancellable = true)
+    private void sevendaystominecraft$alwaysCanEat(boolean ignoreHunger, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(true);
     }
 }
