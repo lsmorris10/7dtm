@@ -336,7 +336,9 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
                 }
             }
         } else if (currentTab == Tab.QUESTS) {
-            return handleQuestClick(mouseX, mouseY);
+            if (handleQuestClick(mouseX, mouseY)) {
+                return true;
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
