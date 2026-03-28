@@ -86,6 +86,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.HOBO_STEW.get());
                         output.accept(ModItems.SHAM_CHOWDER.get());
                         output.accept(ModItems.BAKED_POTATO_MEAL.get());
+                        output.accept(ModItems.COIN_BAG.get());
                     })
                     .build());
 

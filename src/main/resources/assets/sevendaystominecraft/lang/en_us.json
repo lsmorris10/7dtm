@@ -230,5 +230,6 @@
   "block.sevendaystominecraft.gas_can": "Gas Can",
   "block.sevendaystominecraft.generator_bank": "Generator Bank",
   "block.sevendaystominecraft.battery_bank": "Battery Bank",
-  "block.sevendaystominecraft.solar_panel": "Solar Panel"
+  "block.sevendaystominecraft.solar_panel": "Solar Panel",
+  "item.sevendaystominecraft.coin_bag": "Coin Bag"
 }

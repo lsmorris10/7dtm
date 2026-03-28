@@ -188,8 +188,9 @@ src/main/java/com/sevendaystominecraft/
 │       ├── ZombieBearEntity.java    — Charge + AoE swipe
 │       └── ZombieDogEntity.java     — Pack spawns, fast (Wolf base)
 ├── item/
-│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor, seeds, crops, cooked food, repair hammer)
+│   ├── ModItems.java               — DeferredRegister for all items (materials, melee weapons, ranged weapons, ammo, treatment items, armor, seeds, crops, cooked food, repair hammer, coin bag)
 │   ├── ModCreativeTabs.java        — Creative tabs: Materials, Workstations, Weapons, Armor, Loot Containers, Building, Magazines
+│   ├── CoinBagItem.java            — Equipment item storing tier (2/4 slots) and internal inventory via DataComponents.CUSTOM_DATA; equips in dedicated GUI slot
 │   ├── TreatmentItem.java          — Single-use right-click consumable that removes specific debuffs
 │   ├── ConsumableStatItem.java     — Consumable item that modifies food/water stats, applies/cures debuffs, grants regen
 │   ├── SeedItem.java               — Right-click-on-farm-plot plantable seed item
@@ -246,7 +247,9 @@ src/main/java/com/sevendaystominecraft/
 │   ├── VanillaItemDurabilityMixin.java — Scales vanilla gear durability by QualityTier stat multiplier
 │   └── CreateWorldScreenMixin.java — Intercepts Create World to handle premade world creation
 └── network/
-    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory + quests)
+    ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory + quests + coin bag)
+    ├── CoinBagSyncPayload.java    — Server→client coin bag equipped state sync
+    ├── CoinBagActionPayload.java  — Client→server coin bag equip/unequip/slot-click actions
     ├── SyncPlayerStatsPayload.java — Client/server stats sync packet
     ├── BloodMoonSyncPayload.java   — Blood moon state sync packet
     ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64, includes groupMember flag)
@@ -389,6 +392,15 @@ src/main/java/com/sevendaystominecraft/
 - **Quest markers**: Yellow "Q" markers on compass, minimap, and big map for active quest target locations
 - **TraderRenderer**: HumanoidModel-based renderer using Steve texture
 - **TraderActionPayload**: Client→server buy/sell packets with traderId validation
+
+#### Coin Bag Equipment System (Task #266) — DONE
+- **CoinBagItem**: Equipment item crafted from 3 wool at Workbench (Pack Mule rank 3 unlock); stores tier (2 or 4 slots) and internal inventory via `DataComponents.CUSTOM_DATA` + `ContainerHelper`
+- **Equipment slot**: Dedicated coin bag slot rendered in BzhsInventoryScreen (next to offhand area); click-to-equip/unequip via cursor interaction
+- **Internal storage**: 2 slots at base tier, 4 slots at Pack Mule rank 4 (set via `applyCraftingPerkBonuses`); items stored as NBT on the bag ItemStack itself
+- **Network**: CoinBagSyncPayload (S2C) syncs equipped bag state; CoinBagActionPayload (C2S) handles equip/unequip/slot-click with server-side tier validation
+- **CoinBagClientState**: Client-side singleton holding synced equipped coin bag state
+- **Death handling**: Bag drops as item entity on death (respects keepInventory gamerule); cleared from stats on respawn
+- **Server security**: Tier clamped to {2,4} and validated against player's Pack Mule rank on every action
 
 #### Quest System (Task #157) — DONE
 - **Package**: `com.sevendaystominecraft.quest`

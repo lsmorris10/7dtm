@@ -1,0 +1,14 @@
+{
+  "type": "sevendaystominecraft:workbench_workstation",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:white_wool",
+      "count": 3
+    }
+  ],
+  "result": {
+    "id": "sevendaystominecraft:coin_bag",
+    "count": 1
+  },
+  "processing_ticks": 0
+}

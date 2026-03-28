@@ -5,12 +5,14 @@ import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
 import com.sevendaystominecraft.client.BloodMoonClientState;
 import com.sevendaystominecraft.client.ChunkHeatClientState;
+import com.sevendaystominecraft.client.CoinBagClientState;
 import com.sevendaystominecraft.client.NearbyPlayersClientState;
 import com.sevendaystominecraft.client.QuestClientState;
 import com.sevendaystominecraft.client.TerritoryClientState;
 import com.sevendaystominecraft.client.TraderClientState;
 import com.sevendaystominecraft.client.WaypointClientState;
 import com.sevendaystominecraft.group.WaypointEntry;
+import com.sevendaystominecraft.item.CoinBagItem;
 import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.perk.Attribute;
 import com.sevendaystominecraft.quest.QuestActionHandler;
@@ -140,6 +142,18 @@ public class ModNetworking {
                 RemoveWaypointPayload.TYPE,
                 RemoveWaypointPayload.STREAM_CODEC,
                 ModNetworking::handleRemoveWaypoint
+        );
+
+        registrar.playToClient(
+                CoinBagSyncPayload.TYPE,
+                CoinBagSyncPayload.STREAM_CODEC,
+                ModNetworking::handleCoinBagSync
+        );
+
+        registrar.playToServer(
+                CoinBagActionPayload.TYPE,
+                CoinBagActionPayload.STREAM_CODEC,
+                ModNetworking::handleCoinBagAction
         );
 
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
@@ -373,5 +387,90 @@ public class ModNetworking {
             wpList.add(new SyncWaypointsPayload.WaypointData(wp.name(), wp.x(), wp.z()));
         }
         PacketDistributor.sendToPlayer(player, new SyncWaypointsPayload(wpList));
+    }
+
+    private static void handleCoinBagSync(CoinBagSyncPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            CoinBagClientState.update(payload.equippedCoinBag());
+        });
+    }
+
+    private static void handleCoinBagAction(CoinBagActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+            SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
+
+            switch (payload.action()) {
+                case CoinBagActionPayload.ACTION_EQUIP -> {
+                    ItemStack cursorItem = serverPlayer.containerMenu.getCarried();
+                    if (cursorItem.isEmpty() || !(cursorItem.getItem() instanceof CoinBagItem)) return;
+                    ItemStack currentBag = stats.getEquippedCoinBag();
+                    if (!currentBag.isEmpty()) return;
+
+                    stats.setEquippedCoinBag(cursorItem.copy());
+                    serverPlayer.containerMenu.setCarried(ItemStack.EMPTY);
+                    sendCoinBagToClient(serverPlayer);
+                }
+                case CoinBagActionPayload.ACTION_UNEQUIP -> {
+                    ItemStack currentBag = stats.getEquippedCoinBag();
+                    if (currentBag.isEmpty()) return;
+                    ItemStack cursorNow = serverPlayer.containerMenu.getCarried();
+                    if (!cursorNow.isEmpty()) return;
+                    serverPlayer.containerMenu.setCarried(currentBag.copy());
+                    stats.setEquippedCoinBag(ItemStack.EMPTY);
+                    sendCoinBagToClient(serverPlayer);
+                }
+                case CoinBagActionPayload.ACTION_CLICK_BAG_SLOT -> {
+                    ItemStack bagStack = stats.getEquippedCoinBag();
+                    if (bagStack.isEmpty() || !(bagStack.getItem() instanceof CoinBagItem)) return;
+
+                    int tier = CoinBagItem.getTier(bagStack);
+                    if (tier != 2 && tier != 4) {
+                        CoinBagItem.setTier(bagStack, tier > 2 ? 4 : 2);
+                    }
+
+                    int slot = payload.slot();
+                    int maxSlots = CoinBagItem.getSlotCount(bagStack);
+                    if (slot < 0 || slot >= maxSlots || slot >= 4) return;
+
+                    net.minecraft.core.HolderLookup.Provider provider = serverPlayer.registryAccess();
+                    ItemStack inSlot = CoinBagItem.getStoredItem(bagStack, slot, provider);
+                    ItemStack carried = serverPlayer.containerMenu.getCarried();
+
+                    if (carried.isEmpty() && inSlot.isEmpty()) return;
+
+                    if (carried.isEmpty()) {
+                        serverPlayer.containerMenu.setCarried(inSlot.copy());
+                        CoinBagItem.setStoredItem(bagStack, slot, ItemStack.EMPTY, provider);
+                    } else if (inSlot.isEmpty()) {
+                        CoinBagItem.setStoredItem(bagStack, slot, carried.copy(), provider);
+                        serverPlayer.containerMenu.setCarried(ItemStack.EMPTY);
+                    } else if (ItemStack.isSameItemSameComponents(carried, inSlot)) {
+                        int canFit = inSlot.getMaxStackSize() - inSlot.getCount();
+                        if (canFit > 0) {
+                            int toMove = Math.min(canFit, carried.getCount());
+                            inSlot.grow(toMove);
+                            carried.shrink(toMove);
+                            CoinBagItem.setStoredItem(bagStack, slot, inSlot, provider);
+                            if (carried.isEmpty()) {
+                                serverPlayer.containerMenu.setCarried(ItemStack.EMPTY);
+                            }
+                        }
+                    } else {
+                        serverPlayer.containerMenu.setCarried(inSlot.copy());
+                        CoinBagItem.setStoredItem(bagStack, slot, carried.copy(), provider);
+                    }
+                    sendCoinBagToClient(serverPlayer);
+                }
+            }
+        });
+    }
+
+    public static void sendCoinBagToClient(ServerPlayer player) {
+        SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+        PacketDistributor.sendToPlayer(player, new CoinBagSyncPayload(stats.getEquippedCoinBag().copy()));
     }
 }

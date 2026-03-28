@@ -18,6 +18,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializable<CompoundTag> {
@@ -69,6 +70,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     private final Map<String, Long> consumedQuests = new HashMap<>();
 
     private final List<WaypointEntry> waypoints = new ArrayList<>();
+
+    private ItemStack equippedCoinBag = ItemStack.EMPTY;
 
     public SevenDaysPlayerStats() {
         for (int i = 0; i < attributeLevels.length; i++) {
@@ -277,6 +280,9 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
     public Map<String, Long> getConsumedQuests() { return consumedQuests; }
 
+    public ItemStack getEquippedCoinBag() { return equippedCoinBag; }
+    public void setEquippedCoinBag(ItemStack stack) { this.equippedCoinBag = stack != null ? stack : ItemStack.EMPTY; }
+
     public List<WaypointEntry> getWaypoints() { return waypoints; }
 
     public boolean addWaypoint(WaypointEntry waypoint) {
@@ -337,6 +343,7 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
             this.consumedQuests.putAll(concrete.getConsumedQuests());
             this.waypoints.clear();
             this.waypoints.addAll(concrete.getWaypoints());
+            this.equippedCoinBag = concrete.equippedCoinBag.copy();
         }
     }
 
@@ -424,6 +431,10 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
                 waypointList.add(wp.save());
             }
             tag.put("Waypoints", waypointList);
+        }
+
+        if (!equippedCoinBag.isEmpty()) {
+            tag.put("EquippedCoinBag", equippedCoinBag.save(provider));
         }
 
         return tag;
@@ -535,6 +546,12 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
             for (int i = 0; i < waypointList.size(); i++) {
                 waypoints.add(WaypointEntry.load(waypointList.getCompound(i)));
             }
+        }
+
+        if (tag.contains("EquippedCoinBag")) {
+            equippedCoinBag = ItemStack.parseOptional(provider, tag.getCompound("EquippedCoinBag"));
+        } else {
+            equippedCoinBag = ItemStack.EMPTY;
         }
     }
 

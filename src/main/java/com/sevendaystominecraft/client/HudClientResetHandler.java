@@ -36,6 +36,7 @@ public class HudClientResetHandler {
         TraderClientState.reset();
         QuestClientState.reset();
         DebuffOverlayRenderer.reset();
+        CoinBagClientState.reset();
     }
 
     @SubscribeEvent

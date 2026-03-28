@@ -386,4 +386,7 @@ public class ModItems {
 
     public static final Supplier<Item> FERTILIZER = ITEMS.register("fertilizer",
             () -> new Item(new Item.Properties().setId(key("fertilizer")).stacksTo(64)));
+
+    public static final Supplier<Item> COIN_BAG = ITEMS.register("coin_bag",
+            () -> new CoinBagItem(new Item.Properties().setId(key("coin_bag")).stacksTo(1)));
 }

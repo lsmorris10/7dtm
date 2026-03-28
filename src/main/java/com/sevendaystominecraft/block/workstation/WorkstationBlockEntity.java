@@ -346,6 +346,12 @@ public class WorkstationBlockEntity extends BlockEntity {
                 output.grow(1);
             }
         }
+
+        if (output.getItem() instanceof com.sevendaystominecraft.item.CoinBagItem) {
+            int packMuleRank = stats.getPerkRank("pack_mule");
+            int tier = packMuleRank >= 4 ? 4 : 2;
+            com.sevendaystominecraft.item.CoinBagItem.setTier(output, tier);
+        }
     }
 
     private void addToOutput(ItemStack result) {

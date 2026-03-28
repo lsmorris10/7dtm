@@ -282,7 +282,37 @@ public class PlayerStatsHandler {
                 newStats.setWater(newStats.getMaxWater());
                 newStats.setStamina(newStats.getMaxStamina());
 
+                boolean keepInventory = event.getEntity().level() instanceof ServerLevel sl
+                        && sl.getServer().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_KEEPINVENTORY);
+                if (!keepInventory) {
+                    newStats.setEquippedCoinBag(ItemStack.EMPTY);
+                }
+
                 clearAllDebuffs(event.getEntity(), newStats);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            com.sevendaystominecraft.network.ModNetworking.sendCoinBagToClient(serverPlayer);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDeathDropCoinBag(net.neoforged.neoforge.event.entity.living.LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
+        if (!serverPlayer.hasData(ModAttachments.PLAYER_STATS.get())) return;
+
+        boolean keepInventory = serverPlayer.server.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_KEEPINVENTORY);
+
+        SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
+        ItemStack coinBag = stats.getEquippedCoinBag();
+        if (!coinBag.isEmpty()) {
+            if (!keepInventory) {
+                serverPlayer.drop(coinBag.copy(), true, false);
+                stats.setEquippedCoinBag(ItemStack.EMPTY);
             }
         }
     }
@@ -407,6 +437,7 @@ public class PlayerStatsHandler {
             sendStatsToClient(serverPlayer, stats);
             com.sevendaystominecraft.quest.QuestSyncHelper.syncQuests(serverPlayer);
             com.sevendaystominecraft.network.ModNetworking.sendWaypointsToPlayer(serverPlayer);
+            com.sevendaystominecraft.network.ModNetworking.sendCoinBagToClient(serverPlayer);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
         }
     }

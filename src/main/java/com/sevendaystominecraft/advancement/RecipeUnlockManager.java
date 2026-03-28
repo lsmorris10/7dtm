@@ -24,6 +24,7 @@ public final class RecipeUnlockManager {
         registerPhysicianRecipes();
         registerGearheadRecipes();
         registerRoboticsInventorRecipes();
+        registerPackMuleRecipes();
         registerMagazineRecipes();
     }
 
@@ -167,6 +168,14 @@ public final class RecipeUnlockManager {
                 r("workbench/generator_bank")
         ));
         PERK_RECIPE_MAP.put("robotics_inventor", map);
+    }
+
+    private static void registerPackMuleRecipes() {
+        Map<Integer, List<String>> map = new LinkedHashMap<>();
+        map.put(3, List.of(
+                r("workbench/coin_bag")
+        ));
+        PERK_RECIPE_MAP.put("pack_mule", map);
     }
 
     private static void registerMagazineRecipes() {

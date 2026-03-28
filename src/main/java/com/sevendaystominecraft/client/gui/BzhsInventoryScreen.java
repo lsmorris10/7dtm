@@ -4,7 +4,10 @@ import com.sevendaystominecraft.SevenDaysConstants;
 import com.sevendaystominecraft.SevenDaysToMinecraft;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.capability.SevenDaysPlayerStats;
+import com.sevendaystominecraft.client.CoinBagClientState;
+import com.sevendaystominecraft.item.CoinBagItem;
 import com.sevendaystominecraft.item.armor.ArmorSetBonusHandler;
+import com.sevendaystominecraft.network.CoinBagActionPayload;
 import com.sevendaystominecraft.perk.Attribute;
 import com.sevendaystominecraft.perk.LevelManager;
 
@@ -13,11 +16,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Map;
 
@@ -53,6 +59,14 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
     private static final int STAT_BAR_WIDTH = 90;
     private static final int STAT_BAR_HEIGHT = 6;
     private static final float LOW_THRESHOLD = 0.3f;
+
+    private static final int COIN_BAG_SLOT_SIZE = 18;
+    private static final int COIN_BAG_SLOT_COLOR = 0xFF2A2A2A;
+    private static final int COIN_BAG_SLOT_HIGHLIGHT = 0x80FFFFFF;
+    private static final int COIN_BAG_BORDER_COLOR = 0xFF8B5A2B;
+
+    private static final ResourceLocation COIN_BAG_SLOT_ICON =
+            ResourceLocation.fromNamespaceAndPath(SevenDaysToMinecraft.MOD_ID, "textures/gui/coin_bag_slot.png");
 
     private static final int[] ATTRIBUTE_COLORS = { STR_COLOR, PER_COLOR, FOR_COLOR, AGI_COLOR, INT_COLOR };
 
@@ -102,12 +116,15 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
         }
 
         renderArmorSetBonus(graphics, player);
+        renderCoinBagSlots(graphics, mouseX, mouseY);
 
         renderTooltip(graphics, mouseX, mouseY);
 
         if (stats != null) {
             renderDebuffTooltips(graphics, stats, mouseX, mouseY);
         }
+
+        renderCoinBagTooltips(graphics, mouseX, mouseY);
     }
 
     @Override
@@ -415,6 +432,150 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
             }
         }
         return sb.toString();
+    }
+
+    private int getCoinBagEquipSlotX() {
+        return leftPos + 77 + 22;
+    }
+
+    private int getCoinBagEquipSlotY() {
+        return topPos + 62 - 18;
+    }
+
+    private void renderCoinBagSlots(GuiGraphics graphics, int mouseX, int mouseY) {
+        int slotX = getCoinBagEquipSlotX();
+        int slotY = getCoinBagEquipSlotY();
+
+        graphics.fill(slotX, slotY, slotX + COIN_BAG_SLOT_SIZE, slotY + COIN_BAG_SLOT_SIZE, COIN_BAG_SLOT_COLOR);
+        drawBorder(graphics, slotX, slotY, COIN_BAG_SLOT_SIZE, COIN_BAG_SLOT_SIZE, COIN_BAG_BORDER_COLOR);
+
+        ItemStack equippedBag = CoinBagClientState.getEquippedCoinBag();
+
+        if (equippedBag.isEmpty()) {
+            graphics.blit(RenderType::guiTextured, COIN_BAG_SLOT_ICON, slotX + 1, slotY + 1, 0, 0, 16, 16, 16, 16);
+        } else {
+            graphics.renderItem(equippedBag, slotX + 1, slotY + 1);
+            if (equippedBag.getCount() > 1) {
+                graphics.renderItemDecorations(font, equippedBag, slotX + 1, slotY + 1);
+            }
+        }
+
+        if (mouseX >= slotX && mouseX < slotX + COIN_BAG_SLOT_SIZE
+                && mouseY >= slotY && mouseY < slotY + COIN_BAG_SLOT_SIZE) {
+            graphics.fill(slotX + 1, slotY + 1, slotX + COIN_BAG_SLOT_SIZE - 1, slotY + COIN_BAG_SLOT_SIZE - 1, COIN_BAG_SLOT_HIGHLIGHT);
+        }
+
+        if (!equippedBag.isEmpty() && equippedBag.getItem() instanceof CoinBagItem) {
+            int slotCount = CoinBagItem.getSlotCount(equippedBag);
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null) return;
+
+            NonNullList<ItemStack> storedItems = CoinBagItem.getStoredItems(equippedBag, mc.player.registryAccess());
+
+            int bagSlotsX = slotX;
+            int bagSlotsY = slotY + COIN_BAG_SLOT_SIZE + 2;
+
+            for (int i = 0; i < slotCount; i++) {
+                int sx = bagSlotsX + (i % 2) * COIN_BAG_SLOT_SIZE;
+                int sy = bagSlotsY + (i / 2) * COIN_BAG_SLOT_SIZE;
+
+                graphics.fill(sx, sy, sx + COIN_BAG_SLOT_SIZE, sy + COIN_BAG_SLOT_SIZE, COIN_BAG_SLOT_COLOR);
+                drawBorder(graphics, sx, sy, COIN_BAG_SLOT_SIZE, COIN_BAG_SLOT_SIZE, PANEL_BORDER);
+
+                if (i < storedItems.size() && !storedItems.get(i).isEmpty()) {
+                    graphics.renderItem(storedItems.get(i), sx + 1, sy + 1);
+                    graphics.renderItemDecorations(font, storedItems.get(i), sx + 1, sy + 1);
+                }
+
+                if (mouseX >= sx && mouseX < sx + COIN_BAG_SLOT_SIZE
+                        && mouseY >= sy && mouseY < sy + COIN_BAG_SLOT_SIZE) {
+                    graphics.fill(sx + 1, sy + 1, sx + COIN_BAG_SLOT_SIZE - 1, sy + COIN_BAG_SLOT_SIZE - 1, COIN_BAG_SLOT_HIGHLIGHT);
+                }
+            }
+        }
+    }
+
+    private void renderCoinBagTooltips(GuiGraphics graphics, int mouseX, int mouseY) {
+        int slotX = getCoinBagEquipSlotX();
+        int slotY = getCoinBagEquipSlotY();
+        ItemStack equippedBag = CoinBagClientState.getEquippedCoinBag();
+
+        if (mouseX >= slotX && mouseX < slotX + COIN_BAG_SLOT_SIZE
+                && mouseY >= slotY && mouseY < slotY + COIN_BAG_SLOT_SIZE) {
+            if (!equippedBag.isEmpty()) {
+                graphics.renderTooltip(font, equippedBag, mouseX, mouseY);
+            } else {
+                graphics.renderTooltip(font, Component.literal("Coin Bag Slot"), mouseX, mouseY);
+            }
+            return;
+        }
+
+        if (!equippedBag.isEmpty() && equippedBag.getItem() instanceof CoinBagItem) {
+            int slotCount = CoinBagItem.getSlotCount(equippedBag);
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null) return;
+
+            NonNullList<ItemStack> storedItems = CoinBagItem.getStoredItems(equippedBag, mc.player.registryAccess());
+            int bagSlotsX = slotX;
+            int bagSlotsY = slotY + COIN_BAG_SLOT_SIZE + 2;
+
+            for (int i = 0; i < slotCount; i++) {
+                int sx = bagSlotsX + (i % 2) * COIN_BAG_SLOT_SIZE;
+                int sy = bagSlotsY + (i / 2) * COIN_BAG_SLOT_SIZE;
+
+                if (mouseX >= sx && mouseX < sx + COIN_BAG_SLOT_SIZE
+                        && mouseY >= sy && mouseY < sy + COIN_BAG_SLOT_SIZE) {
+                    if (i < storedItems.size() && !storedItems.get(i).isEmpty()) {
+                        graphics.renderTooltip(font, storedItems.get(i), mouseX, mouseY);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            int slotX = getCoinBagEquipSlotX();
+            int slotY = getCoinBagEquipSlotY();
+            ItemStack equippedBag = CoinBagClientState.getEquippedCoinBag();
+
+            if (mouseX >= slotX && mouseX < slotX + COIN_BAG_SLOT_SIZE
+                    && mouseY >= slotY && mouseY < slotY + COIN_BAG_SLOT_SIZE) {
+                ItemStack carried = menu.getCarried();
+
+                if (equippedBag.isEmpty() && !carried.isEmpty() && carried.getItem() instanceof CoinBagItem) {
+                    PacketDistributor.sendToServer(new CoinBagActionPayload(
+                            CoinBagActionPayload.ACTION_EQUIP, 0));
+                    return true;
+                } else if (!equippedBag.isEmpty() && carried.isEmpty()) {
+                    PacketDistributor.sendToServer(new CoinBagActionPayload(
+                            CoinBagActionPayload.ACTION_UNEQUIP, 0));
+                    return true;
+                }
+            }
+
+            if (!equippedBag.isEmpty() && equippedBag.getItem() instanceof CoinBagItem) {
+                int slotCount = CoinBagItem.getSlotCount(equippedBag);
+                int bagSlotsX = slotX;
+                int bagSlotsY = slotY + COIN_BAG_SLOT_SIZE + 2;
+
+                for (int i = 0; i < slotCount; i++) {
+                    int sx = bagSlotsX + (i % 2) * COIN_BAG_SLOT_SIZE;
+                    int sy = bagSlotsY + (i / 2) * COIN_BAG_SLOT_SIZE;
+
+                    if (mouseX >= sx && mouseX < sx + COIN_BAG_SLOT_SIZE
+                            && mouseY >= sy && mouseY < sy + COIN_BAG_SLOT_SIZE) {
+                        PacketDistributor.sendToServer(new CoinBagActionPayload(
+                                CoinBagActionPayload.ACTION_CLICK_BAG_SLOT, i));
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
