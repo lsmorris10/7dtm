@@ -57,6 +57,10 @@ public class StatsHudOverlay {
     private static final int TEMP_HOT_COLOR = 0xFFFF6633;
     private static final int TEMP_NORMAL_COLOR = 0xFFAAFFAA;
     private static final int LEVEL_COLOR = 0xFFFFDD00;
+    private static final int SPEED_POSITIVE_COLOR = 0xFF55FF55;
+    private static final int SPEED_NEGATIVE_COLOR = 0xFFFF5555;
+    private static final int SPEED_NEUTRAL_COLOR = 0xFFFFFFFF;
+    private static final double BASE_MOVEMENT_SPEED = 0.1;
 
     private static final float LOW_THRESHOLD = 0.3f;
 
@@ -140,6 +144,24 @@ public class StatsHudOverlay {
         int tempColor = (temp < 50f) ? TEMP_COLD_COLOR : (temp > 90f) ? TEMP_HOT_COLOR : TEMP_NORMAL_COLOR;
         String tempText = String.format("Temp: %.0f°F", temp);
         graphics.drawString(mc.font, tempText, x, y, tempColor, true);
+        y += 12;
+
+        double currentSpeed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        int speedPctDiff = (int) Math.round(((currentSpeed - BASE_MOVEMENT_SPEED) / BASE_MOVEMENT_SPEED) * 100);
+        int speedColor;
+        String speedPrefix;
+        if (speedPctDiff > 0) {
+            speedColor = SPEED_POSITIVE_COLOR;
+            speedPrefix = "+";
+        } else if (speedPctDiff < 0) {
+            speedColor = SPEED_NEGATIVE_COLOR;
+            speedPrefix = "";
+        } else {
+            speedColor = SPEED_NEUTRAL_COLOR;
+            speedPrefix = "";
+        }
+        String speedText = String.format("Speed: %s%d%%", speedPrefix, speedPctDiff);
+        graphics.drawString(mc.font, speedText, x, y, speedColor, true);
         y += 12;
 
         var debuffs = stats.getDebuffs();
