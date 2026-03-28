@@ -32,6 +32,7 @@ public class LootContainerBlock extends BaseEntityBlock {
 
     private final LootContainerType containerType;
     private static final VoxelShape TRASH_PILE_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D);
+    private static final VoxelShape MUNITIONS_BOX_SHAPE = Block.box(2.0D, 0.0D, 4.0D, 14.0D, 10.0D, 12.0D);
 
     public LootContainerBlock(Properties properties, LootContainerType containerType) {
         super(properties);
@@ -54,18 +55,20 @@ public class LootContainerBlock extends BaseEntityBlock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        if (this.containerType == LootContainerType.TRASH_PILE) {
-            return TRASH_PILE_SHAPE;
-        }
-        return super.getShape(state, level, pos, context);
+        return switch (this.containerType) {
+            case TRASH_PILE -> TRASH_PILE_SHAPE;
+            case MUNITIONS_BOX -> MUNITIONS_BOX_SHAPE;
+            default -> super.getShape(state, level, pos, context);
+        };
     }
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        if (this.containerType == LootContainerType.TRASH_PILE) {
-            return TRASH_PILE_SHAPE;
-        }
-        return super.getCollisionShape(state, level, pos, context);
+        return switch (this.containerType) {
+            case TRASH_PILE -> TRASH_PILE_SHAPE;
+            case MUNITIONS_BOX -> MUNITIONS_BOX_SHAPE;
+            default -> super.getCollisionShape(state, level, pos, context);
+        };
     }
 
     @Override

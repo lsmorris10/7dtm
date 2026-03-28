@@ -80,6 +80,7 @@ public class ModBlocks {
                 .setId(blockKey(name))
                 .strength(4.0f)
                 .sound(SoundType.METAL)
+                .noOcclusion()
                 .requiresCorrectToolForDrops();
     }
 
