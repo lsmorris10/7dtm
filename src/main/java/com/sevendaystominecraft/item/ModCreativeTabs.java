@@ -47,7 +47,6 @@ public class ModCreativeTabs {
                         output.accept(ModItems.ACID.get());
                         output.accept(ModItems.POLYMER.get());
                         output.accept(ModItems.SURVIVORS_COIN.get());
-                        output.accept(ModItems.DUKE_TOKEN.get());
                         output.accept(ModItems.CONCRETE_MIX.get());
                         output.accept(ModItems.ANTIBIOTICS.get());
                         output.accept(ModItems.BANDAGE.get());

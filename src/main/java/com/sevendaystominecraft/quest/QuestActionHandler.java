@@ -174,7 +174,7 @@ public class QuestActionHandler {
         LevelManager.awardXp(player, rewardXp);
 
         if (tokens > 0) {
-            ItemStack tokenStack = new ItemStack(ModItems.DUKE_TOKEN.get(), tokens);
+            ItemStack tokenStack = new ItemStack(ModItems.SURVIVORS_COIN.get(), tokens);
             if (!player.getInventory().add(tokenStack)) {
                 player.drop(tokenStack, false);
             }

@@ -65,7 +65,7 @@ public class TraderMenu extends AbstractContainerMenu {
             addSlot(new Slot(sellContainer, i, 8 + i * 18, 110) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return stack.getItem() != ModItems.DUKE_TOKEN.get();
+                    return stack.getItem() != ModItems.SURVIVORS_COIN.get();
                 }
             });
         }
@@ -195,7 +195,7 @@ public class TraderMenu extends AbstractContainerMenu {
         int total = 0;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
-            if (!stack.isEmpty() && stack.getItem() == ModItems.DUKE_TOKEN.get()) {
+            if (!stack.isEmpty() && stack.getItem() == ModItems.SURVIVORS_COIN.get()) {
                 total += stack.getCount();
             }
         }
@@ -206,7 +206,7 @@ public class TraderMenu extends AbstractContainerMenu {
         int remaining = amount;
         for (int i = 0; i < player.getInventory().getContainerSize() && remaining > 0; i++) {
             ItemStack stack = player.getInventory().getItem(i);
-            if (!stack.isEmpty() && stack.getItem() == ModItems.DUKE_TOKEN.get()) {
+            if (!stack.isEmpty() && stack.getItem() == ModItems.SURVIVORS_COIN.get()) {
                 int take = Math.min(remaining, stack.getCount());
                 stack.shrink(take);
                 if (stack.isEmpty()) {
@@ -218,7 +218,7 @@ public class TraderMenu extends AbstractContainerMenu {
     }
 
     private void giveTokens(Player player, int amount) {
-        ItemStack tokens = new ItemStack(ModItems.DUKE_TOKEN.get(), amount);
+        ItemStack tokens = new ItemStack(ModItems.SURVIVORS_COIN.get(), amount);
         if (!player.getInventory().add(tokens)) {
             player.drop(tokens, false);
         }

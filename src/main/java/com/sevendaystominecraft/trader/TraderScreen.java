@@ -450,7 +450,7 @@ public class TraderScreen extends AbstractContainerScreen<TraderMenu> {
         int total = 0;
         for (int i = 0; i < mc.player.getInventory().getContainerSize(); i++) {
             ItemStack stack = mc.player.getInventory().getItem(i);
-            if (!stack.isEmpty() && stack.getItem() == ModItems.DUKE_TOKEN.get()) {
+            if (!stack.isEmpty() && stack.getItem() == ModItems.SURVIVORS_COIN.get()) {
                 total += stack.getCount();
             }
         }
