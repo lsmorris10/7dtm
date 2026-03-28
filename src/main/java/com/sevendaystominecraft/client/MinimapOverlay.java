@@ -5,6 +5,7 @@ import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEnt
 import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
 import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import com.sevendaystominecraft.network.SyncTraderPayload.TraderEntry;
+import com.sevendaystominecraft.network.SyncWaypointsPayload.WaypointData;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -42,6 +43,9 @@ public class MinimapOverlay {
     private static final int TRADER_DOT_SIZE = 5;
     private static final int COLOR_QUEST = 0xFFFFFF00;
     private static final int QUEST_DOT_SIZE = 5;
+    private static final int COLOR_GROUP_MEMBER = 0xFF55FFAA;
+    private static final int COLOR_WAYPOINT = 0xFFFF6600;
+    private static final int WAYPOINT_DOT_SIZE = 4;
 
     private static int[] terrainCache = null;
     private static int cachedPlayerX = Integer.MIN_VALUE;
@@ -109,6 +113,7 @@ public class MinimapOverlay {
 
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
         renderQuestMarkers(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
+        renderWaypoints(graphics, mc, player, centerX, centerY, mapX, mapY, cosYaw, sinYaw);
 
         int halfDot = PLAYER_DOT_SIZE / 2;
         graphics.fill(centerX - halfDot, centerY - halfDot,
@@ -260,6 +265,70 @@ public class MinimapOverlay {
         }
     }
 
+    private static void renderWaypoints(GuiGraphics graphics, Minecraft mc, Player player,
+                                          int centerX, int centerY, int mapX, int mapY,
+                                          double cosYaw, double sinYaw) {
+        List<WaypointData> waypoints = WaypointClientState.getWaypoints();
+        if (waypoints.isEmpty()) return;
+
+        int halfMap = MAP_SIZE / 2;
+
+        for (WaypointData wp : waypoints) {
+            double dx = wp.x() - player.getX();
+            double dz = wp.z() - player.getZ();
+
+            double screenDx = -(dx * cosYaw + dz * sinYaw);
+            double screenDy = dx * sinYaw - dz * cosYaw;
+
+            int dotX = centerX + (int) screenDx;
+            int dotY = centerY + (int) screenDy;
+
+            int halfDot = WAYPOINT_DOT_SIZE / 2;
+
+            boolean inside = isInsideRoundedRect(dotX - halfDot - mapX, dotY - halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
+                             isInsideRoundedRect(dotX + halfDot - mapX, dotY + halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1);
+
+            if (inside) {
+                graphics.fill(dotX, dotY - halfDot, dotX + 1, dotY + halfDot + 1, COLOR_WAYPOINT);
+                graphics.fill(dotX - halfDot, dotY, dotX + halfDot + 1, dotY + 1, COLOR_WAYPOINT);
+                for (int d = 1; d <= halfDot; d++) {
+                    int w = halfDot - d;
+                    if (w >= 0) {
+                        graphics.fill(dotX - w, dotY - d, dotX + w + 1, dotY - d + 1, COLOR_WAYPOINT);
+                        graphics.fill(dotX - w, dotY + d, dotX + w + 1, dotY + d + 1, COLOR_WAYPOINT);
+                    }
+                }
+            } else {
+                double dist = Math.sqrt(screenDx * screenDx + screenDy * screenDy);
+                if (dist < 1) continue;
+
+                double normX = screenDx / dist;
+                double normY = screenDy / dist;
+
+                int arrowDist = halfMap - 8;
+                int arrowX = centerX + (int) (normX * arrowDist);
+                int arrowY = centerY + (int) (normY * arrowDist);
+
+                if (!isInsideRoundedRect(arrowX - mapX, arrowY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                    arrowDist -= 5;
+                    arrowX = centerX + (int) (normX * arrowDist);
+                    arrowY = centerY + (int) (normY * arrowDist);
+                }
+
+                int arrowSize = 3;
+                graphics.fill(arrowX - arrowSize, arrowY - arrowSize,
+                        arrowX + arrowSize + 1, arrowY + arrowSize + 1, COLOR_WAYPOINT);
+
+                int tipX = arrowX + (int) (normX * 5);
+                int tipY = arrowY + (int) (normY * 5);
+                if (isInsideRoundedRect(tipX - mapX, tipY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                    graphics.fill(tipX, tipY, tipX + 1, tipY + 1, COLOR_WAYPOINT);
+                    graphics.fill(tipX - 1, tipY, tipX + 2, tipY + 1, COLOR_WAYPOINT);
+                }
+            }
+        }
+    }
+
     private static int getTierColor(int tier) {
         if (tier <= 2) return COLOR_EASY;
         if (tier == 3) return COLOR_MEDIUM;
@@ -286,12 +355,60 @@ public class MinimapOverlay {
             int dotScreenY = centerY + (int) screenDy;
 
             int halfDot = OTHER_PLAYER_DOT_SIZE / 2;
-            int dotColor = dotColors[colorIndex % dotColors.length];
+            int dotColor = entry.groupMember() ? COLOR_GROUP_MEMBER : dotColors[colorIndex % dotColors.length];
 
-            if (isInsideRoundedRect(dotScreenX - halfDot - mapX, dotScreenY - halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
-                isInsideRoundedRect(dotScreenX + halfDot - mapX, dotScreenY + halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+            boolean inside = isInsideRoundedRect(dotScreenX - halfDot - mapX, dotScreenY - halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1) &&
+                isInsideRoundedRect(dotScreenX + halfDot - mapX, dotScreenY + halfDot - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1);
+
+            if (inside) {
                 graphics.fill(dotScreenX - halfDot, dotScreenY - halfDot,
                         dotScreenX + halfDot, dotScreenY + halfDot, dotColor);
+
+                if (entry.groupMember()) {
+                    String name = entry.name();
+                    int nameWidth = mc.font.width(name);
+                    int nameX = dotScreenX - nameWidth / 2;
+                    int nameY = dotScreenY - halfDot - 9;
+                    if (isInsideRoundedRect(nameX - mapX, nameY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                        graphics.drawString(mc.font, name, nameX, nameY, dotColor, true);
+                    }
+                }
+            } else if (entry.groupMember()) {
+                int halfMapSize = MAP_SIZE / 2;
+                double dist = Math.sqrt(screenDx * screenDx + screenDy * screenDy);
+                if (dist >= 1) {
+                    double normX = screenDx / dist;
+                    double normY = screenDy / dist;
+                    int arrowDist = halfMapSize - 10;
+                    int arrowX = centerX + (int) (normX * arrowDist);
+                    int arrowY = centerY + (int) (normY * arrowDist);
+
+                    if (!isInsideRoundedRect(arrowX - mapX, arrowY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                        arrowDist -= 5;
+                        arrowX = centerX + (int) (normX * arrowDist);
+                        arrowY = centerY + (int) (normY * arrowDist);
+                    }
+
+                    int arrowSize = 3;
+                    graphics.fill(arrowX - arrowSize, arrowY - arrowSize,
+                            arrowX + arrowSize + 1, arrowY + arrowSize + 1, dotColor);
+
+                    int tipX = arrowX + (int) (normX * 5);
+                    int tipY = arrowY + (int) (normY * 5);
+                    if (isInsideRoundedRect(tipX - mapX, tipY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                        graphics.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, dotColor);
+                    }
+
+                    String name = entry.name();
+                    int nameWidth = mc.font.width(name);
+                    int nameX = arrowX - nameWidth / 2;
+                    int nameY = arrowY - arrowSize - 9;
+                    nameX = Math.max(mapX + 2, Math.min(mapX + MAP_SIZE - nameWidth - 2, nameX));
+                    nameY = Math.max(mapY + 2, nameY);
+                    if (isInsideRoundedRect(nameX - mapX, nameY - mapY, MAP_SIZE, MAP_SIZE, CORNER_RADIUS - 1)) {
+                        graphics.drawString(mc.font, name, nameX, nameY, dotColor, true);
+                    }
+                }
             }
 
             colorIndex++;

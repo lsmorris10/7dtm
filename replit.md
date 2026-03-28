@@ -35,7 +35,8 @@ src/main/java/com/sevendaystominecraft/
 │   ├── StatsHudOverlay.java        — HUD overlay for player stats + blood moon indicator
 │   ├── CompassOverlay.java         — 360° compass strip at top-center with cardinal/intercardinal markers + heat indicator + territory markers
 │   ├── MinimapOverlay.java         — Top-right minimap with terrain colors, player dot, nearby player dots
-│   ├── NearbyPlayersClientState.java — Client-side state for synced nearby player positions
+│   ├── NearbyPlayersClientState.java — Client-side state for synced nearby player positions (includes group flag)
+│   ├── WaypointClientState.java   — Client-side state for player waypoints
 │   ├── ChunkHeatClientState.java   — Client-side state for current chunk heat value
 │   ├── TerritoryClientState.java   — Client-side state for nearby territory data (synced from server)
 │   ├── HudClientResetHandler.java  — Resets client HUD state on disconnect (including MusicManager)
@@ -119,7 +120,12 @@ src/main/java/com/sevendaystominecraft/
 │       ├── LootContainerBlockEntity.java — Block entity with loot generation, respawn tracking
 │       ├── LootContainerMenu.java  — Container menu for loot containers
 │       └── LootContainerScreen.java — Client-side GUI for loot containers
+├── group/
+│   ├── Group.java                  — Group data class (UUID, owner, member list)
+│   ├── GroupData.java              — SavedData: persists groups, membership, pending invites
+│   └── WaypointEntry.java          — Record: waypoint name + world x/z coordinates
 ├── command/
+│   ├── GroupCommand.java           — /group create|invite|accept|decline|leave|disband|list commands
 │   ├── LootStageCommand.java       — /bzhs loot_stage debug command
 │   └── TerritoryCommand.java       — /bzhs territory list|listall debug commands
 ├── config/
@@ -243,7 +249,10 @@ src/main/java/com/sevendaystominecraft/
     ├── ModNetworking.java          — Packet channel registration (stats + blood moon + nearby players + chunk heat + territory + quests)
     ├── SyncPlayerStatsPayload.java — Client/server stats sync packet
     ├── BloodMoonSyncPayload.java   — Blood moon state sync packet
-    ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64)
+    ├── SyncNearbyPlayersPayload.java — Server→client nearby player positions (float coords, capped at 64, includes groupMember flag)
+    ├── SyncWaypointsPayload.java   — Server→client full waypoint list sync (on login + after changes)
+    ├── AddWaypointPayload.java     — Client→server add waypoint request (name, x, z)
+    ├── RemoveWaypointPayload.java  — Client→server remove waypoint request (x, z)
     ├── SyncChunkHeatPayload.java   — Server→client current chunk heat value
     ├── SyncTerritoryPayload.java   — Server→client territory entries (id, pos, tier, label)
     ├── SyncTraderPayload.java      — Server→client trader entries (id, pos, tier, name)

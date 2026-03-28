@@ -1,16 +1,21 @@
 package com.sevendaystominecraft.client;
 
+import com.sevendaystominecraft.network.AddWaypointPayload;
+import com.sevendaystominecraft.network.RemoveWaypointPayload;
 import com.sevendaystominecraft.network.SyncNearbyPlayersPayload.NearbyPlayerEntry;
 import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
 import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import com.sevendaystominecraft.network.SyncTraderPayload.TraderEntry;
+import com.sevendaystominecraft.network.SyncWaypointsPayload.WaypointData;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -31,12 +36,24 @@ public class BigMapScreen extends Screen {
     private static final int COLOR_CLEARED = 0xFF888888;
     private static final int COLOR_TRADER = 0xFF00CCCC;
     private static final int COLOR_QUEST = 0xFFFFFF00;
+    private static final int COLOR_GROUP_MEMBER = 0xFF55FFAA;
+    private static final int COLOR_WAYPOINT = 0xFFFF6600;
 
     private int[] terrainCache = null;
     private int cachedPlayerX = Integer.MIN_VALUE;
     private int cachedPlayerZ = Integer.MIN_VALUE;
     private long cacheTime = 0;
     private static final long CACHE_DURATION_MS = 2000;
+
+    private boolean namingWaypoint = false;
+    private int pendingWaypointWorldX;
+    private int pendingWaypointWorldZ;
+    private EditBox waypointNameBox;
+
+    private int lastMapX;
+    private int lastMapY;
+    private int lastMapDisplaySize;
+    private float lastScale;
 
     public BigMapScreen() {
         super(Component.translatable("screen.sevendaystominecraft.big_map"));
@@ -45,6 +62,16 @@ public class BigMapScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        waypointNameBox = new EditBox(Minecraft.getInstance().font, width / 2 - 60, height / 2 - 10, 120, 20, Component.literal("Waypoint Name"));
+        waypointNameBox.setMaxLength(32);
+        waypointNameBox.setVisible(false);
+        waypointNameBox.setFocused(false);
+        addWidget(waypointNameBox);
     }
 
     @Override
@@ -63,6 +90,10 @@ public class BigMapScreen extends Screen {
         int mapY = 30;
         int mapBottom = mapY + mapDisplaySize;
 
+        lastMapX = mapX;
+        lastMapY = mapY;
+        lastMapDisplaySize = mapDisplaySize;
+
         graphics.fill(mapX - 2, mapY - 2, mapX + mapDisplaySize + 2, mapBottom + 2, BORDER_COLOR);
         graphics.fill(mapX, mapY, mapX + mapDisplaySize, mapBottom, 0xFF1A1A1A);
 
@@ -74,6 +105,7 @@ public class BigMapScreen extends Screen {
         int samplesPerSide = MAP_RADIUS / SAMPLE_STEP;
         int totalSamples = samplesPerSide * 2;
         float scale = (float) mapDisplaySize / (MAP_RADIUS * 2);
+        lastScale = scale;
 
         for (int sx = -samplesPerSide; sx < samplesPerSide; sx++) {
             for (int sz = -samplesPerSide; sz < samplesPerSide; sz++) {
@@ -105,6 +137,7 @@ public class BigMapScreen extends Screen {
         renderTerritories(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
         renderTraders(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
         renderQuestMarkers(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
+        renderWaypoints(graphics, mc, player, centerX, centerY, mapX, mapY, mapDisplaySize, scale);
 
         renderPlayerMarker(graphics, centerX, centerY, player.getYRot());
 
@@ -121,6 +154,105 @@ public class BigMapScreen extends Screen {
         String hintText = Component.translatable("gui.sevendaystominecraft.map_close_hint").getString();
         int hintWidth = mc.font.width(hintText);
         graphics.drawString(mc.font, hintText, (screenWidth - hintWidth) / 2, mapBottom + 22, 0xFF666666, true);
+
+        if (namingWaypoint && waypointNameBox != null) {
+            int boxBgX = waypointNameBox.getX() - 5;
+            int boxBgY = waypointNameBox.getY() - 15;
+            graphics.fill(boxBgX, boxBgY, boxBgX + 130, boxBgY + 45, 0xDD000000);
+            graphics.drawString(mc.font, "Waypoint name:", boxBgX + 2, boxBgY + 2, 0xFFCCCCCC, true);
+            waypointNameBox.render(graphics, mouseX, mouseY, partialTick);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (namingWaypoint && waypointNameBox != null) {
+            if (waypointNameBox.isMouseOver(mouseX, mouseY)) {
+                return waypointNameBox.mouseClicked(mouseX, mouseY, button);
+            }
+            cancelWaypointNaming();
+            return true;
+        }
+
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        if (player == null) return super.mouseClicked(mouseX, mouseY, button);
+
+        int mx = (int) mouseX;
+        int my = (int) mouseY;
+
+        if (mx >= lastMapX && mx < lastMapX + lastMapDisplaySize &&
+            my >= lastMapY && my < lastMapY + lastMapDisplaySize) {
+
+            int centerX = lastMapX + lastMapDisplaySize / 2;
+            int centerY = lastMapY + lastMapDisplaySize / 2;
+            double worldOffX = (mx - centerX) / (double) lastScale;
+            double worldOffZ = (my - centerY) / (double) lastScale;
+            int worldX = (int) Math.floor(player.getX() + worldOffX);
+            int worldZ = (int) Math.floor(player.getZ() + worldOffZ);
+
+            if (button == 0) {
+                pendingWaypointWorldX = worldX;
+                pendingWaypointWorldZ = worldZ;
+                namingWaypoint = true;
+                waypointNameBox.setVisible(true);
+                waypointNameBox.setFocused(true);
+                waypointNameBox.setValue("");
+                setFocused(waypointNameBox);
+                return true;
+            } else if (button == 1) {
+                List<WaypointData> waypoints = WaypointClientState.getWaypoints();
+                for (WaypointData wp : waypoints) {
+                    double dx = wp.x() - player.getX();
+                    double dz = wp.z() - player.getZ();
+                    int wpScreenX = centerX + (int) (dx * lastScale);
+                    int wpScreenY = centerY + (int) (dz * lastScale);
+                    if (Math.abs(mx - wpScreenX) < 8 && Math.abs(my - wpScreenY) < 8) {
+                        PacketDistributor.sendToServer(new RemoveWaypointPayload(wp.x(), wp.z()));
+                        return true;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (namingWaypoint && waypointNameBox != null) {
+            if (keyCode == 256) {
+                cancelWaypointNaming();
+                return true;
+            }
+            if (keyCode == 257 || keyCode == 335) {
+                String name = waypointNameBox.getValue().trim();
+                if (!name.isEmpty()) {
+                    PacketDistributor.sendToServer(new AddWaypointPayload(name, pendingWaypointWorldX, pendingWaypointWorldZ));
+                }
+                cancelWaypointNaming();
+                return true;
+            }
+            return waypointNameBox.keyPressed(keyCode, scanCode, modifiers);
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (namingWaypoint && waypointNameBox != null) {
+            return waypointNameBox.charTyped(codePoint, modifiers);
+        }
+        return super.charTyped(codePoint, modifiers);
+    }
+
+    private void cancelWaypointNaming() {
+        namingWaypoint = false;
+        if (waypointNameBox != null) {
+            waypointNameBox.setVisible(false);
+            waypointNameBox.setFocused(false);
+        }
     }
 
     private void renderPlayerMarker(GuiGraphics graphics, int cx, int cy, float yaw) {
@@ -278,6 +410,47 @@ public class BigMapScreen extends Screen {
         }
     }
 
+    private void renderWaypoints(GuiGraphics graphics, Minecraft mc, Player player,
+                                  int centerX, int centerY, int mapX, int mapY,
+                                  int mapDisplaySize, float scale) {
+        List<WaypointData> waypoints = WaypointClientState.getWaypoints();
+        if (waypoints.isEmpty()) return;
+
+        int iconSize = 5;
+
+        for (WaypointData wp : waypoints) {
+            double dx = wp.x() - player.getX();
+            double dz = wp.z() - player.getZ();
+
+            int screenX = centerX + (int) (dx * scale);
+            int screenY = centerY + (int) (dz * scale);
+
+            if (screenX - iconSize < mapX || screenX + iconSize > mapX + mapDisplaySize ||
+                screenY - iconSize < mapY || screenY + iconSize > mapY + mapDisplaySize) {
+                continue;
+            }
+
+            graphics.fill(screenX, screenY - iconSize, screenX + 1, screenY + iconSize + 1, COLOR_WAYPOINT);
+            graphics.fill(screenX - iconSize, screenY, screenX + iconSize + 1, screenY + 1, COLOR_WAYPOINT);
+            for (int d = 1; d <= iconSize; d++) {
+                int w = iconSize - d;
+                graphics.fill(screenX - w, screenY - d, screenX + w + 1, screenY - d + 1, COLOR_WAYPOINT);
+                graphics.fill(screenX - w, screenY + d, screenX + w + 1, screenY + d + 1, COLOR_WAYPOINT);
+            }
+
+            String label = wp.name();
+            int labelWidth = mc.font.width(label);
+            int labelX = screenX - labelWidth / 2;
+            int labelY = screenY + iconSize + 3;
+
+            if (labelX >= mapX && labelX + labelWidth <= mapX + mapDisplaySize &&
+                labelY + mc.font.lineHeight <= mapY + mapDisplaySize) {
+                graphics.fill(labelX - 1, labelY - 1, labelX + labelWidth + 1, labelY + mc.font.lineHeight + 1, 0x88000000);
+                graphics.drawString(mc.font, label, labelX, labelY, COLOR_WAYPOINT, true);
+            }
+        }
+    }
+
     private static int getTierColor(int tier) {
         if (tier <= 2) return COLOR_EASY;
         if (tier == 3) return COLOR_MEDIUM;
@@ -300,22 +473,49 @@ public class BigMapScreen extends Screen {
             int dotScreenX = centerX + (int) (dx * scale);
             int dotScreenY = centerY + (int) (dz * scale);
 
-            if (dotScreenX < mapX || dotScreenX >= mapX + mapDisplaySize ||
-                dotScreenY < mapY || dotScreenY >= mapY + mapDisplaySize) {
-                colorIndex++;
-                continue;
-            }
-
             int halfDot = OTHER_PLAYER_DOT_SIZE / 2;
-            int dotColor = dotColors[colorIndex % dotColors.length];
+            int dotColor = entry.groupMember() ? COLOR_GROUP_MEMBER : dotColors[colorIndex % dotColors.length];
 
-            graphics.fill(dotScreenX - halfDot, dotScreenY - halfDot,
-                    dotScreenX + halfDot, dotScreenY + halfDot, dotColor);
+            boolean inside = dotScreenX >= mapX && dotScreenX < mapX + mapDisplaySize &&
+                             dotScreenY >= mapY && dotScreenY < mapY + mapDisplaySize;
 
-            String name = entry.name();
-            int nameWidth = mc.font.width(name);
-            graphics.drawString(mc.font, name, dotScreenX - nameWidth / 2,
-                    dotScreenY - halfDot - 10, dotColor, true);
+            if (inside) {
+                graphics.fill(dotScreenX - halfDot, dotScreenY - halfDot,
+                        dotScreenX + halfDot, dotScreenY + halfDot, dotColor);
+
+                String name = entry.name();
+                int nameWidth = mc.font.width(name);
+                graphics.drawString(mc.font, name, dotScreenX - nameWidth / 2,
+                        dotScreenY - halfDot - 10, dotColor, true);
+            } else if (entry.groupMember()) {
+                int halfMapDisplay = mapDisplaySize / 2;
+                double relX = dx * scale;
+                double relZ = dz * scale;
+                double dist = Math.sqrt(relX * relX + relZ * relZ);
+                if (dist >= 1) {
+                    double normX = relX / dist;
+                    double normZ = relZ / dist;
+                    int edgeDist = halfMapDisplay - 12;
+                    int edgeX = centerX + (int) (normX * edgeDist);
+                    int edgeY = centerY + (int) (normZ * edgeDist);
+
+                    edgeX = Math.max(mapX + 6, Math.min(mapX + mapDisplaySize - 6, edgeX));
+                    edgeY = Math.max(mapY + 6, Math.min(mapY + mapDisplaySize - 6, edgeY));
+
+                    int arrowSize = 4;
+                    graphics.fill(edgeX - arrowSize, edgeY - arrowSize,
+                            edgeX + arrowSize + 1, edgeY + arrowSize + 1, dotColor);
+
+                    String name = entry.name();
+                    int nameWidth = mc.font.width(name);
+                    int nameX = edgeX - nameWidth / 2;
+                    int nameY = edgeY - arrowSize - 10;
+                    nameX = Math.max(mapX + 2, Math.min(mapX + mapDisplaySize - nameWidth - 2, nameX));
+                    nameY = Math.max(mapY + 2, nameY);
+                    graphics.fill(nameX - 1, nameY - 1, nameX + nameWidth + 1, nameY + mc.font.lineHeight + 1, 0x88000000);
+                    graphics.drawString(mc.font, name, nameX, nameY, dotColor, true);
+                }
+            }
 
             colorIndex++;
         }

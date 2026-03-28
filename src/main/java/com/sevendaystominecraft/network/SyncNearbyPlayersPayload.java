@@ -21,7 +21,7 @@ public record SyncNearbyPlayersPayload(
 
     private static final int MAX_PLAYERS = 64;
 
-    public record NearbyPlayerEntry(String name, double x, double z) {}
+    public record NearbyPlayerEntry(String name, double x, double z, boolean groupMember) {}
 
     public static final StreamCodec<ByteBuf, SyncNearbyPlayersPayload> STREAM_CODEC =
             new StreamCodec<>() {
@@ -33,7 +33,8 @@ public record SyncNearbyPlayersPayload(
                         String name = ByteBufCodecs.STRING_UTF8.decode(buf);
                         double x = buf.readFloat();
                         double z = buf.readFloat();
-                        players.add(new NearbyPlayerEntry(name, x, z));
+                        boolean groupMember = buf.readBoolean();
+                        players.add(new NearbyPlayerEntry(name, x, z, groupMember));
                     }
                     return new SyncNearbyPlayersPayload(players);
                 }
@@ -47,6 +48,7 @@ public record SyncNearbyPlayersPayload(
                         ByteBufCodecs.STRING_UTF8.encode(buf, entry.name);
                         buf.writeFloat((float) entry.x);
                         buf.writeFloat((float) entry.z);
+                        buf.writeBoolean(entry.groupMember);
                     }
                 }
             };

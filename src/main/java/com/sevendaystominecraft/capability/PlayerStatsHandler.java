@@ -406,6 +406,7 @@ public class PlayerStatsHandler {
             SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
             sendStatsToClient(serverPlayer, stats);
             com.sevendaystominecraft.quest.QuestSyncHelper.syncQuests(serverPlayer);
+            com.sevendaystominecraft.network.ModNetworking.sendWaypointsToPlayer(serverPlayer);
             SevenDaysToMinecraft.LOGGER.debug("BZHS: Synced player stats to {} on login", serverPlayer.getName().getString());
         }
     }

@@ -9,6 +9,8 @@ import com.sevendaystominecraft.client.NearbyPlayersClientState;
 import com.sevendaystominecraft.client.QuestClientState;
 import com.sevendaystominecraft.client.TerritoryClientState;
 import com.sevendaystominecraft.client.TraderClientState;
+import com.sevendaystominecraft.client.WaypointClientState;
+import com.sevendaystominecraft.group.WaypointEntry;
 import com.sevendaystominecraft.item.weapon.GeoRangedWeaponItem;
 import com.sevendaystominecraft.perk.Attribute;
 import com.sevendaystominecraft.quest.QuestActionHandler;
@@ -18,15 +20,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModNetworking {
 
     public static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(SevenDaysToMinecraft.MOD_ID)
-                .versioned("1");
+                .versioned("2");
 
         registrar.playToClient(
                 SyncPlayerStatsPayload.TYPE,
@@ -116,6 +122,24 @@ public class ModNetworking {
                 WorkstationRecipeListPayload.TYPE,
                 WorkstationRecipeListPayload.STREAM_CODEC,
                 ModNetworking::handleWorkstationRecipeList
+        );
+
+        registrar.playToClient(
+                SyncWaypointsPayload.TYPE,
+                SyncWaypointsPayload.STREAM_CODEC,
+                ModNetworking::handleWaypointsSync
+        );
+
+        registrar.playToServer(
+                AddWaypointPayload.TYPE,
+                AddWaypointPayload.STREAM_CODEC,
+                ModNetworking::handleAddWaypoint
+        );
+
+        registrar.playToServer(
+                RemoveWaypointPayload.TYPE,
+                RemoveWaypointPayload.STREAM_CODEC,
+                ModNetworking::handleRemoveWaypoint
         );
 
         SevenDaysToMinecraft.LOGGER.debug("BZHS: Registered network payloads");
@@ -307,5 +331,47 @@ public class ModNetworking {
 
             stats.setUnkillableCooldownEnd(payload.unkillableCooldownEnd());
         });
+    }
+
+    private static void handleWaypointsSync(SyncWaypointsPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            WaypointClientState.update(payload.waypoints());
+        });
+    }
+
+    private static void handleAddWaypoint(AddWaypointPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+            SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
+            String name = payload.name().trim();
+            if (name.isEmpty()) name = "Waypoint";
+            if (name.length() > 32) name = name.substring(0, 32);
+            stats.addWaypoint(new WaypointEntry(name, payload.x(), payload.z()));
+            sendWaypointsToPlayer(serverPlayer);
+        });
+    }
+
+    private static void handleRemoveWaypoint(RemoveWaypointPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (player == null) return;
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+
+            SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
+            stats.removeWaypoint(payload.x(), payload.z());
+            sendWaypointsToPlayer(serverPlayer);
+        });
+    }
+
+    public static void sendWaypointsToPlayer(ServerPlayer player) {
+        SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
+        List<SyncWaypointsPayload.WaypointData> wpList = new ArrayList<>();
+        for (WaypointEntry wp : stats.getWaypoints()) {
+            wpList.add(new SyncWaypointsPayload.WaypointData(wp.name(), wp.x(), wp.z()));
+        }
+        PacketDistributor.sendToPlayer(player, new SyncWaypointsPayload(wpList));
     }
 }

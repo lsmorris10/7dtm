@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.sevendaystominecraft.group.WaypointEntry;
 import com.sevendaystominecraft.magazine.MagazinePlayerData;
 import com.sevendaystominecraft.perk.Attribute;
 import com.sevendaystominecraft.quest.QuestInstance;
@@ -66,6 +67,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
     private final List<QuestInstance> activeQuests = new ArrayList<>();
     private String trackedQuestId = "";
     private final Map<String, Long> consumedQuests = new HashMap<>();
+
+    private final List<WaypointEntry> waypoints = new ArrayList<>();
 
     public SevenDaysPlayerStats() {
         for (int i = 0; i < attributeLevels.length; i++) {
@@ -274,6 +277,19 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
 
     public Map<String, Long> getConsumedQuests() { return consumedQuests; }
 
+    public List<WaypointEntry> getWaypoints() { return waypoints; }
+
+    public boolean addWaypoint(WaypointEntry waypoint) {
+        boolean replaced = waypoints.removeIf(w -> w.x() == waypoint.x() && w.z() == waypoint.z());
+        if (!replaced && waypoints.size() >= 50) return false;
+        waypoints.add(waypoint);
+        return true;
+    }
+
+    public boolean removeWaypoint(int x, int z) {
+        return waypoints.removeIf(w -> w.x() == x && w.z() == z);
+    }
+
     // =====================================================================
     // copyFrom
     // =====================================================================
@@ -319,6 +335,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
             this.trackedQuestId = concrete.getTrackedQuestId();
             this.consumedQuests.clear();
             this.consumedQuests.putAll(concrete.getConsumedQuests());
+            this.waypoints.clear();
+            this.waypoints.addAll(concrete.getWaypoints());
         }
     }
 
@@ -398,6 +416,14 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
                 consumed.putLong(entry.getKey(), entry.getValue());
             }
             tag.put("ConsumedQuests", consumed);
+        }
+
+        if (!waypoints.isEmpty()) {
+            ListTag waypointList = new ListTag();
+            for (WaypointEntry wp : waypoints) {
+                waypointList.add(wp.save());
+            }
+            tag.put("Waypoints", waypointList);
         }
 
         return tag;
@@ -500,6 +526,14 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
             CompoundTag consumed = tag.getCompound("ConsumedQuests");
             for (String key : consumed.getAllKeys()) {
                 consumedQuests.put(key, consumed.getLong(key));
+            }
+        }
+
+        waypoints.clear();
+        if (tag.contains("Waypoints")) {
+            ListTag waypointList = tag.getList("Waypoints", Tag.TAG_COMPOUND);
+            for (int i = 0; i < waypointList.size(); i++) {
+                waypoints.add(WaypointEntry.load(waypointList.getCompound(i)));
             }
         }
     }

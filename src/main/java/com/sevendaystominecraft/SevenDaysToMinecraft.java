@@ -5,6 +5,7 @@ import com.sevendaystominecraft.block.ModBlockEntities;
 import com.sevendaystominecraft.block.ModBlocks;
 import com.sevendaystominecraft.capability.ModAttachments;
 import com.sevendaystominecraft.command.AdminCommand;
+import com.sevendaystominecraft.command.GroupCommand;
 import com.sevendaystominecraft.command.LootStageCommand;
 import com.sevendaystominecraft.command.TerritoryCommand;
 import com.sevendaystominecraft.config.HeatmapConfig;
@@ -159,6 +160,7 @@ public class SevenDaysToMinecraft {
         LootStageCommand.register(event.getDispatcher());
         TerritoryCommand.register(event.getDispatcher());
         AdminCommand.register(event.getDispatcher());
+        GroupCommand.register(event.getDispatcher());
         LOGGER.info("BZHS: Registered /bzhs commands");
     }
 }

@@ -27,6 +27,7 @@ public class HudClientResetHandler {
         NearbyPlayersClientState.reset();
         ChunkHeatClientState.reset();
         TerritoryClientState.reset();
+        WaypointClientState.reset();
         BloodMoonSkyRenderer.resetIntensity();
         BloodMoonClientState.reset();
         MusicManager.reset();
