@@ -45,10 +45,12 @@ public class QuestInstance {
     }
 
     public void setProgress(int value) {
-        if (state != State.ACTIVE) return;
+        if (state != State.ACTIVE && state != State.READY_TO_TURN_IN) return;
         progress = Math.min(value, definition.getTargetCount());
         if (progress >= definition.getTargetCount()) {
             state = State.READY_TO_TURN_IN;
+        } else if (state == State.READY_TO_TURN_IN) {
+            state = State.ACTIVE;
         }
     }
 

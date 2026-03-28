@@ -80,13 +80,15 @@ public class QuestProgressHandler {
         boolean changed = false;
 
         for (QuestInstance quest : quests) {
-            if (quest.getState() != QuestInstance.State.ACTIVE) continue;
             QuestDefinition def = quest.getDefinition();
+            boolean isActiveOrReadyDelivery = def.getType() == QuestType.FETCH_DELIVER
+                    && (quest.getState() == QuestInstance.State.ACTIVE || quest.getState() == QuestInstance.State.READY_TO_TURN_IN);
+            if (quest.getState() != QuestInstance.State.ACTIVE && !isActiveOrReadyDelivery) continue;
 
             if (def.getType() == QuestType.FETCH_DELIVER) {
                 ItemStack target = QuestGenerator.getItemForFetchQuest(def.getTargetId());
                 if (!target.isEmpty()) {
-                    int count = countItem(player, target);
+                    int count = Math.min(countItem(player, target), def.getTargetCount());
                     if (count != quest.getProgress()) {
                         quest.setProgress(count);
                         changed = true;
