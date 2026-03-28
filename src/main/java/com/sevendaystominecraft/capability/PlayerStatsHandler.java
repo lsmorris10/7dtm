@@ -347,6 +347,11 @@ public class PlayerStatsHandler {
             }
         }
 
+        if (stack.is(Items.GOLDEN_APPLE) || stack.is(Items.ENCHANTED_GOLDEN_APPLE)) {
+            clearAllDebuffs(serverPlayer, stats);
+            changed = true;
+        }
+
         if (changed) {
             sendStatsToClient(serverPlayer, stats);
         }
