@@ -21,9 +21,9 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializable<CompoundTag> {
 
-    private static final float DEFAULT_MAX_FOOD = 100.0f;
-    private static final float DEFAULT_MAX_WATER = 100.0f;
-    private static final float DEFAULT_MAX_STAMINA = 100.0f;
+    private static final float DEFAULT_MAX_FOOD = 20.0f;
+    private static final float DEFAULT_MAX_WATER = 20.0f;
+    private static final float DEFAULT_MAX_STAMINA = 20.0f;
     private static final float DEFAULT_CORE_TEMP = 70.0f;
 
     private float food = DEFAULT_MAX_FOOD;
@@ -392,6 +392,8 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         return tag;
     }
 
+    private static final float LEGACY_SCALE_THRESHOLD = 21.0f;
+
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         food = tag.getFloat("Food");
@@ -400,6 +402,22 @@ public class SevenDaysPlayerStats implements ISevenDaysPlayerStats, INBTSerializ
         maxWater = tag.contains("MaxWater") ? tag.getFloat("MaxWater") : DEFAULT_MAX_WATER;
         stamina = tag.getFloat("Stamina");
         maxStamina = tag.contains("MaxStamina") ? tag.getFloat("MaxStamina") : DEFAULT_MAX_STAMINA;
+
+        if (maxFood > LEGACY_SCALE_THRESHOLD) {
+            float ratio = food / maxFood;
+            maxFood = DEFAULT_MAX_FOOD;
+            food = ratio * maxFood;
+        }
+        if (maxWater > LEGACY_SCALE_THRESHOLD) {
+            float ratio = water / maxWater;
+            maxWater = DEFAULT_MAX_WATER;
+            water = ratio * maxWater;
+        }
+        if (maxStamina > LEGACY_SCALE_THRESHOLD) {
+            float ratio = stamina / maxStamina;
+            maxStamina = DEFAULT_MAX_STAMINA;
+            stamina = ratio * maxStamina;
+        }
         staminaExhausted = tag.contains("StaminaExhausted") && tag.getBoolean("StaminaExhausted");
         coreTemperature = tag.contains("CoreTemp") ? tag.getFloat("CoreTemp") : DEFAULT_CORE_TEMP;
         coldExposureTicks = tag.contains("ColdExposureTicks") ? tag.getInt("ColdExposureTicks") : 0;

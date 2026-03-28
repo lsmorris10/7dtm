@@ -167,10 +167,10 @@ public class SurvivalConfig {
         builder.push("food_water");
         foodDrainPerMinute = builder
                 .comment("Passive food drain per minute at rest")
-                .defineInRange("foodDrainPerMinute", 0.2, 0.0, 10.0);
+                .defineInRange("foodDrainPerMinute", 0.04, 0.0, 10.0);
         waterDrainPerMinute = builder
                 .comment("Passive water drain per minute at rest")
-                .defineInRange("waterDrainPerMinute", 0.3, 0.0, 10.0);
+                .defineInRange("waterDrainPerMinute", 0.06, 0.0, 10.0);
         waterDrainDesertMultiplier = builder
                 .comment("Water drain multiplier in desert/hot biomes")
                 .defineInRange("waterDrainDesertMultiplier", 1.5, 1.0, 5.0);
@@ -183,29 +183,29 @@ public class SurvivalConfig {
         builder.push("stamina");
         staminaDrainSprint = builder
                 .comment("Stamina drain per second while sprinting")
-                .defineInRange("staminaDrainSprint", 10.0, 0.0, 50.0);
+                .defineInRange("staminaDrainSprint", 2.0, 0.0, 50.0);
         staminaDrainMelee = builder
                 .comment("Stamina cost per melee swing (base)")
-                .defineInRange("staminaDrainMelee", 12.0, 0.0, 50.0);
+                .defineInRange("staminaDrainMelee", 2.4, 0.0, 50.0);
         staminaDrainMining = builder
                 .comment("Stamina cost per mining swing")
-                .defineInRange("staminaDrainMining", 5.0, 0.0, 50.0);
+                .defineInRange("staminaDrainMining", 1.0, 0.0, 50.0);
         staminaDrainJump = builder
                 .comment("Stamina cost per jump")
-                .defineInRange("staminaDrainJump", 8.0, 0.0, 50.0);
+                .defineInRange("staminaDrainJump", 1.6, 0.0, 50.0);
         staminaRegenRest = builder
                 .comment("Stamina regen per second at rest")
-                .defineInRange("staminaRegenRest", 8.0, 0.0, 50.0);
+                .defineInRange("staminaRegenRest", 1.6, 0.0, 50.0);
         staminaRegenWalking = builder
                 .comment("Stamina regen per second while walking")
-                .defineInRange("staminaRegenWalking", 4.0, 0.0, 50.0);
+                .defineInRange("staminaRegenWalking", 0.8, 0.0, 50.0);
         builder.pop();
 
         // Health
         builder.push("health");
         healthRegenRate = builder
                 .comment("Health regen per second when above food/water thresholds")
-                .defineInRange("healthRegenRate", 0.1, 0.0, 10.0);
+                .defineInRange("healthRegenRate", 0.02, 0.0, 10.0);
         healthRegenFoodThreshold = builder
                 .comment("Food must be above this % of max for health regen")
                 .defineInRange("healthRegenFoodThreshold", 50.0, 0.0, 100.0);
@@ -250,7 +250,7 @@ public class SurvivalConfig {
                 .defineInRange("bleedingDamagePerSec", 0.2, 0.0, 10.0);
         bleedingStaminaDrainPerSec = builder
                 .comment("Bleeding stamina drain per second")
-                .defineInRange("bleedingStaminaDrainPerSec", 1.0, 0.0, 50.0);
+                .defineInRange("bleedingStaminaDrainPerSec", 0.2, 0.0, 50.0);
 
         infection1Duration = builder
                 .comment("Infection Stage 1 duration in ticks (336000 = ~7 in-game days at 2x time scale)")
@@ -353,11 +353,11 @@ public class SurvivalConfig {
         // Food/Water Restoration
         builder.push("restoration");
         foodRestorationMultiplier = builder
-                .comment("Multiplier applied to vanilla food nutrition to get BZHS food restoration (e.g. steak nutrition=8 * 5.0 = 40 food restored)")
-                .defineInRange("foodRestorationMultiplier", 5.0, 0.1, 50.0);
+                .comment("Multiplier applied to vanilla food nutrition to get BZHS food restoration (e.g. steak nutrition=8 * 1.0 = 8 food restored)")
+                .defineInRange("foodRestorationMultiplier", 1.0, 0.1, 50.0);
         waterPerDrink = builder
                 .comment("Water restored per drink (water bottle, potion, milk bucket)")
-                .defineInRange("waterPerDrink", 25.0, 1.0, 100.0);
+                .defineInRange("waterPerDrink", 5.0, 1.0, 100.0);
         builder.pop();
 
         // XP

@@ -218,7 +218,7 @@ public class ModItems {
 
     public static final Supplier<Item> BOILED_WATER = ITEMS.register("boiled_water",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("boiled_water")).stacksTo(64),
-                    0f, 20f, new String[]{}, new String[]{}, 0));
+                    0f, 4f, new String[]{}, new String[]{}, 0));
 
     public static final Supplier<Item> GOLDENROD = ITEMS.register("goldenrod",
             () -> new Item(new Item.Properties().setId(key("goldenrod")).stacksTo(64)));
@@ -228,15 +228,15 @@ public class ModItems {
 
     public static final Supplier<Item> CHARRED_MEAT = ITEMS.register("charred_meat",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("charred_meat")).stacksTo(64),
-                    12f, -5f, new String[]{}, new String[]{}, 0, 0.10f));
+                    2.4f, -1f, new String[]{}, new String[]{}, 0, 0.10f));
 
     public static final Supplier<Item> GOLDENROD_TEA = ITEMS.register("goldenrod_tea",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("goldenrod_tea")).stacksTo(64),
-                    2f, 25f, new String[]{}, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, 0));
+                    0.4f, 5f, new String[]{}, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, 0));
 
     public static final Supplier<Item> RED_TEA = ITEMS.register("red_tea",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("red_tea")).stacksTo(64),
-                    2f, 20f, new String[]{}, new String[]{}, 1200));
+                    0.4f, 4f, new String[]{}, new String[]{}, 1200));
 
     public static final Supplier<Item> PADDED_HELMET = ITEMS.register("padded_helmet",
             () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.HELMET,
@@ -302,19 +302,19 @@ public class ModItems {
 
     public static final Supplier<Item> MURKY_WATER = ITEMS.register("murky_water",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("murky_water")).stacksTo(64),
-                    0f, 15f, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, new String[]{}, 0));
+                    0f, 3f, new String[]{SevenDaysPlayerStats.DEBUFF_DYSENTERY}, new String[]{}, 0));
 
     public static final Supplier<Item> CORN = ITEMS.register("corn",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("corn")).stacksTo(64),
-                    5f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
+                    1f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
 
     public static final Supplier<Item> POTATO_CROP_ITEM = ITEMS.register("potato_crop_item",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("potato_crop_item")).stacksTo(64),
-                    4f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
+                    0.8f, 0f, new String[]{}, new String[]{}, 0, 0.05f));
 
     public static final Supplier<Item> BLUEBERRY = ITEMS.register("blueberry",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("blueberry")).stacksTo(64),
-                    3f, 2f, new String[]{}, new String[]{}, 0));
+                    0.6f, 0.4f, new String[]{}, new String[]{}, 0));
 
     public static final Supplier<Item> ALOE = ITEMS.register("aloe",
             () -> new Item(new Item.Properties().setId(key("aloe")).stacksTo(64)));
@@ -348,23 +348,23 @@ public class ModItems {
 
     public static final Supplier<Item> CORN_ON_THE_COB = ITEMS.register("corn_on_the_cob",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("corn_on_the_cob")).stacksTo(64),
-                    15f, 0f, new String[]{}, new String[]{}, 0));
+                    3f, 0f, new String[]{}, new String[]{}, 0));
 
     public static final Supplier<Item> BLUEBERRY_PIE = ITEMS.register("blueberry_pie",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("blueberry_pie")).stacksTo(64),
-                    20f, 5f, new String[]{}, new String[]{}, 600));
+                    4f, 1f, new String[]{}, new String[]{}, 600));
 
     public static final Supplier<Item> VEGETABLE_STEW = ITEMS.register("vegetable_stew",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("vegetable_stew")).stacksTo(64),
-                    24f, 10f, new String[]{}, new String[]{}, 0));
+                    4.8f, 2f, new String[]{}, new String[]{}, 0));
 
     public static final Supplier<Item> MEAT_STEW = ITEMS.register("meat_stew",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("meat_stew")).stacksTo(64),
-                    30f, 10f, new String[]{}, new String[]{}, 600));
+                    6f, 2f, new String[]{}, new String[]{}, 600));
 
     public static final Supplier<Item> COFFEE = ITEMS.register("coffee",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("coffee")).stacksTo(64),
-                    2f, 15f, new String[]{}, new String[]{}, 0) {
+                    0.4f, 3f, new String[]{}, new String[]{}, 0) {
                 @Override
                 public net.minecraft.world.InteractionResult use(net.minecraft.world.level.Level level, net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
                     net.minecraft.world.InteractionResult result = super.use(level, player, hand);
@@ -378,15 +378,15 @@ public class ModItems {
 
     public static final Supplier<Item> HOBO_STEW = ITEMS.register("hobo_stew",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("hobo_stew")).stacksTo(64),
-                    35f, 15f, new String[]{}, new String[]{}, 1200));
+                    7f, 3f, new String[]{}, new String[]{}, 1200));
 
     public static final Supplier<Item> SHAM_CHOWDER = ITEMS.register("sham_chowder",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("sham_chowder")).stacksTo(64),
-                    18f, 20f, new String[]{}, new String[]{}, 400));
+                    3.6f, 4f, new String[]{}, new String[]{}, 400));
 
     public static final Supplier<Item> BAKED_POTATO_MEAL = ITEMS.register("baked_potato_meal",
             () -> new ConsumableStatItem(new Item.Properties().setId(key("baked_potato_meal")).stacksTo(64),
-                    16f, 0f, new String[]{}, new String[]{}, 0));
+                    3.2f, 0f, new String[]{}, new String[]{}, 0));
 
     public static final Supplier<Item> FERTILIZER = ITEMS.register("fertilizer",
             () -> new Item(new Item.Properties().setId(key("fertilizer")).stacksTo(64)));

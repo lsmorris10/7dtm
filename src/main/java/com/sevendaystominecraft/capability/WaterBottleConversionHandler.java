@@ -26,7 +26,7 @@ public class WaterBottleConversionHandler {
         if (!player.hasData(ModAttachments.PLAYER_STATS.get())) return;
 
         SevenDaysPlayerStats stats = player.getData(ModAttachments.PLAYER_STATS.get());
-        stats.setWater(stats.getWater() + 10f);
+        stats.setWater(stats.getWater() + 2f);
         stats.addDebuff(SevenDaysPlayerStats.DEBUFF_DYSENTERY, 72000);
 
         if (player instanceof ServerPlayer serverPlayer) {
