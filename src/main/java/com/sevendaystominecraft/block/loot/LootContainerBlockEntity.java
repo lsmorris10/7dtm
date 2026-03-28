@@ -268,10 +268,10 @@ public class LootContainerBlockEntity extends BlockEntity {
     @SafeVarargs
     private static ItemStack pickRandomWithArmorAndVanillaGear(Random random, int lootStage, Supplier<Item>... baseItems) {
         float roll = random.nextFloat();
-        if (roll < 0.25f) {
+        if (roll < 0.20f) {
             return pickArmorForLootStage(random, lootStage);
         }
-        if (roll < 0.45f) {
+        if (roll < 0.40f) {
             return pickVanillaGearForLootStage(random, lootStage);
         }
         return pickRandom(random, lootStage, baseItems);
@@ -279,7 +279,7 @@ public class LootContainerBlockEntity extends BlockEntity {
 
     @SafeVarargs
     private static ItemStack pickRandomWithArmor(Random random, int lootStage, Supplier<Item>... baseItems) {
-        if (random.nextFloat() < 0.25f) {
+        if (random.nextFloat() < 0.20f) {
             return pickArmorForLootStage(random, lootStage);
         }
         return pickRandom(random, lootStage, baseItems);
