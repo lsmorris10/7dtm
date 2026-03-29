@@ -439,7 +439,7 @@ public class BzhsInventoryScreen extends AbstractContainerScreen<InventoryMenu> 
     }
 
     private int getCoinBagEquipSlotY() {
-        return topPos + 62 - 18;
+        return topPos + 62;
     }
 
     private void renderCoinBagSlots(GuiGraphics graphics, int mouseX, int mouseY) {
