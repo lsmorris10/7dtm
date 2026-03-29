@@ -67,7 +67,6 @@ public class ModCreativeTabs {
                         output.accept(ModItems.CHARRED_MEAT.get());
                         output.accept(ModItems.GOLDENROD_TEA.get());
                         output.accept(ModItems.RED_TEA.get());
-                        output.accept(ModItems.MURKY_WATER.get());
                         output.accept(ModItems.CORN.get());
                         output.accept(ModItems.POTATO_CROP_ITEM.get());
                         output.accept(ModItems.BLUEBERRY.get());
