@@ -309,11 +309,8 @@ public class PlayerStatsHandler {
 
         SevenDaysPlayerStats stats = serverPlayer.getData(ModAttachments.PLAYER_STATS.get());
         ItemStack coinBag = stats.getEquippedCoinBag();
-        if (!coinBag.isEmpty()) {
-            if (!keepInventory) {
-                serverPlayer.drop(coinBag.copy(), true, false);
-                stats.setEquippedCoinBag(ItemStack.EMPTY);
-            }
+        if (!coinBag.isEmpty() && !keepInventory) {
+            com.sevendaystominecraft.entity.DeadBodyEventHandler.stashCoinBag(serverPlayer.getUUID(), coinBag.copy());
         }
     }
 

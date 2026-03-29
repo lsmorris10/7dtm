@@ -5,6 +5,7 @@ import com.sevendaystominecraft.client.particle.ModParticles;
 import com.sevendaystominecraft.client.particle.RadioactiveGlowParticle;
 import com.sevendaystominecraft.client.particle.SonicPulseParticle;
 import com.sevendaystominecraft.client.renderer.entity.AirdropPlaneRenderer;
+import com.sevendaystominecraft.client.renderer.entity.DeadBodyRenderer;
 import com.sevendaystominecraft.client.renderer.entity.FallingAirdropRenderer;
 import com.sevendaystominecraft.entity.ModEntities;
 
@@ -46,6 +47,7 @@ public class ModEntityRenderers {
         event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new TraderRenderer(ctx));
         event.registerEntityRenderer(ModEntities.AIRDROP_PLANE.get(), AirdropPlaneRenderer::new);
         event.registerEntityRenderer(ModEntities.FALLING_AIRDROP.get(), FallingAirdropRenderer::new);
+        event.registerEntityRenderer(ModEntities.DEAD_BODY.get(), DeadBodyRenderer::new);
     }
 
     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {

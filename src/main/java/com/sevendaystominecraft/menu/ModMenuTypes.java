@@ -7,6 +7,7 @@ import com.sevendaystominecraft.block.power.BatteryMenu;
 import com.sevendaystominecraft.block.power.GeneratorMenu;
 import com.sevendaystominecraft.block.workstation.WorkstationMenu;
 import com.sevendaystominecraft.trader.TraderMenu;
+import com.sevendaystominecraft.menu.DeadBodyMenu;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
@@ -43,4 +44,8 @@ public class ModMenuTypes {
     public static final Supplier<MenuType<BatteryMenu>> BATTERY_MENU =
             MENU_TYPES.register("battery", () ->
                     IMenuTypeExtension.create(BatteryMenu::fromNetwork));
+
+    public static final Supplier<MenuType<DeadBodyMenu>> DEAD_BODY_MENU =
+            MENU_TYPES.register("dead_body", () ->
+                    IMenuTypeExtension.create(DeadBodyMenu::fromNetwork));
 }

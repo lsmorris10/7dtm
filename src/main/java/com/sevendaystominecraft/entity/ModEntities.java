@@ -174,6 +174,12 @@ public class ModEntities {
                             .sized(2.0f, 4.0f).clientTrackingRange(20).updateInterval(2)
                             .build(key("falling_airdrop")));
 
+    public static final Supplier<EntityType<DeadBodyEntity>> DEAD_BODY =
+            ENTITY_TYPES.register("dead_body", () ->
+                    EntityType.Builder.<DeadBodyEntity>of(DeadBodyEntity::new, MobCategory.MISC)
+                            .sized(0.8f, 0.3f).clientTrackingRange(10).updateInterval(20)
+                            .build(key("dead_body")));
+
     public static class AttributeRegistration {
         public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
             event.put(WALKER.get(), BaseSevenDaysZombie.createBaseZombieAttributes().build());

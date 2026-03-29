@@ -6,6 +6,7 @@ import com.sevendaystominecraft.block.loot.LootContainerScreen;
 import com.sevendaystominecraft.block.power.BatteryScreen;
 import com.sevendaystominecraft.block.power.GeneratorScreen;
 import com.sevendaystominecraft.block.workstation.WorkstationScreen;
+import com.sevendaystominecraft.client.gui.DeadBodyScreen;
 import com.sevendaystominecraft.menu.ModMenuTypes;
 import com.sevendaystominecraft.trader.TraderScreen;
 
@@ -20,6 +21,7 @@ public class ModScreens {
         event.register(ModMenuTypes.DEW_COLLECTOR_MENU.get(), DewCollectorScreen::new);
         event.register(ModMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
         event.register(ModMenuTypes.BATTERY_MENU.get(), BatteryScreen::new);
-        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered workstation, loot container, trader, dew collector, generator, and battery screens");
+        event.register(ModMenuTypes.DEAD_BODY_MENU.get(), DeadBodyScreen::new);
+        SevenDaysToMinecraft.LOGGER.info("BZHS: Registered workstation, loot container, trader, dew collector, generator, battery, and dead body screens");
     }
 }

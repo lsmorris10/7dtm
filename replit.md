@@ -159,6 +159,8 @@ src/main/java/com/sevendaystominecraft/
 │   └── NoiseEventHandler.java      — @EventBusSubscriber for movement/block break noise + gunshot hook
 ├── entity/
 │   ├── ModEntities.java            — DeferredRegister for all custom entity types + attribute events
+│   ├── DeadBodyEntity.java         — Stationary loot entity spawned on player death (holds full inventory, 30-min despawn, NBT persistent)
+│   ├── DeadBodyEventHandler.java   — LivingDropsEvent handler: cancels item scatter, copies player inventory into DeadBodyEntity
 │   └── zombie/
 │       ├── BaseSevenDaysZombie.java — Base zombie entity with variant stats, modifiers, night speed bonus, radiated regen, detection state, behavior tree goals
 │       ├── DetectionState.java      — Enum: UNAWARE(0), SUSPICIOUS(1), ALERT(2)
@@ -214,7 +216,8 @@ src/main/java/com/sevendaystominecraft/
 │   ├── LootStageCalculator.java    — Loot stage formula: floor((level×0.5) + (days×0.3) + biomeBonus + perkBonus)
 │   └── LootStageHandler.java       — Periodic loot stage sync to client
 ├── menu/
-│   └── ModMenuTypes.java           — Menu type registration for workstations, loot containers, and trader
+│   ├── DeadBodyMenu.java           — Container menu for dead body loot interaction (41 slots: armor, main, hotbar, offhand)
+│   └── ModMenuTypes.java           — Menu type registration for workstations, loot containers, trader, and dead body
 ├── heatmap/
 │   ├── HeatSource.java             — Individual heat source with amount, decay rate, radius
 │   ├── HeatmapData.java            — SavedData storing per-chunk heat sources, persisted via NBT

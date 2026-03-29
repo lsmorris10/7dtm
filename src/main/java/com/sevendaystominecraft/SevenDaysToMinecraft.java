@@ -129,6 +129,7 @@ public class SevenDaysToMinecraft {
         NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TerritoryWorldGenerator::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(TraderSpawnHandler::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(com.sevendaystominecraft.entity.DeadBodyEventHandler::onLivingDrops);
 
         LOGGER.info("BZHS — Mod registered successfully.");
     }
