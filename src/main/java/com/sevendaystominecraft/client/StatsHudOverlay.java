@@ -214,6 +214,7 @@ public class StatsHudOverlay {
     private static final double TERRITORY_DISPLAY_RANGE = 64.0;
     private static final double TERRITORY_DISPLAY_RANGE_SQ = TERRITORY_DISPLAY_RANGE * TERRITORY_DISPLAY_RANGE;
     private static final double BUILDING_DISPLAY_RANGE_SQ = 12.0 * 12.0;
+    private static final int BOUNDARY_PADDING = 12;
 
     private static void renderBottomLeftArea(GuiGraphics graphics, Minecraft mc, Player player) {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
@@ -250,7 +251,32 @@ public class StatsHudOverlay {
                 }
             }
 
-            if (nearest != null && nearestDistSq <= TERRITORY_DISPLAY_RANGE_SQ) {
+            boolean insideTerritory = false;
+            if (nearest != null) {
+                if (!nearest.buildings().isEmpty()) {
+                    // Use bounding box around buildings with padding — matches map boundary
+                    int minBX = Integer.MAX_VALUE, maxBX = Integer.MIN_VALUE;
+                    int minBZ = Integer.MAX_VALUE, maxBZ = Integer.MIN_VALUE;
+                    for (var b : nearest.buildings()) {
+                        if (b.x() < minBX) minBX = b.x();
+                        if (b.x() > maxBX) maxBX = b.x();
+                        if (b.z() < minBZ) minBZ = b.z();
+                        if (b.z() > maxBZ) maxBZ = b.z();
+                    }
+                    minBX -= BOUNDARY_PADDING;
+                    minBZ -= BOUNDARY_PADDING;
+                    maxBX += BOUNDARY_PADDING;
+                    maxBZ += BOUNDARY_PADDING;
+
+                    insideTerritory = playerX >= minBX && playerX <= maxBX
+                                  && playerZ >= minBZ && playerZ <= maxBZ;
+                } else {
+                    // Legacy fallback: circle from origin
+                    insideTerritory = nearestDistSq <= TERRITORY_DISPLAY_RANGE_SQ;
+                }
+            }
+
+            if (nearest != null && insideTerritory) {
                 sb.append("  |  ").append(nearest.label());
 
                 String nearestBuildingName = null;
@@ -290,6 +316,7 @@ public class StatsHudOverlay {
             graphics.drawString(mc.font, cachedAreaText, x, y, 0xFFCCCCCC, true);
         }
     }
+
 
     private static String formatBiomeName(String path) {
         String[] parts = path.split("_");
