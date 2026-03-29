@@ -231,5 +231,6 @@
   "block.sevendaystominecraft.generator_bank": "Generator Bank",
   "block.sevendaystominecraft.battery_bank": "Battery Bank",
   "block.sevendaystominecraft.solar_panel": "Solar Panel",
-  "item.sevendaystominecraft.coin_bag": "Coin Bag"
+  "item.sevendaystominecraft.coin_bag": "Coin Bag",
+  "key.sevendaystominecraft.open_quest_journal": "Open Quest Journal"
 }

@@ -18,8 +18,16 @@ public class ModKeyBindings {
             CATEGORY
     );
 
+    public static final KeyMapping OPEN_QUEST_JOURNAL = new KeyMapping(
+            "key.sevendaystominecraft.open_quest_journal",
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_J,
+            CATEGORY
+    );
+
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(OPEN_MAP);
+        event.register(OPEN_QUEST_JOURNAL);
     }
 
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -31,6 +39,14 @@ public class ModKeyBindings {
                 mc.setScreen(null);
             } else if (mc.screen == null || mc.screen instanceof InventoryScreen) {
                 mc.setScreen(new BigMapScreen());
+            }
+        }
+
+        while (OPEN_QUEST_JOURNAL.consumeClick()) {
+            if (mc.screen instanceof QuestJournalScreen) {
+                mc.setScreen(null);
+            } else if (mc.screen == null || mc.screen instanceof InventoryScreen) {
+                mc.setScreen(new QuestJournalScreen());
             }
         }
     }
