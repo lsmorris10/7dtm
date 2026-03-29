@@ -19,7 +19,28 @@ public record SyncTerritoryPayload(List<TerritoryEntry> territories) implements 
     public record BuildingEntry(int x, int y, int z, String displayName) {}
 
     public record TerritoryEntry(int id, int x, int y, int z, int tier, String label,
-                                  String typeName, List<BuildingEntry> buildings) {}
+                                  String typeName, List<BuildingEntry> buildings) {
+
+        private static final double DEFAULT_RADIUS = 32.0;
+        private static final double BUILDING_PADDING = 12.0;
+
+        public double computeDisplayRadiusSq() {
+            if (buildings == null || buildings.isEmpty()) {
+                return DEFAULT_RADIUS * DEFAULT_RADIUS;
+            }
+            double maxDistSq = 0.0;
+            for (BuildingEntry b : buildings) {
+                double dx = b.x() - x;
+                double dz = b.z() - z;
+                double distSq = dx * dx + dz * dz;
+                if (distSq > maxDistSq) {
+                    maxDistSq = distSq;
+                }
+            }
+            double radius = Math.sqrt(maxDistSq) + BUILDING_PADDING;
+            return radius * radius;
+        }
+    }
 
     private static final StreamCodec<ByteBuf, BuildingEntry> BUILDING_CODEC = StreamCodec.of(
             (buf, entry) -> {

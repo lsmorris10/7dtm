@@ -39,7 +39,6 @@ public class MusicManager {
     private static final int COMBAT_DETECTION_RADIUS = 24;
     private static final int COMBAT_GRACE_PERIOD_TICKS = 200;
     private static final int CONTEXT_SWITCH_COOLDOWN_TICKS = 40;
-    private static final double TRADER_OUTPOST_RADIUS_SQ = 80.0 * 80.0;
     private static final String TRADER_OUTPOST_TYPE_NAME = "Trader Outpost";
 
     private static MusicContext currentContext = MusicContext.NONE;
@@ -174,7 +173,7 @@ public class MusicManager {
             if (TRADER_OUTPOST_TYPE_NAME.equals(entry.typeName())) {
                 double dx = playerX - entry.x();
                 double dz = playerZ - entry.z();
-                if (dx * dx + dz * dz <= TRADER_OUTPOST_RADIUS_SQ) {
+                if (dx * dx + dz * dz <= entry.computeDisplayRadiusSq()) {
                     return true;
                 }
             }
