@@ -279,22 +279,6 @@ public class StatsHudOverlay {
             if (nearest != null && insideTerritory) {
                 sb.append("  |  ").append(nearest.label());
 
-                String nearestBuildingName = null;
-                double nearestBuildingDistSq = BUILDING_DISPLAY_RANGE_SQ;
-                for (BuildingEntry building : nearest.buildings()) {
-                    if (building.displayName().isEmpty()) continue;
-                    double bdx = playerX - building.x();
-                    double bdz = playerZ - building.z();
-                    double bDistSq = bdx * bdx + bdz * bdz;
-                    if (bDistSq < nearestBuildingDistSq) {
-                        nearestBuildingDistSq = bDistSq;
-                        nearestBuildingName = building.displayName();
-                    }
-                }
-                if (nearestBuildingName != null && !nearestBuildingName.equals(nearest.typeName())) {
-                    sb.append("  |  ").append(nearestBuildingName);
-                }
-
                 int territoryId = nearest.id();
                 if (territoryId != lastNearestTerritoryEntityId) {
                     lastNearestTerritoryEntityId = territoryId;
