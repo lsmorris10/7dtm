@@ -1,25 +1,10 @@
 {
-	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "sevendaystominecraft:block/iron_scrap",
 		"particle": "sevendaystominecraft:block/iron_scrap"
 	},
 	"elements": [
-		{
-			"name": "base",
-			"from": [2, 0, 2],
-			"to": [14, 1, 14],
-			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 0.5, 8]},
-			"faces": {
-				"north": {"uv": [2, 15, 14, 16], "texture": "#0"},
-				"east": {"uv": [2, 15, 14, 16], "texture": "#0"},
-				"south": {"uv": [2, 15, 14, 16], "texture": "#0"},
-				"west": {"uv": [2, 15, 14, 16], "texture": "#0"},
-				"up": {"uv": [2, 2, 14, 14], "texture": "#0"},
-				"down": {"uv": [2, 2, 14, 14], "texture": "#0"}
-			}
-		},
 		{
 			"name": "shard1",
 			"from": [4, 0, 6],

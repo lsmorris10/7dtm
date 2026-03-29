@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "sevendaystominecraft:item/iron_scrap"
-  }
+  "parent": "sevendaystominecraft:block/iron_scrap"
 }
