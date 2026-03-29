@@ -51,7 +51,9 @@ public class TraderSpawnHandler {
             double distFromSpawn = Math.sqrt((double) blockX * blockX + (double) blockZ * blockZ);
             int guaranteeRadius = TraderConfig.INSTANCE.guaranteeRadius.get();
             if (distFromSpawn <= guaranteeRadius) {
-                if (!traderData.hasNearby(candidate, minSpacing) && !isNearPendingOutpost(candidate, minSpacing)) {
+                TerritoryData territoryDataGuaranteed = TerritoryData.getOrCreate(serverLevel);
+                if (!traderData.hasNearby(candidate, minSpacing) && !isNearPendingOutpost(candidate, minSpacing)
+                        && !territoryDataGuaranteed.hasNearby(candidate, 5)) {
                     pendingOutpostPositions.add(candidate);
                     if (tryPlaceTraderOutpost(serverLevel, blockX, blockZ)) {
                         traderData.setGuaranteedSpawnPlaced(true);
@@ -139,6 +141,9 @@ public class TraderSpawnHandler {
         TraderRecord placeholder = traderData.addTrader(origin, "__pending__", 1);
         int placeholderId = placeholder.getId();
 
+        BlockPos pendingCandidate = new BlockPos(origin.getX(), 64, origin.getZ());
+        territoryData.addPending(pendingCandidate);
+
         VillageClusterGenerator.VillageResult villageResult;
         try {
             villageResult = VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, true, type);
@@ -159,6 +164,8 @@ public class TraderSpawnHandler {
                     origin, e.getMessage());
             traderData.removeTrader(placeholderId);
             return false;
+        } finally {
+            territoryData.removePending(pendingCandidate);
         }
 
         traderData.removeTrader(placeholderId);

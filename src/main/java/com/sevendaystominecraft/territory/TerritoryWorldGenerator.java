@@ -53,6 +53,9 @@ public class TerritoryWorldGenerator {
 
         if (data.hasNearby(candidate, minSpacing)) return;
 
+        com.sevendaystominecraft.trader.TraderData traderData = com.sevendaystominecraft.trader.TraderData.getOrCreate(serverLevel);
+        if (traderData.hasNearby(candidate, 5)) return;
+
         int vanillaExclusionRadius = TerritoryConfig.INSTANCE.vanillaStructureExclusionRadius.get();
         if (vanillaExclusionRadius > 0 && hasNearbyVanillaStructure(serverLevel, candidate, vanillaExclusionRadius)) {
             SevenDaysToMinecraft.LOGGER.debug(
