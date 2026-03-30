@@ -20,8 +20,7 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
     public GeoRangedWeaponRenderer(GeoRangedWeaponItem item) {
         super(new DefaultedItemGeoModel<>(ResourceLocation.fromNamespaceAndPath(
                 SevenDaysToMinecraft.MOD_ID,
-                getModelName(item)
-        )));
+                getModelName(item))));
         this.weaponName = getModelName(item);
     }
 
@@ -39,8 +38,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
 
     @Override
     public RenderType getRenderType(GeoRangedWeaponItem animatable, ResourceLocation texture,
-                                     @org.jetbrains.annotations.Nullable MultiBufferSource bufferSource,
-                                     float partialTick) {
+            @org.jetbrains.annotations.Nullable MultiBufferSource bufferSource,
+            float partialTick) {
         return RenderType.entityCutoutNoCull(texture);
     }
 
@@ -52,9 +51,9 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
 
     @Override
     public void preRender(PoseStack poseStack, GeoRangedWeaponItem animatable, BakedGeoModel model,
-                           MultiBufferSource bufferSource, VertexConsumer buffer,
-                           boolean isReRender, float partialTick,
-                           int packedLight, int packedOverlay, int renderColor) {
+            MultiBufferSource bufferSource, VertexConsumer buffer,
+            boolean isReRender, float partialTick,
+            int packedLight, int packedOverlay, int renderColor) {
         if (!isReRender) {
             applyDisplayTransforms(poseStack, this.renderPerspective);
         }
@@ -70,7 +69,8 @@ public class GeoRangedWeaponRenderer extends GeoItemRenderer<GeoRangedWeaponItem
     }
 
     private void applyDisplayTransforms(PoseStack poseStack, ItemDisplayContext context) {
-        if (context == null) return;
+        if (context == null)
+            return;
 
         boolean longGun = isLongGun();
         float scale;

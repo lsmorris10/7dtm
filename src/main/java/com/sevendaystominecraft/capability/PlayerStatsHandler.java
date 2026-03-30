@@ -109,54 +109,13 @@ public class PlayerStatsHandler {
         stats.setFood(stats.getFood() - foodDrainPerTick);
         stats.setWater(stats.getWater() - waterDrainPerTick);
 
-        // ── 2. Stamina Drain / Regen ────────────────────────────────────
-        float staminaPct = (stats.getMaxStamina() > 0)
-                ? (stats.getStamina() / stats.getMaxStamina()) * 100f : 0f;
-        boolean wasExhausted = stats.isStaminaExhausted();
-        if (wasExhausted && staminaPct >= 40f) {
-            stats.setStaminaExhausted(false);
-        }
+        // Sync mod hunger to vanilla every tick so vanilla food items can be eaten
+        // Also zero saturation to prevent vanilla's own health regen (we handle regen ourselves)
+        int vanillaFoodLevel = (int) Math.floor(stats.getFood());
+        player.getFoodData().setFoodLevel(vanillaFoodLevel);
+        player.getFoodData().setSaturation(0.0f);
 
-        if (stats.isStaminaExhausted() && player.isSprinting()) {
-            player.setSprinting(false);
-        }
-
-        float staminaCostMult = getStaminaCostMultiplier(stats);
-
-        if (player.isSprinting() && !stats.isStaminaExhausted()) {
-            float drain = (float) (cfg.staminaDrainSprint.get() / 20.0) * staminaCostMult;
-            stats.setStamina(stats.getStamina() - drain);
-
-            if (stats.getStamina() <= 0) {
-                stats.setStaminaExhausted(true);
-                player.setSprinting(false);
-            }
-        } else if (!stats.isStaminaExhausted() && isPlayerMoving(player)) {
-            float regenRate = (float) (cfg.staminaRegenWalking.get() / 20.0);
-            regenRate *= ArmorSetBonusHandler.getStaminaRegenMultiplier(player);
-            applyStaminaRegen(stats, cfg, regenRate);
-        } else if (!player.isSprinting()) {
-            float regenRate = (float) (cfg.staminaRegenRest.get() / 20.0);
-            regenRate *= ArmorSetBonusHandler.getStaminaRegenMultiplier(player);
-            applyStaminaRegen(stats, cfg, regenRate);
-        }
-
-        if (!player.onGround() && player.getDeltaMovement().y > 0.1 && player.fallDistance < 0.1f) {
-            stats.setStamina(stats.getStamina() - cfg.staminaDrainJump.get().floatValue() * staminaCostMult);
-            if (stats.getStamina() <= 0 && !stats.isStaminaExhausted()) {
-                stats.setStaminaExhausted(true);
-                player.setSprinting(false);
-            }
-        }
-
-        boolean isNowExhausted = stats.isStaminaExhausted();
-        if (wasExhausted != isNowExhausted) {
-            sendStatsToClient(serverPlayer, stats);
-        }
-
-        if (isNowExhausted && player.isSprinting()) {
-            player.setSprinting(false);
-        }
+        // ── 2. Stamina system removed — vanilla sprinting restored ─────
 
         // ── 3. Starvation / Dehydration Cascade (§1.1) ─────────────────
         float foodPct = (stats.getMaxFood() > 0) ? (stats.getFood() / stats.getMaxFood()) * 100f : 0f;
@@ -643,7 +602,7 @@ public class PlayerStatsHandler {
             if (player.tickCount % 20 == 0) {
                 player.hurtServer(serverLevel, player.damageSources().magic(),
                         cfg.bleedingDamagePerSec.get().floatValue());
-                stats.setStamina(stats.getStamina() - cfg.bleedingStaminaDrainPerSec.get().floatValue());
+                // Stamina drain removed — vanilla sprinting
             }
         }
 

@@ -234,21 +234,7 @@ public class ModItems {
             () -> new ConsumableStatItem(new Item.Properties().setId(key("red_tea")).stacksTo(64),
                     0.4f, 4f, new String[]{}, new String[]{}, 1200));
 
-    public static final Supplier<Item> PADDED_HELMET = ITEMS.register("padded_helmet",
-            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.HELMET,
-                    new Item.Properties().setId(key("padded_helmet")).stacksTo(1), ArmorTier.LIGHT));
 
-    public static final Supplier<Item> PADDED_CHESTPLATE = ITEMS.register("padded_chestplate",
-            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.CHESTPLATE,
-                    new Item.Properties().setId(key("padded_chestplate")).stacksTo(1), ArmorTier.LIGHT));
-
-    public static final Supplier<Item> PADDED_LEGGINGS = ITEMS.register("padded_leggings",
-            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.LEGGINGS,
-                    new Item.Properties().setId(key("padded_leggings")).stacksTo(1), ArmorTier.LIGHT));
-
-    public static final Supplier<Item> PADDED_BOOTS = ITEMS.register("padded_boots",
-            () -> new TieredArmorItem(ModArmorMaterials.PADDED, ArmorType.BOOTS,
-                    new Item.Properties().setId(key("padded_boots")).stacksTo(1), ArmorTier.LIGHT));
 
     public static final Supplier<Item> SCRAP_IRON_HELMET = ITEMS.register("scrap_iron_helmet",
             () -> new TieredArmorItem(ModArmorMaterials.SCRAP_IRON, ArmorType.HELMET,

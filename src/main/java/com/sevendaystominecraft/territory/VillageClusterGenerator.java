@@ -336,8 +336,10 @@ public class VillageClusterGenerator {
                                               List<BlockPos> buildingCenters,
                                               List<BlockPos> roadPositions,
                                               TerritoryTier tier, RandomSource random) {
-        int propCount = 3 + random.nextInt(5) + tier.getTier();
+        // More props overall — scales with tier
+        int propCount = 8 + random.nextInt(8) + tier.getTier() * 3;
 
+        // Vehicle wrecks on roads
         int vehicleCount = 1 + random.nextInt(3);
         if (!roadPositions.isEmpty()) {
             List<BlockPos> availableRoadPositions = new ArrayList<>(roadPositions);
@@ -350,9 +352,17 @@ public class VillageClusterGenerator {
             }
         }
 
+        // Calculate the territory radius for density gradient
+        int maxSpread = 40;
+        for (BlockPos bc : buildingCenters) {
+            int dx = Math.abs(bc.getX() - center.getX());
+            int dz = Math.abs(bc.getZ() - center.getZ());
+            maxSpread = Math.max(maxSpread, Math.max(dx, dz) + 15);
+        }
+
         for (int i = 0; i < propCount; i++) {
-            int offsetX = random.nextInt(60) - 30;
-            int offsetZ = random.nextInt(60) - 30;
+            int offsetX = random.nextInt(maxSpread * 2) - maxSpread;
+            int offsetZ = random.nextInt(maxSpread * 2) - maxSpread;
             int x = center.getX() + offsetX;
             int z = center.getZ() + offsetZ;
             int y = TerrainValidator.findSolidGroundY(level, x, z);
@@ -363,15 +373,32 @@ public class VillageClusterGenerator {
             BlockState belowState = level.getBlockState(propPos.below());
             if (!TerrainValidator.isSolidTerrainBlock(belowState.getBlock())) continue;
 
+            // Distance from center as a 0.0-1.0 ratio (0=center, 1=edge)
+            double distFromCenter = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
+            double distRatio = Math.min(1.0, distFromCenter / maxSpread);
+
+            // Center = 90% trash, Edge = 20% trash. Mailboxes near buildings only.
+            float trashChance = (float) (0.90 - 0.70 * distRatio);
             float roll = random.nextFloat();
-            if (roll < 0.4f) {
+
+            if (roll < trashChance) {
                 placeTrashPile(level, propPos, tier, random);
-            } else if (roll < 0.7f) {
+            } else if (roll < trashChance + 0.15f && isNearAnyBuilding(propPos, buildingCenters, 20)) {
                 placeMailbox(level, propPos, tier, random);
-            } else {
+            } else if (roll < trashChance + 0.25f) {
                 placeVendingMachine(level, propPos, tier, random);
             }
+            // else: nothing placed, creating natural empty spaces at edges
         }
+    }
+
+    private static boolean isNearAnyBuilding(BlockPos pos, List<BlockPos> buildingCenters, int range) {
+        for (BlockPos bc : buildingCenters) {
+            if (Math.abs(pos.getX() - bc.getX()) < range && Math.abs(pos.getZ() - bc.getZ()) < range) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void placeTrashPile(ServerLevel level, BlockPos pos, TerritoryTier tier, RandomSource random) {

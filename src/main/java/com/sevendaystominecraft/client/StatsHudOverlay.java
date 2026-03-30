@@ -97,7 +97,16 @@ public class StatsHudOverlay {
         int y = MARGIN_Y;
 
         int currentDay = (int) (mc.level.getDayTime() / SevenDaysConstants.DAY_LENGTH) + 1;
-        String dayAndLevel = String.format("Day: %d  |  Lvl: %d", currentDay, stats.getLevel());
+        long timeOfDay = mc.level.getDayTime() % SevenDaysConstants.DAY_LENGTH;
+        // Minecraft dayTime 0 = 6:00 AM, so offset by 6000 ticks
+        long adjustedTime = (timeOfDay + 6000) % SevenDaysConstants.DAY_LENGTH;
+        int totalMinutes = (int) (adjustedTime * 1440 / SevenDaysConstants.DAY_LENGTH);
+        int hour24 = totalMinutes / 60;
+        int minute = totalMinutes % 60;
+        int hour12 = hour24 % 12;
+        if (hour12 == 0) hour12 = 12;
+        String amPm = hour24 < 12 ? "AM" : "PM";
+        String dayAndLevel = String.format("Day: %d  |  Lvl: %d  |  %d:%02d %s", currentDay, stats.getLevel(), hour12, minute, amPm);
         graphics.drawString(mc.font, dayAndLevel, x, y, LEVEL_COLOR, true);
         y += 14;
 
@@ -121,10 +130,6 @@ public class StatsHudOverlay {
         }
         y += BAR_HEIGHT + BAR_SPACING + 2;
 
-        float staminaPct = (stats.getMaxStamina() > 0) ? stats.getStamina() / stats.getMaxStamina() : 0f;
-        drawStatBar(graphics, x, y, "Stamina", staminaPct, stats.getStamina(), stats.getMaxStamina(),
-                staminaPct < LOW_THRESHOLD ? STAMINA_LOW_COLOR : STAMINA_COLOR);
-        y += BAR_HEIGHT + BAR_SPACING + 2;
 
         float food = stats.getFood();
         float maxFood = stats.getMaxFood();

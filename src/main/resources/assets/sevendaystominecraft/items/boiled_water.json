@@ -1,7 +1,7 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "sevendaystominecraft:item/boiled_water",
+    "model": "minecraft:item/potion",
     "tints": [
       {
         "type": "minecraft:constant",

@@ -143,7 +143,7 @@ public class ModBlocks {
             () -> new VendingMachineBlock(metalContainerProps("vending_machine")));
 
     public static final Supplier<Block> MAILBOX_BLOCK = registerWithItem("mailbox",
-            () -> new LootContainerBlock(containerProps("mailbox"), LootContainerType.MAILBOX));
+            () -> new LootContainerBlock(metalContainerProps("mailbox"), LootContainerType.MAILBOX));
 
     public static final Supplier<Block> FARM_CRATE_BLOCK = registerWithItem("farm_crate",
             () -> new LootContainerBlock(containerProps("farm_crate"), LootContainerType.FARM_CRATE));

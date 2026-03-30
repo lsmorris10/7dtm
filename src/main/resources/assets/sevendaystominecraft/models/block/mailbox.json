@@ -1,6 +1,81 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "sevendaystominecraft:block/mailbox"
+    "mailbox": "sevendaystominecraft:block/mailbox",
+    "particle": "sevendaystominecraft:block/mailbox"
+  },
+  "elements": [
+    {
+      "name": "post",
+      "from": [6, 0, 6],
+      "to": [10, 10, 10],
+      "faces": {
+        "north": {"uv": [6, 0, 10, 10], "texture": "#mailbox"},
+        "south": {"uv": [6, 0, 10, 10], "texture": "#mailbox"},
+        "east":  {"uv": [6, 0, 10, 10], "texture": "#mailbox"},
+        "west":  {"uv": [6, 0, 10, 10], "texture": "#mailbox"},
+        "down":  {"uv": [6, 6, 10, 10], "texture": "#mailbox"},
+        "up":    {"uv": [6, 6, 10, 10], "texture": "#mailbox"}
+      }
+    },
+    {
+      "name": "mailbox_body",
+      "from": [2, 10, 3],
+      "to": [14, 16, 13],
+      "faces": {
+        "north": {"uv": [0, 0, 12, 6], "texture": "#mailbox"},
+        "south": {"uv": [0, 0, 12, 6], "texture": "#mailbox"},
+        "east":  {"uv": [0, 0, 10, 6], "texture": "#mailbox"},
+        "west":  {"uv": [0, 0, 10, 6], "texture": "#mailbox"},
+        "up":    {"uv": [0, 0, 12, 10], "texture": "#mailbox"},
+        "down":  {"uv": [0, 0, 12, 10], "texture": "#mailbox"}
+      }
+    },
+    {
+      "name": "flag",
+      "from": [14, 11, 7],
+      "to": [16, 15, 9],
+      "faces": {
+        "north": {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "south": {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "east":  {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "west":  {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "up":    {"uv": [14, 6, 16, 8], "texture": "#mailbox"}
+      }
+    },
+    {
+      "name": "debris",
+      "from": [3, 0, 3],
+      "to": [13, 1, 13],
+      "faces": {
+        "up":    {"uv": [4, 12, 14, 16], "texture": "#mailbox"},
+        "down":  {"uv": [4, 12, 14, 16], "texture": "#mailbox"},
+        "north": {"uv": [4, 15, 14, 16], "texture": "#mailbox"},
+        "south": {"uv": [4, 15, 14, 16], "texture": "#mailbox"},
+        "east":  {"uv": [4, 15, 14, 16], "texture": "#mailbox"},
+        "west":  {"uv": [4, 15, 14, 16], "texture": "#mailbox"}
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.625, 0.625, 0.625]
+    },
+    "ground": {
+      "translation": [0, 3, 0],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_righthand": {
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.375, 0.375, 0.375]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
   }
 }

@@ -144,7 +144,7 @@ public class ArmorSetBonusHandler {
             if (!(stack.getItem() instanceof TieredArmorItem tiered)) continue;
             if (tiered.getArmorTier() != ArmorTier.LIGHT) continue;
             if (stack.getMaxDamage() > 0 && stack.getDamageValue() >= stack.getMaxDamage()) continue;
-            int defenseForSlot = ModArmorMaterials.PADDED.defense().getOrDefault(tiered.getArmorType(), 0);
+            int defenseForSlot = ModArmorMaterials.SCRAP_IRON.defense().getOrDefault(tiered.getArmorType(), 0);
             totalLightArmor += defenseForSlot;
         }
 
@@ -232,7 +232,7 @@ public class ArmorSetBonusHandler {
 
     private static int getBaseDefense(TieredArmorItem tiered) {
         return switch (tiered.getArmorTier()) {
-            case LIGHT -> ModArmorMaterials.PADDED.defense().getOrDefault(tiered.getArmorType(), 0);
+            case LIGHT -> ModArmorMaterials.SCRAP_IRON.defense().getOrDefault(tiered.getArmorType(), 0);
             case MEDIUM -> ModArmorMaterials.SCRAP_IRON.defense().getOrDefault(tiered.getArmorType(), 0);
             case HEAVY -> ModArmorMaterials.MILITARY.defense().getOrDefault(tiered.getArmorType(), 0);
         };

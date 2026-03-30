@@ -134,10 +134,6 @@ public class ModCreativeTabs {
                     .title(Component.translatable("creativetab.sevendaystominecraft.armor"))
                     .icon(() -> new ItemStack(ModItems.MILITARY_CHESTPLATE.get()))
                     .displayItems((params, output) -> {
-                        output.accept(ModItems.PADDED_HELMET.get());
-                        output.accept(ModItems.PADDED_CHESTPLATE.get());
-                        output.accept(ModItems.PADDED_LEGGINGS.get());
-                        output.accept(ModItems.PADDED_BOOTS.get());
                         output.accept(ModItems.SCRAP_IRON_HELMET.get());
                         output.accept(ModItems.SCRAP_IRON_CHESTPLATE.get());
                         output.accept(ModItems.SCRAP_IRON_LEGGINGS.get());

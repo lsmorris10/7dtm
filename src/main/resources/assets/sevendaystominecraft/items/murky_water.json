@@ -1,11 +1,11 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "sevendaystominecraft:item/murky_water",
+    "model": "minecraft:item/potion",
     "tints": [
       {
         "type": "minecraft:constant",
-        "value": 7035699
+        "value": 3694022
       }
     ]
   }

@@ -10,7 +10,7 @@ public enum LootContainerType {
     MEDICINE_CABINET("medicine_cabinet", "Medicine Cabinet", 5, 9),
     BOOKSHELF("bookshelf", "Bookshelf", 5, 9),
     TOOL_CRATE("tool_crate", "Tool Crate", 5, 12),
-    FUEL_CACHE("fuel_cache", "Fuel Cache", 7, 9),
+    FUEL_CACHE("fuel_cache", "Fuel Barrel", 7, 9),
     VENDING_MACHINE("vending_machine", "Vending Machine", 5, 9),
     MAILBOX("mailbox", "Mailbox", 5, 6),
     FARM_CRATE("farm_crate", "Farm Crate", 5, 9);

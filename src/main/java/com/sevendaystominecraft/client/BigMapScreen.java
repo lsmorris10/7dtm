@@ -8,6 +8,7 @@ import com.sevendaystominecraft.network.SyncTerritoryPayload.TerritoryEntry;
 import com.sevendaystominecraft.network.SyncTraderPayload.TraderEntry;
 import com.sevendaystominecraft.network.SyncWaypointsPayload.WaypointData;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -22,7 +23,7 @@ import java.util.List;
 public class BigMapScreen extends Screen {
 
     private static final int MAP_RADIUS = 256;
-    private static final int SAMPLE_STEP = 4;
+    private static final int SAMPLE_STEP = 2;
     private static final int BG_COLOR = 0xEE111111;
     private static final int BORDER_COLOR = 0xFF444444;
     private static final int PLAYER_DOT_COLOR = 0xFFFFFFFF;
@@ -239,6 +240,10 @@ public class BigMapScreen extends Screen {
                 return true;
             }
             return waypointNameBox.keyPressed(keyCode, scanCode, modifiers);
+        }
+        if (ModKeyBindings.OPEN_MAP.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode))) {
+            this.onClose();
+            return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }

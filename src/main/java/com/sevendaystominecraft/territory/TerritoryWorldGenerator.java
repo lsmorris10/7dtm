@@ -78,7 +78,9 @@ public class TerritoryWorldGenerator {
 
         TerritoryTier tier = TerritoryTier.roll(serverLevel.random, biomeMin, maxTier);
 
-        TerritoryType type = TerritoryType.randomNonTrader(serverLevel.random);
+        // 25% chance for Tier 5 to become an underground bunker instead of a village
+        boolean isBunker = tier.getTier() == 5 && chunkRandom.nextInt(4) == 0;
+        TerritoryType type = isBunker ? TerritoryType.UNDERGROUND_BUNKER : TerritoryType.randomNonTrader(serverLevel.random);
 
         int surfaceY = TerrainValidator.findSolidGroundY(serverLevel, blockX, blockZ);
         if (surfaceY <= 0) return;
@@ -90,6 +92,36 @@ public class TerritoryWorldGenerator {
 
         data.addPending(candidate);
         try {
+            if (isBunker) {
+                // Generate underground bunker
+                BunkerGenerator.BunkerResult bunkerResult =
+                        BunkerGenerator.generate(serverLevel, origin, serverLevel.random);
+
+                TerritoryRecord record = data.addTerritory(origin, tier, type);
+                data.removePending(candidate);
+
+                setTerritoryIdOnLootContainers(serverLevel, bunkerResult.lootPositions, record.getId());
+
+                spawnLabelEntity(serverLevel, record, origin.above(3));
+
+                record.setBuildingCenters(java.util.List.of(origin));
+                record.setBuildingTypeNames(java.util.List.of("Underground Bunker"));
+
+                // Spawn bunker zombies via sleeper system
+                java.util.List<java.util.List<BlockPos>> perBuildingSpawns = new java.util.ArrayList<>();
+                perBuildingSpawns.add(bunkerResult.zombieSpawnPositions);
+                SleeperZombieManager.spawnSleepers(serverLevel, record, perBuildingSpawns);
+
+                data.markDirtyRecord();
+
+                SevenDaysToMinecraft.LOGGER.info(
+                        "[BZHS Bunker] Placed underground bunker at ({}, {}, {}). {} rooms, {} zombies, {} loot",
+                        blockX, surfaceY, blockZ,
+                        bunkerResult.roomCount, bunkerResult.zombieSpawnPositions.size(),
+                        bunkerResult.lootPositions.size());
+                return;
+            }
+
             VillageClusterGenerator.VillageResult villageResult =
                     VillageClusterGenerator.generate(serverLevel, origin, tier, serverLevel.random, type);
 

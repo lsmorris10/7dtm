@@ -1,5 +1,6 @@
 package com.sevendaystominecraft.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.sevendaystominecraft.network.QuestActionPayload;
 import com.sevendaystominecraft.network.SyncQuestPayload.QuestEntry;
 
@@ -173,6 +174,15 @@ public class QuestJournalScreen extends Screen {
             return true;
         }
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (ModKeyBindings.OPEN_QUEST_JOURNAL.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode))) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

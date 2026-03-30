@@ -341,10 +341,6 @@ public class LootContainerBlockEntity extends BlockEntity {
     }
 
     private static ItemStack pickArmorForLootStage(Random random, int lootStage) {
-        Supplier<Item>[] lightArmor = new Supplier[]{
-                ModItems.PADDED_HELMET, ModItems.PADDED_CHESTPLATE,
-                ModItems.PADDED_LEGGINGS, ModItems.PADDED_BOOTS
-        };
         Supplier<Item>[] mediumArmor = new Supplier[]{
                 ModItems.SCRAP_IRON_HELMET, ModItems.SCRAP_IRON_CHESTPLATE,
                 ModItems.SCRAP_IRON_LEGGINGS, ModItems.SCRAP_IRON_BOOTS
@@ -357,10 +353,8 @@ public class LootContainerBlockEntity extends BlockEntity {
         Supplier<Item>[] pool;
         if (lootStage >= 50) {
             pool = random.nextBoolean() ? heavyArmor : mediumArmor;
-        } else if (lootStage >= 20) {
-            pool = random.nextBoolean() ? mediumArmor : lightArmor;
         } else {
-            pool = lightArmor;
+            pool = mediumArmor;
         }
 
         return new ItemStack(pool[random.nextInt(pool.length)].get(), 1);

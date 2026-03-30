@@ -20,7 +20,8 @@ public enum TerritoryType {
     POP_N_PILLS("Pop-n-Pills",           LootContainerType.MEDICINE_CABINET, LootContainerType.CARDBOARD_BOX),
     FARM("Farm",                         LootContainerType.FARM_CRATE, LootContainerType.KITCHEN_CABINET),
     UTILITY("Utility Building",          LootContainerType.SUPPLY_CRATE, LootContainerType.TOOL_CRATE),
-    TRADER_OUTPOST("Trader Outpost",     LootContainerType.SUPPLY_CRATE, LootContainerType.VENDING_MACHINE);
+    TRADER_OUTPOST("Trader Outpost",     LootContainerType.SUPPLY_CRATE, LootContainerType.VENDING_MACHINE),
+    UNDERGROUND_BUNKER("Underground Bunker", LootContainerType.GUN_SAFE, LootContainerType.SUPPLY_CRATE);
 
     private static final Map<TerritoryType, List<VillageBuildingType>> ALLOWED_BUILDINGS = new EnumMap<>(TerritoryType.class);
 
@@ -38,6 +39,7 @@ public enum TerritoryType {
         ALLOWED_BUILDINGS.put(FARM,           List.of(VillageBuildingType.FARM, VillageBuildingType.RESIDENTIAL, VillageBuildingType.UTILITY));
         ALLOWED_BUILDINGS.put(UTILITY,        List.of(VillageBuildingType.UTILITY, VillageBuildingType.WORKING_STIFFS));
         ALLOWED_BUILDINGS.put(TRADER_OUTPOST, List.of(VillageBuildingType.TRADER_OUTPOST));
+        ALLOWED_BUILDINGS.put(UNDERGROUND_BUNKER, List.of(VillageBuildingType.UTILITY));
     }
 
     private final String displayName;
@@ -68,7 +70,7 @@ public enum TerritoryType {
         TerritoryType result;
         do {
             result = values[random.nextInt(values.length)];
-        } while (result == TRADER_OUTPOST);
+        } while (result == TRADER_OUTPOST || result == UNDERGROUND_BUNKER);
         return result;
     }
 }

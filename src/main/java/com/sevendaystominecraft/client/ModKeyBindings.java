@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import com.sevendaystominecraft.client.gui.BzhsInventoryScreen;
 
 public class ModKeyBindings {
 
@@ -37,7 +38,7 @@ public class ModKeyBindings {
         while (OPEN_MAP.consumeClick()) {
             if (mc.screen instanceof BigMapScreen) {
                 mc.setScreen(null);
-            } else if (mc.screen == null || mc.screen instanceof InventoryScreen) {
+            } else if (mc.screen == null || mc.screen instanceof InventoryScreen || mc.screen instanceof BzhsInventoryScreen || mc.screen instanceof QuestJournalScreen) {
                 mc.setScreen(new BigMapScreen());
             }
         }
@@ -45,7 +46,7 @@ public class ModKeyBindings {
         while (OPEN_QUEST_JOURNAL.consumeClick()) {
             if (mc.screen instanceof QuestJournalScreen) {
                 mc.setScreen(null);
-            } else if (mc.screen == null || mc.screen instanceof InventoryScreen) {
+            } else if (mc.screen == null || mc.screen instanceof InventoryScreen || mc.screen instanceof BzhsInventoryScreen || mc.screen instanceof BigMapScreen) {
                 mc.setScreen(new QuestJournalScreen());
             }
         }

@@ -43,7 +43,8 @@ public class DayCycleHandler {
 
         if (sleepHandled) return;
 
-        boolean allSleepingLongEnough = players.stream().allMatch(ServerPlayer::isSleepingLongEnough);
+        boolean allSleepingLongEnough = players.stream().allMatch(p ->
+                !p.isSleeping() || p.isSleepingLongEnough());
         if (!allSleepingLongEnough) return;
 
         long currentTime = level.getDayTime();
@@ -51,6 +52,12 @@ public class DayCycleHandler {
 
         if (timeOfDay >= SevenDaysConstants.NIGHT_END) {
             sleepHandled = true;
+            // Wake all players up even if already morning
+            for (ServerPlayer sp : players) {
+                if (sp.isSleeping()) {
+                    sp.stopSleeping();
+                }
+            }
             SevenDaysToMinecraft.LOGGER.info("[BZHS] Sleep completed — already at morning (timeOfDay={}), no time advance needed", timeOfDay);
             return;
         }
@@ -59,6 +66,17 @@ public class DayCycleHandler {
         long targetTime = dayBase + SevenDaysConstants.NIGHT_END;
         level.setDayTime(targetTime);
         sleepHandled = true;
+
+        // Wake all players up after advancing time
+        for (ServerPlayer sp : players) {
+            if (sp.isSleeping()) {
+                sp.stopSleeping();
+            }
+        }
+
+        // Reset weather on sleep like vanilla does
+        level.setWeatherParameters(0, 0, false, false);
+
         SevenDaysToMinecraft.LOGGER.info("[BZHS] Sleep completed — advanced time from {} to {} (morning of day {})",
                 currentTime, targetTime, BloodMoonTracker.calculateGameDay(level));
     }
