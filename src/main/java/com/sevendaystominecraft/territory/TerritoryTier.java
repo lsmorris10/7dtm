@@ -8,11 +8,11 @@ import java.util.function.Supplier;
 
 public enum TerritoryTier {
 
-    TIER_1(1, "★", 5, 8,   0.40f,  3, 2, 1),
-    TIER_2(2, "★★", 8, 11,  0.25f,  5, 3, 2),
+    TIER_1(1, "★", 5, 8,   0.35f,  3, 2, 1),
+    TIER_2(2, "★★", 8, 11,  0.20f,  5, 3, 2),
     TIER_3(3, "★★★", 10, 13, 0.15f,  8, 5, 3),
-    TIER_4(4, "★★★★", 12, 15, 0.12f, 10, 7, 4),
-    TIER_5(5, "★★★★★", 15, 20, 0.08f, 14, 9, 5);
+    TIER_4(4, "★★★★", 12, 15, 0.15f, 10, 7, 4),
+    TIER_5(5, "★★★★★", 15, 20, 0.15f, 14, 9, 5);
 
     private final int tier;
     private final String stars;
