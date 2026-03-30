@@ -109,7 +109,9 @@ public class QuestGenerator {
 
         return new QuestDefinition(
                 QuestType.CLEAR_TERRITORY,
-                "Clear the " + target.getType().getDisplayName() + " at " + formatPos(target.getOrigin()),
+                "Clear " + target.getType().getDisplayName()
+                        + " " + target.getTier().getStars()
+                        + " [X:" + target.getOrigin().getX() + " Z:" + target.getOrigin().getZ() + "]",
                 1,
                 xpReward,
                 tokenReward,

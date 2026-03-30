@@ -22,8 +22,11 @@ import java.util.List;
 
 public class BigMapScreen extends Screen {
 
-    private static final int MAP_RADIUS = 256;
-    private static final int SAMPLE_STEP = 2;
+    private static final int MIN_MAP_RADIUS = 64;
+    private static final int MAX_MAP_RADIUS = 1024;
+    private static final int DEFAULT_MAP_RADIUS = 256;
+    private int mapRadius = DEFAULT_MAP_RADIUS;
+    private int sampleStep = 2;
     private static final int BG_COLOR = 0xEE111111;
     private static final int BORDER_COLOR = 0xFF444444;
     private static final int PLAYER_DOT_COLOR = 0xFFFFFFFF;
@@ -105,9 +108,10 @@ public class BigMapScreen extends Screen {
 
         int[] terrain = getTerrainColors(mc.level, playerBlockX, playerBlockZ);
 
-        int samplesPerSide = MAP_RADIUS / SAMPLE_STEP;
+        sampleStep = mapRadius <= 128 ? 1 : (mapRadius <= 256 ? 2 : 4);
+        int samplesPerSide = mapRadius / sampleStep;
         int totalSamples = samplesPerSide * 2;
-        float scale = (float) mapDisplaySize / (MAP_RADIUS * 2);
+        float scale = (float) mapDisplaySize / (mapRadius * 2);
         lastScale = scale;
 
         for (int sx = -samplesPerSide; sx < samplesPerSide; sx++) {
@@ -115,10 +119,10 @@ public class BigMapScreen extends Screen {
                 int idx = (sx + samplesPerSide) * totalSamples + (sz + samplesPerSide);
                 int color = terrain[idx];
 
-                int pixelX = mapX + (int) ((sx + samplesPerSide) * scale * SAMPLE_STEP);
-                int pixelY = mapY + (int) ((sz + samplesPerSide) * scale * SAMPLE_STEP);
-                int pixelEndX = mapX + (int) ((sx + samplesPerSide + 1) * scale * SAMPLE_STEP);
-                int pixelEndY = mapY + (int) ((sz + samplesPerSide + 1) * scale * SAMPLE_STEP);
+                int pixelX = mapX + (int) ((sx + samplesPerSide) * scale * sampleStep);
+                int pixelY = mapY + (int) ((sz + samplesPerSide) * scale * sampleStep);
+                int pixelEndX = mapX + (int) ((sx + samplesPerSide + 1) * scale * sampleStep);
+                int pixelEndY = mapY + (int) ((sz + samplesPerSide + 1) * scale * sampleStep);
 
                 pixelEndX = Math.min(pixelEndX, mapX + mapDisplaySize);
                 pixelEndY = Math.min(pixelEndY, mapBottom);
@@ -153,6 +157,8 @@ public class BigMapScreen extends Screen {
         Component coordsComponent = Component.translatable("gui.sevendaystominecraft.map_position",
                 playerBlockX, playerBlockZ, getCardinalDirection(player.getYRot()));
         String coordsText = coordsComponent.getString();
+        String zoomText = "  [Zoom: " + (int)(100.0 * DEFAULT_MAP_RADIUS / mapRadius) + "%]";
+        coordsText += zoomText;
         int coordsWidth = mc.font.width(coordsText);
         graphics.drawString(mc.font, coordsText, (screenWidth - coordsWidth) / 2, mapBottom + 8, COORD_COLOR, true);
 
@@ -254,6 +260,22 @@ public class BigMapScreen extends Screen {
             return waypointNameBox.charTyped(codePoint, modifiers);
         }
         return super.charTyped(codePoint, modifiers);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (namingWaypoint) return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+
+        if (scrollY > 0) {
+            // Scroll up = zoom in
+            mapRadius = Math.max(MIN_MAP_RADIUS, mapRadius - 32);
+        } else if (scrollY < 0) {
+            // Scroll down = zoom out
+            mapRadius = Math.min(MAX_MAP_RADIUS, mapRadius + 32);
+        }
+        // Invalidate terrain cache on zoom
+        terrainCache = null;
+        return true;
     }
 
     private void cancelWaypointNaming() {
@@ -595,7 +617,7 @@ public class BigMapScreen extends Screen {
             return terrainCache;
         }
 
-        terrainCache = TerrainColorHelper.sampleTerrain(level, playerX, playerZ, MAP_RADIUS, SAMPLE_STEP);
+        terrainCache = TerrainColorHelper.sampleTerrain(level, playerX, playerZ, mapRadius, sampleStep);
         cachedPlayerX = playerX;
         cachedPlayerZ = playerZ;
         cacheTime = now;

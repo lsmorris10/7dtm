@@ -112,8 +112,9 @@ public class ConsumableStatItem extends Item {
         }
 
         if (waterRestore > 0 && foodRestore == 0) {
-            com.sevendaystominecraft.sound.ModSounds.playAtEntity(
-                    com.sevendaystominecraft.sound.ModSounds.PLAYER_DRINK, player,
+            // Use vanilla drink sound — reliable and correct
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                    net.minecraft.sounds.SoundEvents.GENERIC_DRINK.value(),
                     net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
         } else if (foodRestore > 0) {
             com.sevendaystominecraft.sound.ModSounds.playAtEntity(

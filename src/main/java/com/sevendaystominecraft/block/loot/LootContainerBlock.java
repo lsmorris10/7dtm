@@ -97,13 +97,10 @@ public class LootContainerBlock extends BaseEntityBlock {
                         serverPlayer.sendSystemMessage(
                                 Component.literal("Defeat all zombies first! (" + record.getZombiesRemaining() + " remaining)")
                                         .withStyle(ChatFormatting.RED));
-                        return InteractionResult.SUCCESS;
+                        return InteractionResult.CONSUME;
                     }
                 }
                 lootBE.tryGenerateLoot(serverPlayer);
-                com.sevendaystominecraft.sound.ModSounds.playAtBlock(
-                        com.sevendaystominecraft.sound.ModSounds.LOOT_OPEN, level, pos,
-                        net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
                 serverPlayer.openMenu(new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
@@ -115,9 +112,13 @@ public class LootContainerBlock extends BaseEntityBlock {
                         return new LootContainerMenu(containerId, playerInv, lootBE);
                     }
                 }, pos);
+                // Play sound AFTER opening menu so it doesn't block
+                com.sevendaystominecraft.sound.ModSounds.playAtBlock(
+                        com.sevendaystominecraft.sound.ModSounds.LOOT_OPEN, level, pos,
+                        net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
             }
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResult.CONSUME;
     }
 
     @Override

@@ -24,6 +24,7 @@ public class TerritoryLabelEntity extends Entity {
         super(type, level);
         this.setNoGravity(true);
         this.noPhysics = true;
+        this.setCustomNameVisible(true);
     }
 
     @Override
@@ -77,6 +78,17 @@ public class TerritoryLabelEntity extends Entity {
     @Override
     public boolean isPickable() {
         return false;
+    }
+
+    @Override
+    public boolean shouldShowName() {
+        return true; // Always show name even at distance
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distSqr) {
+        // Render up to 96 blocks away (default is ~64)
+        return distSqr < 96.0 * 96.0;
     }
 
     @Override

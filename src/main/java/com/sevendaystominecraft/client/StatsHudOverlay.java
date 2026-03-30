@@ -90,6 +90,11 @@ public class StatsHudOverlay {
         renderTopLeftStats(graphics, mc, player, stats);
         renderBottomCenterXp(graphics, mc, stats);
         renderBottomLeftArea(graphics, mc, player);
+
+        // Quest Journal hint
+        int screenHeight = mc.getWindow().getGuiScaledHeight();
+        String questHint = "§7[J] Quest Journal";
+        graphics.drawString(mc.font, questHint, MARGIN_X, screenHeight - 48, 0xFFAAAAAA, true);
     }
 
     private static void renderTopLeftStats(GuiGraphics graphics, Minecraft mc, Player player, SevenDaysPlayerStats stats) {

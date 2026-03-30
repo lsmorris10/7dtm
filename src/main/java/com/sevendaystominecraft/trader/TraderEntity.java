@@ -163,6 +163,12 @@ public class TraderEntity extends PathfinderMob {
                 stockArray[idx] = record != null ? record.getStock(idx) : secretStash.get(i).maxStock();
             }
 
+            // Show personalized trader dialogue
+            List<String> dialogue = TraderDialogueSystem.getDialogueForPlayer(serverPlayer, name);
+            for (String line : dialogue) {
+                serverPlayer.sendSystemMessage(Component.literal(line));
+            }
+
             serverPlayer.openMenu(new SimpleMenuProvider(
                     (containerId, playerInv, p) -> new TraderMenu(containerId, playerInv, tier, traderId, name, stockArray, barterRank),
                     Component.literal(name)
@@ -179,9 +185,9 @@ public class TraderEntity extends PathfinderMob {
 
             QuestActionHandler.syncTraderQuests(serverPlayer, traderId);
 
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResult.CONSUME;
     }
 
     @Override
