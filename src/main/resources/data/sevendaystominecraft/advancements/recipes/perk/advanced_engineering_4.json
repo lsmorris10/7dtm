@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:crafting_table"
+    },
+    "title": {
+      "text": "Advanced Engineering IV"
+    },
+    "description": {
+      "text": "Unlocked power system recipes"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "rank": {
+      "trigger": "sevendaystominecraft:perk_rank",
+      "conditions": {
+        "perk_id": "advanced_engineering",
+        "min_rank": 4
+      }
+    }
+  }
+}

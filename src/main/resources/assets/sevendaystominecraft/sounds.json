@@ -1,0 +1,251 @@
+{
+  "zombie_groan": {
+    "sounds": [
+      "sevendaystominecraft:zombie_groan"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_groan"
+  },
+  "zombie_scream": {
+    "sounds": [
+      "sevendaystominecraft:zombie_scream"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_scream"
+  },
+  "zombie_death": {
+    "sounds": [
+      "sevendaystominecraft:zombie_death"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_death"
+  },
+  "zombie_alert": {
+    "sounds": [
+      "sevendaystominecraft:zombie_alert"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_alert"
+  },
+  "zombie_attack": {
+    "sounds": [
+      "sevendaystominecraft:zombie_attack"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_attack"
+  },
+  "zombie_hurt": {
+    "sounds": [
+      "sevendaystominecraft:zombie_hurt"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_hurt"
+  },
+  "zombie_horde_roar": {
+    "sounds": [
+      "sevendaystominecraft:zombie_horde_roar"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_horde_roar"
+  },
+  "gun_fire_9mm": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_9mm"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_9mm"
+  },
+  "gun_fire_ak47": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_ak47"
+  },
+  "shotgun_fire": {
+    "sounds": [
+      "sevendaystominecraft:shotgun_fire"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.shotgun_fire"
+  },
+  "gun_fire_smg": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_9mm"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_smg"
+  },
+  "gun_fire_hunting_rifle": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_hunting_rifle"
+  },
+  "gun_fire_sniper_rifle": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_sniper_rifle"
+  },
+  "gun_fire_m60": {
+    "sounds": [
+      "sevendaystominecraft:gun_fire_ak47"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.gun_fire_m60"
+  },
+  "weapon_reload": {
+    "sounds": [
+      "sevendaystominecraft:weapon_reload"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.weapon_reload"
+  },
+  "melee_swing": {
+    "sounds": [
+      "sevendaystominecraft:melee_swing"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.melee_swing"
+  },
+  "melee_hit": {
+    "sounds": [
+      "sevendaystominecraft:melee_hit"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.melee_hit"
+  },
+  "blood_moon_siren": {
+    "sounds": [
+      "sevendaystominecraft:blood_moon_siren"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.blood_moon_siren"
+  },
+  "workstation_ambient": {
+    "sounds": [
+      "sevendaystominecraft:workstation_ambient"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.workstation_ambient"
+  },
+  "block_break_zombie": {
+    "sounds": [
+      "sevendaystominecraft:block_break_zombie"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.block_break_zombie"
+  },
+  "zombie_sniff": {
+    "sounds": [
+      "sevendaystominecraft:zombie_sniff"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.zombie_sniff"
+  },
+  "player_drink": {
+    "sounds": [
+      "sevendaystominecraft:player_drink"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.player_drink"
+  },
+  "player_eat_cooked": {
+    "sounds": [
+      "sevendaystominecraft:player_eat_cooked"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.player_eat_cooked"
+  },
+  "player_bandage": {
+    "sounds": [
+      "sevendaystominecraft:player_bandage"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.player_bandage"
+  },
+  "player_levelup": {
+    "sounds": [
+      "sevendaystominecraft:player_levelup"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.player_levelup"
+  },
+  "player_debuff_apply": {
+    "sounds": [
+      "sevendaystominecraft:player_debuff_apply"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.player_debuff_apply"
+  },
+  "territory_enter": {
+    "sounds": [
+      "sevendaystominecraft:territory_enter"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.territory_enter"
+  },
+  "loot_open": {
+    "sounds": [
+      "sevendaystominecraft:loot_open"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.loot_open"
+  },
+  "craft_complete": {
+    "sounds": [
+      "sevendaystominecraft:craft_complete"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.craft_complete"
+  },
+  "quest_complete": {
+    "sounds": [
+      "sevendaystominecraft:quest_complete"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.quest_complete"
+  },
+  "trader_buy": {
+    "sounds": [
+      "sevendaystominecraft:trader_buy"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.trader_buy"
+  },
+  "music_exploration_day": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/exploration_day",
+        "stream": true
+      }
+    ]
+  },
+  "music_exploration_night": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/exploration_night",
+        "stream": true
+      }
+    ]
+  },
+  "music_blood_moon": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/blood_moon",
+        "stream": true
+      }
+    ]
+  },
+  "music_combat": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/combat",
+        "stream": true
+      }
+    ]
+  },
+  "music_trader_outpost": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "sevendaystominecraft:music/trader_outpost",
+        "stream": true
+      }
+    ]
+  },
+  "crt_power_on": {
+    "sounds": [
+      "sevendaystominecraft:crt_power_on"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.crt_power_on"
+  },
+  "crt_power_off": {
+    "sounds": [
+      "sevendaystominecraft:crt_power_off"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.crt_power_off"
+  },
+  "crt_static": {
+    "sounds": [
+      "sevendaystominecraft:crt_static"
+    ],
+    "subtitle": "subtitles.sevendaystominecraft.crt_static"
+  }
+}

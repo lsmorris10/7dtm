@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sevendaystominecraft:item/magazine_dungeon_tactician_3"
+  }
+}

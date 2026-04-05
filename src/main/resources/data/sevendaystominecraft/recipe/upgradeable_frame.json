@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["PP", "PP"],
+  "key": {
+    "P": "minecraft:oak_planks"
+  },
+  "result": { "id": "sevendaystominecraft:upgradeable_frame", "count": 1 }
+}

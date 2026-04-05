@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["OO"],
+  "key": {
+    "O": "sevendaystominecraft:oil_shale"
+  },
+  "result": { "id": "sevendaystominecraft:polymer", "count": 1 }
+}

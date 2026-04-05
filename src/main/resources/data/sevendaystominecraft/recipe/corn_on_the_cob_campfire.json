@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": "sevendaystominecraft:corn",
+  "result": {
+    "id": "sevendaystominecraft:corn_on_the_cob",
+    "count": 1
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

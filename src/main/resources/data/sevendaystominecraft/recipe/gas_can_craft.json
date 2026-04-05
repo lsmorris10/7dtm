@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["OOO"],
+  "key": {
+    "O": "sevendaystominecraft:oil_shale"
+  },
+  "result": { "id": "sevendaystominecraft:gas_can", "count": 1 }
+}

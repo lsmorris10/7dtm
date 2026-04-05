@@ -1,0 +1,10 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["IIM", "IIM", "IM "],
+  "key": {
+    "I": "sevendaystominecraft:forged_iron",
+    "M": "sevendaystominecraft:mechanical_parts"
+  },
+  "result": { "id": "sevendaystominecraft:forged_steel", "count": 2 }
+}

@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["IEI", "IMI", "EMM"],
+  "key": {
+    "I": "sevendaystominecraft:forged_iron",
+    "E": "sevendaystominecraft:electrical_parts",
+    "M": "sevendaystominecraft:mechanical_parts"
+  },
+  "result": { "id": "sevendaystominecraft:generator_bank", "count": 1 }
+}

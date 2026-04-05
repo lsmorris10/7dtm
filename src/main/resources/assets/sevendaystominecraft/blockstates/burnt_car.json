@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sevendaystominecraft:block/burnt_car"
+    },
+    "facing=south": {
+      "model": "sevendaystominecraft:block/burnt_car",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sevendaystominecraft:block/burnt_car",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "sevendaystominecraft:block/burnt_car",
+      "y": 90
+    }
+  }
+}

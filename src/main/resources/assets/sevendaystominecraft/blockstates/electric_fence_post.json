@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "sevendaystominecraft:block/electric_fence_post"
+    },
+    "powered=false": {
+      "model": "sevendaystominecraft:block/electric_fence_post"
+    }
+  }
+}

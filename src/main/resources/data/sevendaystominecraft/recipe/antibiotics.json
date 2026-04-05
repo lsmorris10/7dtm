@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["NNN", "BP "],
+  "key": {
+    "N": "sevendaystominecraft:nitrate",
+    "B": "minecraft:glass_bottle",
+    "P": "sevendaystominecraft:polymer"
+  },
+  "result": { "id": "sevendaystominecraft:antibiotics", "count": 1 }
+}

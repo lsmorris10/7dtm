@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["CC", "CC"],
+  "key": {
+    "C": "sevendaystominecraft:concrete_mix"
+  },
+  "result": { "id": "sevendaystominecraft:cement", "count": 2 }
+}

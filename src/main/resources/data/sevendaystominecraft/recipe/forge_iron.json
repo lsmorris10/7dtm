@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": "minecraft:iron_ingot",
+  "result": {
+    "id": "sevendaystominecraft:forged_iron",
+    "count": 1
+  },
+  "experience": 1.0,
+  "cookingtime": 150
+}

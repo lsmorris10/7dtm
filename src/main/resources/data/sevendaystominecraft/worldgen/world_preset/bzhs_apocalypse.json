@@ -1,0 +1,367 @@
+{
+  "dimensions": {
+    "minecraft:overworld": {
+      "type": "minecraft:overworld",
+      "generator": {
+        "type": "minecraft:noise",
+        "biome_source": {
+          "type": "minecraft:multi_noise",
+          "biomes": [
+            {
+              "biome": "sevendaystominecraft:snowy_tundra",
+              "parameters": {
+                "temperature": [
+                  -1,
+                  -0.45
+                ],
+                "humidity": [
+                  -1,
+                  1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:pine_forest",
+              "parameters": {
+                "temperature": [
+                  -0.45,
+                  -0.15
+                ],
+                "humidity": [
+                  -1,
+                  1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:forest",
+              "parameters": {
+                "temperature": [
+                  -0.15,
+                  0.2
+                ],
+                "humidity": [
+                  -0.1,
+                  1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:plains",
+              "parameters": {
+                "temperature": [
+                  -0.15,
+                  0.2
+                ],
+                "humidity": [
+                  -1,
+                  -0.1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:plains",
+              "parameters": {
+                "temperature": [
+                  0.2,
+                  0.55
+                ],
+                "humidity": [
+                  0.3,
+                  1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:forest",
+              "parameters": {
+                "temperature": [
+                  0.2,
+                  0.55
+                ],
+                "humidity": [
+                  -0.1,
+                  0.3
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:burned_forest",
+              "parameters": {
+                "temperature": [
+                  0.2,
+                  0.55
+                ],
+                "humidity": [
+                  -1,
+                  -0.1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:desert",
+              "parameters": {
+                "temperature": [
+                  0.55,
+                  1
+                ],
+                "humidity": [
+                  -0.35,
+                  1
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:burned_forest",
+              "parameters": {
+                "temperature": [
+                  0.55,
+                  1
+                ],
+                "humidity": [
+                  -0.7,
+                  -0.35
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:wasteland",
+              "parameters": {
+                "temperature": [
+                  0.55,
+                  1
+                ],
+                "humidity": [
+                  -1,
+                  -0.7
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  0.25,
+                  1
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0.375
+              }
+            },
+            {
+              "biome": "sevendaystominecraft:desert",
+              "parameters": {
+                "temperature": [
+                  0.55,
+                  1
+                ],
+                "humidity": [
+                  -1,
+                  -0.7
+                ],
+                "continentalness": [
+                  -0.11,
+                  1
+                ],
+                "erosion": [
+                  -1,
+                  0.25
+                ],
+                "weirdness": [
+                  -1,
+                  1
+                ],
+                "depth": [
+                  0,
+                  1
+                ],
+                "offset": 0
+              }
+            }
+          ]
+        },
+        "settings": "sevendaystominecraft:bzhs_overworld"
+      }
+    },
+    "minecraft:the_nether": {
+      "type": "minecraft:the_nether",
+      "generator": {
+        "type": "minecraft:noise",
+        "biome_source": {
+          "type": "minecraft:multi_noise",
+          "preset": "minecraft:nether"
+        },
+        "settings": "minecraft:nether"
+      }
+    },
+    "minecraft:the_end": {
+      "type": "minecraft:the_end",
+      "generator": {
+        "type": "minecraft:noise",
+        "biome_source": {
+          "type": "minecraft:the_end"
+        },
+        "settings": "minecraft:end"
+      }
+    }
+  }
+}

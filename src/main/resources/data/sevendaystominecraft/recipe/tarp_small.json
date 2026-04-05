@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["LL", "LL"],
+  "key": {
+    "L": "minecraft:leather"
+  },
+  "result": { "id": "sevendaystominecraft:tarp_small", "count": 1 }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "sevendaystominecraft:block/mailbox_lower"
+    },
+    "half=upper": {
+      "model": "sevendaystominecraft:block/mailbox_upper"
+    }
+  }
+}

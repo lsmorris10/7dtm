@@ -1,0 +1,10 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "pattern": ["BBB", "WW "],
+  "key": {
+    "B": "sevendaystominecraft:blueberry",
+    "W": "minecraft:wheat"
+  },
+  "result": { "id": "sevendaystominecraft:blueberry_pie", "count": 1 }
+}

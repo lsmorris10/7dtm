@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": ["MI", "SI", "MI"],
+  "key": {
+    "M": "sevendaystominecraft:mechanical_parts",
+    "I": "sevendaystominecraft:forged_iron",
+    "S": "sevendaystominecraft:spring"
+  },
+  "result": { "id": "sevendaystominecraft:pistol_9mm", "count": 1 }
+}

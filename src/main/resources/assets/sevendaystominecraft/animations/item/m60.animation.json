@@ -1,0 +1,79 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.m60.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "1.0": [0.5, 0, 0],
+            "2.0": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.m60.fire": {
+      "loop": false,
+      "animation_length": 0.12,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.03": [-6, 0, 0],
+            "0.12": [0, 0, 0]
+          },
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.03": [0, 0, 2],
+            "0.12": [0, 0, 0]
+          }
+        },
+        "barrel": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.03": [0, 0.3, 0],
+            "0.12": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.m60.rack": {
+      "loop": false,
+      "animation_length": 0.5,
+      "bones": {
+        "handle": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.15": [0, 0, 3],
+            "0.35": [0, 0, 3],
+            "0.5": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.m60.reload": {
+      "loop": false,
+      "animation_length": 3.0,
+      "bones": {
+        "magazine": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [0, -6, 0],
+            "1.5": [0, -6, 0],
+            "2.0": [0, 0, 0]
+          }
+        },
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.3": [-15, 0, 0],
+            "2.5": [-15, 0, 0],
+            "2.8": [0, 0, 0]
+          }
+        }
+      }
+    }
+  }
+}

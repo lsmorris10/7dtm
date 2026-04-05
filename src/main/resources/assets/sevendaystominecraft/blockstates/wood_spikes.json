@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "durability=0": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=1": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=2": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=3": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=4": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=5": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=6": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=7": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=8": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=9": { "model": "sevendaystominecraft:block/wood_spikes" },
+    "durability=10": { "model": "sevendaystominecraft:block/wood_spikes" }
+  }
+}

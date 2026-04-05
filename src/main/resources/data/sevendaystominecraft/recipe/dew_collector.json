@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["B", "T", "S"],
+  "key": {
+    "B": "minecraft:barrel",
+    "T": "sevendaystominecraft:tarp_small",
+    "S": "minecraft:stick"
+  },
+  "result": { "id": "sevendaystominecraft:dew_collector", "count": 1 }
+}

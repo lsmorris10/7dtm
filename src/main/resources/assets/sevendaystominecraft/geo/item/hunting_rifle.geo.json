@@ -1,0 +1,82 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.hunting_rifle",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [0, 2, 0]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [0, 0, 0],
+          "cubes": []
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [0, 4, 0],
+          "cubes": [
+            {
+              "origin": [-1.5, 3, -4],
+              "size": [3, 2.5, 14],
+              "uv": [0, 0]
+            }
+          ]
+        },
+        {
+          "name": "barrel",
+          "parent": "body",
+          "pivot": [0, 5, -4],
+          "cubes": [
+            {
+              "origin": [-0.5, 4, -20],
+              "size": [1, 1, 16],
+              "uv": [0, 18]
+            }
+          ]
+        },
+        {
+          "name": "magazine",
+          "parent": "body",
+          "pivot": [0, 3, -1],
+          "cubes": [
+            {
+              "origin": [-1, 0, -2],
+              "size": [2, 3, 3],
+              "uv": [0, 36]
+            }
+          ]
+        },
+        {
+          "name": "stock",
+          "parent": "body",
+          "pivot": [0, 3, 10],
+          "cubes": [
+            {
+              "origin": [-1, 1, 10],
+              "size": [2, 4, 8],
+              "uv": [0, 44]
+            }
+          ]
+        },
+        {
+          "name": "grip",
+          "parent": "body",
+          "pivot": [0, 3, 5],
+          "cubes": [
+            {
+              "origin": [-0.5, -1, 4],
+              "size": [1, 4, 2],
+              "uv": [34, 0]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

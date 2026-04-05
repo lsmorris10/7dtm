@@ -1,0 +1,21 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.sevendaystominecraft.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "refmap": "sevendaystominecraft.refmap.json",
+    "mixins": [
+        "FoodDataMixin",
+        "PlayerHealMixin",
+        "LivingEntityHurtMixin",
+        "SprintBlockMixin",
+        "FractureJumpMixin"
+    ],
+    "client": [
+        "LocalPlayerSprintMixin",
+        "CreateWorldScreenMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

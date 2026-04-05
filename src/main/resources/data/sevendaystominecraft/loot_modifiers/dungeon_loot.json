@@ -1,0 +1,26 @@
+{
+  "type": "sevendaystominecraft:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/abandoned_mineshaft" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/simple_dungeon" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/stronghold_corridor" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/stronghold_crossing" }
+      ]
+    }
+  ],
+  "entries": [
+    { "item": "sevendaystominecraft:iron_scrap_block", "chance": 0.35, "min_count": 1, "max_count": 4 },
+    { "item": "sevendaystominecraft:lead", "chance": 0.25, "min_count": 1, "max_count": 3 },
+    { "item": "sevendaystominecraft:nail", "chance": 0.30, "min_count": 2, "max_count": 8 },
+    { "item": "sevendaystominecraft:mechanical_parts", "chance": 0.15, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:duct_tape", "chance": 0.12, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:spring", "chance": 0.15, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:bandage", "chance": 0.18, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:stone_club", "chance": 0.08 },
+    { "item": "sevendaystominecraft:ammo_9mm", "chance": 0.10, "min_count": 2, "max_count": 6 },
+    { "item": "sevendaystominecraft:murky_water", "chance": 0.20, "min_count": 1, "max_count": 2 }
+  ]
+}

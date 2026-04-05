@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "sevendaystominecraft:item/grenade",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

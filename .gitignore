@@ -1,0 +1,107 @@
+# =============================================================
+# BZHS / Seven Days to Minecraft — .gitignore
+# Only the mod source belongs in the repo. Everything else stays local.
+# =============================================================
+
+# ---------- Build / Output ----------
+*.class
+build/
+out/
+bin/
+
+# ---------- Gradle ----------
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# ---------- IDE ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+*.launch
+workspace.code-workspace
+
+# ---------- NeoForge / Minecraft run data ----------
+run/
+runs/
+logs/
+crash-reports/
+
+# ---------- Server (everything) ----------
+server/
+
+# ---------- Replit ----------
+.replit
+replit.md
+
+# ---------- Agent / AI tooling ----------
+.agents/
+.canvas/
+blockbench-mcp
+
+# ---------- Attached assets (Replit uploads, screenshots) ----------
+attached_assets/
+attached_assets_latest.txt
+attached_assets_latest_utf8.txt
+
+# ---------- Dev artifacts (dashboards, etc.) ----------
+artifacts/
+
+# ---------- Archive / old specs ----------
+archive/
+
+# ---------- Temp build/debug logs ----------
+*.log
+*.tmp
+*.bak
+*.swp
+build_errors*.txt
+build_out*.txt
+build_output*.txt
+build_result*.txt
+compile_out*.log
+crash_search.txt
+clean_compile_out.log
+test_compile_out.log
+final_build*.txt
+server_log_verification*.txt
+out.log
+today_search.txt
+
+# ---------- Misc listing files ----------
+root_*.txt
+modified_files*.txt
+recently_modified*.txt
+
+# ---------- Debug / tracked logs ----------
+debug/
+tracked_logs/
+
+# ---------- Instance config (not mod source config) ----------
+config/
+
+# ---------- Data directory (structure READMEs, etc.) ----------
+data/
+
+# ---------- Scripts (local dev tooling) ----------
+scripts/
+
+# ---------- Landing page / web ----------
+public/
+package.json
+package-lock.json
+tsconfig.base.json
+
+# ---------- Dev notes (keep locally, not in repo) ----------
+PROJECT_NOTES.md
+PROJECT_SUMMARY.md
+
+# ---------- OS files ----------
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "entries": [
+    "sevendaystominecraft:dungeon_loot",
+    "sevendaystominecraft:village_smith_loot",
+    "sevendaystominecraft:village_house_loot",
+    "sevendaystominecraft:mid_tier_structure_loot",
+    "sevendaystominecraft:military_loot",
+    "sevendaystominecraft:exploration_loot",
+    "sevendaystominecraft:nether_trial_loot"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:brewing_stand"
+    },
+    "title": {
+      "text": "Physician III"
+    },
+    "description": {
+      "text": "Unlocked advanced medical and ammo recipes"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "rank": {
+      "trigger": "sevendaystominecraft:perk_rank",
+      "conditions": {
+        "perk_id": "physician",
+        "min_rank": 3
+      }
+    }
+  }
+}

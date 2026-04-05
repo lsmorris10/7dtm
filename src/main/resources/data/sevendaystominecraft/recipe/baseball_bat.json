@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": ["PP", "PN", "DN"],
+  "key": {
+    "P": "minecraft:oak_planks",
+    "N": "sevendaystominecraft:nail",
+    "D": "sevendaystominecraft:duct_tape"
+  },
+  "result": { "id": "sevendaystominecraft:baseball_bat", "count": 1 }
+}

@@ -1,0 +1,6 @@
+{
+	"parent": "sevendaystominecraft:block/crt_tv",
+	"textures": {
+		"screen": "sevendaystominecraft:block/crt_tv_screen_off"
+	}
+}

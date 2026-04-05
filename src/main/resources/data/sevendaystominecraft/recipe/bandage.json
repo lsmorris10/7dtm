@@ -1,0 +1,10 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["PP", "S "],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:string"
+  },
+  "result": { "id": "sevendaystominecraft:bandage", "count": 2 }
+}

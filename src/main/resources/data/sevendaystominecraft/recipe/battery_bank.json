@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["EDE", "EIE", "IDI"],
+  "key": {
+    "E": "sevendaystominecraft:electrical_parts",
+    "D": "sevendaystominecraft:duct_tape",
+    "I": "sevendaystominecraft:forged_iron"
+  },
+  "result": { "id": "sevendaystominecraft:battery_bank", "count": 1 }
+}

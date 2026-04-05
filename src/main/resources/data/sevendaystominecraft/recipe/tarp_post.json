@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["S", "S"],
+  "key": {
+    "S": "minecraft:stick"
+  },
+  "result": { "id": "sevendaystominecraft:tarp_post", "count": 4 }
+}

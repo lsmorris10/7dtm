@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "text": "Gearhead III"
+    },
+    "description": {
+      "text": "Unlocked pistol crafting"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "rank": {
+      "trigger": "sevendaystominecraft:perk_rank",
+      "conditions": {
+        "perk_id": "gearhead",
+        "min_rank": 3
+      }
+    }
+  }
+}

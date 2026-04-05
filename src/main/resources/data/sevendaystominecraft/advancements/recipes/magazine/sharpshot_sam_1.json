@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": {
+      "text": "Sharpshot Sam #1"
+    },
+    "description": {
+      "text": "Reading unlocked rifle ammo recipes"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "read": {
+      "trigger": "sevendaystominecraft:magazine_read",
+      "conditions": {
+        "series_id": "sharpshot_sam",
+        "issue": 1
+      }
+    }
+  }
+}

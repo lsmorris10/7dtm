@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "sag=0": {
+      "model": "sevendaystominecraft:block/tarp_sag_0"
+    },
+    "sag=1": {
+      "model": "sevendaystominecraft:block/tarp_sag_1"
+    },
+    "sag=2": {
+      "model": "sevendaystominecraft:block/tarp_sag_2"
+    },
+    "sag=3": {
+      "model": "sevendaystominecraft:block/tarp_sag_3"
+    }
+  }
+}

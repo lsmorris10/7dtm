@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": ["SSS", "MMP", "SMP"],
+  "key": {
+    "S": "sevendaystominecraft:forged_steel",
+    "M": "sevendaystominecraft:mechanical_parts",
+    "P": "sevendaystominecraft:spring"
+  },
+  "result": { "id": "sevendaystominecraft:ak47", "count": 1 }
+}

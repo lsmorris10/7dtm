@@ -1,0 +1,31 @@
+{
+  "type": "sevendaystominecraft:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/desert_pyramid" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/jungle_temple" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/pillager_outpost" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/woodland_mansion" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/stronghold_library" }
+      ]
+    }
+  ],
+  "entries": [
+    { "item": "sevendaystominecraft:ammo_9mm", "chance": 0.25, "min_count": 4, "max_count": 12 },
+    { "item": "sevendaystominecraft:ammo_762", "chance": 0.18, "min_count": 3, "max_count": 8 },
+    { "item": "sevendaystominecraft:ammo_shotgun_shell", "chance": 0.15, "min_count": 2, "max_count": 6 },
+    { "item": "sevendaystominecraft:pistol_9mm", "chance": 0.08 },
+    { "item": "sevendaystominecraft:shotgun", "chance": 0.05 },
+    { "item": "sevendaystominecraft:hunting_rifle", "chance": 0.04 },
+    { "item": "sevendaystominecraft:iron_sledgehammer", "chance": 0.06 },
+    { "item": "sevendaystominecraft:antibiotics", "chance": 0.15, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:first_aid_kit", "chance": 0.10 },
+    { "item": "sevendaystominecraft:electrical_parts", "chance": 0.18, "min_count": 1, "max_count": 3 },
+    { "item": "sevendaystominecraft:forged_iron", "chance": 0.20, "min_count": 1, "max_count": 4 },
+    { "item": "sevendaystominecraft:polymer", "chance": 0.15, "min_count": 1, "max_count": 3 },
+    { "item": "sevendaystominecraft:grenade", "chance": 0.06, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:survivors_coin", "chance": 0.25, "min_count": 15, "max_count": 50 }
+  ]
+}

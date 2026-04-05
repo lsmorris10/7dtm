@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "sevendaystominecraft:block/blade_trap"
+    },
+    "powered=false": {
+      "model": "sevendaystominecraft:block/blade_trap"
+    }
+  }
+}

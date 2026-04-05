@@ -1,0 +1,79 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.sniper_rifle.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "1.0": [0.5, 0, 0],
+            "2.0": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.sniper_rifle.fire": {
+      "loop": false,
+      "animation_length": 0.25,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.04": [-14, 0, 0],
+            "0.25": [0, 0, 0]
+          },
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.04": [0, 0, 3],
+            "0.25": [0, 0, 0]
+          }
+        },
+        "barrel": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.04": [0, 0.5, 0],
+            "0.25": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.sniper_rifle.rack": {
+      "loop": false,
+      "animation_length": 0.6,
+      "bones": {
+        "body": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.15": [0, 0, 4],
+            "0.4": [0, 0, 4],
+            "0.6": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.sniper_rifle.reload": {
+      "loop": false,
+      "animation_length": 2.4,
+      "bones": {
+        "magazine": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [0, -6, 0],
+            "1.2": [0, -6, 0],
+            "1.7": [0, 0, 0]
+          }
+        },
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.2": [-20, 0, 0],
+            "2.0": [-20, 0, 0],
+            "2.2": [0, 0, 0]
+          }
+        }
+      }
+    }
+  }
+}

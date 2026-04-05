@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "pattern": ["BCP"],
+  "key": {
+    "B": "minecraft:beef",
+    "C": "sevendaystominecraft:corn",
+    "P": "minecraft:potato"
+  },
+  "result": { "id": "sevendaystominecraft:hobo_stew", "count": 1 }
+}

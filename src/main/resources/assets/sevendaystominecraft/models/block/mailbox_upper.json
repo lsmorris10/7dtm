@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "mailbox": "sevendaystominecraft:block/mailbox",
+    "particle": "sevendaystominecraft:block/mailbox"
+  },
+  "elements": [
+    {
+      "name": "post_top",
+      "from": [6, 0, 6],
+      "to": [10, 4, 10],
+      "faces": {
+        "north": {"uv": [6, 0, 10, 4], "texture": "#mailbox"},
+        "south": {"uv": [6, 0, 10, 4], "texture": "#mailbox"},
+        "east":  {"uv": [6, 0, 10, 4], "texture": "#mailbox"},
+        "west":  {"uv": [6, 0, 10, 4], "texture": "#mailbox"}
+      }
+    },
+    {
+      "name": "mailbox_body",
+      "from": [2, 4, 3],
+      "to": [14, 10, 13],
+      "faces": {
+        "north": {"uv": [0, 0, 12, 6], "texture": "#mailbox"},
+        "south": {"uv": [0, 0, 12, 6], "texture": "#mailbox"},
+        "east":  {"uv": [0, 0, 10, 6], "texture": "#mailbox"},
+        "west":  {"uv": [0, 0, 10, 6], "texture": "#mailbox"},
+        "up":    {"uv": [0, 0, 12, 10], "texture": "#mailbox"},
+        "down":  {"uv": [0, 0, 12, 10], "texture": "#mailbox"}
+      }
+    },
+    {
+      "name": "flag",
+      "from": [14, 5, 7],
+      "to": [16, 9, 9],
+      "faces": {
+        "north": {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "south": {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "east":  {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "west":  {"uv": [14, 6, 16, 10], "texture": "#mailbox"},
+        "up":    {"uv": [14, 6, 16, 8], "texture": "#mailbox"}
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 0],
+      "translation": [0, -4, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "ground": {
+      "translation": [0, 3, 0],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_righthand": {
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.375, 0.375, 0.375]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  }
+}

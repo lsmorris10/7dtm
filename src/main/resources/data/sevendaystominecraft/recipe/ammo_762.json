@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["LI", "GG"],
+  "key": {
+    "L": "sevendaystominecraft:forged_lead",
+    "I": "sevendaystominecraft:forged_iron",
+    "G": "minecraft:gunpowder"
+  },
+  "result": { "id": "sevendaystominecraft:ammo_762", "count": 8 }
+}

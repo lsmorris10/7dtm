@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "humanoid": {
+      "textures": [
+        {
+          "texture": "sevendaystominecraft:entity/equipment/military_layer_1"
+        }
+      ]
+    },
+    "humanoid_leggings": {
+      "textures": [
+        {
+          "texture": "sevendaystominecraft:entity/equipment/military_layer_2"
+        }
+      ]
+    }
+  }
+}

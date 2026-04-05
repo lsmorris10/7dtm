@@ -1,0 +1,30 @@
+{
+  "type": "sevendaystominecraft:add_items",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/village/village_plains_house" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/village/village_desert_house" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/village/village_savanna_house" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/village/village_snowy_house" },
+        { "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/village/village_taiga_house" }
+      ]
+    }
+  ],
+  "entries": [
+    { "item": "sevendaystominecraft:bandage", "chance": 0.20, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:murky_water", "chance": 0.25, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:boiled_water", "chance": 0.12, "min_count": 1, "max_count": 2 },
+    { "item": "minecraft:cooked_rabbit", "chance": 0.15, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:corn", "chance": 0.18, "min_count": 1, "max_count": 3 },
+    { "item": "sevendaystominecraft:blueberry", "chance": 0.15, "min_count": 1, "max_count": 3 },
+    { "item": "sevendaystominecraft:goldenrod", "chance": 0.15, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:aloe", "chance": 0.12, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:corn_seed", "chance": 0.10, "min_count": 1, "max_count": 2 },
+    { "item": "minecraft:potato", "chance": 0.10, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:blueberry_seed", "chance": 0.10, "min_count": 1, "max_count": 2 },
+    { "item": "sevendaystominecraft:duct_tape", "chance": 0.08 },
+    { "item": "sevendaystominecraft:survivors_coin", "chance": 0.15, "min_count": 5, "max_count": 25 }
+  ]
+}

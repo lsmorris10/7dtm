@@ -1,0 +1,79 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.shotgun.idle": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "1.0": [0.5, 0, 0],
+            "2.0": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.shotgun.fire": {
+      "loop": false,
+      "animation_length": 0.3,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.05": [-12, 0, 0],
+            "0.3": [0, 0, 0]
+          },
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.05": [0, 0, 3],
+            "0.3": [0, 0, 0]
+          }
+        },
+        "barrel": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.05": [0, 0.5, 0],
+            "0.3": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.shotgun.rack": {
+      "loop": false,
+      "animation_length": 0.6,
+      "bones": {
+        "magazine": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.15": [0, 0, 4],
+            "0.4": [0, 0, 4],
+            "0.6": [0, 0, 0]
+          }
+        }
+      }
+    },
+    "animation.shotgun.reload": {
+      "loop": false,
+      "animation_length": 2.2,
+      "bones": {
+        "body": {
+          "rotation": {
+            "0.0": [0, 0, 0],
+            "0.3": [-25, 0, 0],
+            "1.8": [-25, 0, 0],
+            "2.0": [0, 0, 0]
+          }
+        },
+        "magazine": {
+          "position": {
+            "0.0": [0, 0, 0],
+            "0.5": [0, -4, 0],
+            "1.2": [0, -4, 0],
+            "1.6": [0, 0, 0]
+          }
+        }
+      }
+    }
+  }
+}

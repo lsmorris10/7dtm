@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "pattern": ["CP", "W "],
+  "key": {
+    "C": "sevendaystominecraft:corn",
+    "P": "minecraft:potato",
+    "W": "sevendaystominecraft:boiled_water"
+  },
+  "result": { "id": "sevendaystominecraft:vegetable_stew", "count": 1 }
+}

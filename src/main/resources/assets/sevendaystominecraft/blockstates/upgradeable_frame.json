@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "tier=0,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_0" },
+    "tier=0,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_0" },
+    "tier=1,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_1" },
+    "tier=1,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_1" },
+    "tier=2,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_2" },
+    "tier=2,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_2" },
+    "tier=3,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_3" },
+    "tier=3,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_3" },
+    "tier=4,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_4" },
+    "tier=4,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_4" },
+    "tier=5,upgrading=false": { "model": "sevendaystominecraft:block/upgradeable_frame_5" },
+    "tier=5,upgrading=true": { "model": "sevendaystominecraft:block/upgradeable_frame_5" }
+  }
+}

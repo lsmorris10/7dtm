@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["GGG", "GEE", "IEI"],
+  "key": {
+    "G": "minecraft:glass",
+    "E": "sevendaystominecraft:electrical_parts",
+    "I": "sevendaystominecraft:forged_iron"
+  },
+  "result": { "id": "sevendaystominecraft:solar_panel", "count": 1 }
+}

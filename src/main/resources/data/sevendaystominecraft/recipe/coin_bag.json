@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["W ", "WW"],
+  "key": {
+    "W": "minecraft:white_wool"
+  },
+  "result": { "id": "sevendaystominecraft:coin_bag", "count": 1 }
+}

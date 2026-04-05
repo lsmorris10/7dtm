@@ -1,0 +1,69 @@
+package com.sevendaystominecraft.entity.zombie;
+
+import com.sevendaystominecraft.config.ZombieConfig;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+public class FeralWightZombie extends BaseSevenDaysZombie {
+
+    public FeralWightZombie(EntityType<? extends Zombie> type, Level level) {
+        super(type, level, ZombieVariant.FERAL_WIGHT);
+    }
+
+    @Override
+    protected void applyVariantStats() {
+        ZombieConfig cfg = ZombieConfig.INSTANCE;
+        double hp = cfg.feralWightHP.get();
+        double damage = cfg.feralWightDamage.get();
+        double speed = convertSpeedToAttribute(cfg.feralWightSpeed.get());
+
+        getAttribute(Attributes.MAX_HEALTH).setBaseValue(hp);
+        setHealth((float) hp);
+        getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damage);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!level().isClientSide() && getTarget() != null) {
+            setSprinting(true);
+        }
+
+        if (level().isClientSide() && tickCount % 4 == 0) {
+            level().addParticle(ParticleTypes.SMALL_FLAME,
+                    getX() + (random.nextFloat() - 0.5) * 0.3,
+                    getEyeY() + 0.1,
+                    getZ() + (random.nextFloat() - 0.5) * 0.3,
+                    0, 0.02, 0);
+        }
+
+        if (level().isClientSide() && tickCount % 3 == 0) {
+            Vec3 movement = getDeltaMovement();
+            double trailX = getX() - movement.x * 2 + (random.nextFloat() - 0.5) * 0.5;
+            double trailZ = getZ() - movement.z * 2 + (random.nextFloat() - 0.5) * 0.5;
+            level().addParticle(ParticleTypes.SOUL_FIRE_FLAME,
+                    trailX,
+                    getY() + random.nextFloat() * getBbHeight(),
+                    trailZ,
+                    (random.nextFloat() - 0.5) * 0.02, 0.02, (random.nextFloat() - 0.5) * 0.02);
+        }
+    }
+
+    @Override
+    public boolean isCurrentlyGlowing() {
+        return true;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return createBaseZombieAttributes()
+                .add(Attributes.MAX_HEALTH, 60.0)
+                .add(Attributes.ATTACK_DAMAGE, 7.5)
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
+    }
+}

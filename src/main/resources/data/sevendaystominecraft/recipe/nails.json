@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["I", "I"],
+  "key": {
+    "I": "sevendaystominecraft:forged_iron"
+  },
+  "result": { "id": "sevendaystominecraft:nail", "count": 4 }
+}
